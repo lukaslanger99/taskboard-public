@@ -166,6 +166,7 @@ class TaskBoard {
         $this->mysqliQueryPrepared("DELETE FROM tasks WHERE taskType = 'task' AND taskParentID = ?", $id);
         $this->mysqliQueryPrepared("DELETE FROM groupaccess WHERE groupID = ?", $id);
         $this->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ?", $id);
+        $this->mysqliQueryPrepared("DELETE FROM messages WHERE messageGroup = ?", $id);
     }
 
     public function deleteTaskPermission($taskID, $userID, $type) {
