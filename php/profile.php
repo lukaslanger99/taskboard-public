@@ -79,7 +79,7 @@
             </div>';
         echo $html;
     }
-
+    
     if ($taskBoard->getNightmodeEnabled($user->userID)) {
         $nightModeState = 'checked';
     } else {
@@ -91,7 +91,7 @@
         <div>
         Nightmode 
         <label class="switch">
-          <input id="nightmode-checkbox" type="checkbox" '.$nightModeState.'">
+          <input id="nightmode-checkbox" type="checkbox" '.$nightModeState.'>
           <span class="slider round"></span>
         </label>
         </div>

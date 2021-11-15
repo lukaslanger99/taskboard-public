@@ -58,10 +58,7 @@ function printTaskForm(selectedGroupId = 'default') {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {
     var html = '\
-    <div class="modal-header">\
-        Create Task\
-        <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-    </div >\
+    '+ addHeaderDynamicForm('Create Task') + '\
     <form action="'+ DIR_SYSTEM + 'php/action.php?action=createTask" autocomplete="off" method="post" >\
         <table style="margin:0 auto 15px auto;">\
             <tr>\
@@ -84,24 +81,8 @@ function printTaskForm(selectedGroupId = 'default') {
         <input type="checkbox" id="createAnother" name="createAnother">\
         <label for="createAnother">Create Another</label>\
     </form>';
-    container.innerHTML = html;
-    container.style.height = '280px';
-    document.querySelector('html').style.overflow = 'hidden';
-
-    document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-    var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-    if (faCloseDynamicform) {
-      faCloseDynamicform.addEventListener('click',
-        function () {
-          var container = document.getElementById("dynamic-modal-content");
-          if (container) {
-            container.innerHTML = '';
-            document.getElementById('bg-modal-dynamicform').style.display = 'none';
-            document.querySelector('html').style.overflow = 'auto';
-          }
-        }
-      )
-    }
+    showDynamicForm(container, html, 280);
+    closeDynamicFormListener();
   }
 }
 
@@ -110,10 +91,7 @@ function printSubtaskForm() {
   if (container) {
     var taskId = document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1');
     var html = '\
-    <div class="modal-header">\
-        Create Subtask\
-        <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-    </div >\
+    '+ addHeaderDynamicForm('Create Subtask') + '\
     <form action="'+ DIR_SYSTEM + 'php/action.php?action=createSubtask&taskId=' + taskId + '" autocomplete="off" method="post" >\
         <table style="margin:0 auto 15px auto;">\
             <tr>\
@@ -136,23 +114,10 @@ function printSubtaskForm() {
         <label for="createAnother">Create Another</label>\
     </form>';
     container.innerHTML = html;
-    container.style.height = '280px';
+    showDynamicForm(container, html, 280);
     document.querySelector('html').style.overflow = 'hidden';
-
     document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-    var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-    if (faCloseDynamicform) {
-      faCloseDynamicform.addEventListener('click',
-        function () {
-          var container = document.getElementById("dynamic-modal-content");
-          if (container) {
-            container.innerHTML = '';
-            document.getElementById('bg-modal-dynamicform').style.display = 'none';
-            document.querySelector('html').style.overflow = 'auto';
-          }
-        }
-      )
-    }
+    closeDynamicFormListener();
   }
 }
 
@@ -196,32 +161,13 @@ if (createGroupButton) {
       var container = document.getElementById("dynamic-modal-content");
       if (container) {
         var html = '\
-        <div class="modal-header">\
-            Create Group\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-        </div>\
+        '+ addHeaderDynamicForm('Create Group') + '\
         <form action="'+ DIR_SYSTEM + 'php/action.php?action=createGroup" autocomplete="off" method="post" >\
             <input class="input-login" placeholder="name" type="text" name="name"/>\
             <input class="submit-login" type="submit" name="creategroup-submit" value="Create" />\
         </form>';
-        container.innerHTML = html;
-        container.style.height = '200px';
-        document.querySelector('html').style.overflow = 'hidden';
-
-        document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-        var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-        if (faCloseDynamicform) {
-          faCloseDynamicform.addEventListener('click',
-            function () {
-              var container = document.getElementById("dynamic-modal-content");
-              if (container) {
-                container.innerHTML = '';
-                document.getElementById('bg-modal-dynamicform').style.display = 'none';
-                document.querySelector('html').style.overflow = 'auto';
-              }
-            }
-          )
-        }
+        showDynamicForm(container, html, 200);
+        closeDynamicFormListener();
       }
     }
   )
@@ -235,10 +181,7 @@ if (createRTButton) {
       var container = document.getElementById("dynamic-modal-content");
       if (container) {
         var html = '\
-        <div class="modal-header">\
-            Create Repeating Task\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-        </div>\
+        '+ addHeaderDynamicForm('Create Repeating Task') + '\
         <form action="'+ DIR_SYSTEM + 'php/action.php?action=createRepeatingtask" autocomplete="off" method="post" >\
             <table style="margin:0 auto 15px auto;">    \
                 <tr>\
@@ -284,24 +227,8 @@ if (createRTButton) {
             <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
             <input class="submit-login" type="submit" name="creatert-submit" value="Create" />\
         </form>';
-        container.innerHTML = html;
-        container.style.height = '250px';
-        document.querySelector('html').style.overflow = 'hidden';
-
-        document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-        var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-        if (faCloseDynamicform) {
-          faCloseDynamicform.addEventListener('click',
-            function () {
-              var container = document.getElementById("dynamic-modal-content");
-              if (container) {
-                container.innerHTML = '';
-                document.getElementById('bg-modal-dynamicform').style.display = 'none';
-                document.querySelector('html').style.overflow = 'auto';
-              }
-            }
-          )
-        }
+        showDynamicForm(container, html, 250);
+        closeDynamicFormListener();
       }
     }
   )
@@ -326,10 +253,7 @@ if (createMOTDButton) {
       var container = document.getElementById("dynamic-modal-content");
       if (container) {
         var html = '\
-        <div class="modal-header">\
-            Create Message of the Day\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-        </div>\
+        '+ addHeaderDynamicForm('Create Message of the Day') + '\
         <form action="'+ DIR_SYSTEM + 'php/action.php?action=createMotd" autocomplete="off" method="post" >\
             <table style="margin:0 auto 15px auto;">\
                 <tr>\
@@ -339,24 +263,8 @@ if (createMOTDButton) {
             <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
             <input class="submit-login" type="submit" name="createmotd-submit" value="Create" />\
         </form>';
-        container.innerHTML = html;
-        container.style.height = '210px';
-        document.querySelector('html').style.overflow = 'hidden';
-
-        document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-        var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-        if (faCloseDynamicform) {
-          faCloseDynamicform.addEventListener('click',
-            function () {
-              var container = document.getElementById("dynamic-modal-content");
-              if (container) {
-                container.innerHTML = '';
-                document.getElementById('bg-modal-dynamicform').style.display = 'none';
-                document.querySelector('html').style.overflow = 'auto';
-              }
-            }
-          )
-        }
+        showDynamicForm(container, html, 210);
+        closeDynamicFormListener();
       }
     }
   )
@@ -370,10 +278,7 @@ if (createMOTDButton) {
       var container = document.getElementById("dynamic-modal-content");
       if (container) {
         var html = '\
-        <div class="modal-header">\
-            Create Appointment\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-        </div>\
+        '+ addHeaderDynamicForm('Create Appointment') + '\
         <form action="'+ DIR_SYSTEM + 'php/action.php?action=createAppointment" autocomplete="off" method="post" >\
             <table style="margin:0 auto 15px auto;">\
                 <tr>\
@@ -387,24 +292,8 @@ if (createMOTDButton) {
             <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
             <input class="submit-login" type="submit" name="createappointment-submit" value="Create" />\
         </form>';
-        container.innerHTML = html;
-        container.style.height = '230px';
-        document.querySelector('html').style.overflow = 'hidden';
-
-        document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-        var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-        if (faCloseDynamicform) {
-          faCloseDynamicform.addEventListener('click',
-            function () {
-              var container = document.getElementById("dynamic-modal-content");
-              if (container) {
-                container.innerHTML = '';
-                document.getElementById('bg-modal-dynamicform').style.display = 'none';
-                document.querySelector('html').style.overflow = 'auto';
-              }
-            }
-          )
-        }
+        showDynamicForm(container, html, 230);
+        closeDynamicFormListener();
       }
     }
   )
@@ -425,10 +314,7 @@ if (createTaskButton) {
         dropDowns += printPriorityDropdown(task.taskPriority);
 
         var html = '\
-        <div class="modal-header">\
-            Update Task\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-        </div>\
+        '+ addHeaderDynamicForm('Update Task') + '\
         <form action="'+ DIR_SYSTEM + 'php/action.php?action=update&id=' + task.taskID + '" autocomplete="off" method="post" >\
             <table style="margin:0 auto 15px auto;">\
                 <tr>\
@@ -439,75 +325,57 @@ if (createTaskButton) {
             <textarea class="input-login" type="text" name="description" cols="40" rows="5">'+ task.taskDescription + '</textarea>\
             <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />\
         </form>';
-        container.innerHTML = html;
-        container.style.height = '280px';
-        document.querySelector('html').style.overflow = 'hidden';
-
-        document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-        var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-        if (faCloseDynamicform) {
-          faCloseDynamicform.addEventListener('click',
-            function () {
-              var container = document.getElementById("dynamic-modal-content");
-              if (container) {
-                container.innerHTML = '';
-                document.getElementById('bg-modal-dynamicform').style.display = 'none';
-                document.querySelector('html').style.overflow = 'auto';
-              }
-            }
-          )
-        }
+        showDynamicForm(container, html, 280);
+        closeDynamicFormListener();
       }
     }
   )
 }
 
-//Nightmode checkbox
-var nightmodeCheckbox = document.getElementById("nightmode-checkbox");
-if (nightmodeCheckbox) {
-  nightmodeCheckbox.addEventListener("click",
-    function () {
-      location.href = "http://lukaslanger.bplaced.net/taskboard/php/profile.inc.php?action=toggleNightmode&n=" + nightmodeCheckbox.checked + "";
-    }
-  );
+function addHeaderDynamicForm(title) {
+  return '\
+  <div class="modal-header">\
+      '+ title + '\
+      <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
+  </div>';
 }
 
-//RT checkbox
-var rtpanelCheckbox = document.getElementById("rtpanel-checkbox");
-if (rtpanelCheckbox) {
-  rtpanelCheckbox.addEventListener("click",
-    function () {
-      location.href = "http://lukaslanger.bplaced.net/taskboard/php/profile.inc.php?action=toggleRTpanel&n=" + rtpanelCheckbox.checked + "";
-    }
-  );
+function showDynamicForm(container, html, boxHeight) {
+  container.innerHTML = html;
+  container.style.height = boxHeight + 'px';
+  document.querySelector('html').style.overflow = 'hidden';
+  document.getElementById('bg-modal-dynamicform').style.display = 'flex';
 }
 
-//MOTD checkbox
-var motdpanelCheckbox = document.getElementById("motdpanel-checkbox");
-if (motdpanelCheckbox) {
-  motdpanelCheckbox.addEventListener("click",
-    function () {
-      location.href = "http://lukaslanger.bplaced.net/taskboard/php/profile.inc.php?action=toggleMOTDpanel&n=" + motdpanelCheckbox.checked + "";
-    }
-  );
+function closeDynamicFormListener() {
+  var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
+  if (faCloseDynamicform) {
+    faCloseDynamicform.addEventListener('click',
+      function () {
+        var container = document.getElementById("dynamic-modal-content");
+        if (container) {
+          container.innerHTML = '';
+          document.getElementById('bg-modal-dynamicform').style.display = 'none';
+          document.querySelector('html').style.overflow = 'auto';
+        }
+      }
+    )
+  }
 }
 
-//Appointment checkbox
-var appointmentpanelCheckbox = document.getElementById("appointmentpanel-checkbox");
-if (appointmentpanelCheckbox) {
-  appointmentpanelCheckbox.addEventListener("click",
-    function () {
-      location.href = "http://lukaslanger.bplaced.net/taskboard/php/profile.inc.php?action=toggleAppointmentpanel&n=" + appointmentpanelCheckbox.checked + "";
-    }
-  );
+function addCheckboxListener(elementId, phpAction) {
+  var checkboxElement = document.getElementById(elementId);
+  if (checkboxElement) {
+    checkboxElement.addEventListener("click",
+      function () {
+        location.href = DIR_SYSTEM + "php/profile.inc.php?action=" + phpAction + "&n=" + checkboxElement.checked;
+      }
+    )
+  }
 }
 
-//Queue checkbox
-var queueCheckbox = document.getElementById("queuepanel-checkbox");
-if (queueCheckbox) {
-  queueCheckbox.addEventListener("click",
-    function () {
-      location.href = "http://lukaslanger.bplaced.net/taskboard/php/profile.inc.php?action=toggleQueuepanel&n=" + queueCheckbox.checked + "";
-    }
-  );
-}
+addCheckboxListener("nightmode-checkbox", "toggleNightmode"); //Nightmode checkbox
+addCheckboxListener("rtpanel-checkbox", "toggleRTpanel"); //RT checkbox
+addCheckboxListener("motdpanel-checkbox", "toggleMOTDpanel"); //MOTD checkbox
+addCheckboxListener("appointmentpanel-checkbox", "toggleAppointmentpanel"); //Appointment checkbox
+addCheckboxListener("queuepanel-checkbox", "toggleQueuepanel"); //Queue checkbox

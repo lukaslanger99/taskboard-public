@@ -1292,7 +1292,7 @@ class TaskBoard {
     }
 
     private function addTaskDataToLocalstorage($task) {
-        $localStorageInit = "
+        echo "
         <script>
             var json = '{}';
             var obj = JSON.parse(json);
@@ -1305,7 +1305,6 @@ class TaskBoard {
             obj['taskDescription'] = '$task->taskDescription';
             localStorage.setItem('TaskData', JSON.stringify(obj));
         </script>";
-        echo $localStorageInit;
     }
 
     public function printUserDetails($userID) {
