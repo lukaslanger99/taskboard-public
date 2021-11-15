@@ -1,0 +1,8 @@
+id ( assigned automatically, maybe random )
+Priority- 1=low, 2=normal, 3=high
+Title
+state created, assigned, finished
+date created
+date assigned
+date finished
+description

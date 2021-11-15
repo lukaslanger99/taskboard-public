@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)https://bugs.mojang.com/browse/REALMS-6147 -->
+<html lang="en" class="webkit chrome"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+
+
+
+
+
+
+
+
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="application-name" content="JIRA" data-name="jira" data-version="8.8.0"><meta name="ajs-server-scheme" content="https">
+<meta name="ajs-server-port" content="443">
+<meta name="ajs-server-name" content="bugs.mojang.com">
+<meta name="ajs-behind-proxy" content="null">
+<meta name="ajs-base-url" content="https://bugs.mojang.com">
+<meta name="ajs-viewissue-use-history-api" content="false">
+<meta name="ajs-jira-base-url" content="https://bugs.mojang.com">
+<meta name="ajs-serverRenderedViewIssue" content="true">
+<meta name="ajs-dev-mode" content="false">
+<meta name="ajs-context-path" content="">
+<meta name="ajs-version-number" content="8.8.0">
+<meta name="ajs-build-number" content="808000">
+<meta name="ajs-is-beta" content="false">
+<meta name="ajs-is-rc" content="false">
+<meta name="ajs-is-snapshot" content="false">
+<meta name="ajs-is-milestone" content="false">
+<meta name="ajs-remote-user" content="">
+<meta name="ajs-remote-user-fullname" content="">
+<meta name="ajs-user-locale" content="en_US">
+<meta name="ajs-user-locale-group-separator" content=",">
+<meta name="ajs-app-title" content="Jira">
+<meta name="ajs-keyboard-shortcuts-enabled" content="true">
+<meta name="ajs-keyboard-accesskey-modifier" content="Alt">
+<meta name="ajs-enabled-dark-features" content="[&quot;com.atlassian.jira.agile.darkfeature.editable.detailsview&quot;,&quot;ka.AJAX_PREFETCH&quot;,&quot;nps.survey.inline.dialog&quot;,&quot;heatmapper.disabled&quot;,&quot;com.atlassian.jira.agile.darkfeature.edit.closed.sprint.enabled&quot;,&quot;jira.plugin.devstatus.phasetwo&quot;,&quot;jira.frother.reporter.field&quot;,&quot;com.atlassian.jira.jira-feedback-plugin&quot;,&quot;atlassian.rest.xsrf.legacy.enabled&quot;,&quot;jira.site.darkfeature.admin&quot;,&quot;jira.issue.status.lozenge&quot;,&quot;com.atlassian.jira.config.BIG_PIPE&quot;,&quot;com.atlassian.jira.projects.issuenavigator&quot;,&quot;com.atlassian.jira.config.PDL&quot;,&quot;jira.plugin.devstatus.phasetwo.enabled&quot;,&quot;atlassian.aui.raphael.disabled&quot;,&quot;jira.user.darkfeature.admin&quot;,&quot;app-switcher.new&quot;,&quot;frother.assignee.field&quot;,&quot;jira.projectconfig.issuetypes.sidebar&quot;,&quot;casper.WORKFLOW_TAB&quot;,&quot;com.atlassian.jira.projects.ProjectCentricNavigation.Switch&quot;,&quot;jira.onboarding.cyoa&quot;,&quot;com.atlassian.jira.agile.darkfeature.kanplan.enabled&quot;,&quot;com.atlassian.jira.config.ProjectConfig.MENU&quot;,&quot;com.atlassian.jira.projects.sidebar.DEFER_RESOURCES&quot;,&quot;com.atlassian.jira.agile.darkfeature.kanplan.epics.and.versions.enabled&quot;,&quot;com.atlassian.jira.agile.darkfeature.sprint.goal.enabled&quot;,&quot;jira.zdu.admin-updates-ui&quot;,&quot;jira.zdu.jmx-monitoring&quot;,&quot;ka.STABLE_SEARCH&quot;,&quot;mail.batching.enabled&quot;,&quot;sd.new.settings.sidebar.location.disabled&quot;,&quot;jira.zdu.cluster-upgrade-state&quot;,&quot;com.atlassian.jira.agile.darkfeature.splitissue&quot;,&quot;ka.SPLIT_VIEW&quot;,&quot;com.atlassian.jira.config.CoreFeatures.LICENSE_ROLES_ENABLED&quot;,&quot;casper.VIEW_ISSUE&quot;,&quot;jira.export.csv.enabled&quot;,&quot;ka.AJAX_VIEW_ISSUE&quot;]">
+<meta name="ajs-in-admin-mode" content="false">
+<meta name="ajs-is-sysadmin" content="false">
+<meta name="ajs-is-admin" content="false">
+<meta name="ajs-outgoing-mail-enabled" content="true">
+<meta name="ajs-archiving-enabled" content="false">
+<meta name="ajs-date-relativize" content="true">
+<meta name="ajs-date-time" content="h:mm a">
+<meta name="ajs-date-day" content="EEEE h:mm a">
+<meta name="ajs-date-dmy" content="dd/MMM/yy">
+<meta name="ajs-date-complete" content="dd/MMM/yy h:mm a">
+<script type="text/javascript">var AJS=AJS||{};AJS.debug=true;</script>
+
+
+    
+<meta id="atlassian-token" name="atlassian-token" content="B9ZF-GTOQ-9NYK-WZ0G_ac9ae8d1c32955dd07f2c8fa0a4ddfaf20899b1e_lout">
+
+
+
+<link rel="shortcut icon" href="https://bugs.mojang.com/s/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/_/jira-favicon-hires.png">
+
+
+    
+
+
+
+<!--[if IE]><![endif]-->
+<script type="text/javascript">
+    (function() {
+        var contextPath = '';
+
+        function printDeprecatedMsg() {
+            if (console && console.warn) {
+                console.warn('DEPRECATED JS - contextPath global variable has been deprecated since 7.4.0. Use `wrm/context-path` module instead.');
+            }
+        }
+
+        Object.defineProperty(window, 'contextPath', {
+            get: function() {
+                printDeprecatedMsg();
+                return contextPath;
+            },
+            set: function(value) {
+                printDeprecatedMsg();
+                contextPath = value;
+            }
+        });
+    })();
+
+</script>
+<script>
+window.WRM=window.WRM||{};window.WRM._unparsedData=window.WRM._unparsedData||{};window.WRM._unparsedErrors=window.WRM._unparsedErrors||{};
+WRM._unparsedData["com.atlassian.plugins.atlassian-plugins-webresource-plugin:context-path.context-path"]="\"\"";
+WRM._unparsedData["jira.core:feature-flags-data.feature-flag-data"]="{\"enabled-feature-keys\":[\"com.atlassian.jira.agile.darkfeature.editable.detailsview\",\"ka.AJAX_PREFETCH\",\"nps.survey.inline.dialog\",\"heatmapper.disabled\",\"com.atlassian.jira.agile.darkfeature.edit.closed.sprint.enabled\",\"jira.plugin.devstatus.phasetwo\",\"jira.frother.reporter.field\",\"com.atlassian.jira.jira-feedback-plugin\",\"atlassian.rest.xsrf.legacy.enabled\",\"jira.site.darkfeature.admin\",\"jira.issue.status.lozenge\",\"com.atlassian.jira.config.BIG_PIPE\",\"com.atlassian.jira.projects.issuenavigator\",\"com.atlassian.jira.config.PDL\",\"jira.plugin.devstatus.phasetwo.enabled\",\"atlassian.aui.raphael.disabled\",\"jira.user.darkfeature.admin\",\"app-switcher.new\",\"frother.assignee.field\",\"jira.projectconfig.issuetypes.sidebar\",\"casper.WORKFLOW_TAB\",\"com.atlassian.jira.projects.ProjectCentricNavigation.Switch\",\"jira.onboarding.cyoa\",\"com.atlassian.jira.agile.darkfeature.kanplan.enabled\",\"com.atlassian.jira.config.ProjectConfig.MENU\",\"com.atlassian.jira.projects.sidebar.DEFER_RESOURCES\",\"com.atlassian.jira.agile.darkfeature.kanplan.epics.and.versions.enabled\",\"com.atlassian.jira.agile.darkfeature.sprint.goal.enabled\",\"jira.zdu.admin-updates-ui\",\"jira.zdu.jmx-monitoring\",\"ka.STABLE_SEARCH\",\"mail.batching.enabled\",\"sd.new.settings.sidebar.location.disabled\",\"jira.zdu.cluster-upgrade-state\",\"com.atlassian.jira.agile.darkfeature.splitissue\",\"ka.SPLIT_VIEW\",\"com.atlassian.jira.config.CoreFeatures.LICENSE_ROLES_ENABLED\",\"casper.VIEW_ISSUE\",\"jira.export.csv.enabled\",\"ka.AJAX_VIEW_ISSUE\"],\"feature-flag-states\":{\"atlassian.cdn.static.assets\":true,\"mail.batching\":false,\"com.atlassian.jira.diagnostics.perflog\":true,\"com.atlassian.jira.privateEntitiesEditable\":false,\"com.atlassian.jira.issuetable.move.links.hidden\":true,\"jira.priorities.per.project.edit.default\":false,\"com.atlassian.jira.agile.darkfeature.unlink.sprints.on.issue.move\":true,\"jira.renderer.consider.variable.format\":true,\"com.atlassian.jira.user.dbIdBasedKeyGenerationStrategy\":true,\"jira.priorities.per.project.jsd\":true,\"com.atlassian.jira.agile.darkfeature.rapid.boards.bands\":true,\"com.atlassian.jira.sharedEntityEditRights\":true,\"com.atlassian.jira.agile.darkfeature.flexible.boards\":true,\"com.atlassian.jira.agile.darkfeature.sprint.goal\":false,\"jira.dc.lock.leasing\":true,\"com.atlassian.jira.accessibility.personal.settings\":true,\"mail.batching.create.section.cf\":true,\"com.atlassian.jira.custom.csv.escaper\":true,\"com.atlassian.jira.plugin.issuenavigator.filtersUxImprovment\":true,\"com.atlassian.jira.agile.darkfeature.kanplan.epics.and.versions\":false,\"com.atlassian.jira.upgrade.startup.fix.index\":true,\"jira.dc.cleanup.cluser.tasks\":true,\"com.atlassian.jira.issues.archiving.filters\":false,\"mail.batching.override.core\":true,\"jira.users.and.roles.page.in.react\":true,\"com.atlassian.jira.issuetable.draggable\":true,\"com.atlassian.jira.attachments.generate.unique.suffix\":true,\"com.atlassian.jira.agile.darkfeature.kanban.hide.old.done.issues\":true,\"jira.jql.suggestrecentfields\":false,\"com.atlassian.jira.agile.darkfeature.backlog.showmore\":true,\"com.atlassian.jira.gdpr.rtbf\":true,\"com.atlassian.jira.security.xsrf.session.token\":true,\"com.atlassian.jira.agile.darkfeature.optimistic.transitions\":true,\"com.atlassian.jira.agile.darkfeature.kanplan\":false,\"com.atlassian.jira.agile.darkfeature.burnupchart\":true,\"com.atlassian.jira.issues.archiving.browse\":true,\"com.atlassian.jira.agile.darkfeature.future.sprint.dates\":true,\"jira.instrumentation.laas\":false,\"jira.customfields.paginated.ui\":true,\"com.atlassian.jira.agile.darkfeature.edit.closed.sprint\":false,\"mail.batching.user.notification\":true,\"jira.create.linked.issue\":true,\"com.atlassian.jira.agile.darkfeature.dataonpageload\":true,\"com.atlassian.jira.advanced.audit.log\":true,\"jira.sal.host.connect.accessor.existing.transaction.will.create.transactions\":true,\"external.links.new.window\":true,\"jira.quick.search\":true,\"com.atlassian.jira.projects.per.project.permission.query\":true,\"jira.jql.smartautoselectfirst\":false,\"com.atlassian.jira.issues.archiving\":true,\"index.use.snappy\":true,\"jira.priorities.per.project\":true}}";
+WRM._unparsedData["jira.core:default-comment-security-level-data.DefaultCommentSecurityLevelHelpLink"]="{\"extraClasses\":\"default-comment-level-help\",\"title\":\"Commenting on an Issue\",\"url\":\"https://docs.atlassian.com/jira/jcore-docs-088/Editing+and+collaborating+on+issues#Editingandcollaboratingonissues-restrictacomment\",\"isLocal\":false}";
+WRM._unparsedData["jira.core:dateFormatProvider.allFormats"]="{\"dateFormats\":{\"meridiem\":[\"AM\",\"PM\"],\"eras\":[\"BC\",\"AD\"],\"months\":[\"January\",\"February\",\"March\",\"April\",\"May\",\"June\",\"July\",\"August\",\"September\",\"October\",\"November\",\"December\"],\"monthsShort\":[\"Jan\",\"Feb\",\"Mar\",\"Apr\",\"May\",\"Jun\",\"Jul\",\"Aug\",\"Sep\",\"Oct\",\"Nov\",\"Dec\"],\"weekdaysShort\":[\"Sun\",\"Mon\",\"Tue\",\"Wed\",\"Thu\",\"Fri\",\"Sat\"],\"weekdays\":[\"Sunday\",\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Friday\",\"Saturday\"]},\"lookAndFeelFormats\":{\"relativize\":\"true\",\"time\":\"h:mm a\",\"day\":\"EEEE h:mm a\",\"dmy\":\"dd/MMM/yy\",\"complete\":\"dd/MMM/yy h:mm a\"}}";
+WRM._unparsedData["com.atlassian.jira.jira-issue-nav-components:issueviewer.features"]="{\"rteEnabled\":true}";
+WRM._unparsedData["com.atlassian.jira.plugins.jira-dnd-attachment-plugin:dnd-issue-drop-zone.thumbnail-mime-types"]="\"image/vnd.wap.wbmp,image/png,image/x-png,image/jpeg,image/bmp,image/gif\"";
+WRM._unparsedData["com.atlassian.jira.plugins.jira-dnd-attachment-plugin:dnd-issue-drop-zone.upload-limit"]="\"10485760\"";
+WRM._unparsedData["com.atlassian.plugins.helptips.jira-help-tips:help-tip-manager.JiraHelpTipData"]="{\"anonymous\":true}";
+WRM._unparsedData["com.atlassian.jira.jira-view-issue-plugin:controller-subtasks.controller.subtasks.parameters"]="{\"url\":\"/rest/api/2/issue/{issueId}/subtask/move\"}";
+WRM._unparsedData["com.atlassian.jira.plugins.jira-wiki-editor:wiki-editor-thumbnails.thumbnails-allowed"]="true";
+WRM._unparsedData["com.atlassian.jira.plugins.jira-wiki-editor:wiki-editor-resources.help-data"]="{\"showHelp\":true,\"editorDocumentationUrl\":[\"https://docs.atlassian.com/jira/jcore-docs-088/Visual+editing\"],\"editorDocumentationTitle\":[\"Show me documentation for the visual editor\"]}";
+WRM._unparsedData["com.atlassian.analytics.analytics-client:policy-update-init.policy-update-data-provider"]="false";
+WRM._unparsedData["com.atlassian.analytics.analytics-client:programmatic-analytics-init.programmatic-analytics-data-provider"]="false";
+WRM._unparsedData["com.onresolve.jira.groovy.groovyrunner:web-item-response-renderer.web-item-actions-data-provider"]="[]";
+WRM._unparsedData["jira.core:avatar-picker-data.data"]="{}";
+WRM._unparsedData["com.atlassian.jira.jira-header-plugin:dismissedFlags.flags"]="{\"dismissed\":[]}";
+WRM._unparsedData["com.atlassian.jira.jira-header-plugin:newsletter-signup-tip-init.newsletterSignup"]="{\"signupDescription\":\"Get updates, inspiration and best practices from the team behind Jira.\",\"formUrl\":\"https://www.atlassian.com/apis/exact-target/{0}/subscribe?mailingListId=1401671\",\"signupTitle\":\"Sign up!\",\"signupId\":\"newsletter-signup-tip\",\"showNewsletterTip\":false}";
+WRM._unparsedData["com.atlassian.jira.project-templates-plugin:project-templates-plugin-resources.ptAnalyticsData"]="{\"instanceCreatedDate\":\"2012-12-02\"}";
+WRM._unparsedData["jira.core:user-message-flags-data.adminLockout"]="{}";
+WRM._unparsedData["jira.request.correlation-id"]="\"9d30550b0cc269\"";
+WRM._unparsedData["project-id"]="11402";
+WRM._unparsedData["project-key"]="\"REALMS\"";
+WRM._unparsedData["project-name"]="\"Minecraft Realms\"";
+WRM._unparsedData["project-type"]="\"business\"";
+WRM._unparsedData["com.atlassian.jira.jira-projects-issue-navigator:generic-filters"]="[{\"id\":\"allissues\",\"jql\":\"project = \\\"{0}\\\" ORDER BY {1}\",\"defaultOrderby\":\"created DESC\",\"label\":\"All issues\",\"requiresUser\":false,\"supportsInlineIssueCreate\":true,\"fields\":[]},{\"id\":\"allopenissues\",\"jql\":\"project = \\\"{0}\\\" AND resolution = Unresolved ORDER BY {1}\",\"defaultOrderby\":\"updated DESC\",\"label\":\"Open issues\",\"requiresUser\":false,\"supportsInlineIssueCreate\":true,\"fields\":[\"resolution\"]},{\"id\":\"doneissues\",\"jql\":\"project = \\\"{0}\\\" AND statusCategory = Done ORDER BY {1}\",\"defaultOrderby\":\"updated DESC\",\"label\":\"Done issues\",\"requiresUser\":false,\"supportsInlineIssueCreate\":false,\"fields\":[\"status\"]},{\"id\":\"recentlyviewed\",\"jql\":\"project = \\\"{0}\\\" AND issuekey in issueHistory() ORDER BY {1}\",\"defaultOrderby\":\"lastViewed DESC\",\"label\":\"Viewed recently\",\"requiresUser\":false,\"supportsInlineIssueCreate\":true,\"fields\":[\"issuekey\"]},{\"id\":\"addedrecently\",\"jql\":\"project = \\\"{0}\\\" AND created \u003e= -1w ORDER BY {1}\",\"defaultOrderby\":\"created DESC\",\"label\":\"Created recently\",\"requiresUser\":false,\"supportsInlineIssueCreate\":true,\"fields\":[\"created\"]},{\"id\":\"resolvedrecently\",\"jql\":\"project = \\\"{0}\\\" AND resolutiondate \u003e= -1w ORDER BY {1}\",\"defaultOrderby\":\"updated DESC\",\"label\":\"Resolved recently\",\"requiresUser\":false,\"supportsInlineIssueCreate\":false,\"fields\":[\"resolutiondate\"]},{\"id\":\"updatedrecently\",\"jql\":\"project = \\\"{0}\\\" AND updated \u003e= -1w ORDER BY {1}\",\"defaultOrderby\":\"updated DESC\",\"label\":\"Updated recently\",\"requiresUser\":false,\"supportsInlineIssueCreate\":true,\"fields\":[\"updated\"]}]";
+WRM._unparsedData["com.atlassian.jira.jira-projects-issue-navigator:default-filter-priority"]="[\"allopenissues\",\"allissues\"]";
+WRM._unparsedData["com.atlassian.jira.jira-projects-issue-navigator:can-manage-filters"]="false";
+WRM._unparsedData["com.atlassian.jira.jira-projects-issue-navigator:project-filters"]="[]";
+WRM._unparsedData["com.atlassian.jira.jira-projects-issue-navigator:can-create-issues"]="false";
+WRM._unparsedData["projectId"]="11402";
+WRM._unparsedData["projectKey"]="\"REALMS\"";
+WRM._unparsedData["projectType"]="\"business\"";
+WRM._unparsedData["com.atlassian.jira.jira-projects-issue-navigator:server-rendered"]="true";
+WRM._unparsedData["archivingProjectHelpUrl"]="\"https://docs.atlassian.com/jira/jadm-docs-088/Archiving+a+project\"";
+WRM._unparsedData["archivingIssueHelpUrl"]="\"https://docs.atlassian.com/jira/jadm-docs-088/Archiving+an+issue\"";
+if(window.WRM._dataArrived)window.WRM._dataArrived();</script>
+<link type="text/css" rel="stylesheet" href="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch.css" data-wrm-key="_super" data-wrm-batch-type="context" media="all">
+<link type="text/css" rel="stylesheet" href="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch(1).css" data-wrm-key="project.issue.navigator,jira.view.issue,jira.global,atl.general,jira.general,-_super" data-wrm-batch-type="context" media="all">
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch.js.Download" data-wrm-key="_super" data-wrm-batch-type="context" data-initially-rendered=""></script>
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch.js(1).Download" data-wrm-key="project.issue.navigator,jira.view.issue,jira.global,atl.general,jira.general,-_super" data-wrm-batch-type="context" data-initially-rendered=""></script>
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch.js(2).Download" data-wrm-key="atl.global,-_super" data-wrm-batch-type="context" data-initially-rendered=""></script>
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/jira.webresources_calendar-en.js.Download" data-wrm-key="jira.webresources:calendar-en" data-wrm-batch-type="resource" data-initially-rendered=""></script>
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/jira.webresources_calendar-localisation-moment.js.Download" data-wrm-key="jira.webresources:calendar-localisation-moment" data-wrm-batch-type="resource" data-initially-rendered=""></script>
+<link type="text/css" rel="stylesheet" href="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch(2).css" data-wrm-key="jira.global.look-and-feel,-_super" data-wrm-batch-type="context" media="all">
+
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/shortcuts.js.Download"></script>
+
+
+<script>
+window.WRM=window.WRM||{};window.WRM._unparsedData=window.WRM._unparsedData||{};window.WRM._unparsedErrors=window.WRM._unparsedErrors||{};
+WRM._unparsedData["com.atlassian.jira.jira-issue-nav-components:inline-edit-enabled"]="true";
+WRM._unparsedData["should-display-chaperone"]="false";
+if(window.WRM._dataArrived)window.WRM._dataArrived();</script>
+<link type="text/css" rel="stylesheet" href="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch(3).css" data-wrm-key="com.atlassian.jira.projects.sidebar.init,-_super,-jira.view.issue,-project.issue.navigator" data-wrm-batch-type="context" media="all">
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch.js(3).Download" data-wrm-key="com.atlassian.jira.projects.sidebar.init,-_super,-jira.view.issue,-project.issue.navigator" data-wrm-batch-type="context" data-initially-rendered=""></script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+
+
+
+
+
+
+<meta name="ajs-can-search-users" content="false">
+<meta name="ajs-can-edit-watchers" content="false">
+<meta name="ajs-default-avatar-url" content="https://bugs.mojang.com/secure/useravatar?size=xsmall&amp;avatarId=10123">
+<meta name="ajs-issue-project-type" content="business">
+<meta name="ajs-issue-key" content="REALMS-6147">
+<meta name="ajs-server-view-issue-is-editable" content="false">
+
+<title>[REALMS-6147] Error message "Realms (429):" when trying to open Minecraft Realms - Jira</title>
+<link rel="search" type="application/opensearchdescription+xml" href="https://bugs.mojang.com/osd.jsp" title="[REALMS-6147] Error message &quot;Realms (429):&quot; when trying to open Minecraft Realms - Jira">
+
+
+<script type="text/javascript" charset="utf-8" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch.js(4).Download"></script><link rel="stylesheet" type="text/css" href="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch(4).css"><script type="text/javascript" charset="utf-8" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/batch.js(5).Download"></script><script type="text/javascript" charset="utf-8" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/tinymce.js.Download"></script><script type="text/javascript" charset="utf-8" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/tinymce-amd.js.Download"></script><script type="text/javascript" charset="utf-8" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/theme.js.Download"></script></head>
+
+
+
+
+<body id="jira" class="aui-layout aui-theme-default   aui-page-sidebar page-type-split page-issue-navigator" data-version="8.8.0" data-aui-version="8.6.0">
+<div id="page">
+    <header id="header" role="banner">
+        
+
+
+
+
+
+
+<script>
+require(["jquery", "jira/license-banner"], function ($, licenseBanner) {
+    $(function () {
+        licenseBanner.showLicenseBanner("");
+        licenseBanner.showLicenseFlag("");
+    });
+});
+</script>
+
+
+
+        
+
+
+
+
+        
+
+
+<nav class="aui-header aui-dropdown2-trigger-group" role="navigation" resolved="" data-aui-responsive="true"><div class="aui-header-inner"><div class="aui-header-before"><a class=" aui-dropdown2-trigger app-switcher-trigger" aria-controls="app-switcher" aria-haspopup="true" role="button" tabindex="0" data-aui-trigger="" href="https://bugs.mojang.com/browse/REALMS-6147#app-switcher" resolved="" aria-expanded="false"><span class="aui-icon aui-icon-small aui-iconfont-appswitcher">Linked Applications</span></a><div id="app-switcher" class="aui-dropdown2 aui-style-default aui-layer" role="menu" aria-hidden="true" data-is-switcher="true" data-environment="{&quot;isUserAdmin&quot;:false,&quot;isAppSuggestionAvailable&quot;:false,&quot;isSiteAdminUser&quot;:false}" resolved=""><div class="aui-dropdown2-section"><ul class="nav-links"><li class="nav-link"><a href="https://bugs.mojang.com/browse/MC/summary" class="aui-dropdown2-radio " title="https://bugs.mojang.com/browse/MC/summary" resolved="" aria-checked="false" tabindex="0"><span class="nav-link-label">Minecraft: Java Edition</span></a></li><li class="nav-link"><a href="https://bugs.mojang.com/browse/MCPE/summary" class="aui-dropdown2-radio " title="https://bugs.mojang.com/browse/MCPE/summary" resolved="" aria-checked="false" tabindex="0"><span class="nav-link-label">Minecraft (Bedrock codebase)</span></a></li><li class="nav-link"><a href="https://bugs.mojang.com/projects/MCD/summary" class="aui-dropdown2-radio " title="https://bugs.mojang.com/projects/MCD/summary" resolved="" aria-checked="false" tabindex="0"><span class="nav-link-label">Minecraft: Dungeons</span></a></li><li class="nav-link"><a href="https://bugs.mojang.com/projects/MCE/summary" class="aui-dropdown2-radio " title="https://bugs.mojang.com/projects/MCE/summary" resolved="" aria-checked="false" tabindex="0"><span class="nav-link-label">Minecraft: Earth</span></a></li><li class="nav-link"><a href="https://bugs.mojang.com/browse/MCL/summary" class="aui-dropdown2-radio " title="https://bugs.mojang.com/browse/MCL/summary" resolved="" aria-checked="false" tabindex="0"><span class="nav-link-label">Minecraft Launcher</span></a></li><li class="nav-link nav-link-local"><a href="https://bugs.mojang.com/secure/MyJiraHome.jspa" class="aui-dropdown2-radio aui-dropdown2-checked checked" title="https://bugs.mojang.com/secure/MyJiraHome.jspa" resolved="" aria-checked="true" tabindex="0"><span class="nav-link-label">Jira</span></a></li></ul></div></div></div><div class="aui-header-primary"><h1 id="logo" class="aui-header-logo aui-header-logo-custom"><a href="https://bugs.mojang.com/secure/MyJiraHome.jspa"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/jira-logo-scaled.png" alt="Jira" data-aui-responsive-header-index="0"></a></h1><ul class="aui-nav" style="width: auto;" resolved=""><li><a href="https://bugs.mojang.com/secure/Dashboard.jspa" class=" aui-nav-link aui-dropdown2-trigger aui-dropdown2-ajax" id="home_link" aria-haspopup="true" aria-controls="home_link-content" title="View and manage your dashboards" accesskey="d" resolved="" aria-expanded="false">Dashboards</a><div class="aui-dropdown2 aui-style-default aui-layer" id="home_link-content" data-aui-dropdown2-ajax-key="home_link" resolved="" aria-hidden="true"></div></li><li><a href="https://bugs.mojang.com/browse/REALMS" class=" aui-nav-link aui-dropdown2-trigger aui-dropdown2-ajax" id="browse_link" aria-haspopup="true" aria-controls="browse_link-content" title="View recent projects and browse a list of projects" accesskey="p" resolved="" aria-expanded="false">Projects</a><div class="aui-dropdown2 aui-style-default aui-layer" id="browse_link-content" data-aui-dropdown2-ajax-key="browse_link" resolved="" aria-hidden="true"></div></li><li><a href="https://bugs.mojang.com/issues/" class=" aui-nav-link aui-dropdown2-trigger aui-dropdown2-ajax" id="find_link" aria-haspopup="true" aria-controls="find_link-content" title="Search for issues and view recent issues" accesskey="i" resolved="" aria-expanded="false">Issues</a><div class="aui-dropdown2 aui-style-default aui-layer" id="find_link-content" data-aui-dropdown2-ajax-key="find_link" resolved="" aria-hidden="true"></div></li>
+</ul></div><div class="aui-header-secondary"><ul class="aui-nav" resolved="">
+<li id="quicksearch-menu">
+    <form action="https://bugs.mojang.com/secure/QuickSearch.jspa" method="get" id="quicksearch" class="aui-quicksearch dont-default-focus ajs-dirty-warning-exempt">
+        <input id="quickSearchInput" autocomplete="off" class="search" type="text" title="Search ( Type &#39;/&#39; )" placeholder="Search" name="searchString" accesskey="q"><div class="quick-search-spinner"></div>
+        <input type="submit" class="hidden" value="Search">
+    </form>
+</li>
+
+
+
+
+    <li id="system-help-menu">
+        <a class="aui-nav-link aui-dropdown2-trigger aui-dropdown2-trigger-arrowless" id="help_menu" aria-haspopup="true" href="https://docs.atlassian.com/jira/jcore-docs-088/" target="$textUtils.htmlEncode($rootHelpMenuItem.params.target)" title="Help" resolved="" aria-controls="system-help-menu-content" aria-expanded="false"><span class="aui-icon aui-icon-small aui-iconfont-question-filled">Help</span></a>
+        <div id="system-help-menu-content" class="aui-dropdown2 aui-style-default aui-layer" resolved="" aria-hidden="true">
+                            <div class="aui-dropdown2-section">
+                                                                <ul id="jira-help" class="aui-list-truncate">
+                                                            <li>
+                                    <a id="view_core_help" class="aui-nav-link " title="Go to the online documentation for Jira Core" href="https://docs.atlassian.com/jira/jcore-docs-088/" target="_blank">Jira Core help</a>
+                                </li>
+                                                            <li>
+                                    <a id="keyshortscuthelp" class="aui-nav-link " title="Get more information about Jira&#39;s Keyboard Shortcuts ( Type &#39;?&#39; )" href="https://bugs.mojang.com/secure/ViewKeyboardShortcuts!default.jspa" target="_blank">Keyboard Shortcuts</a>
+                                </li>
+                                                            <li>
+                                    <a id="view_about" class="aui-nav-link " title="Get more information about Jira" href="https://bugs.mojang.com/secure/AboutPage.jspa">About Jira</a>
+                                </li>
+                                                            <li>
+                                    <a id="view_credits" class="aui-nav-link " title="See who did what" href="https://bugs.mojang.com/secure/credits/AroundTheWorld!default.jspa" target="_blank">Jira Credits</a>
+                                </li>
+                                                    </ul>
+                                    </div>
+                    </div>
+    </li>
+
+
+
+
+
+
+
+
+
+<li id="user-options">
+            <a class="aui-nav-link login-link" href="https://bugs.mojang.com/login.jsp?os_destination=%2Fbrowse%2FREALMS-6147">Log In</a>
+                <div id="user-options-content" class="aui-dropdown2 aui-style-default aui-layer" resolved="" aria-hidden="true">
+                            <div class="aui-dropdown2-section">
+                                                        </div>
+                    </div>
+    </li>
+</ul></div></div><!-- .aui-header-inner--></nav><!-- .aui-header -->
+    </header>
+    
+
+
+<div id="announcement-banner" class="alertHeader">
+    <!--div class="panel" style="background-color: #FFFFCE;border-color: #ccc;border-style: dashed;border-width: 1px; display: block">
+	<div class="panelHeader" style="border-bottom-width: 1px;border-bottom-style: dashed;border-bottom-color: #ccc;background-color: #F7D6C1;"><b>Scheduled downtime</b></div>
+	<div class="panelContent" style="background-color: #FFFFCE;">
+	<p>On Thursday the 9th, the bug tracker will be unavailable from 11am CET for approximately 5 to 7 hours as we upgrade the bug tracker software. Please check <a href="https://twitter.com/MojangStatus" target="_blank">@MojangStatus</a> on twitter for status updates.<br>
+	</div>
+</div-->
+
+
+<link href="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/mojira.css" rel="stylesheet">
+
+<!--style>#announcement-banner { display: block }</style-->
+
+<script type="text/javascript">
+AJS.keys["shortcuts"].push({
+    "moduleKey": "mojang.custom.triage",
+    "keys": [["r"]],
+    "context": "issueaction",
+    "op": "click",
+    "param": "#action_id_801"
+});
+</script>
+</div>
+
+
+    <section id="content" role="main">
+<div class="aui-sidebar projects-sidebar fade-in" resolved=""><div class="aui-sidebar-wrapper" style="height: 840px;"><div class="aui-sidebar-body"><header class="aui-page-header"><div class="aui-page-header-inner"><div class="aui-page-header-image"><a href="https://bugs.mojang.com/projects/REALMS/summary" title="Minecraft Realms" class="jira-project-avatar"><span class="aui-avatar aui-avatar-large aui-avatar-project"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/projectavatar" alt="Minecraft Realms"></span></span><img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MSA3MSI+PGNpcmNsZSBjeD0iMzUuNSIgY3k9IjM1LjUiIHI9IjM1LjUiIGZpbGw9IiMwMDY1ZmYiLz48cGF0aCBkPSJNMTguNyAzNy41aDMzLjVjMS42IDAgMyAxLjMgMyAzcy0xLjMgMy0zIDNIMTguN2MtMS42IDAtMy0xLjMtMy0zczEuNC0zIDMtM3ptMC05LjloMzMuNWMxLjYgMCAzIDEuMyAzIDMgMCAxLjYtMS4zIDMtMyAzSDE4LjdjLTEuNiAwLTMtMS4zLTMtMyAuMS0xLjcgMS40LTMgMy0zem0wLTkuOGgzMy41YzEuNiAwIDMgMS4zIDMgM3MtMS4zIDMtMyAzSDE4LjdjLTEuNiAwLTMtMS4zLTMtM3MxLjQtMyAzLTN6bS4xIDI5LjVoMTcuN2MxLjcgMCAzIDEuMyAzIDNzLTEuMyAzLTMgM0gxOC44Yy0xLjcgMC0zLTEuMy0zLTMgMC0xLjYgMS4zLTMgMy0zeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" alt="Project Type: business" class="jira-project-avatar-icon"></a></div><!-- .aui-page-header-image --><div class="aui-page-header-main"><h1><div class="aui-group aui-group-split"><div class="aui-item project-title"><a href="https://bugs.mojang.com/projects/REALMS/summary" title="Minecraft Realms">Minecraft Realms</a></div></div></h1></div><!-- .aui-page-header-main --><div class="aui-page-header-main scopeFilterContainer"></div><!-- .aui-page-header-main --></div><!-- .aui-page-header-inner --></header><!-- .aui-page-header --><nav class="aui-navgroup aui-navgroup-vertical"><div class="aui-navgroup-inner sidebar-content-container jira-navigation"><div class="aui-sidebar-group aui-sidebar-group-tier-one" data-id="sidebar-navigation-panel"><ul class="aui-nav" resolved=""><li><a class="aui-nav-item " href="https://bugs.mojang.com/projects/REALMS/summary" data-link-id="com.atlassian.jira.jira-projects-plugin:summary-page"><span class="aui-icon aui-icon-large icon-sidebar-summary"></span><span class="aui-nav-item-label" title="Summary">Summary</span></a></li><li class="aui-nav-selected"><a class="aui-nav-item " href="https://bugs.mojang.com/projects/REALMS/issues" data-link-id="com.atlassian.jira.jira-projects-issue-navigator:sidebar-issue-navigator"><span class="aui-icon aui-icon-large icon-sidebar-issues aui-iconfont-issues"></span><span class="aui-nav-item-label" title="Issues">Issues</span></a></li><li><a class="aui-nav-item " href="https://bugs.mojang.com/projects/REALMS?selectedItem=com.atlassian.jira.jira-projects-plugin:report-page" data-link-id="com.atlassian.jira.jira-projects-plugin:report-page"><span class="aui-icon aui-icon-large agile-icon-report aui-iconfont-graph-line"></span><span class="aui-nav-item-label" title="Reports">Reports</span></a></li></ul></div></div></nav></div><div class="aui-sidebar-footer"><a class="aui-button aui-button-subtle aui-sidebar-toggle aui-sidebar-footer-tipsy" data-tooltip="Expand sidebar ( [ )" href="https://bugs.mojang.com/browse/REALMS-6147#" resolved=""><span class="aui-icon aui-icon-small"></span></a></div></div></div><div class="aui-page-panel"><div class="aui-page-panel-inner"><div class="issue-navigator"><div class="content"><div class="issue-view" style="height: 840px;"><div class="navigation-tools"><div class="collapse-container"></div></div><div class="issue-container"><div id="issue-content" class="issue-edit-form"><header id="stalker" class="issue-header js-stalker"><div class="issue-header-content"><header class="aui-page-header"><div class="aui-page-header-inner"><div class="aui-page-header-image"><span id="11402" class="aui-avatar aui-avatar-large aui-avatar-project"><span class="aui-avatar-inner"><img id="project-avatar" alt="Uploaded image for project: &#39;Minecraft Realms&#39;" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/projectavatar"></span></span></div><!-- .aui-page-header-image --><div class="aui-page-header-main"><ol class="aui-nav aui-nav-breadcrumbs" resolved=""><li><a id="project-name-val" href="https://bugs.mojang.com/browse/REALMS">Minecraft Realms</a></li><li><a class="issue-link" data-issue-key="REALMS-6147" href="https://bugs.mojang.com/browse/REALMS-6147" id="key-val" rel="389424">REALMS-6147</a></li></ol><h1 id="summary-val">Error message "Realms (429):" when trying to open Minecraft Realms</h1></div><!-- .aui-page-header-main --><div class="aui-page-header-actions"><div id="issue-header-pager"></div></div><!-- .aui-page-header-actions --></div><!-- .aui-page-header-inner --></header><!-- .aui-page-header --><div class="command-bar"><div class="ops-cont"><div class="ops-menus aui-toolbar2"><div class="aui-toolbar2-inner"><div class="aui-toolbar2-primary"><div id="opsbar-ops-login-lnk_container" class="aui-buttons pluggable-ops"><a id="ops-login-lnk" title="Log In" class="aui-button toolbar-trigger" href="https://bugs.mojang.com/login.jsp?os_destination=%2Fbrowse%2FREALMS-6147" resolved="" style="display: none;"><span class="trigger-label">Log In</span></a></div><div id="opsbar-opsbar-operations" class="aui-buttons pluggable-ops"></div><div id="opsbar-opsbar-transitions" class="aui-buttons pluggable-ops"></div><div id="opsbar-opsbar-admin" class="aui-buttons pluggable-ops"></div><div id="opsbar-opsbar-restore" class="aui-buttons pluggable-ops"></div></div><div class="aui-toolbar2-secondary"><div id="opsbar-jira.issue.tools" class="aui-buttons pluggable-ops"><a href="https://bugs.mojang.com/browse/REALMS-6147#" id="viewissue-export" aria-haspopup="true" class="aui-button  aui-dropdown2-trigger" resolved="" aria-controls="viewissue-export_drop" aria-expanded="false" original-title="Export this issue in another format"><span class="icon icon-default aui-icon aui-icon-small aui-iconfont-export"></span> <span class="dropdown-text">Export</span></a></div></div></div></div><aui-dropdown-menu id="viewissue-export_drop" resolved="" role="menu" class="aui-dropdown2 aui-style-default aui-layer" aria-hidden="true">
+        <div role="application">
+            <!-- content {"defaultContent":"","selector":null} --><ul><aui-item-link href="/si/jira.issueviews:issue-xml/REALMS-6147/REALMS-6147.xml" id="jira.issueviews:issue-xml" resolved=""><a role="menuitem" tabindex="-1" href="https://bugs.mojang.com/si/jira.issueviews:issue-xml/REALMS-6147/REALMS-6147.xml"><!-- content {"defaultContent":"","selector":null} --><span class="trigger-label">XML</span><!-- /content --></a></aui-item-link><aui-item-link href="/si/jira.issueviews:issue-word/REALMS-6147/REALMS-6147.doc" id="jira.issueviews:issue-word" resolved=""><a role="menuitem" tabindex="-1" href="https://bugs.mojang.com/si/jira.issueviews:issue-word/REALMS-6147/REALMS-6147.doc"><!-- content {"defaultContent":"","selector":null} --><span class="trigger-label">Word</span><!-- /content --></a></aui-item-link><aui-item-link href="/si/jira.issueviews:issue-html/REALMS-6147/REALMS-6147.html" id="jira.issueviews:issue-html" resolved=""><a role="menuitem" tabindex="-1" href="https://bugs.mojang.com/si/jira.issueviews:issue-html/REALMS-6147/REALMS-6147.html"><!-- content {"defaultContent":"","selector":null} --><span class="trigger-label">Printable</span><!-- /content --></a></aui-item-link></ul><!-- /content -->
+        </div>
+    </aui-dropdown-menu></div></div></div></header><div class="issue-body-content"><div class="aui-group issue-body"><div class="aui-item issue-main-column"><div id="details-module" class="module toggle-wrap expanded"><div id="details-module_heading" class="mod-header"><ul class="ops"></ul><button class="aui-button toggle-title" aria-label="Details" aria-controls="details-module" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">Details</h4></div><div class="mod-content">
+
+
+
+
+
+
+
+
+
+
+<ul id="issuedetails" class="property-list two-cols">
+                
+<li class="item">
+    <div class="wrap">
+        <strong class="name">Type:</strong>
+        <span id="type-val" class="value">
+                        <img alt="" height="16" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" title="Bug - A problem which impairs or prevents the functions of the product." width="16"> Bug
+        </span>
+    </div>
+</li>                    <li class="item item-right">
+    <div class="wrap">
+        <strong class="name">Status:</strong>
+            <span id="status-val" class="value">
+                                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-blue-gray jira-issue-status-lozenge-new jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Open&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;The issue is open and ready for the assignee to start work on it.&lt;/span&gt;" original-title="">Open</span>            </span>
+            </div>
+</li>
+    
+                            
+<li class="item item-right">
+    <div class="wrap">
+        <strong class="name">Resolution:</strong>
+        <span id="resolution-val" class="value unresolved">
+                            Unresolved
+                    </span>
+    </div>
+</li>                                
+
+<li class="item">
+    <div class="wrap">
+        <strong class="name">Affects Version/s:</strong>
+        <span id="versions-val" class="value">
+                                        <span class="shorten" id="versions-field" resolved="" style="height: auto;">
+                                            <span title="1.16 (Java Edition) 1.16 (Java Edition)">1.16 (Java Edition)</span>                                    </span>
+                    </span>
+    </div>
+</li>                                
+<li class="item item-right">
+    <div class="wrap">
+        <strong class="name">Fix Version/s:</strong>
+        <span id="fixfor-val" class="value">
+                                        None
+                    </span>
+    </div>
+</li>                                        
+
+
+<li class="item full-width">
+    <div class="wrap" id="wrap-labels">
+        <strong class="name">Labels:</strong>
+                <div class="labels-wrap value">
+            <span class="labels" id="labels-389424-value">None</span>
+            </div>
+    </div>
+</li>                                <li class="item full-width">
+    <div class="wrap">
+        <strong class="name">Environment:</strong>
+        <div id="environment-val" class="value">
+                                          Windows 10
+<br>
+Minecraft Java Edition 1.16.4
+<br>
+Java version 1.8.0-271-b09
+      
+                    </div>
+    </div>
+</li>        </ul>
+
+<div id="customfieldmodule">
+    <div class="aui-tabs horizontal-tabs" id="customfield-tabs" role="application">
+                    <div id="customfield-panel-1" class=" active-pane">
+                        <ul class="property-list">
+                                                    <li id="rowForcustomfield_10500" class="item">
+        <div class="wrap">
+            <strong title="Confirmation Status" class="name">Confirmation Status:</strong>
+            <div id="customfield_10500-val" class="value type-radiobuttons" data-fieldtype="radiobuttons" data-fieldtypecompletekey="com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons">
+                                        Confirmed
+
+                            </div>
+        </div>
+    </li>
+                                                                    <li id="rowForcustomfield_12301" class="item">
+        <div class="wrap">
+            <strong title="Realms Platform" class="name">Realms Platform:</strong>
+            <div id="customfield_12301-val" class="value type-select" data-fieldtype="select" data-fieldtypecompletekey="com.atlassian.jira.plugin.system.customfieldtypes:select">
+                                        Java
+
+                            </div>
+        </div>
+    </li>
+                                        </ul>
+        </div>
+        </div></div>
+</div></div><div id="descriptionmodule" class="module toggle-wrap"><div id="descriptionmodule_heading" class="mod-header"><ul class="ops"></ul><button class="aui-button toggle-title" aria-label="Description" aria-controls="descriptionmodule" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">Description</h4></div><div class="mod-content"><div id="description-val" class="field-ignore-highlight">
+    <div class="user-content-block">
+                    <p>When pressing the "Minecraft Realms" button to bring up the list of realms I have joined, I get the following error message with no other details:</p>
+
+<p>"Realms (429):"</p>
+
+<p>Everything was working just fine less than 30 minutes ago with no new changes or configurations made since then.</p>
+
+<p>Restarting Minecraft does not fix the issue.</p>
+            </div>
+</div>
+</div></div><div id="dnd-metadata" class="module toggle-wrap"><div id="dnd-metadata_heading" class="mod-header"><ul class="ops"></ul><button class="aui-button toggle-title" aria-label="Attachments" aria-controls="dnd-metadata" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">Attachments</h4></div><div class="mod-content"><div id="dnd-metadata-webpanel" data-can-attach="false" data-project-type="business" data-upload-limit="10485760" data-thumbnails-allowed="true"></div></div></div><div id="attachmentmodule" class="module toggle-wrap"><div id="attachmentmodule_heading" class="mod-header"><ul class="ops"><li class="drop"><div class="aui-dd-parent"><div class="aui-button aui-button-compact aui-button-subtle js-default-dropdown" title="Options" resolved="" id="AJS_DROPDOWN__4" aria-controls="AJS_DROPDOWN__4_drop" aria-haspopup="true" aria-expanded="false"><span class="aui-icon aui-icon-small aui-iconfont-more">Options</span></div><div class="aui-dropdown-content aui-list"><ul id="attachment-sorting-options" class="aui-list-section aui-first"><li class="aui-list-item"><a id="attachment-sort-key-name" href="https://bugs.mojang.com/browse/REALMS-6147?attachmentSortBy=fileName#attachmentmodule" class="aui-list-checked aui-checked aui-list-item-link" title="viewissue.subtasks.tab.show.all.name"><span>Sort By Name</span></a></li><li class="aui-list-item"><a id="attachment-sort-key-date" href="https://bugs.mojang.com/browse/REALMS-6147?attachmentSortBy=dateTime#attachmentmodule" class="aui-list-checked aui-list-item-link" title="Sort By Date"><span>Sort By Date</span></a></li></ul><ul id="attachment-sorting-order-options" class="aui-list-section"><li class="aui-list-item"><a id="attachment-sort-direction-asc" href="https://bugs.mojang.com/browse/REALMS-6147?attachmentOrder=asc#attachmentmodule" class="aui-list-checked aui-checked aui-list-item-link" title="Ascending"><span>Ascending</span></a></li><li class="aui-list-item"><a id="attachment-sort-direction-desc" href="https://bugs.mojang.com/browse/REALMS-6147?attachmentOrder=desc#attachmentmodule" class="aui-list-checked aui-list-item-link" title="Descending"><span>Descending</span></a></li></ul><ul id="attachment-view-mode-options" class="aui-list-section"><li class="aui-list-item"><a id="attachment-view-mode-gallery" href="https://bugs.mojang.com/browse/REALMS-6147?attachmentViewMode=gallery#attachmentmodule" class="aui-list-checked aui-checked aui-list-item-link" title="Thumbnails"><span>Thumbnails</span></a></li><li class="aui-list-item"><a id="attachment-view-mode-list" href="https://bugs.mojang.com/browse/REALMS-6147?attachmentViewMode=list#attachmentmodule" class="aui-list-checked aui-list-item-link" title="List"><span>List</span></a></li></ul><ul id="attachment-manage-options" class="aui-list-section aui-last"><li class="aui-list-item"><a id="aszip" href="https://bugs.mojang.com/secure/attachmentzip/389424.zip" class="aui-list-checked aui-list-item-link" title="Download all attachments as a ZIP file"><span>Download All</span></a></li></ul></div></div></li></ul><button class="aui-button toggle-title" aria-label="Attachments" aria-controls="attachmentmodule" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">Attachments</h4></div><div class="mod-content"><ol id="attachment_thumbnails" class="item-attachments" data-sort-key="fileName" data-sort-order="asc"><li class="attachment-content js-file-attachment" draggable="true" data-downloadurl="image/png:billede_2020-12-23_162201.png:https://bugs.mojang.com/secure/attachment/361249/billede_2020-12-23_162201.png" data-issue-id="389424" data-attachment-type="image" data-attachment-thumbnail="true" resolved=""><div class="attachment-thumb"><a href="https://bugs.mojang.com/secure/attachment/361249/billede_2020-12-23_162201.png" title="billede_2020-12-23_162201.png - Latest 23/Dec/20 4:22 PM - David Foght" file-preview-id="361249" file-preview-title="billede_2020-12-23_162201.png" file-preview-type="image" file-preview-url="https://bugs.mojang.com/secure/thumbnail/361249/_thumb_361249.png" resolved=""><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/_thumb_361249.png" alt="billede_2020-12-23_162201.png"></a></div><dl><dt><span class="blender"></span><a href="https://bugs.mojang.com/secure/attachment/361249/billede_2020-12-23_162201.png" class="attachment-title" title="billede_2020-12-23_162201.png - Latest 23/Dec/20 4:22 PM - David Foght" file-preview-id="361249" file-preview-title="billede_2020-12-23_162201.png" file-preview-type="image" file-preview-url="https://bugs.mojang.com/secure/thumbnail/361249/_thumb_361249.png" resolved="">billede_2020-12-23_162201.png</a></dt><dd class="attachment-size">34 kB</dd><dd class="attachment-date"><time class="livestamp" datetime="2020-12-23T16:22:02.200+01:00">6 days ago</time></dd></dl></li><li class="attachment-content js-file-attachment" draggable="true" data-downloadurl="image/png:realms-429.png:https://bugs.mojang.com/secure/attachment/352913/realms-429.png" data-issue-id="389424" data-attachment-type="image" data-attachment-thumbnail="true" resolved=""><div class="attachment-thumb"><a href="https://bugs.mojang.com/secure/attachment/352913/realms-429.png" title="realms-429.png - Latest 23/Nov/20 4:30 PM - Andreas Renberg" file-preview-id="352913" file-preview-title="realms-429.png" file-preview-type="image" file-preview-url="https://bugs.mojang.com/secure/thumbnail/352913/_thumb_352913.png" resolved=""><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/_thumb_352913.png" alt="realms-429.png"></a></div><dl><dt><span class="blender"></span><a href="https://bugs.mojang.com/secure/attachment/352913/realms-429.png" class="attachment-title" title="realms-429.png - Latest 23/Nov/20 4:30 PM - Andreas Renberg" file-preview-id="352913" file-preview-title="realms-429.png" file-preview-type="image" file-preview-url="https://bugs.mojang.com/secure/thumbnail/352913/_thumb_352913.png" resolved="">realms-429.png</a></dt><dd class="attachment-size">441 kB</dd><dd class="attachment-date"><time class="livestamp" datetime="2020-11-23T16:30:09.527+01:00">23/Nov/20 4:30 PM</time></dd></dl></li></ol></div></div><div id="linkingmodule" class="module toggle-wrap"><div id="linkingmodule_heading" class="mod-header"><ul class="ops"></ul><button class="aui-button toggle-title" aria-label="Issue Links" aria-controls="linkingmodule" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">Issue Links</h4></div><div class="mod-content">
+
+
+
+
+
+
+<div class="links-container" data-default-link-icon="/images/icons/generic_link_16.png" resolved="">
+                <dl class="links-list ">
+            <dt title="is duplicated by">is duplicated by</dt>
+                            <dd id="internal-394487_10102">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-208003: Realms, incapable to join">
+        <a href="https://bugs.mojang.com/browse/MC-208003" data-issue-key="MC-208003" class="issue-link link-title resolution">MC-208003</a>
+        <span class="link-summary">Realms, incapable to join</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-395155_10102">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-208114: Bought a realm, now i get Realms(249) every time I click the realms button">
+        <a href="https://bugs.mojang.com/browse/MC-208114" data-issue-key="MC-208114" class="issue-link link-title resolution">MC-208114</a>
+        <span class="link-summary">Bought a realm, now i get Realms(249) every time I click the realms button</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-397580_10102">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-208872: I keep getting the realms (429) error over and over">
+        <a href="https://bugs.mojang.com/browse/MC-208872" data-issue-key="MC-208872" class="issue-link link-title resolution">MC-208872</a>
+        <span class="link-summary">I keep getting the realms (429) error over and over</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-398369_10102">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209106: Realms (429):">
+        <a href="https://bugs.mojang.com/browse/MC-209106" data-issue-key="MC-209106" class="issue-link link-title resolution">MC-209106</a>
+        <span class="link-summary">Realms (429):</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-398446_10102">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209130: Error 429 on Realms">
+        <a href="https://bugs.mojang.com/browse/MC-209130" data-issue-key="MC-209130" class="issue-link link-title resolution">MC-209130</a>
+        <span class="link-summary">Error 429 on Realms</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-398670_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209197: Error 429">
+        <a href="https://bugs.mojang.com/browse/MC-209197" data-issue-key="MC-209197" class="issue-link link-title resolution">MC-209197</a>
+        <span class="link-summary">Error 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-398906_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209267: Minecraft Realms (which i paid for) frequently keeps saying  &quot;realms (429)&quot;">
+        <a href="https://bugs.mojang.com/browse/MC-209267" data-issue-key="MC-209267" class="issue-link link-title resolution">MC-209267</a>
+        <span class="link-summary">Minecraft Realms (which i paid for) frequently keeps saying  "realms (429)"</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-399156_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209351: Realm 429">
+        <a href="https://bugs.mojang.com/browse/MC-209351" data-issue-key="MC-209351" class="issue-link link-title resolution">MC-209351</a>
+        <span class="link-summary">Realm 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-399614_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209531: Realms 429">
+        <a href="https://bugs.mojang.com/browse/MC-209531" data-issue-key="MC-209531" class="issue-link link-title resolution">MC-209531</a>
+        <span class="link-summary">Realms 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-399629_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209536: realms 429">
+        <a href="https://bugs.mojang.com/browse/MC-209536" data-issue-key="MC-209536" class="issue-link link-title resolution">MC-209536</a>
+        <span class="link-summary">realms 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-399828_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209639: Realms(429) error message everytime i try to open realms">
+        <a href="https://bugs.mojang.com/browse/MC-209639" data-issue-key="MC-209639" class="issue-link link-title resolution">MC-209639</a>
+        <span class="link-summary">Realms(429) error message everytime i try to open realms</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400107_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209740: Realms (429): cant start">
+        <a href="https://bugs.mojang.com/browse/MC-209740" data-issue-key="MC-209740" class="issue-link link-title resolution">MC-209740</a>
+        <span class="link-summary">Realms (429): cant start</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400140_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209754: realm 429">
+        <a href="https://bugs.mojang.com/browse/MC-209754" data-issue-key="MC-209754" class="issue-link link-title resolution">MC-209754</a>
+        <span class="link-summary">realm 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400220_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209777: Java Realms 429 bug">
+        <a href="https://bugs.mojang.com/browse/MC-209777" data-issue-key="MC-209777" class="issue-link link-title resolution">MC-209777</a>
+        <span class="link-summary">Java Realms 429 bug</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400222_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209778: 429">
+        <a href="https://bugs.mojang.com/browse/MC-209778" data-issue-key="MC-209778" class="issue-link link-title resolution">MC-209778</a>
+        <span class="link-summary">429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400421_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209850: Realms bug 429">
+        <a href="https://bugs.mojang.com/browse/MC-209850" data-issue-key="MC-209850" class="issue-link link-title resolution">MC-209850</a>
+        <span class="link-summary">Realms bug 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400680_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MC-209967: Error code (429): when I try to open realms">
+        <a href="https://bugs.mojang.com/browse/MC-209967" data-issue-key="MC-209967" class="issue-link link-title resolution">MC-209967</a>
+        <span class="link-summary">Error code (429): when I try to open realms</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400731_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="MCL-16224: Realm 429 error">
+        <a href="https://bugs.mojang.com/browse/MCL-16224" data-issue-key="MCL-16224" class="issue-link link-title resolution">MCL-16224</a>
+        <span class="link-summary">Realm 429 error</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-390522_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6186: Can&#39;t join my realm ">
+        <a href="https://bugs.mojang.com/browse/REALMS-6186" data-issue-key="REALMS-6186" class="issue-link link-title resolution">REALMS-6186</a>
+        <span class="link-summary">Can't join my realm </span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-391560_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6237: Can&#39;t start realms tab becuase of error 429">
+        <a href="https://bugs.mojang.com/browse/REALMS-6237" data-issue-key="REALMS-6237" class="issue-link link-title resolution">REALMS-6237</a>
+        <span class="link-summary">Can't start realms tab becuase of error 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-396105_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6380: Realms (429) Bug">
+        <a href="https://bugs.mojang.com/browse/REALMS-6380" data-issue-key="REALMS-6380" class="issue-link link-title resolution">REALMS-6380</a>
+        <span class="link-summary">Realms (429) Bug</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-397817_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6431: I am getting the Realms (429): error and cannot find how to fix this online.">
+        <a href="https://bugs.mojang.com/browse/REALMS-6431" data-issue-key="REALMS-6431" class="issue-link link-title resolution">REALMS-6431</a>
+        <span class="link-summary">I am getting the Realms (429): error and cannot find how to fix this online.</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-398375_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6453: realm bug 429">
+        <a href="https://bugs.mojang.com/browse/REALMS-6453" data-issue-key="REALMS-6453" class="issue-link link-title resolution">REALMS-6453</a>
+        <span class="link-summary">realm bug 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-398530_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6462: ERROR 429">
+        <a href="https://bugs.mojang.com/browse/REALMS-6462" data-issue-key="REALMS-6462" class="issue-link link-title resolution">REALMS-6462</a>
+        <span class="link-summary">ERROR 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-398675_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6467: Error Realms(429)">
+        <a href="https://bugs.mojang.com/browse/REALMS-6467" data-issue-key="REALMS-6467" class="issue-link link-title resolution">REALMS-6467</a>
+        <span class="link-summary">Error Realms(429)</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-399077_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6484: Minecraft Realms is not working">
+        <a href="https://bugs.mojang.com/browse/REALMS-6484" data-issue-key="REALMS-6484" class="issue-link link-title resolution">REALMS-6484</a>
+        <span class="link-summary">Minecraft Realms is not working</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-399641_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6500: Error 429):">
+        <a href="https://bugs.mojang.com/browse/REALMS-6500" data-issue-key="REALMS-6500" class="issue-link link-title resolution">REALMS-6500</a>
+        <span class="link-summary">Error 429):</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400322_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6526: 429">
+        <a href="https://bugs.mojang.com/browse/REALMS-6526" data-issue-key="REALMS-6526" class="issue-link link-title resolution">REALMS-6526</a>
+        <span class="link-summary">429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                            <dd id="internal-400428_10102" class="
+                                                collapsed-link                    ">
+                    <div class="link-content">
+                                                    
+
+
+
+<p>
+            <img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/viewavatar" width="16" height="16" title="Bug - A problem which impairs or prevents the functions of the product." alt="Bug - A problem which impairs or prevents the functions of the product.">
+        <span title="REALMS-6529: Realm 429">
+        <a href="https://bugs.mojang.com/browse/REALMS-6529" data-issue-key="REALMS-6529" class="issue-link link-title resolution">REALMS-6529</a>
+        <span class="link-summary">Realm 429</span>
+    </span>
+</p>
+<ul class="link-snapshot">
+                <li class="status">
+                        <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-short" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Resolved&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.&lt;/span&gt;" original-title="">Resolved</span>
+                    </li>
+    </ul>
+                                            </div>
+                                    </dd>
+                    </dl>
+                <div id="show-more-links">
+            <button class="aui-button aui-button-link" id="show-more-links-link" resolved="">Show 24 more links</button> <span>(24 is duplicated by)</span>
+        </div>
+    </div>
+</div></div><div id="activitymodule" class="module toggle-wrap"><div id="activitymodule_heading" class="mod-header"><ul class="ops"></ul><button class="aui-button toggle-title" aria-label="Activity" aria-controls="activitymodule" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">Activity</h4></div><div class="mod-content">
+<div class="tabwrap aui-tabs horizontal-tabs aui-tabs-disabled">
+
+        <ul id="issue-tabs" class="tabs-menu">
+                                
+            <li class="menu-item " id="all-tabpanel" data-id="all-tabpanel" data-key="com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel" data-label="All" data-href="/browse/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel">
+                                    <a id="all-tabpanel" href="https://bugs.mojang.com/browse/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel" class="ajax-activity-content">All</a>
+                            </li>
+                                
+            <li class="menu-item  active-tab active " id="comment-tabpanel" data-id="comment-tabpanel" data-key="com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel" data-label="Comments" data-href="/browse/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel">
+                                    <a tabindex="0">Comments</a>
+                            </li>
+                                
+            <li class="menu-item " id="changehistory-tabpanel" data-id="changehistory-tabpanel" data-key="com.atlassian.jira.plugin.system.issuetabpanels:changehistory-tabpanel" data-label="History" data-href="/browse/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:changehistory-tabpanel">
+                                    <a id="changehistory-tabpanel" href="https://bugs.mojang.com/browse/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:changehistory-tabpanel" class="ajax-activity-content">History</a>
+                            </li>
+                                
+            <li class="menu-item " id="activity-stream-issue-tab" data-id="activity-stream-issue-tab" data-key="com.atlassian.streams.streams-jira-plugin:activity-stream-issue-tab" data-label="Activity" data-href="/browse/REALMS-6147?page=com.atlassian.streams.streams-jira-plugin:activity-stream-issue-tab">
+                                    <a id="activity-stream-issue-tab" href="https://bugs.mojang.com/browse/REALMS-6147?page=com.atlassian.streams.streams-jira-plugin:activity-stream-issue-tab" class="ajax-activity-content">Activity</a>
+                            </li>
+                                
+            <li class="menu-item " id="transitions-summary-tabpanel" data-id="transitions-summary-tabpanel" data-key="com.googlecode.jira-suite-utilities:transitions-summary-tabpanel" data-label="Transitions" data-href="/browse/REALMS-6147?page=com.googlecode.jira-suite-utilities:transitions-summary-tabpanel">
+                                    <a id="transitions-summary-tabpanel" href="https://bugs.mojang.com/browse/REALMS-6147?page=com.googlecode.jira-suite-utilities:transitions-summary-tabpanel" class="ajax-activity-content">Transitions</a>
+                            </li>
+                </ul>
+
+                    <div class="sortwrap">
+                                    <a class="issue-activity-sort-link ajax-activity-content" rel="nofollow" data-tab-sort="" data-order="desc" href="https://bugs.mojang.com/browse/REALMS-6147?actionOrder=desc" title="Ascending order - Click to sort in descending order">
+                        <span class="aui-icon aui-icon-small aui-iconfont-up">Ascending order - Click to sort in descending order</span>
+                    </a>
+                            </div>
+                        <div class="tabs-pane active-pane"></div>
+    </div>
+    <div class="issuePanelWrapper">
+        <div class="issuePanelProgress"></div>
+        <div class="issuePanelContainer" id="issue_actions_container">
+                                                <div class="message-container">
+    <a class="collapsed-comments" href="https://bugs.mojang.com/browse/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel&amp;showAll=true"><span class="collapsed-comments-line"></span><span class="collapsed-comments-line"></span><span class="show-more-comments" data-collapsed-count="64">64 older comments</span></a>
+</div>                                     
+
+
+<div id="comment-885458" class="issue-data-block activity-comment twixi-block  expanded">
+    <div class="twixi-wrap verbose actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Collapse comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-expanded"><span>Hide</span></span></a>
+            <div class="action-links">
+                <a href="https://bugs.mojang.com/browse/REALMS-6147?focusedCommentId=885458&amp;page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-885458" title="Right click and copy link for a permanent link to this comment." class="activitymodule-link issue-comment-action">
+                    <span class="icon-default aui-icon aui-icon-small aui-iconfont-link">Permalink</span></a>
+                                            </div>
+            <div class="action-details">        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="jwalk3r12" id="commentauthor_885458_verbose" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=jwalk3r12"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/e68fc2c6e6bda82d98cb04f5b1159712.png" alt="jwalk3r12"></span></span> Jack Walker</a>
+ added a comment  - <span class="commentdate_885458_verbose subText"><span class="date user-tz" title="28/Dec/20 6:28 PM"><time class="livestamp" datetime="2020-12-28T18:28:21+0100">2 days ago</time></span></span>  </div>
+        </div>
+        <div class="action-body flooded"><p>Also getting this issue, nothing seems to resolve it, all the "fixes" seem to do is just waste time whilst it sorts itself out. I would really like to know something is being done about this, as my friend is not paying for a Realms server for it to be inaccessible when it is supposed to be available 24/7</p> </div>
+    </div>
+    <div class="twixi-wrap concise actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Expand comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-collapsed"><span>Show</span></span></a>
+            <div class="action-details flooded">
+                        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="jwalk3r12" id="commentauthor_885458_concise" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=jwalk3r12"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/e68fc2c6e6bda82d98cb04f5b1159712.png" alt="jwalk3r12"></span></span> Jack Walker</a>
+ added a comment  - <span class="commentdate_885458_concise subText"><span class="date user-tz" title="28/Dec/20 6:28 PM"><time class="livestamp" datetime="2020-12-28T18:28:21+0100">2 days ago</time></span></span>                    Also getting this issue, nothing seems to resolve it, all the "fixes" seem to do is just waste time whilst it sorts itself out. I would really like to know something is being done about this, as my friend is not paying for a Realms server for it to be inaccessible when it is supposed to be available 24/7              </div>
+        </div>
+    </div>
+</div>
+                                     
+
+
+<div id="comment-885800" class="issue-data-block activity-comment twixi-block  expanded">
+    <div class="twixi-wrap verbose actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Collapse comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-expanded"><span>Hide</span></span></a>
+            <div class="action-links">
+                <a href="https://bugs.mojang.com/browse/REALMS-6147?focusedCommentId=885800&amp;page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-885800" title="Right click and copy link for a permanent link to this comment." class="activitymodule-link issue-comment-action">
+                    <span class="icon-default aui-icon aui-icon-small aui-iconfont-link">Permalink</span></a>
+                                            </div>
+            <div class="action-details">        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="bopem" id="commentauthor_885800_verbose" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=bopem"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/3547d1d4def7160f2833c04175825c85.png" alt="bopem"></span></span> josh k</a>
+ added a comment  - <span class="commentdate_885800_verbose subText"><span class="date user-tz" title="29/Dec/20 12:53 AM"><time class="livestamp" datetime="2020-12-29T00:53:38+0100">Yesterday</time></span></span>  </div>
+        </div>
+        <div class="action-body flooded"><p>Same thing happened to me after resetting a world that kept crashing the realm. have not found a fix but i am going to try to switch to a different wifi or something along the lines of that.</p> </div>
+    </div>
+    <div class="twixi-wrap concise actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Expand comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-collapsed"><span>Show</span></span></a>
+            <div class="action-details flooded">
+                        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="bopem" id="commentauthor_885800_concise" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=bopem"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/3547d1d4def7160f2833c04175825c85.png" alt="bopem"></span></span> josh k</a>
+ added a comment  - <span class="commentdate_885800_concise subText"><span class="date user-tz" title="29/Dec/20 12:53 AM"><time class="livestamp" datetime="2020-12-29T00:53:38+0100">Yesterday</time></span></span>                    Same thing happened to me after resetting a world that kept crashing the realm. have not found a fix but i am going to try to switch to a different wifi or something along the lines of that.              </div>
+        </div>
+    </div>
+</div>
+                                     
+
+
+<div id="comment-886101" class="issue-data-block activity-comment twixi-block  expanded">
+    <div class="twixi-wrap verbose actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Collapse comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-expanded"><span>Hide</span></span></a>
+            <div class="action-links">
+                <a href="https://bugs.mojang.com/browse/REALMS-6147?focusedCommentId=886101&amp;page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-886101" title="Right click and copy link for a permanent link to this comment." class="activitymodule-link issue-comment-action">
+                    <span class="icon-default aui-icon aui-icon-small aui-iconfont-link">Permalink</span></a>
+                                            </div>
+            <div class="action-details">        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="Liftyee" id="commentauthor_886101_verbose" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=Liftyee"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/e4b0d4b7a0a6d03d6f11c90569b0f917.png" alt="Liftyee"></span></span> Victor Liu</a>
+ added a comment  - <span class="commentdate_886101_verbose subText"><span class="date user-tz" title="29/Dec/20 2:47 PM"><time class="livestamp" datetime="2020-12-29T14:47:11+0100">Yesterday</time></span></span>  </div>
+        </div>
+        <div class="action-body flooded"><p>I think it is something to do with the requests to the server from your client being left open, as '429' is the HTTP error code for 'Too Many Requests'. However this is too annoying! I left my game open on the Realms screen for&nbsp; <b>less than 5 Minutes</b>, and when I came back I could no longer connect with the 429 error. A client update to send less requests or a server update is urgently needed.</p> </div>
+    </div>
+    <div class="twixi-wrap concise actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Expand comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-collapsed"><span>Show</span></span></a>
+            <div class="action-details flooded">
+                        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="Liftyee" id="commentauthor_886101_concise" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=Liftyee"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/e4b0d4b7a0a6d03d6f11c90569b0f917.png" alt="Liftyee"></span></span> Victor Liu</a>
+ added a comment  - <span class="commentdate_886101_concise subText"><span class="date user-tz" title="29/Dec/20 2:47 PM"><time class="livestamp" datetime="2020-12-29T14:47:11+0100">Yesterday</time></span></span>                    I think it is something to do with the requests to the server from your client being left open, as '429' is the HTTP error code for 'Too Many Requests'. However this is too annoying! I left my game open on the Realms screen for&nbsp;  less than 5 Minutes , and when I came back I could no longer connect with the 429 error. A client update to send less requests or a server update is urgently needed.              </div>
+        </div>
+    </div>
+</div>
+                                     
+
+
+<div id="comment-886128" class="issue-data-block activity-comment twixi-block  expanded">
+    <div class="twixi-wrap verbose actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Collapse comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-expanded"><span>Hide</span></span></a>
+            <div class="action-links">
+                <a href="https://bugs.mojang.com/browse/REALMS-6147?focusedCommentId=886128&amp;page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-886128" title="Right click and copy link for a permanent link to this comment." class="activitymodule-link issue-comment-action">
+                    <span class="icon-default aui-icon aui-icon-small aui-iconfont-link">Permalink</span></a>
+                                            </div>
+            <div class="action-details">        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="vampatori" id="commentauthor_886128_verbose" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=vampatori"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/0fa279264a8ad0666e175744a73c6721.png" alt="vampatori"></span></span> Andy Freeborough</a>
+ added a comment  - <span class="commentdate_886128_verbose subText"><span class="date user-tz" title="29/Dec/20 3:28 PM"><time class="livestamp" datetime="2020-12-29T15:28:31+0100">Yesterday</time></span></span>  </div>
+        </div>
+        <div class="action-body flooded"><p>Happening to me too, from around 2pm GMT - it was fine earlier this morning.</p> </div>
+    </div>
+    <div class="twixi-wrap concise actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Expand comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-collapsed"><span>Show</span></span></a>
+            <div class="action-details flooded">
+                        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="vampatori" id="commentauthor_886128_concise" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=vampatori"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/0fa279264a8ad0666e175744a73c6721.png" alt="vampatori"></span></span> Andy Freeborough</a>
+ added a comment  - <span class="commentdate_886128_concise subText"><span class="date user-tz" title="29/Dec/20 3:28 PM"><time class="livestamp" datetime="2020-12-29T15:28:31+0100">Yesterday</time></span></span>                    Happening to me too, from around 2pm GMT - it was fine earlier this morning.              </div>
+        </div>
+    </div>
+</div>
+                                     
+
+
+<div id="comment-886502" class="issue-data-block activity-comment twixi-block  expanded">
+    <div class="twixi-wrap verbose actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Collapse comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-expanded"><span>Hide</span></span></a>
+            <div class="action-links">
+                <a href="https://bugs.mojang.com/browse/REALMS-6147?focusedCommentId=886502&amp;page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-886502" title="Right click and copy link for a permanent link to this comment." class="activitymodule-link issue-comment-action">
+                    <span class="icon-default aui-icon aui-icon-small aui-iconfont-link">Permalink</span></a>
+                                            </div>
+            <div class="action-details">        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="Magmaface" id="commentauthor_886502_verbose" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=Magmaface"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/useravatar" alt="Magmaface"></span></span> The Crimson Creep</a>
+ added a comment  - <span class="commentdate_886502_verbose subText"><span class="date user-tz" title="30/Dec/20 3:02 AM"><time class="livestamp" datetime="2020-12-30T03:02:18+0100">12 hours ago</time></span></span>  </div>
+        </div>
+        <div class="action-body flooded"><p>Switching off of wired does not work</p> </div>
+    </div>
+    <div class="twixi-wrap concise actionContainer">
+        <div class="action-head">
+            <a href="https://bugs.mojang.com/browse/REALMS-6147#" title="Expand comment" class="twixi"><span class="icon-default aui-icon aui-icon-small aui-iconfont-collapsed"><span>Show</span></span></a>
+            <div class="action-details flooded">
+                        
+    
+    
+    
+                
+
+    <a class="user-hover user-avatar" rel="Magmaface" id="commentauthor_886502_concise" href="https://bugs.mojang.com/secure/ViewProfile.jspa?name=Magmaface"><span class="aui-avatar aui-avatar-xsmall"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/useravatar" alt="Magmaface"></span></span> The Crimson Creep</a>
+ added a comment  - <span class="commentdate_886502_concise subText"><span class="date user-tz" title="30/Dec/20 3:02 AM"><time class="livestamp" datetime="2020-12-30T03:02:18+0100">12 hours ago</time></span></span>                    Switching off of wired does not work              </div>
+        </div>
+    </div>
+</div>
+                                     </div>
+    </div>
+</div></div></div><div id="viewissuesidebar" class="aui-item issue-side-column"><div id="peoplemodule" class="module toggle-wrap"><div id="peoplemodule_heading" class="mod-header"><ul class="ops"></ul><button class="aui-button toggle-title" aria-label="People" aria-controls="peoplemodule" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">People</h4></div><div class="mod-content">
+
+
+
+
+
+<div class="item-details people-details" id="peopledetails">
+                        
+<dl>
+    <dt>Assignee:</dt>
+    <dd>
+        <span id="assignee-val" class="view-issue-field">
+
+    
+
+        
+    <span class="aui-avatar aui-avatar-small"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/useravatar(1)" alt="Unassigned"></span></span>
+    Unassigned
+</span>
+            </dd>
+</dl>                                
+<dl>
+    <dt>Reporter:</dt>
+    <dd>
+        <span id="reporter-val" class="view-issue-field">
+
+            <span class="user-hover" id="issue_summary_reporter_IQAndreas" rel="IQAndreas">
+            
+
+    
+    <span class="aui-avatar aui-avatar-small"><span class="aui-avatar-inner"><img src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/4e032a74b26c2116bfcad775ffdc45ae.jpeg" alt="IQAndreas"></span></span>
+            Andreas Renberg
+        </span>
+    </span>
+    </dd>
+</dl>                </div>
+    <div class="item-details">
+                        <dl>
+        <dt>Votes:</dt>
+        <dd>
+                                <aui-badge id="vote-data" class="">80</aui-badge>
+            
+                                                <span id="vote-label" title="You have to be logged in to vote for an issue.">Vote for this issue</span>
+                    </dd>
+    </dl>
+                            <dl>
+        <dt>Watchers:</dt>
+        <dd>
+                                
+                                
+                            <aui-badge id="watcher-data" class="">52</aui-badge>
+            
+                                        <span id="watch-label" title="You have to be logged in to watch an issue.">Start watching this issue</span>
+                    </dd>
+    </dl>
+        </div>
+</div></div><div id="datesmodule" class="module toggle-wrap"><div id="datesmodule_heading" class="mod-header"><ul class="ops"></ul><button class="aui-button toggle-title" aria-label="Dates" aria-controls="datesmodule" aria-expanded="true" resolved=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg></button><h4 class="toggle-title">Dates</h4></div><div class="mod-content">
+<div class="item-details">
+            <dl class="dates">
+            <dt>Created:</dt>
+            <dd class="date user-tz" title="23/Nov/20 4:33 PM">
+                <span data-name="Created" id="created-val" data-fieldtype="datetime">
+                                                                                                        <time class="livestamp" datetime="2020-11-23T16:33:44+0100">23/Nov/20 4:33 PM</time>                                                                                         </span>
+            </dd>
+        </dl>
+            <dl class="dates">
+            <dt>Updated:</dt>
+            <dd class="date user-tz" title="30/Dec/20 10:39 AM">
+                <span data-name="Updated" id="updated-val" data-fieldtype="datetime">
+                                                                                                        <time class="livestamp" datetime="2020-12-30T10:39:20+0100">5 hours ago</time>                                                                                         </span>
+            </dd>
+        </dl>
+    </div>
+</div></div></div></div></div></div></div></div></div></div></div><!-- .aui-page-panel-inner --></div><!-- .aui-page-panel --><div class="issue-navigator-init" resolved=""></div>
+    </section>
+    <footer id="footer" role="contentinfo">
+        
+
+<section class="footer-body">
+
+    <div id="footer-logo"><a rel="nofollow" href="http://www.atlassian.com/">Atlassian</a></div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<fieldset class="hidden parameters">
+    <input type="hidden" title="loggedInUser" value="">
+    <input type="hidden" title="ajaxTimeout" value="The call to the Jira server did not complete within the timeout period.  We are unsure of the result of this operation.">
+    <input type="hidden" title="JiraVersion" value="8.8.0">
+    <input type="hidden" title="ajaxUnauthorised" value="You are not authorized to perform this operation.  Please log in.">
+    <input type="hidden" title="baseURL" value="https://bugs.mojang.com">
+    <input type="hidden" title="ajaxCommsError" value="The Jira server could not be contacted. This may be a temporary glitch or the server may be down. ">
+    <input type="hidden" title="ajaxServerError" value="The Jira server was contacted but has returned an error response. We are unsure of the result of this operation.">
+    <input type="hidden" title="ajaxErrorCloseDialog" value="Close this dialog and press refresh in your browser">
+    <input type="hidden" title="ajaxErrorDialogHeading" value="Communications Breakdown">
+
+    <input type="hidden" title="dirtyMessage" value="You have entered new data on this page. If you navigate away from this page without first saving your data, the changes will be lost.">
+    <input type="hidden" title="dirtyDialogMessage" value="You have entered new data in this dialog. If you navigate away from this dialog without first saving your data, the changes will be lost. Click cancel to return to the dialog.">
+    <input type="hidden" title="keyType" value="Type">
+    <input type="hidden" title="keyThen" value="then">
+    <input type="hidden" title="dblClickToExpand" value="Double click to expand">
+    <input type="hidden" title="actions" value="Actions">
+    <input type="hidden" title="removeItem" value="Remove">
+    <input type="hidden" title="workflow" value="Workflow">
+    <input type="hidden" title="labelNew" value="New Label">
+    <input type="hidden" title="issueActionsHint" value="Begin typing for available operations or press down to see all">
+    <input type="hidden" title="closelink" value="Close">
+    <input type="hidden" title="dotOperations" value="Operations">
+    <input type="hidden" title="dotLoading" value="Loading...">
+    <input type="hidden" title="frotherSuggestions" value="Suggestions">
+    <input type="hidden" title="frotherNomatches" value="No Matches">
+    <input type="hidden" title="multiselectVersionsError" value="{0} is not a valid version.">
+    <input type="hidden" title="multiselectComponentsError" value="{0} is not a valid component.">
+    <input type="hidden" title="multiselectGenericError" value="The value {0} is invalid.">
+</fieldset>
+
+    </footer>
+</div>
+
+
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/jira.webresources_bigpipe-js.js.Download" data-wrm-key="jira.webresources:bigpipe-js" data-wrm-batch-type="resource" data-initially-rendered=""></script>
+<script>
+window.WRM=window.WRM||{};window.WRM._unparsedData=window.WRM._unparsedData||{};window.WRM._unparsedErrors=window.WRM._unparsedErrors||{};
+WRM._unparsedData["activity-panel-pipe-id"]="\"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n    \u003cdiv class=\\\"tabwrap aui-tabs horizontal-tabs aui-tabs-disabled\\\"\u003e\\n\\n        \u003cul id=\\\"issue-tabs\\\" class=\\\"tabs-menu\\\"\u003e\\n                                \\n            \u003cli class=\\\"menu-item \\\"\\n                id=\\\"all-tabpanel\\\"\\n                data-id=\\\"all-tabpanel\\\"\\n                data-key=\\\"com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel\\\"\\n                data-label=\\\"All\\\"\\n                data-href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel\\\"\\n            \u003e\\n                                    \u003ca id=\\\"all-tabpanel\\\" href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel\\\" class=\\\"ajax-activity-content\\\"\u003eAll\u003c\\/a\u003e\\n                            \u003c\\/li\u003e\\n                                \\n            \u003cli class=\\\"menu-item  active-tab active \\\"\\n                id=\\\"comment-tabpanel\\\"\\n                data-id=\\\"comment-tabpanel\\\"\\n                data-key=\\\"com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel\\\"\\n                data-label=\\\"Comments\\\"\\n                data-href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel\\\"\\n            \u003e\\n                                    \u003ca tabindex=\\\"0\\\"\u003eComments\u003c\\/a\u003e\\n                            \u003c\\/li\u003e\\n                                \\n            \u003cli class=\\\"menu-item \\\"\\n                id=\\\"changehistory-tabpanel\\\"\\n                data-id=\\\"changehistory-tabpanel\\\"\\n                data-key=\\\"com.atlassian.jira.plugin.system.issuetabpanels:changehistory-tabpanel\\\"\\n                data-label=\\\"History\\\"\\n                data-href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:changehistory-tabpanel\\\"\\n            \u003e\\n                                    \u003ca id=\\\"changehistory-tabpanel\\\" href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:changehistory-tabpanel\\\" class=\\\"ajax-activity-content\\\"\u003eHistory\u003c\\/a\u003e\\n                            \u003c\\/li\u003e\\n                                \\n            \u003cli class=\\\"menu-item \\\"\\n                id=\\\"activity-stream-issue-tab\\\"\\n                data-id=\\\"activity-stream-issue-tab\\\"\\n                data-key=\\\"com.atlassian.streams.streams-jira-plugin:activity-stream-issue-tab\\\"\\n                data-label=\\\"Activity\\\"\\n                data-href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.streams.streams-jira-plugin:activity-stream-issue-tab\\\"\\n            \u003e\\n                                    \u003ca id=\\\"activity-stream-issue-tab\\\" href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.streams.streams-jira-plugin:activity-stream-issue-tab\\\" class=\\\"ajax-activity-content\\\"\u003eActivity\u003c\\/a\u003e\\n                            \u003c\\/li\u003e\\n                                \\n            \u003cli class=\\\"menu-item \\\"\\n                id=\\\"transitions-summary-tabpanel\\\"\\n                data-id=\\\"transitions-summary-tabpanel\\\"\\n                data-key=\\\"com.googlecode.jira-suite-utilities:transitions-summary-tabpanel\\\"\\n                data-label=\\\"Transitions\\\"\\n                data-href=\\\"\\/browse\\/REALMS-6147?page=com.googlecode.jira-suite-utilities:transitions-summary-tabpanel\\\"\\n            \u003e\\n                                    \u003ca id=\\\"transitions-summary-tabpanel\\\" href=\\\"\\/browse\\/REALMS-6147?page=com.googlecode.jira-suite-utilities:transitions-summary-tabpanel\\\" class=\\\"ajax-activity-content\\\"\u003eTransitions\u003c\\/a\u003e\\n                            \u003c\\/li\u003e\\n                \u003c\\/ul\u003e\\n\\n                    \u003cdiv class=\\\"sortwrap\\\"\u003e\\n                                    \u003ca class=\\\"issue-activity-sort-link ajax-activity-content\\\" rel=\\\"nofollow\\\" data-tab-sort data-order=\\\"desc\\\" href=\\\"\\/browse\\/REALMS-6147?actionOrder=desc\\\" title=\\\"Ascending order - Click to sort in descending order\\\"\u003e\\n                        \u003cspan class=\\\"aui-icon aui-icon-small aui-iconfont-up\\\"\u003eAscending order - Click to sort in descending order\u003c\\/span\u003e\\n                    \u003c\\/a\u003e\\n                            \u003c\\/div\u003e\\n                        \u003cdiv class=\\\"tabs-pane active-pane\\\"\u003e\u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n    \u003cdiv class=\\\"issuePanelWrapper\\\"\u003e\\n        \u003cdiv class=\\\"issuePanelProgress\\\"\u003e\u003c\\/div\u003e\\n        \u003cdiv class=\\\"issuePanelContainer\\\" id=\\\"issue_actions_container\\\"\u003e\\n                                                \u003cdiv class=\\\"message-container\\\"\u003e\\n    \u003ca class=\\\"collapsed-comments\\\" href=\\\"\\/browse\\/REALMS-6147?page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel&showAll=true\\\" \u003e\u003cspan class=\\\"collapsed-comments-line\\\"\u003e\u003c\\/span\u003e\u003cspan class=\\\"collapsed-comments-line\\\"\u003e\u003c\\/span\u003e\u003cspan class=\\\"show-more-comments\\\" data-collapsed-count=\\\"64\\\"\u003e64 older comments\u003c\\/span\u003e\u003c\\/a\u003e\\n\u003c\\/div\u003e                                     \\n\\n\\n\u003cdiv id=\\\"comment-885458\\\" class=\\\"issue-data-block activity-comment twixi-block  expanded\\\"\u003e\\n    \u003cdiv class=\\\"twixi-wrap verbose actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Collapse comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-expanded\\\"\u003e\u003cspan\u003eHide\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-links\\\"\u003e\\n                \u003ca href=\\\"\\/browse\\/REALMS-6147?focusedCommentId=885458&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-885458\\\"\\n                   title=\\\"Right click and copy link for a permanent link to this comment.\\\" class=\\\"activitymodule-link issue-comment-action\\\"\u003e\\n                    \u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-link\\\"\u003ePermalink\u003c\\/span\u003e\u003c\\/a\u003e\\n                                            \u003c\\/div\u003e\\n            \u003cdiv class=\\\"action-details\\\"\u003e        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"jwalk3r12\\\" id=\\\"commentauthor_885458_verbose\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=jwalk3r12\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/e68fc2c6e6bda82d98cb04f5b1159712?d=mm&amp;s=16\\\" alt=\\\"jwalk3r12\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e Jack Walker\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_885458_verbose subText\'\u003e\u003cspan class=\'date user-tz\' title=\'28\\/Dec\\/20 6:28 PM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-28T18:28:21+0100\'\u003e28\\/Dec\\/20 6:28 PM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e  \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n        \u003cdiv class=\\\"action-body flooded\\\"\u003e\u003cp\u003eAlso getting this issue, nothing seems to resolve it, all the \\\"fixes\\\" seem to do is just waste time whilst it sorts itself out. I would really like to know something is being done about this, as my friend is not paying for a Realms server for it to be inaccessible when it is supposed to be available 24\\/7\u003c\\/p\u003e \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n    \u003cdiv class=\\\"twixi-wrap concise actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Expand comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-collapsed\\\"\u003e\u003cspan\u003eShow\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-details flooded\\\"\u003e\\n                        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"jwalk3r12\\\" id=\\\"commentauthor_885458_concise\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=jwalk3r12\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/e68fc2c6e6bda82d98cb04f5b1159712?d=mm&amp;s=16\\\" alt=\\\"jwalk3r12\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e Jack Walker\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_885458_concise subText\'\u003e\u003cspan class=\'date user-tz\' title=\'28\\/Dec\\/20 6:28 PM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-28T18:28:21+0100\'\u003e28\\/Dec\\/20 6:28 PM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e                    Also getting this issue, nothing seems to resolve it, all the \\\"fixes\\\" seem to do is just waste time whilst it sorts itself out. I would really like to know something is being done about this, as my friend is not paying for a Realms server for it to be inaccessible when it is supposed to be available 24\\/7              \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n\u003c\\/div\u003e\\n                                     \\n\\n\\n\u003cdiv id=\\\"comment-885800\\\" class=\\\"issue-data-block activity-comment twixi-block  expanded\\\"\u003e\\n    \u003cdiv class=\\\"twixi-wrap verbose actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Collapse comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-expanded\\\"\u003e\u003cspan\u003eHide\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-links\\\"\u003e\\n                \u003ca href=\\\"\\/browse\\/REALMS-6147?focusedCommentId=885800&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-885800\\\"\\n                   title=\\\"Right click and copy link for a permanent link to this comment.\\\" class=\\\"activitymodule-link issue-comment-action\\\"\u003e\\n                    \u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-link\\\"\u003ePermalink\u003c\\/span\u003e\u003c\\/a\u003e\\n                                            \u003c\\/div\u003e\\n            \u003cdiv class=\\\"action-details\\\"\u003e        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"bopem\\\" id=\\\"commentauthor_885800_verbose\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=bopem\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/3547d1d4def7160f2833c04175825c85?d=mm&amp;s=16\\\" alt=\\\"bopem\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e josh k\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_885800_verbose subText\'\u003e\u003cspan class=\'date user-tz\' title=\'29\\/Dec\\/20 12:53 AM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-29T00:53:38+0100\'\u003e29\\/Dec\\/20 12:53 AM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e  \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n        \u003cdiv class=\\\"action-body flooded\\\"\u003e\u003cp\u003eSame thing happened to me after resetting a world that kept crashing the realm. have not found a fix but i am going to try to switch to a different wifi or something along the lines of that.\u003c\\/p\u003e \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n    \u003cdiv class=\\\"twixi-wrap concise actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Expand comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-collapsed\\\"\u003e\u003cspan\u003eShow\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-details flooded\\\"\u003e\\n                        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"bopem\\\" id=\\\"commentauthor_885800_concise\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=bopem\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/3547d1d4def7160f2833c04175825c85?d=mm&amp;s=16\\\" alt=\\\"bopem\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e josh k\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_885800_concise subText\'\u003e\u003cspan class=\'date user-tz\' title=\'29\\/Dec\\/20 12:53 AM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-29T00:53:38+0100\'\u003e29\\/Dec\\/20 12:53 AM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e                    Same thing happened to me after resetting a world that kept crashing the realm. have not found a fix but i am going to try to switch to a different wifi or something along the lines of that.              \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n\u003c\\/div\u003e\\n                                     \\n\\n\\n\u003cdiv id=\\\"comment-886101\\\" class=\\\"issue-data-block activity-comment twixi-block  expanded\\\"\u003e\\n    \u003cdiv class=\\\"twixi-wrap verbose actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Collapse comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-expanded\\\"\u003e\u003cspan\u003eHide\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-links\\\"\u003e\\n                \u003ca href=\\\"\\/browse\\/REALMS-6147?focusedCommentId=886101&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-886101\\\"\\n                   title=\\\"Right click and copy link for a permanent link to this comment.\\\" class=\\\"activitymodule-link issue-comment-action\\\"\u003e\\n                    \u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-link\\\"\u003ePermalink\u003c\\/span\u003e\u003c\\/a\u003e\\n                                            \u003c\\/div\u003e\\n            \u003cdiv class=\\\"action-details\\\"\u003e        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"Liftyee\\\" id=\\\"commentauthor_886101_verbose\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=Liftyee\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/e4b0d4b7a0a6d03d6f11c90569b0f917?d=mm&amp;s=16\\\" alt=\\\"Liftyee\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e Victor Liu\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_886101_verbose subText\'\u003e\u003cspan class=\'date user-tz\' title=\'29\\/Dec\\/20 2:47 PM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-29T14:47:11+0100\'\u003e29\\/Dec\\/20 2:47 PM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e  \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n        \u003cdiv class=\\\"action-body flooded\\\"\u003e\u003cp\u003eI think it is something to do with the requests to the server from your client being left open, as \'429\' is the HTTP error code for \'Too Many Requests\'. However this is too annoying! I left my game open on the Realms screen for\\u00A0 \u003cb\u003eless than 5 Minutes\u003c\\/b\u003e, and when I came back I could no longer connect with the 429 error. A client update to send less requests or a server update is urgently needed.\u003c\\/p\u003e \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n    \u003cdiv class=\\\"twixi-wrap concise actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Expand comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-collapsed\\\"\u003e\u003cspan\u003eShow\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-details flooded\\\"\u003e\\n                        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"Liftyee\\\" id=\\\"commentauthor_886101_concise\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=Liftyee\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/e4b0d4b7a0a6d03d6f11c90569b0f917?d=mm&amp;s=16\\\" alt=\\\"Liftyee\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e Victor Liu\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_886101_concise subText\'\u003e\u003cspan class=\'date user-tz\' title=\'29\\/Dec\\/20 2:47 PM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-29T14:47:11+0100\'\u003e29\\/Dec\\/20 2:47 PM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e                    I think it is something to do with the requests to the server from your client being left open, as \'429\' is the HTTP error code for \'Too Many Requests\'. However this is too annoying! I left my game open on the Realms screen for\\u00A0  less than 5 Minutes , and when I came back I could no longer connect with the 429 error. A client update to send less requests or a server update is urgently needed.              \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n\u003c\\/div\u003e\\n                                     \\n\\n\\n\u003cdiv id=\\\"comment-886128\\\" class=\\\"issue-data-block activity-comment twixi-block  expanded\\\"\u003e\\n    \u003cdiv class=\\\"twixi-wrap verbose actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Collapse comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-expanded\\\"\u003e\u003cspan\u003eHide\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-links\\\"\u003e\\n                \u003ca href=\\\"\\/browse\\/REALMS-6147?focusedCommentId=886128&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-886128\\\"\\n                   title=\\\"Right click and copy link for a permanent link to this comment.\\\" class=\\\"activitymodule-link issue-comment-action\\\"\u003e\\n                    \u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-link\\\"\u003ePermalink\u003c\\/span\u003e\u003c\\/a\u003e\\n                                            \u003c\\/div\u003e\\n            \u003cdiv class=\\\"action-details\\\"\u003e        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"vampatori\\\" id=\\\"commentauthor_886128_verbose\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=vampatori\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/0fa279264a8ad0666e175744a73c6721?d=mm&amp;s=16\\\" alt=\\\"vampatori\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e Andy Freeborough\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_886128_verbose subText\'\u003e\u003cspan class=\'date user-tz\' title=\'29\\/Dec\\/20 3:28 PM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-29T15:28:31+0100\'\u003e29\\/Dec\\/20 3:28 PM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e  \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n        \u003cdiv class=\\\"action-body flooded\\\"\u003e\u003cp\u003eHappening to me too, from around 2pm GMT - it was fine earlier this morning.\u003c\\/p\u003e \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n    \u003cdiv class=\\\"twixi-wrap concise actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Expand comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-collapsed\\\"\u003e\u003cspan\u003eShow\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-details flooded\\\"\u003e\\n                        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"vampatori\\\" id=\\\"commentauthor_886128_concise\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=vampatori\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/www.gravatar.com\\/avatar\\/0fa279264a8ad0666e175744a73c6721?d=mm&amp;s=16\\\" alt=\\\"vampatori\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e Andy Freeborough\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_886128_concise subText\'\u003e\u003cspan class=\'date user-tz\' title=\'29\\/Dec\\/20 3:28 PM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-29T15:28:31+0100\'\u003e29\\/Dec\\/20 3:28 PM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e                    Happening to me too, from around 2pm GMT - it was fine earlier this morning.              \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n\u003c\\/div\u003e\\n                                     \\n\\n\\n\u003cdiv id=\\\"comment-886502\\\" class=\\\"issue-data-block activity-comment twixi-block  expanded\\\"\u003e\\n    \u003cdiv class=\\\"twixi-wrap verbose actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Collapse comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-expanded\\\"\u003e\u003cspan\u003eHide\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-links\\\"\u003e\\n                \u003ca href=\\\"\\/browse\\/REALMS-6147?focusedCommentId=886502&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-886502\\\"\\n                   title=\\\"Right click and copy link for a permanent link to this comment.\\\" class=\\\"activitymodule-link issue-comment-action\\\"\u003e\\n                    \u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-link\\\"\u003ePermalink\u003c\\/span\u003e\u003c\\/a\u003e\\n                                            \u003c\\/div\u003e\\n            \u003cdiv class=\\\"action-details\\\"\u003e        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"Magmaface\\\" id=\\\"commentauthor_886502_verbose\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=Magmaface\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/bugs.mojang.com\\/secure\\/useravatar?size=xsmall&amp;avatarId=10122\\\" alt=\\\"Magmaface\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e The Crimson Creep\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_886502_verbose subText\'\u003e\u003cspan class=\'date user-tz\' title=\'30\\/Dec\\/20 3:02 AM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-30T03:02:18+0100\'\u003e30\\/Dec\\/20 3:02 AM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e  \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n        \u003cdiv class=\\\"action-body flooded\\\"\u003e\u003cp\u003eSwitching off of wired does not work\u003c\\/p\u003e \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n    \u003cdiv class=\\\"twixi-wrap concise actionContainer\\\"\u003e\\n        \u003cdiv class=\\\"action-head\\\"\u003e\\n            \u003ca href=\\\"#\\\" title=\\\"Expand comment\\\" class=\\\"twixi\\\"\u003e\u003cspan class=\\\"icon-default aui-icon aui-icon-small aui-iconfont-collapsed\\\"\u003e\u003cspan\u003eShow\u003c\\/span\u003e\u003c\\/span\u003e\u003c\\/a\u003e\\n            \u003cdiv class=\\\"action-details flooded\\\"\u003e\\n                        \\n    \\n    \\n    \\n                \\n\\n    \u003ca class=\\\"user-hover user-avatar\\\" rel=\\\"Magmaface\\\" id=\\\"commentauthor_886502_concise\\\" href=\\\"\\/secure\\/ViewProfile.jspa?name=Magmaface\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-xsmall\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"https:\\/\\/bugs.mojang.com\\/secure\\/useravatar?size=xsmall&amp;avatarId=10122\\\" alt=\\\"Magmaface\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e The Crimson Creep\u003c\\/a\u003e\\n added a comment  - \u003cspan class=\'commentdate_886502_concise subText\'\u003e\u003cspan class=\'date user-tz\' title=\'30\\/Dec\\/20 3:02 AM\'\u003e\u003ctime class=\'livestamp\' datetime=\'2020-12-30T03:02:18+0100\'\u003e30\\/Dec\\/20 3:02 AM\u003c\\/time\u003e\u003c\\/span\u003e\u003c\\/span\u003e                    Switching off of wired does not work              \u003c\\/div\u003e\\n        \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n\u003c\\/div\u003e\\n                                     \u003c\\/div\u003e\\n    \u003c\\/div\u003e\\n\"";
+if(window.WRM._dataArrived)window.WRM._dataArrived();</script>
+<script>
+window.WRM=window.WRM||{};window.WRM._unparsedData=window.WRM._unparsedData||{};window.WRM._unparsedErrors=window.WRM._unparsedErrors||{};
+WRM._unparsedData["scope-filter-data"]="{\"createScopeActions\":[],\"scopes\":[]}";
+WRM._unparsedData["com.atlassian.jira.projects.shortcuts:can-manage"]="false";
+WRM._unparsedData["com.atlassian.jira.projects.shortcuts:with-icons"]="false";
+WRM._unparsedData["com.atlassian.jira.projects.shortcuts:shortcuts"]="[]";
+WRM._unparsedData["com.atlassian.jira.projects.shortcuts:project-id"]="11402";
+WRM._unparsedData["sidebar-id"]="\"\u003cdiv class=\\\"aui-sidebar  projects-sidebar sidebar-pending\\\" \u003e\u003cdiv class=\\\"aui-sidebar-wrapper\\\"\u003e\u003cdiv class=\\\"aui-sidebar-body\\\"\u003e\u003cheader class=\\\"aui-page-header\\\"\u003e\u003cdiv class=\\\"aui-page-header-inner\\\"\u003e\u003cdiv class=\\\"aui-page-header-image\\\"\u003e\u003ca href=\\\"\\/projects\\/REALMS\\/summary\\\" title=\\\"Minecraft Realms\\\" class=\\\"jira-project-avatar\\\"\u003e\u003cspan class=\\\"aui-avatar aui-avatar-large aui-avatar-project\\\"\u003e\u003cspan class=\\\"aui-avatar-inner\\\"\u003e\u003cimg src=\\\"\\/secure\\/projectavatar?pid=11402&amp;avatarId=18808\\\" alt=\\\"Minecraft Realms\\\" \\/\u003e\u003c\\/span\u003e\u003c\\/span\u003e\u003cimg src=\\\"data:image\\/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MSA3MSI+PGNpcmNsZSBjeD0iMzUuNSIgY3k9IjM1LjUiIHI9IjM1LjUiIGZpbGw9IiMwMDY1ZmYiLz48cGF0aCBkPSJNMTguNyAzNy41aDMzLjVjMS42IDAgMyAxLjMgMyAzcy0xLjMgMy0zIDNIMTguN2MtMS42IDAtMy0xLjMtMy0zczEuNC0zIDMtM3ptMC05LjloMzMuNWMxLjYgMCAzIDEuMyAzIDMgMCAxLjYtMS4zIDMtMyAzSDE4LjdjLTEuNiAwLTMtMS4zLTMtMyAuMS0xLjcgMS40LTMgMy0zem0wLTkuOGgzMy41YzEuNiAwIDMgMS4zIDMgM3MtMS4zIDMtMyAzSDE4LjdjLTEuNiAwLTMtMS4zLTMtM3MxLjQtMyAzLTN6bS4xIDI5LjVoMTcuN2MxLjcgMCAzIDEuMyAzIDNzLTEuMyAzLTMgM0gxOC44Yy0xLjcgMC0zLTEuMy0zLTMgMC0xLjYgMS4zLTMgMy0zeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==\\\" alt=\\\"Project Type: business\\\" class=\\\"jira-project-avatar-icon\\\" \\/\u003e\u003c\\/a\u003e\u003c\\/div\u003e\u003c!-- .aui-page-header-image --\u003e\u003cdiv class=\\\"aui-page-header-main\\\"\u003e\u003ch1\u003e\u003cdiv class=\\\"aui-group aui-group-split\\\"\u003e\u003cdiv class=\\\"aui-item project-title\\\"\u003e\u003ca href=\\\"\\/projects\\/REALMS\\/summary\\\" title=\\\"Minecraft Realms\\\"\u003eMinecraft Realms\u003c\\/a\u003e\u003c\\/div\u003e\u003c\\/div\u003e\u003c\\/h1\u003e\u003c\\/div\u003e\u003c!-- .aui-page-header-main --\u003e\u003cdiv class=\\\"aui-page-header-main scopeFilterContainer\\\"\u003e\u003c\\/div\u003e\u003c!-- .aui-page-header-main --\u003e\u003c\\/div\u003e\u003c!-- .aui-page-header-inner --\u003e\u003c\\/header\u003e\u003c!-- .aui-page-header --\u003e\u003cnav class=\\\"aui-navgroup aui-navgroup-vertical\\\"\u003e\u003cdiv class=\\\"aui-navgroup-inner sidebar-content-container jira-navigation\\\"\u003e\u003cdiv class=\\\"aui-sidebar-group aui-sidebar-group-tier-one\\\" data-id=\\\"sidebar-navigation-panel\\\"\u003e\u003cul class=\\\"aui-nav\\\"\u003e\u003cli  \u003e\u003ca class=\\\"aui-nav-item \\\" href=\\\"\\/projects\\/REALMS\\/summary\\\" data-link-id=\\\"com.atlassian.jira.jira-projects-plugin:summary-page\\\" \u003e\u003cspan class=\\\"aui-icon aui-icon-large icon-sidebar-summary\\\"\u003e\u003c\\/span\u003e\u003cspan class=\\\"aui-nav-item-label\\\" title=\\\"Summary\\\"\u003eSummary\u003c\\/span\u003e\u003c\\/a\u003e\u003c\\/li\u003e\u003cli class=\\\"aui-nav-selected\\\" \u003e\u003ca class=\\\"aui-nav-item \\\" href=\\\"\\/projects\\/REALMS\\/issues\\\" data-link-id=\\\"com.atlassian.jira.jira-projects-issue-navigator:sidebar-issue-navigator\\\" \u003e\u003cspan class=\\\"aui-icon aui-icon-large icon-sidebar-issues aui-iconfont-issues\\\"\u003e\u003c\\/span\u003e\u003cspan class=\\\"aui-nav-item-label\\\" title=\\\"Issues\\\"\u003eIssues\u003c\\/span\u003e\u003c\\/a\u003e\u003c\\/li\u003e\u003cli  \u003e\u003ca class=\\\"aui-nav-item \\\" href=\\\"\\/projects\\/REALMS?selectedItem=com.atlassian.jira.jira-projects-plugin:report-page\\\" data-link-id=\\\"com.atlassian.jira.jira-projects-plugin:report-page\\\" \u003e\u003cspan class=\\\"aui-icon aui-icon-large agile-icon-report aui-iconfont-graph-line\\\"\u003e\u003c\\/span\u003e\u003cspan class=\\\"aui-nav-item-label\\\" title=\\\"Reports\\\"\u003eReports\u003c\\/span\u003e\u003c\\/a\u003e\u003c\\/li\u003e\u003c\\/ul\u003e\u003c\\/div\u003e\u003c\\/div\u003e\u003c\\/nav\u003e\u003c\\/div\u003e\u003cdiv class=\\\"aui-sidebar-footer\\\"\u003e\u003ca class=\\\"aui-button aui-button-subtle aui-sidebar-toggle aui-sidebar-footer-tipsy\\\" data-tooltip=\\\"Expand sidebar ( [ )\\\" href=\\\"#\\\"\u003e\u003cspan class=\\\"aui-icon aui-icon-small\\\"\u003e\u003c\\/span\u003e\u003c\\/a\u003e\u003c\\/div\u003e\u003c\\/div\u003e\u003c\\/div\u003e\"";
+if(window.WRM._dataArrived)window.WRM._dataArrived();</script>
+<script type="text/javascript" src="./[REALMS-6147] Error message _Realms (429)__ when trying to open Minecraft Realms - Jira_files/jira.webresources_bigpipe-init.js.Download" data-wrm-key="jira.webresources:bigpipe-init" data-wrm-batch-type="resource" data-initially-rendered=""></script>
+
+<form id="jira_request_timing_info" class="dont-default-focus">
+	<fieldset class="parameters hidden">
+		<input type="hidden" title="jira.request.start.millis" value="1609338374400">
+		<input type="hidden" title="jira.request.server.time" value="174">
+		<input type="hidden" title="jira.request.id" value="506x102945661x1">
+		<input type="hidden" title="jira.session.expiry.time" value="-">
+		<input type="hidden" title="jira.session.expiry.in.mins" value="-">
+		<input id="jiraConcurrentRequests" type="hidden" name="jira.request.concurrent.requests" value="4">
+		<input type="hidden" title="db.reads.time.in.ms" value="9">
+		<input type="hidden" title="db.conns.time.in.ms" value="12">
+	</fieldset>
+</form>
+<!--
+	                 REQUEST ID : 506x102945661x1
+	          REQUEST TIMESTAMP : [30/Dec/2020:08:26:14 -0600]
+	               REQUEST TIME : 0.1740
+	                 ASESSIONID : -
+	        CONCURRENT REQUESTS : 4
+
+	                      db.reads : OpSnapshot{name='db.reads', invocationCount=75, elapsedTotal=9875328, elapsedMin=55661, elapsedMax=433710, resultSetSize=0, cpuTotal=0, cpuMin=0, cpuMax=0}
+	                      db.conns : OpSnapshot{name='db.conns', invocationCount=78, elapsedTotal=12848293, elapsedMin=62651, elapsedMax=522131, resultSetSize=0, cpuTotal=0, cpuMin=0, cpuMax=0}
+-->
+
+
+
+<div id="fancybox-tmp"></div><div id="fancybox-loading"><div></div></div><div id="fancybox-overlay"></div><div id="fancybox-wrap" class="fancybox-ie"><div id="fancybox-outer"><div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div><div id="fancybox-content"></div><a id="fancybox-close"></a><div id="fancybox-title"></div><a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a><a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a></div></div><div id="browser-metrics-report" style="display: none;">{"report":{"apdex":0.5,"firstPaint":1237,"isInitial":true,"journeyId":"acfbe5f1-9a05-4d4a-9aff-2aec382184dd","key":"jira.project.issue.view-issue","navigationType":0,"readyForUser":1542.4800000000687,"redirectCount":0,"resourceLoadedEnd":978.0049999999392,"resourceLoadedStart":341.3350000000719,"resourceTiming":[{"duration":217.1250000001237,"initiatorType":"link","name":"https://bugs.mojang.com/s/dba6a431b39f1b0a7de6273719be2ed9-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/f665e96fa2b0ea9c68683fca8f17a311/_/download/contextbatch/css/_super/batch.css","startTime":341.3350000000719,"connectEnd":341.3350000000719,"connectStart":341.3350000000719,"domainLookupEnd":341.3350000000719,"domainLookupStart":341.3350000000719,"fetchStart":341.3350000000719,"redirectEnd":0,"redirectStart":0,"requestStart":481.0749999996915,"responseEnd":558.4600000001956,"responseStart":522.6400000001377,"secureConnectionStart":341.3350000000719},{"duration":299.2050000002564,"initiatorType":"link","name":"https://bugs.mojang.com/s/e62d2b1ca35c3e050cdb35067c8b7033-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/575188c029f339d6a809f4e0621d5a96/_/download/contextbatch/css/project.issue.navigator,jira.view.issue,jira.global,atl.general,jira.general,-_super/batch.css?jira.create.linked.issue=true&amp;richediton=true","startTime":341.69999999994616,"connectEnd":493.4350000003178,"connectStart":347.6300000002084,"domainLookupEnd":347.6300000002084,"domainLookupStart":347.6300000002084,"fetchStart":341.69999999994616,"redirectEnd":0,"redirectStart":0,"requestStart":493.50500000036845,"responseEnd":640.9050000002026,"responseStart":533.7749999998778,"secureConnectionStart":347.6300000002084},{"duration":430.4599999995844,"initiatorType":"script","name":"https://bugs.mojang.com/s/aceed23b43cd690344ca9351c8a5682a-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/f665e96fa2b0ea9c68683fca8f17a311/_/download/contextbatch/js/_super/batch.js?locale=en-US","startTime":342.1650000000227,"connectEnd":342.1650000000227,"connectStart":342.1650000000227,"domainLookupEnd":342.1650000000227,"domainLookupStart":342.1650000000227,"fetchStart":342.1650000000227,"redirectEnd":0,"redirectStart":0,"requestStart":641.4549999999508,"responseEnd":772.6249999996071,"responseStart":682.2549999997136,"secureConnectionStart":342.1650000000227},{"duration":585.8449999996083,"initiatorType":"script","name":"https://bugs.mojang.com/s/39292bf72221331b8118bf563bcdc1de-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/575188c029f339d6a809f4e0621d5a96/_/download/contextbatch/js/project.issue.navigator,jira.view.issue,jira.global,atl.general,jira.general,-_super/batch.js?jira.create.linked.issue=true&amp;locale=en-US&amp;richediton=true","startTime":342.62000000035187,"connectEnd":342.62000000035187,"connectStart":342.62000000035187,"domainLookupEnd":342.62000000035187,"domainLookupStart":342.62000000035187,"fetchStart":342.62000000035187,"redirectEnd":0,"redirectStart":0,"requestStart":643.2249999998021,"responseEnd":928.4649999999601,"responseStart":685.4100000000471,"secureConnectionStart":342.62000000035187},{"duration":369.3550000007235,"initiatorType":"script","name":"https://bugs.mojang.com/s/a71e6cf36d5cb54245d59f28a15b50b6-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/aae1242f5fc81cc6a5bb8bc963ccda29/_/download/contextbatch/js/atl.global,-_super/batch.js?locale=en-US","startTime":343.2249999996202,"connectEnd":669.5749999998952,"connectStart":349.50000000026193,"domainLookupEnd":349.50000000026193,"domainLookupStart":349.50000000026193,"fetchStart":343.2249999996202,"redirectEnd":0,"redirectStart":0,"requestStart":670.9250000003522,"responseEnd":712.5800000003437,"responseStart":711.6349999996601,"secureConnectionStart":386.410000000069},{"duration":371.05500000052416,"initiatorType":"script","name":"https://bugs.mojang.com/s/d41d8cd98f00b204e9800998ecf8427e-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/1.0/_/download/batch/jira.webresources:calendar-en/jira.webresources:calendar-en.js","startTime":343.82499999992433,"connectEnd":670.2199999999721,"connectStart":351.6849999996339,"domainLookupEnd":351.6849999996339,"domainLookupStart":351.6749999998865,"fetchStart":343.82499999992433,"redirectEnd":0,"redirectStart":0,"requestStart":671.0100000000239,"responseEnd":714.8800000004485,"responseStart":712.3400000000402,"secureConnectionStart":388.39499999994587},{"duration":369.0150000002177,"initiatorType":"script","name":"https://bugs.mojang.com/s/d41d8cd98f00b204e9800998ecf8427e-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/1.0/_/download/batch/jira.webresources:calendar-localisation-moment/jira.webresources:calendar-localisation-moment.js","startTime":344.2900000000009,"connectEnd":670.8500000004278,"connectStart":350.33000000021275,"domainLookupEnd":350.33000000021275,"domainLookupStart":350.32000000046537,"fetchStart":344.2900000000009,"redirectEnd":0,"redirectStart":0,"requestStart":671.0700000003271,"responseEnd":713.3050000002186,"responseStart":711.9650000004185,"secureConnectionStart":388.2499999999709},{"duration":254.98499999957858,"initiatorType":"link","name":"https://bugs.mojang.com/s/9bbef73fb0120002cca4eea5cc7e49fc-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/db9799870f079944ef9cbb7047eb30cf/_/download/contextbatch/css/jira.global.look-and-feel,-_super/batch.css","startTime":345.5050000002302,"connectEnd":345.5050000002302,"connectStart":345.5050000002302,"domainLookupEnd":345.5050000002302,"domainLookupStart":345.5050000002302,"fetchStart":345.5050000002302,"redirectEnd":0,"redirectStart":0,"requestStart":558.7299999997413,"responseEnd":600.4899999998088,"responseStart":598.3400000004622,"secureConnectionStart":345.5050000002302},{"duration":429.77499999960855,"initiatorType":"script","name":"https://bugs.mojang.com/rest/api/1.0/shortcuts/808000/7bb8ff7a39e1d45621f58c6d5c06bdd2/shortcuts.js?context=issuenavigation&amp;context=issueaction","startTime":345.93500000028143,"connectEnd":345.93500000028143,"connectStart":345.93500000028143,"domainLookupEnd":345.93500000028143,"domainLookupStart":345.93500000028143,"fetchStart":345.93500000028143,"redirectEnd":0,"redirectStart":0,"requestStart":713.1250000002183,"responseEnd":775.70999999989,"responseStart":774.4050000001153,"secureConnectionStart":345.93500000028143},{"duration":180.95499999981257,"initiatorType":"link","name":"https://bugs.mojang.com/s/f93745d36fa36a11df02a9a3f5ea7d42-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/f94cc7e90bf6257ec924a452d3ecc792/_/download/contextbatch/css/com.atlassian.jira.projects.sidebar.init,-_super,-jira.view.issue,-project.issue.navigator/batch.css?jira.create.linked.issue=true&amp;richediton=true","startTime":461.98499999991327,"connectEnd":461.98499999991327,"connectStart":461.98499999991327,"domainLookupEnd":461.98499999991327,"domainLookupStart":461.98499999991327,"fetchStart":461.98499999991327,"redirectEnd":0,"redirectStart":0,"requestStart":600.8199999996577,"responseEnd":642.9399999997258,"responseStart":641.1399999997229,"secureConnectionStart":461.98499999991327},{"duration":312.78999999994994,"initiatorType":"script","name":"https://bugs.mojang.com/s/979cc819b6200de2a6cd616de36460eb-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/f94cc7e90bf6257ec924a452d3ecc792/_/download/contextbatch/js/com.atlassian.jira.projects.sidebar.init,-_super,-jira.view.issue,-project.issue.navigator/batch.js?jira.create.linked.issue=true&amp;locale=en-US&amp;richediton=true","startTime":462.25500000036845,"connectEnd":462.25500000036845,"connectStart":462.25500000036845,"domainLookupEnd":462.25500000036845,"domainLookupStart":462.25500000036845,"fetchStart":462.25500000036845,"redirectEnd":0,"redirectStart":0,"requestStart":713.5550000002695,"responseEnd":775.0450000003184,"responseStart":773.5700000002907,"secureConnectionStart":462.25500000036845},{"duration":459.35499999995955,"initiatorType":"link","name":"https://launchermeta.mojang.com/mc/jira/mojira.css","startTime":471.4750000002823,"connectEnd":0,"connectStart":0,"domainLookupEnd":0,"domainLookupStart":0,"fetchStart":471.4750000002823,"redirectEnd":0,"redirectStart":0,"requestStart":0,"responseEnd":930.8300000002419,"responseStart":0,"secureConnectionStart":0},{"duration":502.2349999999278,"initiatorType":"script","name":"https://bugs.mojang.com/s/d41d8cd98f00b204e9800998ecf8427e-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/1.0/_/download/batch/jira.webresources:bigpipe-js/jira.webresources:bigpipe-js.js","startTime":474.76499999993393,"connectEnd":474.76499999993393,"connectStart":474.76499999993393,"domainLookupEnd":474.76499999993393,"domainLookupStart":474.76499999993393,"fetchStart":474.76499999993393,"redirectEnd":0,"redirectStart":0,"requestStart":935.9299999996438,"responseEnd":976.9999999998618,"responseStart":974.4449999998324,"secureConnectionStart":474.76499999993393},{"duration":496.8799999996918,"initiatorType":"script","name":"https://bugs.mojang.com/s/d41d8cd98f00b204e9800998ecf8427e-CDN/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/1.0/_/download/batch/jira.webresources:bigpipe-init/jira.webresources:bigpipe-init.js","startTime":481.1250000002474,"connectEnd":481.1250000002474,"connectStart":481.1250000002474,"domainLookupEnd":481.1250000002474,"domainLookupStart":481.1250000002474,"fetchStart":481.1250000002474,"redirectEnd":0,"redirectStart":0,"requestStart":939.5100000001548,"responseEnd":978.0049999999392,"responseStart":977.2199999997611,"secureConnectionStart":481.1250000002474},{"duration":46.15000000012515,"initiatorType":"xmlhttprequest","name":"https://bugs.mojang.com/rest/webResources/1.0/resources","startTime":927.5699999998324,"connectEnd":927.5699999998324,"connectStart":927.5699999998324,"domainLookupEnd":927.5699999998324,"domainLookupStart":927.5699999998324,"fetchStart":927.5699999998324,"redirectEnd":0,"redirectStart":0,"requestStart":929.5849999998609,"responseEnd":973.7199999999575,"responseStart":973.2750000002852,"secureConnectionStart":927.5699999998324},{"duration":297.16999999982363,"initiatorType":"css","name":"https://bugs.mojang.com/s/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/8.6.0/_/download/resources/com.atlassian.auiplugin:split_aui.splitchunk.56dfb54d0c/assets/adgs-icons.woff","startTime":1159.2900000005102,"connectEnd":1159.2900000005102,"connectStart":1159.2900000005102,"domainLookupEnd":1159.2900000005102,"domainLookupStart":1159.2900000005102,"fetchStart":1159.2900000005102,"redirectEnd":0,"redirectStart":0,"requestStart":1381.0599999997066,"responseEnd":1456.4600000003338,"responseStart":1418.8599999997678,"secureConnectionStart":1159.2900000005102},{"duration":45.53500000019994,"initiatorType":"xmlhttprequest","name":"https://bugs.mojang.com/rest/webResources/1.0/resources","startTime":1227.0099999996091,"connectEnd":1227.0099999996091,"connectStart":1227.0099999996091,"domainLookupEnd":1227.0099999996091,"domainLookupStart":1227.0099999996091,"fetchStart":1227.0099999996091,"redirectEnd":0,"redirectStart":0,"requestStart":1228.635000000395,"responseEnd":1272.544999999809,"responseStart":1272.0799999997325,"secureConnectionStart":1227.0099999996091},{"duration":42.35999999946216,"initiatorType":"css","name":"https://bugs.mojang.com/s/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/1.0/_/images/icons/sprites/icons_module.png","startTime":1329.6900000004825,"connectEnd":1329.6900000004825,"connectStart":1329.6900000004825,"domainLookupEnd":1329.6900000004825,"domainLookupStart":1329.6900000004825,"fetchStart":1329.6900000004825,"redirectEnd":0,"redirectStart":0,"requestStart":1332.1999999998297,"responseEnd":1372.0499999999447,"responseStart":1371.4300000001458,"secureConnectionStart":1329.6900000004825},{"duration":43.760000000474975,"initiatorType":"css","name":"https://bugs.mojang.com/s/hxx1z4/808000/21802e8b5d152c2ab3dde22c557065a3/8.6.0/_/download/resources/com.atlassian.auiplugin:split_aui.splitchunk.vendors--7da3927366/assets/atlassian-horizontal-neutral.svg","startTime":1335.6999999996333,"connectEnd":1335.6999999996333,"connectStart":1335.6999999996333,"domainLookupEnd":1335.6999999996333,"domainLookupStart":1335.6999999996333,"fetchStart":1335.6999999996333,"redirectEnd":0,"redirectStart":0,"requestStart":1339.4650000000183,"responseEnd":1379.4600000001083,"responseStart":1378.4450000002835,"secureConnectionStart":1335.6999999996333},{"duration":44.425000000046566,"initiatorType":"xmlhttprequest","name":"https://bugs.mojang.com/rest/menu/latest/appswitcher?_=1609338375552","startTime":1493.2300000000396,"connectEnd":1493.2300000000396,"connectStart":1493.2300000000396,"domainLookupEnd":1493.2300000000396,"domainLookupStart":1493.2300000000396,"fetchStart":1493.2300000000396,"redirectEnd":0,"redirectStart":0,"requestStart":1495.1000000000931,"responseEnd":1537.6550000000861,"responseStart":1537.1800000002622,"secureConnectionStart":1493.2300000000396}],"threshold":1000,"fetchStart":8,"domainLookupStart":23,"domainLookupEnd":23,"connectStart":23,"connectEnd":268,"secureConnectionStart":61,"requestStart":268,"responseStart":320,"responseEnd":481,"domLoading":327,"domInteractive":1443,"domContentLoadedEventStart":1443,"domContentLoadedEventEnd":1562,"domComplete":1725,"loadEventStart":1725,"loadEventEnd":1729,"userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36","marks":[{"name":"bigPipe.sidebar-id.start","time":1408.9599999997517},{"name":"bigPipe.sidebar-id.end","time":1409.975000000486},{"name":"bigPipe.activity-panel-pipe-id.start","time":1410.1099999998041},{"name":"bigPipe.activity-panel-pipe-id.end","time":1411.685000000034}],"measures":[],"correlationId":"9d30550b0cc269","effectiveType":"4g","downlink":10,"rtt":50,"serverDuration":174,"dbReadsTimeInMs":9,"dbConnsTimeInMs":12,"applicationHash":"e2c7e59ae165efc6ad6b529150e24d091b9947bf","experiments":[]}}</div></body></html>

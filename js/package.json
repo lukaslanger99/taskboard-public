@@ -1,0 +1,15 @@
+{
+  "name": "js",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "javascript.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tata-js": "^0.1.5"
+  }
+}
