@@ -20,6 +20,40 @@ function printGroupDropdown(selectedGroupId) {
   return html;
 }
 
+function printPriorityDropdown(selectedPriority = '2') {
+  var priorityHtml = '';
+  if (selectedPriority == 1) {
+    priorityHtml += '\
+    <option selected="selected" value="1">Low</option>\
+    <option value="2">Normal</option>\
+    <option value="3">High</option>\
+    ';
+  } else if (selectedPriority == 2) {
+    priorityHtml += '\
+    <option value="1">Low</option>\
+    <option selected="selected" value="2">Normal</option>\
+    <option value="3">High</option>\
+    ';
+  } else {
+    priorityHtml += '\
+    <option selected="selected" value="1">Low</option>\
+    <option value="2">Normal</option>\
+    <option selected="selected" value="3">High</option>\
+    ';
+  }
+
+  var html = '\
+  <td>Priority:</td>\
+  <td>\
+      <div class="select">\
+          <select name="priority">\
+          '+ priorityHtml + '\
+          </select>\
+      </div>\
+  </td>';
+  return html;
+}
+
 function printTaskForm(selectedGroupId = 'default') {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {
@@ -381,18 +415,49 @@ var createTaskButton = document.getElementById('updatetask-button');
 if (createTaskButton) {
   createTaskButton.addEventListener('click',
     function () {
-      document.getElementById('bg-modal-updatetaskform').style.display = 'flex';
-      document.querySelector('html').style.overflow = 'hidden';
-    }
-  )
-}
+      var container = document.getElementById("dynamic-modal-content");
+      if (container) {
+        var taskJsonString = localStorage.getItem('TaskData'), dropDowns = '';
+        task = JSON.parse(taskJsonString);
+        if (task.taskType == 'task') {
+          dropDowns += printGroupDropdown(task.taskParentID);
+        }
+        dropDowns += printPriorityDropdown(task.taskPriority);
 
-var faCloseTaskform = document.getElementById('fa-close-updatetaskform');
-if (faCloseTaskform) {
-  faCloseTaskform.addEventListener('click',
-    function () {
-      document.getElementById('bg-modal-updatetaskform').style.display = 'none';
-      document.querySelector('html').style.overflow = 'auto';
+        var html = '\
+        <div class="modal-header">\
+            Update Task\
+            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
+        </div>\
+        <form action="'+ DIR_SYSTEM + 'php/action.php?action=update&id=' + task.taskID + '" autocomplete="off" method="post" >\
+            <table style="margin:0 auto 15px auto;">\
+                <tr>\
+                    '+ dropDowns + '\
+                </tr>\
+            </table>\
+            <textarea class="input-login" type="text" name="title" cols="40" rows="1">'+ task.taskTitle + '</textarea>\
+            <textarea class="input-login" type="text" name="description" cols="40" rows="5">'+ task.taskDescription + '</textarea>\
+            <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />\
+        </form>';
+        container.innerHTML = html;
+        container.style.height = '280px';
+        document.querySelector('html').style.overflow = 'hidden';
+
+        document.getElementById('bg-modal-dynamicform').style.display = 'flex';
+        var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
+        if (faCloseDynamicform) {
+          faCloseDynamicform.addEventListener('click',
+            function () {
+              var container = document.getElementById("dynamic-modal-content");
+              if (container) {
+                container.innerHTML = '';
+                document.getElementById('bg-modal-dynamicform').style.display = 'none';
+                document.querySelector('html').style.overflow = 'auto';
+              }
+            }
+          )
+        }
+      }
     }
   )
 }

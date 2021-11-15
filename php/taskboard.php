@@ -1120,7 +1120,7 @@ class TaskBoard {
             $html .= $this->printSubtaskPanel($id);
         }
         $html .= '</div>';
-        $html.= $this->printTaskDetailPopups($task);
+        $this->addTaskDataToLocalstorage($task);
         echo $html;
     }
 
@@ -1291,82 +1291,21 @@ class TaskBoard {
         return $html;
     }
 
-    private function printTaskDetailPopups($task) {
-        
-        $priorityDropdown = '
-            <td>Priority:</td>
-            <td>
-                <div class="select">
-                    <select name="priority">';
-        switch ($task->taskPriority) {
-            case 1:
-                $priorityDropdown .= '<option selected="selected" value="1">Low</option>
-                    <option value="2">Normal</option>
-                    <option value="3">High</option>';
-                break;
+    private function addTaskDataToLocalstorage($task) {
+        $localStorageInit = "
+        <script>
+            var json = '{}';
+            var obj = JSON.parse(json);
 
-            case 2:
-                $priorityDropdown .= '<option value="1">Low</option>
-                    <option selected="selected" value="2">Normal</option>
-                    <option value="3">High</option>';
-                break;
-
-            case 3:
-                $priorityDropdown .= '<option selected="selected" value="1">Low</option>
-                    <option value="2">Normal</option>
-                    <option selected="selected" value="3">High</option>';
-                break;
-
-            default:
-                break;
-        }
-        $priorityDropdown .= '</select>
-                </div>
-            </td>';
-            
-        if ($task->taskType == 'task') {
-            $groupDropdown = '
-            <td>Group:</td>
-            <td>
-            <div class="select">
-            <select name="groupID">';
-            $groups = $this->sqlGetGroups();
-            foreach ($groups as $group) {
-                if ($group->groupID == $task->taskParentID) {
-                    $groupDropdown .= '<option selected="selected" value="' . $group->groupID . '">' . $group->groupName . '</option>';
-                } else {
-                    $groupDropdown .= '<option value="' . $group->groupID . '">' . $group->groupName . '</option>';
-                }
-            }
-            $groupDropdown .= '
-            </select>
-            </div>
-            </td>';
-        }
-
-        $html = '
-
-        <div class="bg-modal" id="bg-modal-updatetaskform">
-            <div class="modal-content">
-            <div class="modal-header">
-                Update Task
-                <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-updatetaskform"></i>
-            </div>
-            <form action="'.DIR_SYSTEM.'php/action.php?action=update&id='.$task->taskID.'" autocomplete="off" method="post" >
-                <table style="margin:0 auto 15px auto;">
-                    <tr>
-                        '.$priorityDropdown.'
-                        '.$groupDropdown.'
-                    </tr>
-                </table>
-                <textarea class="input-login" type="text" name="title" cols="40" rows="1">'.$task->taskTitle.'</textarea>
-                <textarea class="input-login" type="text" name="description" cols="40" rows="5">'.$task->taskDescription.'</textarea>
-                <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />
-            </form>
-        </div>
-        </div>
-        </div>';
-        return $html;
+            obj['taskID'] = $task->taskID;
+            obj['taskType'] = '$task->taskType';
+            obj['taskParentID'] = $task->taskParentID;
+            obj['taskPriority'] = $task->taskPriority;
+            obj['taskTitle'] = '$task->taskTitle';
+            obj['taskDescription'] = '$task->taskDescription';
+            localStorage.setItem('TaskData', JSON.stringify(obj));
+        </script>";
+        echo $localStorageInit;
     }
 
     public function printUserDetails($userID) {
