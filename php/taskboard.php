@@ -614,8 +614,6 @@ class TaskBoard {
 
     public function printGroupNames() {
         $groups = $this->sqlGetGroups();
-
-
         $html =  '
             <div class="group-box">
             <table>
@@ -625,6 +623,8 @@ class TaskBoard {
                     <th>PRIORITY</th>
                     <th>TOTAL_NUM_OF_TASKS</th>
                     <th>CURRENTLY_OPEN</th>
+                    <th>CURRENTLY_IN_PROGRESS</th>
+                    <th></th>
                 </tr>';
 
         if ($groups != null) {
@@ -635,10 +635,16 @@ class TaskBoard {
             }
             $toggle = true;
             foreach ($groups as $group) {
-                $totalTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ?", $group->groupID);
-                $totalTasks = $totalTasks->number;
-                $openTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'open'", $group->groupID);
-                $openTasks = $openTasks->number;
+                $groupID = $group->groupID;
+                $totalTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ?", $groupID);
+                $openTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'open'", $groupID);
+                $tasksInProgress = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'assigned'", $groupID);
+
+                if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
+                    $deleteOrLeaveGroup = '<td><button type="button" onclick="deleteGroup('.$groupID.')">Delete Group</button>';
+                } else {
+                    $deleteOrLeaveGroup = '<button type="button" onclick="leaveGroup('.$groupID.')">Leave Group</button>';
+                }
 
                 $toggle = !$toggle;
                 if ($toggle) {
@@ -647,16 +653,17 @@ class TaskBoard {
                     $html .= '<tr>';
                 }
                 $html .= '
-                    <td>' . $group->groupID . '</td>
-                    <td><a href="'.DIR_SYSTEM.'php/details.php?action=groupDetails&id=' . $group->groupID . '">' . $group->groupName . '</a></td>
+                    <td>' . $groupID . '</td>
+                    <td><a href="'.DIR_SYSTEM.'php/details.php?action=groupDetails&id=' . $groupID . '">' . $group->groupName . '</a></td>
                     <td>' . $group->groupPriority . '</td>
-                    <td>' . $totalTasks . '</td>
-                    <td>' . $openTasks . '</td>
+                    <td>' . $totalTasks->number . '</td>
+                    <td>' . $openTasks->number . '</td>
+                    <td>' . $tasksInProgress->number . '</td>
+                    <td>' . $deleteOrLeaveGroup . '</td>
                 </tr>
                 ';
             }
         }
-
         $html .= '</table></div>';
         echo $html;
     }
