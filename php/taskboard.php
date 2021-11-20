@@ -876,7 +876,11 @@ class TaskBoard {
             WHERE  ga.userID = ? AND m.messageType = 'motd'
             ORDER BY m.messageDate DESC, messageID DESC";
             $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-            $title = 'MessageBoard ('.count($data).' Messages)';
+            if ($data) {
+                $title = 'MessageBoard ('.count($data).' Messages)';
+            } else {
+                $title = 'MessageBoard';
+            }
         } else if ($type == 'rt') {
             $title = 'Today\'s Tasks';
             $createButtonID = 'createRTButton';
