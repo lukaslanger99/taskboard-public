@@ -15,6 +15,7 @@ function fillSuccessMap() {
         "finishedsubtask": "Successfully finished subtask !",
         "groupcreated": "Successfully created group !",
         "invited": "Successfully send invite !",
+        "joinedgroup": "Successfully joined group !",
         "leavegroup": "Successfully left group !",
         "login": "Successfully logged in !",
         "mailsend": "Successfully send verify mail !",
@@ -74,7 +75,7 @@ function fillErrorMap() {
 
 function printErrorToast(key) {
     fillErrorMap();
-    tata.success(errorMap.get(key), '', {
+    tata.error(errorMap.get(key), '', {
         position: 'bl',
         duration: 2000
     });
@@ -85,7 +86,7 @@ var warningMap = new Map();
 
 function fillWarningMap() {
     var mapData = {
-
+        "alreadyjoined": "Already joined this group !"
     };
 
     for (const [key, value] of Object.entries(mapData)) {
@@ -95,7 +96,7 @@ function fillWarningMap() {
 
 function printWarningToast(key) {
     fillWarningMap();
-    tata.success(warningMap.get(key), '', {
+    tata.warn(warningMap.get(key), '', {
         position: 'bl',
         duration: 2000
     });

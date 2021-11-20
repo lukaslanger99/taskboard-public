@@ -340,6 +340,46 @@
             }
             break;
 
+        case 'groupinvites':
+            if (isset($_POST['groupinvites-submit'])) {
+                $enableInvites = $_GET['invites']; // enable, disable
+                $groupData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupID = ?", $id);
+                
+                if ($enableInvites == 'enable') {
+                    $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupInvites = 'enabled' WHERE groupID = ?;" , $id);
+                    //token anlegen
+                    $sql = "INSERT INTO tokens (tokenType, tokenGroupID, tokenToken) VALUES ('groupinvite', ?, ?)";
+                    $taskBoard->mysqliQueryPrepared($sql, $id, $taskBoard->generateRandomString());
+                } else if ($enableInvites == 'disable') {
+                    $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupInvites = 'disabled' WHERE groupID = ?;" , $id);
+                    //token löschen
+                    $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $id);
+                }
+                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$id);
+                exit;
+            }
+            break;
+
+        case 'joingroup':
+            $token = $_GET['t'];
+            $tokenData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM tokens WHERE tokenToken = ?", $token);
+            if ($tokenData) {
+                $user = $taskBoard->getUserData($_SESSION['userID']);
+                $groupCheck = $taskBoard->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE groupID = ? AND userID = ?", $tokenData->tokenGroupID, $user->userID);
+                if ($groupCheck) {
+                    header("Location: " . DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&warning=alreadyjoined");
+                    exit;
+                }
+                if ($user->userType == 'normal' && $taskBoard->getNumberOfGroupUsers($token->tokenGroupID) > 5) {
+                    header("Location: " . DIR_SYSTEM . "php/profile.php?error=maxgroupusers");
+                    exit;
+                }
+                $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES (?, ?)", $tokenData->tokenGroupID, $user->userID);
+                header("Location: " . DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
+                exit;
+            }
+            break;
+
         case 'leaveGroup':
             $taskBoard->mysqliQueryPrepared("DELETE FROM groupaccess WHERE groupID = ? AND userID = ?", $_GET['groupID'], $_SESSION['userID']);
             $taskBoard->locationWithDir("php/groups.php?success=leavegroup");

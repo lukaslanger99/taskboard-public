@@ -1,3 +1,4 @@
 Fehler die lange gebraucht haben zu finden.
 
 - ->"<- zu viel oder zu wenig in html tag
+- gucken ob falsche variable benutzt die deshalb leer ist

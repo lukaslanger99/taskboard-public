@@ -24,6 +24,7 @@ groupID | ID automatically initialized
 groupName | name od Group
 groupOwner | userID of group owner
 groupPriority | priority (int) 1-999
+groupInvites | enabled, disabled
 
 ## messages
 Column name | Description
@@ -69,7 +70,7 @@ taskDescription | description
 Column name | Description
 ------------ | -------------
 tokenID | ID automatically initialized
-tokenType | joingroup,resetpw,verifymail
+tokenType | joingroup(private link for single invite),resetpw,verifymail,groupinvite(public invite link)
 tokenGroupID | joingroup: groupID
 tokenUserID | userID of token owner
 tokenToken | token itself 20 char long random string

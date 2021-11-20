@@ -679,6 +679,22 @@ class TaskBoard {
                             <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                         </div>';
 
+        $inviteToken = $this->mysqliSelectFetchObject("SELECT tokenToken FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $groupID);
+        if ($group->groupInvites == 'enabled') {
+            $groupInvites = '
+            '. DIR_SYSTEM .'php/action.php?action=joingroup&t='. $inviteToken->tokenToken.'
+            <form action="action.php?action=groupinvites&invites=disable&id='.$groupID.'" autocomplete="off" method="post" >
+                <input type="submit" name="groupinvites-submit" value="Disable Invites"/>
+            </form>
+            ';
+        } else {
+            $groupInvites = '
+            <form action="action.php?action=groupinvites&invites=enable&id='.$groupID.'" autocomplete="off" method="post" >
+                <input type="submit" name="groupinvites-submit" value="Enable Invites"/>
+            </form>
+            ';
+        }
+
         if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
             $html .= '
             <div class="editgroup-button" onclick="openEditGroupForm('.$groupID.', \''.$group->groupName.'\', '.$group->groupPriority.')">
@@ -688,6 +704,9 @@ class TaskBoard {
             <div style="float:right;">
                     <table>
                         <tr>
+                            <td>
+                            '.$groupInvites.'
+                            </td>
                             <td>
                                 <form action="action.php?action=generateToken&id='.$groupID.'" autocomplete="off" method="post" >
                                     <input type="text" name="name" placeholder="username"/>

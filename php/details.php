@@ -25,7 +25,7 @@
             $sql = "SELECT * FROM groups WHERE groupID = ?";
             $group = $taskBoard->mysqliSelectFetchObject($sql, $_GET['id']);
 
-            if ($group->groupName && ($taskBoard->checkGroupPermission($_SESSION['userID'], $group->groupID) || $_SESSION['userID'] == 1) ) {
+            if ($group && ($taskBoard->checkGroupPermission($_SESSION['userID'], $group->groupID) || $_SESSION['userID'] == 1) ) {
                 require('../html/top-bar.php');
                 $taskBoard->printGroupDetails($group);
                 $_SESSION['deleteGroup'] = $group->groupID;
