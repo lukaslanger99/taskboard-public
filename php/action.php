@@ -360,6 +360,15 @@
             }
             break;
 
+        case 'refreshinvite':
+            if ($taskBoard->groupOwnerCheck($id, $_SESSION['userID'])) {
+                $taskBoard->mysqliQueryPrepared("UPDATE tokens 
+                SET tokenToken = ? WHERE tokenType = 'groupinvite' AND tokenGroupID = ?;" , $taskBoard->generateRandomString(), $id);
+                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$id);
+                exit;
+            }
+            break;
+
         case 'joingroup':
             $token = $_GET['t'];
             $tokenData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM tokens WHERE tokenToken = ?", $token);

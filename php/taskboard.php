@@ -682,16 +682,27 @@ class TaskBoard {
         $inviteToken = $this->mysqliSelectFetchObject("SELECT tokenToken FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $groupID);
         if ($group->groupInvites == 'enabled') {
             $groupInvites = '
-            '. DIR_SYSTEM .'php/action.php?action=joingroup&t='. $inviteToken->tokenToken.'
-            <form action="action.php?action=groupinvites&invites=disable&id='.$groupID.'" autocomplete="off" method="post" >
-                <input type="submit" name="groupinvites-submit" value="Disable Invites"/>
-            </form>
+            <td>
+                '. DIR_SYSTEM .'php/action.php?action=joingroup&t='. $inviteToken->tokenToken.'
+            </td>
+            <td>
+                <div class="panel-item-top-bar-button">
+                    <a href="' . DIR_SYSTEM . 'php/action.php?action=refreshinvite&id='.$groupID.'"> <i class="fa fa-refresh" aria-hidden="true"></i> </a>
+                </div>
+            </td>
+            <td>
+                <form action="action.php?action=groupinvites&invites=disable&id='.$groupID.'" autocomplete="off" method="post" >
+                    <input type="submit" name="groupinvites-submit" value="Disable Invites"/>
+                </form>
+            </td>
             ';
         } else {
             $groupInvites = '
-            <form action="action.php?action=groupinvites&invites=enable&id='.$groupID.'" autocomplete="off" method="post" >
-                <input type="submit" name="groupinvites-submit" value="Enable Invites"/>
-            </form>
+            <td>
+                <form action="action.php?action=groupinvites&invites=enable&id='.$groupID.'" autocomplete="off" method="post" >
+                    <input type="submit" name="groupinvites-submit" value="Enable Invites"/>
+                </form>
+            </td>
             ';
         }
 
@@ -704,9 +715,7 @@ class TaskBoard {
             <div style="float:right;">
                     <table>
                         <tr>
-                            <td>
                             '.$groupInvites.'
-                            </td>
                             <td>
                                 <form action="action.php?action=generateToken&id='.$groupID.'" autocomplete="off" method="post" >
                                     <input type="text" name="name" placeholder="username"/>

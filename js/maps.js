@@ -59,6 +59,7 @@ function fillErrorMap() {
     var mapData = {
         "emptyfield": "Empty Fields !",
         "invalidInput": "Invalid Input !",
+        "invalidurl": "Invalid Url !",
         "login": "Wrong username or password !",
         "mailtaken": "Mail already taken !",
         "nouserfound": "No user found !",
