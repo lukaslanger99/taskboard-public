@@ -49,40 +49,6 @@ function removeUserAccess(groupID, userID, userName) {
   }
 }
 
-function copyTextToClipboard(elementID) {
-  let element = document.getElementById(elementID);
-  let elementText = element.textContent;
-  copyText(elementText);
-}
-
-function copyText(text) {
-  if (typeof (navigator.clipboard) == 'undefined') {
-    console.log('navigator.clipboard');
-    var textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed";  //avoid scrolling to bottom
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      var successful = document.execCommand('copy');
-      var msg = successful ? 'successful' : 'unsuccessful';
-      toastr.info(msg);
-    } catch (err) {
-      toastr.warning('Was not possible to copy te text: ', err);
-    }
-
-    document.body.removeChild(textArea)
-    return;
-  }
-  navigator.clipboard.writeText(text).then(function () {
-    toastr.info(`successful!`);
-  }, function (err) {
-    toastr.warning('unsuccessful!', err);
-  });
-}
-
 function showForm(id) {
   var element = document.getElementById(id);
   if (element) {

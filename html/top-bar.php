@@ -1,8 +1,7 @@
 <?php
     require('head.php');
-
-    $user = $taskBoard->getUserData($_SESSION['userID']);
-    if ($taskBoard->getNightmodeEnabled($user->userID)) {
+    $userID = $_SESSION['userID'];
+    if ($taskBoard->getNightmodeEnabled($userID)) {
         $nightModeState = 'checked';
     } else {
         $nightModeState = '';
@@ -14,11 +13,20 @@
                 <a href="<?php echo DIR_SYSTEM?>"> TaskBoard </a>
             </div>
             <?php
+                $userVerificationState = $taskBoard->getUserVerificationState($userID);
+                ($userVerificationState) ? $notificationCounter = 0 : $notificationCounter = 1;
+
+                $inviteCounter = $taskBoard->getUserGroupInvitesCount($userID);
+                $notificationCounter += $inviteCounter;
+
+                ($notificationCounter) ? $notificationsHTML = '<span class="button__badge">'.$notificationCounter.'</span>' : $notificationsHTML = '';
+
                 if ($_SESSION['enteredUrl'] != '/taskboard/php/profile.php') {
                     echo '
                     <div class="dropdown">
                         <div class="dropbtn">
                             <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+                            '.$notificationsHTML.'
                         </div>
                         <div class="dropdown-content">
                             <div class="dropdown-item">
@@ -37,7 +45,7 @@
                         </div>
                     </div>';
                 }
-                if ($_SESSION['userID'] == 1) {
+                if ($userID == 1) {
                     echo '
                     <a href="'.DIR_SYSTEM.'php/admin.php">
                         <div class="button">
@@ -62,5 +70,4 @@
             <div class="button" id="createGroupButton">
                 Create Group
             </div>
-            <!-- </div> -->
         </div>

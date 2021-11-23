@@ -425,6 +425,27 @@ class TaskBoard {
         return $data->userName;
     }
 
+    /**
+     * get number (int) how many group invites a user has
+     */
+    public function getUserGroupInvitesCount($userID) {
+        $data = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tokens WHERE tokenType = 'joingroup' AND tokenUserID = ?;", $userID);
+        if ($data) {
+            return $data->number;
+        }
+        return 0;
+    }
+
+    /**
+     * return true if mail is verified
+     * return false if mail is unverified
+     */
+    public function getUserVerificationState($userID) {
+        $sql = "SELECT userMailState FROM users WHERE userID = ?";
+        $data = $this->mysqliSelectFetchObject($sql, $userID);
+        return $data->userMailState == 'verified';
+    }
+
     public function getTasksByGroupID($groupID) {
         $sql = "SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? ORDER BY taskID DESC";
         return $this->mysqliSelectFetchArray($sql, $groupID);
