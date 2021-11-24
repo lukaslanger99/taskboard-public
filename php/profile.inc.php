@@ -75,25 +75,24 @@
 
         case 'acceptinvite':
             if (isset($_POST['acceptinvite-submit'])) {
-                $token = $taskBoard->mysqliSelectFetchObject("SELECT * FROM tokens WHERE tokenToken = ?", $_GET['t']);
-                if ($token->tokenUserID == $_SESSION['userID']) {
+                $tokenData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM tokens WHERE tokenToken = ?", $_GET['t']);
+                if ($tokenData->tokenUserID == $_SESSION['userID']) {
                     $owner = $taskBoard->getUserData($taskBoard->getGroupOwnerID($token->tokenGroupID));
                     if ($owner->userType == 'normal' && $taskBoard->getNumberOfGroupUsers($token->tokenGroupID) > 5) {
                         header("Location: " . DIR_SYSTEM . "php/profile.php?error=maxgroupusers");
                     }
-                    $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES (?, ?)", $token->tokenGroupID, $token->tokenUserID);
-                    $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenToken = ?", $token->tokenToken);
-                    header("Location: " . DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$token->tokenGroupID."&success=joinedgroup");
-                    exit;
+                    $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES (?, ?)", $tokenData->tokenGroupID, $tokenData->tokenUserID);
+                    $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenToken = ?", $tokenData->tokenToken);
+                    $taskBoard->localstorageGroupUpdate(DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
                 }
             }
             break;
 
         case 'rejectinvite':
             if (isset($_POST['rejectinvite-submit'])) {
-                $token = $taskBoard->mysqliSelectFetchObject("SELECT * FROM tokens WHERE tokenToken = ?", $_GET['t']);
-                if ($token->tokenUserID == $_SESSION['userID']) {
-                    $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenToken = ?", $token->tokenToken);
+                $tokenData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM tokens WHERE tokenToken = ?", $_GET['t']);
+                if ($tokenData->tokenUserID == $_SESSION['userID']) {
+                    $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenToken = ?", $tokenData->tokenToken);
                 }
             }
             break;

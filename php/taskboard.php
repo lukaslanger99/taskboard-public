@@ -416,6 +416,12 @@ class TaskBoard {
         return $data->userID;
     }
 
+    private function getUserLastMotd($userID) {
+        $sql = "SELECT userLastMotd FROM users WHERE userID = ?";
+        $data = $this->mysqliSelectFetchObject($sql, $userID);
+        return $data->userLastMotd;
+    }
+
     public function getUsernameByID($userID) {
         if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') {
             return $userID;
@@ -778,9 +784,14 @@ class TaskBoard {
             $jsMethodName = 'printEditAppointmentForm';
         } else if ($message->messageType == 'motd') {
             $jsMethodName = 'printEditMessageForm';
+            if (new DateTime($message->messageDate) > new DateTime($this->getUserLastMotd($_SESSION['userID']))) {
+                $redOutline = 'style="outline: 1px solid red;"';
+            } else {
+                $redOutline = '';
+            }
         }
         $string = '
-        <div class="panel-item-message-title">
+        <div class="panel-item-message-title" '.$redOutline.'>
             '.date("d.m.y", strtotime($message->messageDate)).' - '.$this->addTagsToUrlsInString($message->messageTitle).'
             <small style="color:#d1d1e0">'.$this->getUsernameByID($message->messageOwner).'</small>
         </div>';
@@ -975,6 +986,10 @@ class TaskBoard {
         $html .= '</div>
             </div>
         </div>';
+
+        if ($type == 'motd') {
+            $this->mysqliQueryPrepared("UPDATE users SET userLastMotd = CURRENT_TIMESTAMP WHERE userID = ?", $_SESSION['userID']);
+        }
         return $html;
     }
 

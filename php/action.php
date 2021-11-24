@@ -384,8 +384,7 @@
                     exit;
                 }
                 $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES (?, ?)", $tokenData->tokenGroupID, $user->userID);
-                header("Location: " . DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
-                exit;
+                $taskBoard->localstorageGroupUpdate(DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
             }
             break;
 

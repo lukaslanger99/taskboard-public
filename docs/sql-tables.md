@@ -87,3 +87,5 @@ userMail | email
 userMailState | unverified,verified
 usrePass | password (hashed)
 userNightmode | enabled=true,disabled=false
+userLastLogin | 0000-00-00 00:00:00
+userLastMotd | 0000-00-00 00:00:00

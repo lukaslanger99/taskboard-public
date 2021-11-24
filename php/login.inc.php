@@ -23,6 +23,7 @@
                     } else {
                         $destinationUrl = DIR_SYSTEM . "index.php?success=login";
                     }
+                    $taskBoard->mysqliQueryPrepared("UPDATE users SET userLastLogin = CURRENT_TIMESTAMP WHERE userID = ?", $row->userID);
                     $taskBoard->localstorageGroupUpdate($destinationUrl);
                 } else {
                     $taskBoard->locationIndex("?error=login");

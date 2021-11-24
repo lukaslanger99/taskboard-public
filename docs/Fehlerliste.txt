@@ -1,4 +1,5 @@
 Fehler die lange gebraucht haben zu finden.
 
 - ->"<- zu viel oder zu wenig in html tag
-- gucken ob falsche variable benutzt die deshalb leer ist
+- gucken ob falsche variable benutzt die deshalb leer ist (konkret man verwendet $token statt $tokenData)
+- gucken ob er die cases reingeht wenn nix passiert wenn man auf nen button drückt (weil startseite = zielseite sein kann dann sieht es so aus als würde nix passieren)
