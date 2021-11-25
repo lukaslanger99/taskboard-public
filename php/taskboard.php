@@ -793,7 +793,7 @@ class TaskBoard {
         $string = '
         <div class="panel-item-message-title" '.$redOutline.'>
             '.date("d.m.y", strtotime($message->messageDate)).' - '.$this->addTagsToUrlsInString($message->messageTitle).'
-            <small style="color:#d1d1e0">'.$this->getUsernameByID($message->messageOwner).'</small>
+            <small style="color:#d1d1e0">'.$this->getUsernameByID($message->messageOwner).' - '.$this->getGroupNameByID($message->messageGroup).'</small>
         </div>';
         if ($message->messageOwner == $_SESSION['userID'] || $_SESSION['userID'] == 1) {
             $string .= '
