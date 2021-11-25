@@ -17,7 +17,7 @@
                 <div class="login-box">
                     <div class="box-header">Login</div>
                         <form action="'.DIR_SYSTEM.'php/login.inc.php" autocomplete="off" method="post" >
-                            <input class="input-login" type="text" name="username" placeholder="username"/><br>
+                            <input class="input-login" type="text" name="username" placeholder="username" value="'.$_GET['username'].'"/><br>
                             <input class="input-login" type="password" name="password" placeholder="password"/><br>
                             <input class="submit-login" type="submit" name="login-submit" value="Login"/>
                         </form>
