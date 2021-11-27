@@ -493,6 +493,7 @@ th {
 .button-list {
   float: left;
   padding: 5px;
+  cursor: pointer;
 }
 
 /* The switch - the box around the slider */
@@ -646,4 +647,9 @@ input:checked + .slider:before {
   position: absolute; /* Position the badge within the relatively positioned button */
   top: 0;
   right: 0;
+}
+
+input:hover[type="submit"] 
+{
+  cursor: pointer;
 }
