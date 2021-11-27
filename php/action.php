@@ -343,7 +343,6 @@
         case 'groupinvites':
             if (isset($_POST['groupinvites-submit'])) {
                 $enableInvites = $_GET['invites']; // enable, disable
-                $groupData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupID = ?", $id);
                 
                 if ($enableInvites == 'enable') {
                     $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupInvites = 'enabled' WHERE groupID = ?;" , $id);
@@ -356,6 +355,20 @@
                     $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $id);
                 }
                 $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$id);
+                exit;
+            }
+            break;
+
+        case 'groupstate':
+            if(isset($_POST['groupstate-submit'])) {
+                $stateAction = $_GET['state']; // activate, hide
+
+                if ($stateAction == 'activate') {
+                    $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'active' WHERE groupID = ?;" , $id);
+                } else if ($stateAction == 'hide') {
+                    $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'hidden' WHERE groupID = ?;" , $id);
+                }
+                $taskBoard->localstorageGroupUpdate(DIR_SYSTEM."php/details.php?action=groupDetails&id=".$id);
                 exit;
             }
             break;

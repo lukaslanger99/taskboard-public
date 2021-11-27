@@ -184,7 +184,7 @@ class TaskBoard {
     }
 
     public function deleteUser($userID) {
-        $groups = $this->sqlGetGroups($userID);
+        $groups = $this->sqlGetAllGroups($userID);
         foreach ($groups as $group) {
             $this->deleteGroup($group->groupID);
         }
@@ -475,7 +475,7 @@ class TaskBoard {
     }
 
     public function localstorageCreateJSCode() {
-        $groups = $this->sqlGetGroups();
+        $groups = $this->sqlGetActiveGroups();
         $localStorageInit = "
         var json = '{}';
         var obj = JSON.parse(json);
@@ -640,13 +640,14 @@ class TaskBoard {
     }
 
     public function printGroupNames() {
-        $groups = $this->sqlGetGroups();
+        $groups = $this->sqlGetAllGroups();
         $html =  '
             <div class="group-box">
             <table>
                 <tr>
                     <th>ID</th>
-                    <th>GROUP_ID</th>
+                    <th>NAME</th>
+                    <th>STATE</th>
                     <th>PRIORITY</th>
                     <th>TOTAL_NUM_OF_TASKS</th>
                     <th>CURRENTLY_OPEN</th>
@@ -682,6 +683,7 @@ class TaskBoard {
                 $html .= '
                     <td>' . $groupID . '</td>
                     <td><a href="'.DIR_SYSTEM.'php/details.php?action=groupDetails&id=' . $groupID . '">' . $group->groupName . '</a></td>
+                    <td>' . $group->groupState . '</td>
                     <td>' . $group->groupPriority . '</td>
                     <td>' . $totalTasks->number . '</td>
                     <td>' . $openTasks->number . '</td>
@@ -733,6 +735,24 @@ class TaskBoard {
             ';
         }
 
+        if ($group->groupState == 'active') {
+            $changeGroupState = '
+            <td>
+                <form action="action.php?action=groupstate&state=hide&id='.$groupID.'" autocomplete="off" method="post" >
+                    <input type="submit" name="groupstate-submit" value="Hide Group"/>
+                </form>
+            </td>
+            ';
+        } else if ($group->groupState == 'hidden') {
+            $changeGroupState = '
+            <td>
+                <form action="action.php?action=groupstate&state=activate&id='.$groupID.'" autocomplete="off" method="post" >
+                    <input type="submit" name="groupstate-submit" value="Show Group"/>
+                </form>
+            </td>
+            ';
+        }
+
         if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
             $html .= '
             <div class="editgroup-button" onclick="openEditGroupForm('.$groupID.', \''.$group->groupName.'\', '.$group->groupPriority.')">
@@ -749,6 +769,7 @@ class TaskBoard {
                                     <input type="submit" name="groupinvite-submit" value="Invite"/>
                                 </form>
                             </td>
+                            '.$changeGroupState.'
                             <td><button type="button" onclick="deleteGroup('.$groupID.')">Delete Group</button></td>
                         </tr>
                     </table>
@@ -1862,11 +1883,37 @@ class TaskBoard {
         return $html;
     }
     
-    public function sqlGetGroups($userID = '') {
+    public function sqlGetActiveGroups($userID = '') {
+        $sql = "SELECT g.* 
+                FROM groups g
+                    LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
+                WHERE  ga.userID = ? AND g.groupState = 'active'
+                ORDER BY g.groupPriority DESC";
+        if ($userID == '') {
+            return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
+        } else {
+            return $this->mysqliSelectFetchArray($sql, $userID);
+        }
+    }
+
+    public function sqlGetAllGroups($userID = '') {
         $sql = "SELECT g.* 
                 FROM groups g
                     LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
                 WHERE  ga.userID = ?
+                ORDER BY g.groupPriority DESC";
+        if ($userID == '') {
+            return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
+        } else {
+            return $this->mysqliSelectFetchArray($sql, $userID);
+        }
+    }
+
+    public function sqlGetHiddenGroups($userID = '') {
+        $sql = "SELECT g.* 
+                FROM groups g
+                    LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
+                WHERE  ga.userID = ? AND g.groupState = 'hidden'
                 ORDER BY g.groupPriority DESC";
         if ($userID == '') {
             return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);

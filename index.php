@@ -7,7 +7,7 @@
         require('html/top-bar.php'); 
         $taskBoard->printPanels();
         if (DIR_SYSTEM == "http://lukaslanger.bplaced.net/taskboard/") {
-            $taskBoard->printGroups($taskBoard->sqlGetGroups());
+            $taskBoard->printGroups($taskBoard->sqlGetActiveGroups());
         }
     } else {
         require('html/head.php');
