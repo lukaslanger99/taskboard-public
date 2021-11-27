@@ -58,6 +58,7 @@ var errorMap = new Map();
 function fillErrorMap() {
     var mapData = {
         "emptyfield": "Empty Fields !",
+        "highnumber": "Failed, number was to high !",
         "invalidInput": "Invalid Input !",
         "invalidurl": "Invalid Url !",
         "login": "Wrong username or password !",

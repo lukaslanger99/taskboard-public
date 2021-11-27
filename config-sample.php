@@ -14,7 +14,5 @@
     define("PASS", "####");
     define("DB", "###");
 
-    define("DAYS_TILL_ARCHIVE", 1);
-
     session_start();
     $taskBoard = new TaskBoard();

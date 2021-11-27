@@ -127,7 +127,7 @@ function printEditAppointmentForm(messageID, messageTitle, date) {
 }
 
 //Edit group form
-function openEditGroupForm(groupID, name, priority) {
+function openEditGroupForm(groupID, name, priority, archiveTime) {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {
     html = '\
@@ -135,7 +135,7 @@ function openEditGroupForm(groupID, name, priority) {
             Update Group\
             <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
           </div>\
-          <form action="'+ DIR_SYSTEM + 'php/action.php?action=updateGroup&groupID=' + groupID + '" autocomplete="off" method="post" >\
+          <form action="'+ DIR_SYSTEM + 'php/action.php?action=updateGroup&id=' + groupID + '" autocomplete="off" method="post" >\
           <table style="margin:0 auto 15px auto;">\
               <tr>\
                   <td>Name:</td>\
@@ -147,6 +147,12 @@ function openEditGroupForm(groupID, name, priority) {
                   <td>Priority:</td>\
                   <td>\
                       <input type="number" name="priority" min="1" max="1000" value="'+ priority + '">\
+                  </td>\
+              </tr>\
+              <tr>\
+              <td>Times till task archived:</td>\
+                  <td>\
+                      <input type="number" name="archivetime" min="1" max="365" value="'+ archiveTime + '">\
                   </td>\
               </tr>\
           </table>\

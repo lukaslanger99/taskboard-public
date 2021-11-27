@@ -495,11 +495,14 @@
             if (isset($_POST['updategroup-submit'])) {
                 $name = $_POST['name'];
                 $priority = $_POST['priority'];
-                $groupID = $_GET['groupID'];
+                $archiveTime = $_POST['archivetime'];
 
-                $sql = "UPDATE groups SET groupName = ?, groupPriority = ? WHERE groupID = ?";
-                $taskBoard->mysqliQueryPrepared($sql, $name, $priority, $groupID);
-                $taskBoard->locationWithDir("php/groups.php?success=updatedgroup");
+                if ($priority > 1000 || $archiveTime > 365) {
+                    $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$id."&error=highnumber");
+                }
+                $sql = "UPDATE groups SET groupName = ?, groupPriority = ?, groupArchiveTime = ? WHERE groupID = ?";
+                $taskBoard->mysqliQueryPrepared($sql, $name, $priority, $archiveTime, $id);
+                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$id."&success=updatedgroup");
             }
             break;
 

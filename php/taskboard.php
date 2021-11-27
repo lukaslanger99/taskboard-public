@@ -119,6 +119,14 @@ class TaskBoard {
         return implode(' ', $words);
     }
 
+    /**
+     * returns true if $dateDiff is higher than groupArchiveTime of $groupID
+     */
+    private function archiveCheck($groupID, $dateDiff) {
+        $groupData = $this->mysqliSelectFetchObject"SELECT * FROM groups WHERE groupID 0 ?", $id);
+        return $dateDiff >= $groupData->groupArchiveTime;
+    }
+
     public function checkGroupPermission($userID, $groupID) {
         if ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) {
             return 1;
@@ -755,7 +763,7 @@ class TaskBoard {
 
         if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
             $html .= '
-            <div class="editgroup-button" onclick="openEditGroupForm('.$groupID.', \''.$group->groupName.'\', '.$group->groupPriority.')">
+            <div class="editgroup-button" onclick="openEditGroupForm('.$groupID.', \''.$group->groupName.'\', '.$group->groupPriority.', '.$group->groupArchiveTime.')">
                 Edit
                 <i class="fa fa-edit" aria-hidden="true"></i>
             </div>
@@ -1160,7 +1168,7 @@ class TaskBoard {
                 break;
         }
 
-        if ($taskData->taskType == 'task' && $taskData->taskState == 'finished' && $dateDiff >= DAYS_TILL_ARCHIVE) {
+        if ($taskData->taskType == 'task' && $taskData->taskState == 'finished' && $this->archiveCheck($taskData->taskParentID, $dateDiff)) {
             $this->moveToArchive($taskData->taskID);
         } else {
             $html = '<a href="'.DIR_SYSTEM.'php/details.php?action=taskDetails&id=' . $taskData->taskID . '">';
