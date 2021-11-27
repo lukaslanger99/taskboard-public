@@ -21,9 +21,12 @@
     switch ($action) {
         case 'stateOpen':
             if (isset($_POST['stateopen-submit'])) {
-                $state = 'open';
-                $sql = "UPDATE tasks SET taskState = '$state', taskAssignedBy = '' WHERE taskID = ?;";
+                $sql = "UPDATE tasks SET taskState = 'open', taskAssignedBy = '' WHERE taskID = ?;";
                 $taskBoard->mysqliQueryPrepared($sql, $id);
+
+                if ($taskBoard->getTaskType($id) == 'subtask') {
+                    $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=".$taskBoard->getParentIDOfTask($id));
+                }
             }
             break;
 

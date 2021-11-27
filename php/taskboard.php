@@ -179,7 +179,7 @@ class TaskBoard {
 
     public function deleteTaskPermission($taskID, $userID, $type) {
         if ($type == 'task') {
-            $groupID = $this->getGroupIDOfTask($taskID);
+            $groupID = $this->getParentIDOfTask($taskID);
         } else {
             $parent = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);;
             do {
@@ -237,7 +237,7 @@ class TaskBoard {
         return $tmpDate->diff(new DateTime(date('Y-m-d')))->format('%r%a'); 
     }
 
-    private function getGroupIDOfTask($taskID) {
+    public function getParentIDOfTask($taskID) {
         $task = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
         return $task->taskParentID;
     }
@@ -463,6 +463,11 @@ class TaskBoard {
     public function getTasksByGroupID($groupID) {
         $sql = "SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? ORDER BY taskID DESC";
         return $this->mysqliSelectFetchArray($sql, $groupID);
+    }
+
+    public function getTaskType($taskID) {
+        $taskData = $this->mysqliSelectFetchObject("SELECT taskType FROM tasks WHERE taskID = ?", $taskID);
+        return $taskData->taskType;
     }
 
     public function getWeek() {
