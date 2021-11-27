@@ -829,7 +829,7 @@ class TaskBoard {
             '.date("d.m.y", strtotime($message->messageDate)).' - '.$this->addTagsToUrlsInString($message->messageTitle).'
             <small style="color:#d1d1e0">'.$this->getUsernameByID($message->messageOwner).' - '.$this->getGroupNameByID($message->messageGroup).'</small>
         </div>';
-        if ($message->messageOwner == $_SESSION['userID'] || $_SESSION['userID'] == 1) {
+        if ($message->messageOwner == $_SESSION['userID'] || $this->groupOwnerCheck($message->messageGroup, $_SESSION['userID']) || $_SESSION['userID'] == 1) {
             $string .= '
             <div class="panel-item-delete-button" onclick="'.$jsMethodName.'('.$message->messageID.', \''.$message->messageTitle.'\', \''.$message->messageDate.'\')">
                 <i class="fa fa-edit" aria-hidden="true"></i>

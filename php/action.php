@@ -283,8 +283,8 @@
             break;
 
         case 'deleteMessage':
-            $messageOwner = $taskBoard->mysqliSelectFetchObject("SELECT messageOwner FROM messages WHERE messageID = ?", $id);
-            if ($messageOwner->messageOwner == $_SESSION['userID'] || 1 == $_SESSION['userID']) {
+            $messageData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM messages WHERE messageID = ?", $id);
+            if ($messageData->messageOwner == $_SESSION['userID'] || $taskBoard->groupOwnerCheck($messageData->messageGroup, $_SESSION['userID']) || 1 == $_SESSION['userID']) {
                 $taskBoard->mysqliQueryPrepared("DELETE FROM messages WHERE messageID = ?", $id);
                 $taskBoard->locationIndex("?success=deletemessage");
             }
