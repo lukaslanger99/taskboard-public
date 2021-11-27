@@ -123,7 +123,7 @@ class TaskBoard {
      * returns true if $dateDiff is higher than groupArchiveTime of $groupID
      */
     private function archiveCheck($groupID, $dateDiff) {
-        $groupData = $this->mysqliSelectFetchObject"SELECT * FROM groups WHERE groupID 0 ?", $id);
+        $groupData = $this->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupID = ?", $groupID);
         return $dateDiff >= $groupData->groupArchiveTime;
     }
 
@@ -946,8 +946,10 @@ class TaskBoard {
             WHERE  ga.userID = ? AND m.messageType = 'motd'
             ORDER BY m.messageDate DESC, messageID DESC";
             $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-            if ($data) {
+            if (count($data) > 1) {
                 $title = 'MessageBoard ('.count($data).' Messages)';
+            } else if(count($data) == 1) {
+                $title = 'MessageBoard (1 Message)';
             } else {
                 $title = 'MessageBoard';
             }
