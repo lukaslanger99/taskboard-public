@@ -52,7 +52,7 @@ On the Appointment Panel you can manage your appointments and deadlines. They ar
 I did that panel to protect myself from procrastination. You set to-do's and are only able to work them off first in first out.
 
 ### What is still in progress?
-- [ ] CCS reworking
+- [ ] CSS reworking
 - [ ] Mobile layout
 - [ ] Weather API Panel
 - [ ] Task labels similar to github issues
