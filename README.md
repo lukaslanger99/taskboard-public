@@ -54,7 +54,7 @@ I did that panel to protect myself from procrastination. You set to-do's and are
 ### What is still in progress?
 - [ ] CCS reworking
 - [ ] Mobile layout
-- [ ] Wheather API Panel
+- [ ] Weather API Panel
 - [ ] Task labels similar to github issues
 - [ ] Upload profile pic
 - [ ] Add documents to task
