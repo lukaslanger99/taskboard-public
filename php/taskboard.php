@@ -951,10 +951,12 @@ class TaskBoard {
             WHERE  ga.userID = ? AND m.messageType = 'motd'
             ORDER BY m.messageDate DESC, messageID DESC";
             $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-            if (count($data) > 1) {
-                $title = 'MessageBoard ('.count($data).' Messages)';
-            } else if(count($data) == 1) {
-                $title = 'MessageBoard (1 Message)';
+            if ($data) {
+                if (count($data) > 1) {
+                    $title = 'MessageBoard ('.count($data).' Messages)';
+                } else if(count($data) == 1) {
+                    $title = 'MessageBoard (1 Message)';
+                }
             } else {
                 $title = 'MessageBoard';
             }
