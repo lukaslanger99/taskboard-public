@@ -50,3 +50,11 @@ On the Appointment Panel you can manage your appointments and deadlines. They ar
 ![](https://i.gyazo.com/8219fc49c4097561a6e5c8a8a4c3aa83.png)
 
 I did that panel to protect myself from procrastination. You set to-do's and are only able to work them off first in first out.
+
+### What is still in progress?
+- [ ] CCS reworking
+- [ ] Mobile layout
+- [ ] Wheather API Panel
+- [ ] Task labels similar to github issues
+- [ ] Upload profile pic
+- [ ] Add documents to task
