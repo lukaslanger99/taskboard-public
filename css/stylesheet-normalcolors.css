@@ -1,0 +1,227 @@
+a {
+  color: black;
+}
+::placeholder { 
+  color: black;
+}
+th {
+  background-color: #fff;
+}
+
+/* Main Page */
+.top-bar {
+  background-color: #cccccc;
+}
+
+.subtask-top-bar {
+  background-color: #cccccc;
+}
+
+.group-box {
+  background-color: #f2f2f2;
+}
+
+.group-top-bar {
+  background-color: #cccccc;
+}
+
+.big-top-bar {
+  background-color: #cccccc;
+}
+
+.single-top-bar {
+  background-color: #cccccc;
+}
+
+.single-content {
+  background-color: lightgray;
+}
+
+.single-top-bar-subtask {
+  background-color: #cccccc;
+}
+
+.single-content-subtask {
+  background-color: lightgray;
+}
+
+/* Button */
+.button {
+  background-color: #f2f2f2;
+}
+
+.profile-button {
+  background-color: #f2f2f2;
+}
+
+.button:hover {
+  background-color: #e6e6e6;
+  color: black;
+}
+
+/* Task */
+.box {
+  background-color: #ffffff;
+}
+
+.subtask-box {
+  background-color: #ffffff;
+}
+
+.bottom-item {
+  background-color: #cccccc;
+}
+
+.new-item {
+  background-color: #00ff55;
+}
+
+.subtask-item {
+  background-color: #00ffff;
+}
+
+.readonly {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+/* Panel */
+.panel {
+  background-color: #f2f2f2;
+}
+
+.panel-item-content {
+  border: 5px solid #cccccc;
+  background-color: #ffffff;
+}
+
+.panel-item-top-bar {
+  background-color: #cccccc;
+}
+
+.panel-item-top-bar-button {
+  background-color: #f2f2f2;
+}
+
+.panel-item-delete-button {
+  background-color: #f2f2f2;
+}
+
+.panel-item-check-button {
+  background-color: #f2f2f2;
+}
+
+.panel-item-check-button:hover {
+  background-color: rgba(242, 242, 242, 1);
+}
+
+.fa-check:hover {
+  color: green;
+}
+
+.fa-trash:hover {
+  color: red;
+}
+
+/* popoup form */
+.bg-modal {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  background-color: #f2f2f2;
+  border: 1px solid #337ab7;
+}
+
+.modal-header {
+  background-color: #337ab7;
+  color: #fff;
+}
+
+.fa-close {
+  color: #fff;
+}
+
+.login-view {
+  background-color: #fff;
+}
+
+.login-box {
+  background-color: #f2f2f2;
+  border: 1px solid #337ab7;
+}
+
+.signup-area {
+  background-color: #f2f2f2;
+  border: 1px solid #337ab7;
+}
+
+.box-header {
+  color: #fff;
+  background-color: #337ab7;
+}
+
+.input-login {
+  border: 1px solid #ccc;
+  color: #555;
+  background-color: #fff;
+}
+
+.submit-login {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+
+::placeholder {
+  color: lightgray;
+}
+
+/* The slider */
+.slider {
+  background-color: #ccc;
+}
+
+.slider:before {
+  background-color: white;
+}
+
+/* Group */
+.editgroup-button {
+  background-color: #f2f2f2;
+}
+
+.editgroup-button:hover {
+  background-color: #e6e6e6;
+  color: black;
+}
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: #f2f2f2;
+  color: #262626;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  background-color: #f2f2f2;
+}
+
+.dropdown-item {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+.dropdown-item:hover {
+  background-color: #e6e6e6;
+  color: black;
+}
+
+.comment-background {
+  background-color:#fff;
+}
+
+.button__badge {
+  background-color: #fa3e3e;
+  color: white;
+}
