@@ -5,10 +5,10 @@
                 <?php
                 echo '<link rel="stylesheet" type="text/css" href="'.DIR_SYSTEM.'css/stylesheet-properties.css">';
                 if ($_SESSION['userID'] && $taskBoard->getNightmodeEnabled($_SESSION['userID'])) {
-                    echo '<link rel="stylesheet" type="text/css" href="'.DIR_SYSTEM.'css/stylesheet-nightmode.css">
+                    echo '<link rel="stylesheet" type="text/css" href="'.DIR_SYSTEM.'css/stylesheet-nightmodecolors.css">
                     ';
                 } else {
-                    echo '<link rel="stylesheet" type="text/css" href="'.DIR_SYSTEM.'css/stylesheet-normal.css">
+                    echo '<link rel="stylesheet" type="text/css" href="'.DIR_SYSTEM.'css/stylesheet-normalcolors.css">
                     ';
                 }
                 ?>
