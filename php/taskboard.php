@@ -609,21 +609,21 @@ class TaskBoard {
             <div class="group-content">
                 <div class="single-content">
                     <div class="single-top-bar">
-                    Open '.$openTasksCount.'
+                    <p>Open '.$openTasksCount.'</p>
                     </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'open' ORDER BY taskPriority DESC, taskID ", $groupID);
         $html .=  '
                 </div>
                 <div class="single-content">
                     <div class="single-top-bar">
-                    In progress '.$assignedTasksCount.'
+                    <p>In progress '.$assignedTasksCount.'</p>
                     </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'assigned' ORDER BY taskPriority DESC, taskDateAssigned", $groupID);
         $html .=  '
                 </div>
                 <div class="single-content">
                     <div class="single-top-bar">
-                    Done '.$finishedTasksCount.'
+                    <p>Done '.$finishedTasksCount.'</p>
                     </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'finished' ORDER BY taskDateFinished", $groupID);
         $html .=  '
@@ -975,12 +975,16 @@ class TaskBoard {
         <div class="panel-item">
             <div class="panel-item-content">
                 <div class="panel-item-top-bar">
-                    '.$title.'
-                    <div class="panel-item-top-bar-button" id="'.$createButtonID.'">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    <div class="top-bar-left">
+                        <p>'.$title.'</p>
                     </div>
-                    <div class="panel-item-top-bar-button">
+                    <div class="top-bar-right">
+                        <div class="panel-item-top-bar-button" id="'.$createButtonID.'">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        </div>
+                        <div class="panel-item-top-bar-button">
                         <a href="' . DIR_SYSTEM . 'php/details.php?action='.$detailsActionName.'"> <i class="fa fa-list" aria-hidden="true"></i> </a>
+                        </div>
                     </div>
                 </div>
                 <div class="panel-item-area">
@@ -1076,14 +1080,18 @@ class TaskBoard {
         <div class="panel-item">
             <div class="panel-item-content">
                 <div class="panel-item-top-bar">
-                Queue
+                    <div class="top-bar-left">
+                        <p>Queue</p>
+                    </div>
+                    <div class="top-bar-right">
+                    <form action="'.DIR_SYSTEM.'php/action.php?action=addQueue" autocomplete="off" method="post" >
+                    <input type="text" name="item">
+                    <input type="checkbox" name="highprio" style="outline: 1px solid red;">
+                    <input type="submit" name="add-queue-submit" value="Add" />
+                    </form>
+                    </div>
                 </div>
                 <div class="panel-item-area">
-                <form action="'.DIR_SYSTEM.'php/action.php?action=addQueue" autocomplete="off" method="post" >
-                        <input type="text" name="item">
-                        <input type="checkbox" name="highprio" style="outline: 1px solid red;">
-                        <input type="submit" name="add-queue-submit" value="Add" />
-                </form>
 
         ';
 

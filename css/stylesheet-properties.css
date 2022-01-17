@@ -1,559 +1,550 @@
-html {
-    font-family: 'Comic Sans MS';
-    font-size: medium;
-    font-weight: 600;
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
-  }
-  
-  a {
-    text-decoration: none;
-  }
-  
-  a:hover {
-    opacity: 0.5;
-  }
-  
-  ::placeholder { 
-    opacity: 1; 
-  }
-  
-  table {
-    border-collapse: collapse;
-  }
-  
-  th {
-    padding: 5px;
-  }
-  
-  /* Main Page */
-  .top-bar {
-    width: 99.5%;
-    height: 35px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .user-bar {
-    width: 200px;
-    float: right;
-  }
-  
-  .subtask-top-bar {
-    width: 85%;
-    height: 35px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .top-bar-item {
-    float: left;
-    height: 25px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .group-box {
-    width: 99.5%;
-    margin-top: 25px;
-    padding: 5px;
-    border-radius: 5px;
-    float: left;
-  }
-  
-  .group-top-bar {
-    width: 99.5%;
-    height: 25px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .big-top-bar {
-    width: 99.5%;
-    height: 35px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .single-top-bar {
-    width: 610px;
-    height: 25px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .single-content {
-    float: left;
-    width: 620px;
-    margin: 5px 5px 5px 0;
-    border-radius: 5px;
-  }
-  
-  .single-top-bar-subtask {
-    width: 255px;
-    height: 25px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .single-content-subtask {
-    float: left;
-    width: 265px;
-    margin: 5px 10px 5px 0;
-    border-radius: 5px;
-  }
-  
-  .fifty-percent-width {
-    width: 50%;
-    float: left;
-  }
-  
-  /* Button */
-  .button {
-    float: right;
-    height: 25px;
-    padding: 5px;
-    border-radius: 5px;
-    margin-right: 5px;
-    cursor: pointer;
-  }
-  
-  .profile-button {
-    float: right;
-    height: 25px;
-    padding: 5px;
-    border-radius: 5px;
-    margin-right: 5px;
-    cursor: pointer;
-    width: 25px;
-    text-align: center;
-  }
-  
-  /* Task */
-  .box {
-    float: left;
-    width: 605px;
-    padding: 5px;
-    border-radius: 5px;
-    margin: 2px;
-    display:flex;
-  }
-  
-  .box:hover {
-    opacity: 0.9;
-  }
-  
-  .subtask-box {
-    float: left;
-    width: 250px;
-    padding: 5px;
-    border-radius: 5px;
-    margin: 2px;
-    display:flex;
-  }
-  
-  .subtask-box:hover {
-    opacity: 0.9;
-  }
-  
-  .priority {
-    float: left;
-    width: 1%;
-    border-radius: 10px;
-  }
-  
-  .subtask-priority {
-    float: left;
-    width: 2%;
-    border-radius: 5px;
-  }
-  
-  .content {
-    float: right;
-    width: 96%;
-    display:grid;
-  }
-  
-  .emptyspace {
-    height: 5px;
-  }
-  
-  .text {
-    padding: 5px;
-    overflow:hidden; 
-  }
-  
-  .bottom {
-    clear: both;
-    padding: 5px;
-  }
-  
-  .bottom-item {
-    float: left;
-    border-radius: 5px;
-    margin-right: 10px;
-    padding: 2px 5px;
-  }
-  
-  .new-item {
-    float: left;
-    border-radius: 5px;
-    margin-right: 10px;
-    padding: 2px 5px;
-  }
-  
-  .subtask-item {
-    float: left;
-    border-radius: 5px;
-    margin-right: 10px;
-    padding: 2px 5px;
-  }
-  
-  /* Form */
-  .select select { 
-    width: auto; 
-    border-radius: 1px;
-  }
-    
-  .select select:focus {
-    width: auto; 
-  }
-  
-  /* Panel */
-  .panel {
-    width: 99.5%;
-    height: 270px;
-    margin-top: 25px;
-    padding: 5px;
-    border-radius: 5px;
-    float: left;
-  }
-  
-  .panel-item {
-    border-radius: 5px;
-    height: 265px;
-    width: 24%;
-    float: left;
-    margin-right: 18px;
-  }
-  
-  .panel-item-content {
-    width: 100%;
-    height: 96%;
-    border-radius: 5px;
-    padding-top: 5px;
-    padding-left: 5px;
-  }
-  
-  .panel-item-top-bar {
-    width: 96%;
-    border-radius: 5px;
-    padding: 5px;
-  }
-  
-  .panel-item-top-bar-button {
-    height: 25px;
-    padding: 0 5px;
-    margin-left: 5px;
-    border-radius: 5px;
-    float: right;
-    cursor: pointer;
-  }
-  
-  .panel-item-area {
-    height: 85%;
-    overflow-y: auto;
-  }
-  
-  .panel-item-content-item {
-    border-radius: 5px;
-    padding: 0 5px;
-    width: 96%;
-    margin: 5px 0;
-    display: flex;
-  }
-  
-  .panel-item-message-title {
-    width: 95%;
-    overflow:hidden; 
-  }
-  
-  .panel-item-delete-button {
-    height: 25px;
-    padding: 1px 5px;
-    border-radius: 5px;
-    float: right;
-  }
-  
-  .panel-item-delete-button:hover {
-    opacity: 0.5;
-    cursor: pointer;
-  }
-  
-  .panel-item-check-button {
-    height: 25px;
-    padding: 1px 5px;
-    border-radius: 5px;
-    float: right;
-  }
-  
-  .panel-item-check-button:hover {
-    cursor: pointer;
-  }
-  
-  /* ??? */
-  .showtaskdetails-panel {
-    float: left;
-    width: 50%;
-  }
-  
-  .emptypage-modal {
-    width: 100%;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .emptypage {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  /* popoup form */
-  .bg-modal {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    display: none;
-  }
-  
-  .modal-content {
-    width: 500px;
-    height: 300px;
-    border-radius: 5px;
-    text-align: center;
-    position: relative;
-  }
-  
-  .modal-header {
-    padding: 10px;
-    text-align: left;
-    margin-bottom: 20px;
-  }
-  
-  .fa-close {
-    position: absolute;
-    top: 0;
-    right: 0;
-    cursor: pointer;
-    padding: 5px;
-  }
-  
-  .login-view {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    clear: both;
-  }
-  
-  .login-box {
-    width: 450px;
-    height: 250px;
-    border-radius: 5px;
-    text-align: center;
-    position: relative;
-    margin: auto;
-    margin-top: 100px;
-  }
-  
-  .signup-area {
-    width: 440px;
-    border-radius: 5px;
-    padding: 5px;
-    text-align: center;
-    position: relative;
-    margin: auto;
-    margin-top: 25px;
-  }
-  
-  .light-text {
-    font-weight: 100;
-  }
-  
-  .box-header {
-    padding: 10px;
-    text-align: left;
-    margin-bottom: 40px;
-  }
-  
-  .input-login {
-    width: 90%;
-    height: 25px;
-    margin-bottom: 15px;
-    padding: 5px;
-    border-radius: 4px;
-  }
-  
-  .submit-login {
-    padding: 6px 12px;
-    font-size: 14px;
-    border-radius: 4px;
-    height: 30;
-    cursor: pointer;
-  }
-  
-  .submit-login:hover {
-    opacity: 0.7;
-  }
-  
-  .button-list {
-    float: left;
-    padding: 5px;
-    cursor: pointer;
-  }
-  
-  /* The switch - the box around the slider */
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-  
-  /* Hide default HTML checkbox */
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  /* The slider */
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: #2196F3;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
-  
-  /* Group */
-  .editgroup-button {
-    margin-left: 5px;
-    height: 25px;
-    padding: 5px;
-    float: left;
-    border-radius: 5px;
-  }
-  
-  .editgroup-button:hover {
-    cursor: pointer;
-  }
-  
-  /* Dropdown Button */
-  .dropbtn {
-    height: 25px;
-    padding: 5px;
-    border-radius: 5px;
-    margin-right: 5px;
-    cursor: pointer;
-    width: 25px;
-    text-align: center;
-  }
-  
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
-    position: relative;
-    /* display: inline-block; */
-    float: right;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    min-width: 160px;
-    z-index: 1;
-    right: 0;
-  }
-  
-  .dropdown-item {
-    cursor: pointer;
-  }
-  
-  /* Links inside the dropdown */
-  .dropdown-content a {
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-  
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {opacity: 0.7;}
-  
-  /* Show the dropdown menu on hover */
-  .dropdown:hover .dropdown-content {display: block;}
-  
-  /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {opacity: 0.7;}
-  
-  .button__badge {
-    border-radius: 2px;
-   
-    padding: 1px 3px;
-    font-size: 10px;
-    
-    position: absolute; /* Position the badge within the relatively positioned button */
-    top: 0;
-    right: 0;
-  }
-  
-  input:hover[type="submit"] 
-  {
-    cursor: pointer;
-  }
+* {
+  margin: 0;
+  font-family: "Comic Sans MS";
+  font-size: medium;
+  font-weight: 600;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+::placeholder {
+  opacity: 1;
+}
+
+p {
+  margin: 5px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  padding: 5px;
+}
+
+/* Main Page */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px;
+  height: 45px;
+  border-radius: 5px;
+}
+
+.top-bar-right {
+  display: flex;
+}
+
+.user-bar {
+  width: 200px;
+  float: right;
+}
+
+.subtask-top-bar {
+  width: 85%;
+  height: 35px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.top-bar-item {
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.top-bar-item:hover {
+  opacity: 0.5;
+}
+
+.group-box {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.group-top-bar {
+  height: 25px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.group-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.big-top-bar {
+  height: 35px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.single-top-bar {
+  height: 35px;
+  border-radius: 5px;
+}
+
+.single-content {
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  margin-top: 5px;
+  width: 32.5%;
+}
+
+.single-top-bar-subtask {
+  width: 255px;
+  height: 25px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.single-content-subtask {
+  float: left;
+  width: 265px;
+  margin: 5px 10px 5px 0;
+  border-radius: 5px;
+}
+
+.fifty-percent-width {
+  width: 50%;
+  float: left;
+}
+
+/* Button */
+.button {
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.profile-button {
+  float: right;
+  height: 25px;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+  width: 25px;
+  text-align: center;
+}
+
+/* Task */
+.box {
+  border-radius: 5px;
+  margin-top: 5px;
+  display: flex;
+}
+
+.box:hover {
+  opacity: 0.9;
+}
+
+.subtask-box {
+  float: left;
+  width: 250px;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 2px;
+  display: flex;
+}
+
+.subtask-box:hover {
+  opacity: 0.9;
+}
+
+.priority {
+  width: 1%;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.subtask-priority {
+  width: 2%;
+  border-radius: 5px;
+}
+
+.content {
+  margin: 5px 5px 5px 0;
+}
+
+.emptyspace {
+  height: 5px;
+}
+
+.text {
+  padding: 5px;
+  overflow: hidden;
+}
+
+.bottom {
+  padding: 5px;
+  display: flex;
+}
+
+.bottom-item {
+  border-radius: 5px;
+  margin-right: 10px;
+  padding: 2px 5px;
+  width: fit-content;
+}
+
+.new-item {
+  border-radius: 5px;
+  margin-right: 10px;
+  padding: 2px 5px;
+  width: fit-content;
+}
+
+.subtask-item {
+  border-radius: 5px;
+  margin-right: 10px;
+  padding: 2px 5px;
+  width: fit-content;
+}
+
+/* Form */
+.select select {
+  width: auto;
+  border-radius: 1px;
+}
+
+.select select:focus {
+  width: auto;
+}
+
+/* Panel */
+.panel {
+  height: 300px;
+  margin-top: 25px;
+  border-radius: 5px;
+  margin: 25px 5px 0 5px;
+  display: flex;
+}
+
+.panel-item {
+  border-radius: 5px;
+  width: 25%;
+  margin: 5px;
+}
+
+.panel-item-content {
+  height: 96%;
+  border-radius: 5px;
+}
+
+.panel-item-top-bar {
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel-item-top-bar-button {
+  margin: 5px;
+  border-radius: 5px;
+  float: right;
+  cursor: pointer;
+}
+
+.panel-item-area {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-item-content-item {
+  border-radius: 5px;
+  padding: 0 5px;
+  margin: 0 5px 5px 5px;
+  display: flex;
+}
+
+.panel-item-message-title {
+  width: 95%;
+  overflow: hidden;
+}
+
+.panel-item-delete-button {
+  height: 25px;
+  padding: 1px 5px;
+  border-radius: 5px;
+}
+
+.panel-item-delete-button:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.panel-item-check-button {
+  height: 25px;
+  padding: 1px 5px;
+  border-radius: 5px;
+}
+
+.panel-item-check-button:hover {
+  cursor: pointer;
+}
+
+/* ??? */
+.showtaskdetails-panel {
+  float: left;
+  width: 50%;
+}
+
+.emptypage-modal {
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptypage {
+  text-align: center;
+  padding: 20px;
+}
+
+/* popoup form */
+.bg-modal {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.modal-content {
+  width: 500px;
+  height: 300px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-header {
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.fa-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.login-view {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  clear: both;
+}
+
+.login-box {
+  width: 450px;
+  height: 250px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  margin: auto;
+  margin-top: 100px;
+}
+
+.signup-area {
+  width: 440px;
+  border-radius: 5px;
+  padding: 5px;
+  text-align: center;
+  position: relative;
+  margin: auto;
+  margin-top: 25px;
+}
+
+.light-text {
+  font-weight: 100;
+}
+
+.box-header {
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.input-login {
+  width: 90%;
+  height: 25px;
+  margin-bottom: 15px;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.submit-login {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  height: 30;
+  cursor: pointer;
+}
+
+.submit-login:hover {
+  opacity: 0.7;
+}
+
+.button-list {
+  float: left;
+  padding: 5px;
+  cursor: pointer;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Group */
+.editgroup-button {
+  margin-left: 5px;
+  height: 25px;
+  padding: 5px;
+  float: left;
+  border-radius: 5px;
+}
+
+.editgroup-button:hover {
+  cursor: pointer;
+}
+
+/* Dropdown Button */
+.dropbtn {
+  padding-top: 2px;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+  width: 35px;
+  text-align: center;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  z-index: 1;
+  right: 0;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  opacity: 0.7;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  opacity: 0.7;
+}
+
+.button__badge {
+  border-radius: 2px;
+
+  padding: 1px 3px;
+  font-size: 10px;
+
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 0;
+  right: 0;
+}
+
+input:hover[type="submit"] {
+  cursor: pointer;
+}
