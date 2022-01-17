@@ -175,6 +175,7 @@ th {
 
 .emptyspace {
   height: 5px;
+  overflow: hidden;
 }
 
 .text {
@@ -248,8 +249,8 @@ th {
 .panel-item-top-bar-button {
   margin: 5px;
   border-radius: 5px;
-  float: right;
   cursor: pointer;
+  padding: 0 5px;
 }
 
 .panel-item-area {
