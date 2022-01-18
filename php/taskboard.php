@@ -308,9 +308,9 @@ class TaskBoard {
         $numberOfSubtasks = $open + $inProgress;
 
         if ($numberOfSubtasks == 1) {
-            return '<div class="subtask-item">'.$numberOfSubtasks.' Subtask</div>';
+            return '<div class="subtask_label">'.$numberOfSubtasks.' Subtask</div>';
         } else if ($numberOfSubtasks > 1) {
-            return '<div class="subtask-item">'.$numberOfSubtasks.' Subtasks</div>';
+            return '<div class="subtask_label">'.$numberOfSubtasks.' Subtasks</div>';
         } else {
             return '';
         }
@@ -712,86 +712,71 @@ class TaskBoard {
 
     public function printGroupDetails($group) {
         $groupID = $group->groupID;
+        if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
+            $editGroupButton = '
+            <div class="button" onclick="openEditGroupForm('.$groupID.', \''.$group->groupName.'\', '.$group->groupPriority.', '.$group->groupArchiveTime.')">
+                <p><i class="fa fa-edit" aria-hidden="true"></i></p>
+            </div>';
+        }
         $html = '<div class="group-box">
-                    <div class="big-top-bar">
-                        <div class="top-bar-item">
-                            '.$group->groupName.'
-                        </div>
-                        <div class="editgroup-button" onclick="openShowUsersPopup()">
-                            <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+                    <div class="top-bar">
+                        <div class="top-bar-left">
+                            <div class="top_bar_title"><p>'.$group->groupName.'</p></div>
+                            <div class="button" onclick="openShowUsersPopup()">
+                                <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+                            </div>
+                            '.$editGroupButton.'
                         </div>';
 
         $inviteToken = $this->mysqliSelectFetchObject("SELECT tokenToken FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $groupID);
         if ($group->groupInvites == 'enabled') {
             $groupInvites = '
-            <td>
                 '. DIR_SYSTEM .'php/action.php?action=joingroup&t='. $inviteToken->tokenToken.'
-            </td>
-            <td>
                 <div class="panel-item-top-bar-button">
                     <a href="' . DIR_SYSTEM . 'php/action.php?action=refreshinvite&id='.$groupID.'"> <i class="fa fa-refresh" aria-hidden="true"></i> </a>
                 </div>
-            </td>
-            <td>
                 <form action="action.php?action=groupinvites&invites=disable&id='.$groupID.'" autocomplete="off" method="post" >
-                    <input type="submit" name="groupinvites-submit" value="Disable Invites"/>
+                    <input class="button" type="submit" name="groupinvites-submit" value="Disable Invites"/>
                 </form>
-            </td>
             ';
         } else {
             $groupInvites = '
-            <td>
                 <form action="action.php?action=groupinvites&invites=enable&id='.$groupID.'" autocomplete="off" method="post" >
-                    <input type="submit" name="groupinvites-submit" value="Enable Invites"/>
+                    <input class="button" type="submit" name="groupinvites-submit" value="Enable Invites"/>
                 </form>
-            </td>
             ';
         }
 
         if ($group->groupState == 'active') {
             $changeGroupState = '
-            <td>
                 <form action="action.php?action=groupstate&state=hide&id='.$groupID.'" autocomplete="off" method="post" >
-                    <input type="submit" name="groupstate-submit" value="Hide Group"/>
+                    <input class="button" type="submit" name="groupstate-submit" value="Hide Group"/>
                 </form>
-            </td>
             ';
         } else if ($group->groupState == 'hidden') {
             $changeGroupState = '
-            <td>
                 <form action="action.php?action=groupstate&state=activate&id='.$groupID.'" autocomplete="off" method="post" >
-                    <input type="submit" name="groupstate-submit" value="Show Group"/>
+                    <input class="button" type="submit" name="groupstate-submit" value="Show Group"/>
                 </form>
-            </td>
             ';
         }
 
         if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
             $html .= '
-            <div class="editgroup-button" onclick="openEditGroupForm('.$groupID.', \''.$group->groupName.'\', '.$group->groupPriority.', '.$group->groupArchiveTime.')">
-                Edit
-                <i class="fa fa-edit" aria-hidden="true"></i>
-            </div>
-            <div style="float:right;">
-                    <table>
-                        <tr>
-                            '.$groupInvites.'
-                            <td>
-                                <form action="action.php?action=generateToken&id='.$groupID.'" autocomplete="off" method="post" >
-                                    <input type="text" name="name" placeholder="username"/>
-                                    <input type="submit" name="groupinvite-submit" value="Invite"/>
-                                </form>
-                            </td>
-                            '.$changeGroupState.'
-                            <td><button type="button" onclick="deleteGroup('.$groupID.')">Delete Group</button></td>
-                        </tr>
-                    </table>
-                </div>';
-        } else {
-            $html .= '
-            <div style="float:right;">
-                <button type="button" onclick="leaveGroup('.$groupID.')">Leave Group</button>
+
+            <div class="top-bar-right">
+                '.$groupInvites.'
+                    <form action="action.php?action=generateToken&id='.$groupID.'" autocomplete="off" method="post" >
+                        <input type="text" name="name" placeholder="username"/>
+                        <input class="button" type="submit" name="groupinvite-submit" value="Invite"/>
+                    </form>
+                '.$changeGroupState.'
+                <button class="button" type="button" onclick="deleteGroup('.$groupID.')">Delete Group</button>
             </div>';
+        } else {
+            $html .= '<div class="top-bar-right">
+                    <button class="button" type="button" onclick="leaveGroup('.$groupID.')">Leave Group</button>
+                </div>';
         }
 
         $html .= '</div>
@@ -1138,28 +1123,28 @@ class TaskBoard {
         $finishedTasksCount = $this->getSubtaskCount($id, 'finshed');
 
         $html = '
-            <div class="showtaskdetails-panel">
+            <div class="taskdetails_panel_right">
                 <div class="group-box">
-                    <div class="subtask-top-bar">
-                        <div class="top-bar-item">
-                            Subtasks
+                    <div class="top-bar">
+                        <div class="top_bar_title">
+                            <p>Subtasks</p>
                         </div>
-                </div>
+                    </div>
                     <div class="group-content">
-                        <div class="single-content-subtask">
-                            <div class="single-top-bar-subtask">
+                        <div class="single-content">
+                            <div class="single-top-bar">
                             Open '.$openTasksCount.'
                             </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'open' ORDER BY taskPriority DESC", $id);
         $html .= '</div>
-                    <div class="single-content-subtask">
-                        <div class="single-top-bar-subtask">
+                    <div class="single-content">
+                        <div class="single-top-bar">
                         In progress '.$assignedTasksCount.'
                             </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'assigned' ORDER BY taskDateAssigned", $id);
         $html .= '</div>
-                    <div class="single-content-subtask">
-                        <div class="single-top-bar-subtask">
+                    <div class="single-content">
+                        <div class="single-top-bar">
                         Done '.$finishedTasksCount.'
                             </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'finished' ORDER BY taskDateFinished", $id);
@@ -1188,14 +1173,9 @@ class TaskBoard {
         if ($taskData->taskType == 'task' && $taskData->taskState == 'finished' && $this->archiveCheck($taskData->taskParentID, $dateDiff)) {
             $this->moveToArchive($taskData->taskID);
         } else {
-            $html = '<a href="'.DIR_SYSTEM.'php/details.php?action=taskDetails&id=' . $taskData->taskID . '">';
-            if ($taskData->taskType == 'task') {
-                $html .= '<div class="box">
+            $html = '<a href="'.DIR_SYSTEM.'php/details.php?action=taskDetails&id=' . $taskData->taskID . '">
+                <div class="box">
                     <div class="priority" style="background-color: ' . $taskData->taskPriorityColor . ';"></div>';
-            } else if ($taskData->taskType == 'subtask') {
-                $html .= '<div class="subtask-box">
-                    <div class="subtask-priority" style="background-color: ' . $taskData->taskPriorityColor . ';"></div>';
-            }
             $html .= '<div class="content">
                 <div class="text">
                     ' . $taskData->taskTitle . '
@@ -1203,7 +1183,7 @@ class TaskBoard {
                 <div class="emptyspace">&nbsp;</div>';
             
             $html .= '<div class="bottom">
-                <div class="bottom-item">
+                <div class="bottom_label">
                 id_' . $taskData->taskID . '
                 </div>';
 
@@ -1212,16 +1192,16 @@ class TaskBoard {
                 $sql = "SELECT * FROM users WHERE userID = ?";
                 $userData = $this->mysqliSelectFetchObject($sql, $userID);
                 $assignerShort = $userData->userNameShort;
-                $html .= '<div class="bottom-item">' . $assignerShort . '</div>';
+                $html .= '<div class="bottom_label">' . $assignerShort . '</div>';
             }
 
             if ($taskData->taskState != 'finished') {
                 if ($taskData->taskState == 'open' && $dateDiff == 0) {
-                    $html .= '<div class="new-item">NEW</div>';
+                    $html .= '<div class="new_label">NEW</div>';
                 } else if ($taskData->taskState == 'open' && $dateDiff > 31) {
-                    $html .= '<div class="bottom-item" style="background-color:red;color:#fff;">' . $dateDiff . '</div>';
+                    $html .= '<div class="bottom_label" style="background-color:red;color:#fff;">' . $dateDiff . '</div>';
                 } else {
-                    $html .= '<div class="bottom-item">' . $dateDiff . '</div>';
+                    $html .= '<div class="bottom_label">' . $dateDiff . '</div>';
                 }
             }
             $html .= $this->getNumberOfSubtasks($taskData->taskID);
@@ -1235,49 +1215,44 @@ class TaskBoard {
     }
 
     public function printTaskDetails($task, $id) {
-        $html = '<div width="99.5%">';
-        $html .= $this->printTaskDetailsNew($task);
+        $html = $this->printTaskDetailsNew($task);
         $subtaskcount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $task->taskID);
         if ($subtaskcount->number > 0) {
             $html .= $this->printSubtaskPanel($id);
         }
-        $html .= '</div>';
         $this->addTaskDataToLocalstorage($task);
         echo $html;
     }
 
     public function printTaskDetailsNew($task) {
         if ($task->taskType == 'subtask') {
-            $backButton = '<div style="float:left;"><a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id='.$task->taskParentID.'"> 
-                <div class="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</div></a></div>';
+            $backButton = '<a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id='.$task->taskParentID.'"> 
+                <div class="button"><p><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</p></div></a>';
         } else {
             $backButton = '';
         }
-        $buttons = '<div style="clear:both;"><button class="button-list" id="updatetask-button" type="button" >Update</button>
-                        <button class="button-list" type="button" onclick="deleteTask(\''.$task->taskID.'\')">Delete</button>
-                        <button class="button-list" id="createSubtaskButton" type="button">Create Subtask</button>';
+        $buttons = '<button class="button" id="updatetask-button" type="button" >Update</button>
+            <button class="button" type="button" onclick="deleteTask(\''.$task->taskID.'\')">Delete</button>
+            <button class="button" id="createSubtaskButton" type="button">Create Subtask</button>';
         switch ($task->taskState) {
             case 'open':
-                $buttons .= '<form class="button-list" action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" ><input type="submit" name="assign-submit" value="Start Work"/></form>';
+                $buttons .= '<form action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="assign-submit" value="Start Work"/></form>';
                 break;
 
             case 'assigned':
-                $buttons .= '<form class="button-list" action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" ><input type="submit" name="stateopen-submit" value="Back to Open"/></form>';
-                $buttons .= '<form class="button-list" action="action.php?action=finishTask&id=' . $task->taskID . '" autocomplete="off" method="post" ><input type="submit" name="finish-submit" value="Finish"/></form>';
+                $buttons .= '<form action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="stateopen-submit" value="Back to Open"/></form>';
+                $buttons .= '<form action="action.php?action=finishTask&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="finish-submit" value="Finish"/></form>';
                 break;
 
             case 'finished':
-                $buttons .= '<form class="button-list" action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" ><input type="submit" name="stateopen-submit" value="Back to Open"/></form>';
-                $buttons .= '<form class="button-list" action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" ><input type="submit" name="assign-submit" value="Back to in progress"/></form>';
+                $buttons .= '<form action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="stateopen-submit" value="Back to Open"/></form>';
+                $buttons .= '<form action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="assign-submit" value="Back to in progress"/></form>';
                 break;
 
             default:
                 break;
         }
-        $buttons .= '</div>';
-
         $priority = $task->taskPriority;
-
         switch ($priority) {
             case 1:
                 $priority = 'low';
@@ -1295,53 +1270,54 @@ class TaskBoard {
                 break;
         }
         $html = '
-            <div class="showtaskdetails-panel">
-                '.$backButton.'
-                <div class="taskdetails-buttons">
-                    '.$buttons.'
-                </div>
-                <table style="clear:both;">
-                    <tr>
-                        <td>ID:</td>
-                        <td>'.$task->taskID.'</td>
-                    </tr>
-                    <tr>
-                        <td>Priority:</td>
-                        <td>'.$priority.'</td>
-                    </tr>
-                    <tr>
-                        <td>Parent:</td>
-                        <td>'.$this->parseParent($task->taskType, $task->taskParentID).'</td>
-                    </tr>
-                    <tr>
-                        <td>Title:</td>
-                        <td>'.$task->taskTitle.'</td>
-                    </tr>
-                    <tr>
-                        <td>Description:</td>
-                        <td>'.$this->addTagsToUrlsInString($task->taskDescription).'</td>
-                    </tr>
-                    <tr>
-                        <td>State:</td>
-                        <td>'.$task->taskState.'</td>
-                    </tr>
-                    <tr>
-                        <td>Date Created:</td>
-                        <td>'.$task->taskDateCreated.'</td>
-                    </tr>
-                    <tr>
-                        <td>Date Assigned:</td>
-                        <td>'.$task->taskDateAssigned.'</td>
-                    </tr>
-                    <tr>
-                        <td>Assigned By:</td>
-                        <td>'.$this->getUsernameByID($task->taskAssignedBy).'</td>
-                    </tr>
-                    <tr>
-                        <td>Date Finished:</td>
-                        <td>'.$task->taskDateFinished.'</td>
-                    </tr>
-                </table>
+            <div class="taskdetails_panel">
+                <div class="taskdetails_panel_left">
+                    <div class="top-bar">
+                        <div class="top-bar-left">'.$backButton.'</div>
+                        <div class="top-bar-right">'.$buttons.'</div>
+                    </div>
+                    <table style="clear:both;">
+                        <tr>
+                            <td>ID:</td>
+                            <td>'.$task->taskID.'</td>
+                        </tr>
+                        <tr>
+                            <td>Priority:</td>
+                            <td>'.$priority.'</td>
+                        </tr>
+                        <tr>
+                            <td>Parent:</td>
+                            <td>'.$this->parseParent($task->taskType, $task->taskParentID).'</td>
+                        </tr>
+                        <tr>
+                            <td>Title:</td>
+                            <td>'.$task->taskTitle.'</td>
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td>'.$this->addTagsToUrlsInString($task->taskDescription).'</td>
+                        </tr>
+                        <tr>
+                            <td>State:</td>
+                            <td>'.$task->taskState.'</td>
+                        </tr>
+                        <tr>
+                            <td>Date Created:</td>
+                            <td>'.$task->taskDateCreated.'</td>
+                        </tr>
+                        <tr>
+                            <td>Date Assigned:</td>
+                            <td>'.$task->taskDateAssigned.'</td>
+                        </tr>
+                        <tr>
+                            <td>Assigned By:</td>
+                            <td>'.$this->getUsernameByID($task->taskAssignedBy).'</td>
+                        </tr>
+                        <tr>
+                            <td>Date Finished:</td>
+                            <td>'.$task->taskDateFinished.'</td>
+                        </tr>
+                    </table>
         ';
         $html .= $this->printComments($task->taskID, $task->taskType);
         return $html;

@@ -364,3 +364,15 @@ function printEditMailForm(mail) {
     }
   }
 }
+
+function showDropdown() {
+  var container = document.getElementById("dropdown_content");
+  if (container) {
+    var containerDisplay = getComputedStyle(container).display;
+    if (containerDisplay == 'none') {
+      container.style.display = 'flex';
+    } else if (containerDisplay == 'flex') {
+      container.style.display = 'none';
+    }
+  }
+}

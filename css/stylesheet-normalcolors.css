@@ -68,15 +68,15 @@ th {
   background-color: #ffffff;
 }
 
-.bottom-item {
+.bottom_label {
   background-color: #cccccc;
 }
 
-.new-item {
+.new_label {
   background-color: #00ff55;
 }
 
-.subtask-item {
+.subtask_label {
   background-color: #00ffff;
 }
 
@@ -203,7 +203,7 @@ th {
 }
 
 /* Dropdown Content (Hidden by Default) */
-.dropdown-content {
+.dropdown_content {
   background-color: #f2f2f2;
 }
 
