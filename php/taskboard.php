@@ -916,7 +916,6 @@ class TaskBoard {
 
     private function printPanel($type) {
         if ($type == 'appointment') {
-            $title = 'Appointments';
             $createButtonID = 'createAppointmentButton';
             $detailsActionName = 'appointmentDetails';
 
@@ -926,6 +925,15 @@ class TaskBoard {
             WHERE  ga.userID = ? AND m.messageType = 'appointment'
             ORDER BY m.messageDate";
             $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
+            if ($data) {
+                if (count($data) > 1) {
+                    $title = 'Appointments ('.count($data).' Appointments)';
+                } else if(count($data) == 1) {
+                    $title = 'Appointments (1 Appointment)';
+                }
+            } else {
+                $title = 'Appointments';
+            }
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
             $detailsActionName = 'motdDetails';
@@ -946,7 +954,6 @@ class TaskBoard {
                 $title = 'MessageBoard';
             }
         } else if ($type == 'rt') {
-            $title = 'Today\'s Tasks';
             $createButtonID = 'createRTButton';
             $detailsActionName = 'repeatingtasksDetails';
 
@@ -954,6 +961,15 @@ class TaskBoard {
             $week = $this->getWeek();
             $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'repeatingtask' AND (messageWeekday = ? OR messageWeekday = 'everyday') AND (messageQuantity = ? OR messageQuantity = 'everyweek')";
             $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID'], $currentDay, $week);
+            if ($data) {
+                if (count($data) > 1) {
+                    $title = 'Today\'s Tasks ('.count($data).' Tasks)';
+                } else if(count($data) == 1) {
+                    $title = 'Today\'s Tasks (1 Task)';
+                }
+            } else {
+                $title = 'Today\'s Tasks';
+            }
         }
 
         $html = '
@@ -1060,13 +1076,24 @@ class TaskBoard {
     }
 
     private function printQueue() {
-        
+        $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'queue' ORDER BY messagePrio, messageID";
+        $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
+        if ($data) {
+            if (count($data) > 1) {
+                $title = 'Queue ('.count($data).' Tasks)';
+            } else if(count($data) == 1) {
+                $title = 'Queue (1 Task)';
+            }
+        } else {
+            $title = 'Queue';
+        }
+
         $html = '
         <div class="panel-item">
             <div class="panel-item-content">
                 <div class="panel-item-top-bar">
                     <div class="top-bar-left">
-                        <p>Queue</p>
+                        <p>'.$title.'</p>
                     </div>
                     <div class="top-bar-right">
                     <form action="'.DIR_SYSTEM.'php/action.php?action=addQueue" autocomplete="off" method="post" >
@@ -1079,9 +1106,6 @@ class TaskBoard {
                 <div class="panel-item-area">
 
         ';
-
-        $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'queue' ORDER BY messagePrio, messageID";
-        $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
 
         $toggle = false;
         $first = true;
