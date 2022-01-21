@@ -207,6 +207,10 @@ th {
   background-color: #f2f2f2;
 }
 
+.dropdown_message {
+  background-color: #fff;
+}
+
 .dropdown-item {
   background-color: #f2f2f2;
   color: black;
@@ -219,9 +223,4 @@ th {
 
 .comment-background {
   background-color:#fff;
-}
-
-.button__badge {
-  background-color: #fa3e3e;
-  color: white;
 }

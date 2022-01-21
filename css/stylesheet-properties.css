@@ -516,6 +516,24 @@ input:checked + .slider:before {
   padding: 10px 10px 0 10px;
 }
 
+.dropdown_message {
+  display: flex;
+  background-color: #333333;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  min-height: fit-content;
+}
+
+.dropdown_message_text {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown_message_text_date {
+  color: #2196f3;
+}
+
 .dropdown_button {
   display: flex;
   margin-bottom: 10px;
@@ -541,7 +559,9 @@ input:checked + .slider:before {
   font-size: 10px;
   position: absolute; /* Position the badge within the relatively positioned button */
   top: 0;
-  right: 0;
+  right: 50px;
+  background-color: #fa3e3e;
+  color: white;
 }
 
 input:hover[type="submit"] {

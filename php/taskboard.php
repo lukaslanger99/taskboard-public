@@ -451,6 +451,13 @@ class TaskBoard {
     }
 
     /**
+     * return all invite tokens the user has
+     */
+    private function getGroupInvites($userID) {
+        return $this->mysqliSelectFetchArray("SELECT * FROM tokens WHERE tokenType = 'joingroup' AND tokenUserID = ?", $userID);
+    }
+
+    /**
      * return true if mail is verified
      * return false if mail is unverified
      */
@@ -796,6 +803,29 @@ class TaskBoard {
             </div>
         </div>';
         echo $html;
+    }
+
+    public function printInviteMessages($userID) {
+        $invites = $this->getGroupInvites($userID);
+        if ($invites) {
+            $html = '';
+            foreach ($invites as $invite) {
+                $groupID = $invite->tokenGroupID;
+                $html .= '
+                <a href="'.DIR_SYSTEM.'php/profile.php">
+                    <div class="dropdown_message">
+                        <p><i class="fa fa-user"></i></p>
+                        <div class="dropdown_message_text">
+                           <p>Invite for '.$this->getGroupNameByID($groupID).'</p>
+                           <p>from '.$this->getUsernameByID($this->getGroupOwnerID($groupID)).'</p>
+                           <p class="dropdown_message_text_date">'.$invite->tokenDate.'</p>
+                        </div>
+                    </div>
+                </a>';
+            }
+            return $html;
+        }
+        return '';
     }
 
     private function printAppointmentOrMOTD($message) {
@@ -1483,6 +1513,15 @@ class TaskBoard {
             </table>
         </div>';
         return $html;
+    }
+
+    public function printVerifyMailMessage($userID) {
+        return '<a href="'.DIR_SYSTEM.'php/profile.php">
+            <div class="dropdown_message">
+                <p><i class="fa fa-envelope"></i></p>
+                <p>Verify your mail please!</p>
+            </div>
+        </a>';
     }
 
     private function pwResetMailHTML($verifyUrl) {

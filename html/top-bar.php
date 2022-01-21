@@ -6,6 +6,21 @@
     } else {
         $nightModeState = '';
     }
+    $userVerificationState = $taskBoard->getUserVerificationState($userID);
+    if ($userVerificationState) {
+        $notificationCounter = 0;
+    } else {
+        $notificationCounter = 1;
+        $messageDropdownVerifyMailMessageHtml .= $taskBoard->printVerifyMailMessage($userID);
+    }
+
+    $inviteCounter = $taskBoard->getUserGroupInvitesCount($userID);
+    $notificationCounter += $inviteCounter;
+    if ($inviteCounter > 0) {
+        $messageDropdownInvitesHtml .= $taskBoard->printInviteMessages($userID);
+    }
+
+    ($notificationCounter) ? $notificationsHTML = '<span class="button__badge">'.$notificationCounter.'</span>' : $notificationsHTML = '';
 ?>
     <body>
         <div class="top-bar">
@@ -24,7 +39,16 @@
                     echo '<a href="'.DIR_SYSTEM.'php/admin.php"><div class="button"><p>Admin</p></div></a>';
                 }
                 ?>
-                <div class="dropbtn" onclick="showDropdown()">
+                <div class="dropbtn" onclick="toggleDropdown('dropdown_messages_content')">
+                    <p><i class="fa fa-bell" aria-hidden="true"></i></p>
+                    <?php echo $notificationsHTML ?>
+                </div>
+                <div class="dropdown_content" id="dropdown_messages_content">
+                    <?php
+                        echo $messageDropdownVerifyMailMessageHtml . $messageDropdownInvitesHtml;
+                    ?>
+                </div>
+                <div class="dropbtn" onclick="toggleDropdown('dropdown_content')">
                     <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
                 </div>
                 <div class="dropdown_content" id="dropdown_content">

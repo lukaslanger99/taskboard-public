@@ -224,6 +224,10 @@ th {
   background-color: #262626;
 }
 
+.dropdown_message {
+  background-color: #333333;
+}
+
 .dropdown-item {
   background-color: #262626;
   color: #f2f2f2;
@@ -236,9 +240,4 @@ th {
 
 .comment-background {
   background-color:#1a1a1a;
-}
-
-.button__badge {
-  background-color: #fa3e3e;
-  color: white;
 }

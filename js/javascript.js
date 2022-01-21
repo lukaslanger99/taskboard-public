@@ -365,8 +365,8 @@ function printEditMailForm(mail) {
   }
 }
 
-function showDropdown() {
-  var container = document.getElementById("dropdown_content");
+function toggleDropdown(id) {
+  var container = document.getElementById(id);
   if (container) {
     var containerDisplay = getComputedStyle(container).display;
     if (containerDisplay == 'none') {
