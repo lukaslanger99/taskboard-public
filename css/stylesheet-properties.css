@@ -557,7 +557,7 @@ input:checked + .slider:before {
   border-radius: 2px;
   padding: 1px 3px;
   font-size: 10px;
-  position: absolute; /* Position the badge within the relatively positioned button */
+  position: absolute;
   top: 0;
   right: 50px;
   background-color: #fa3e3e;
@@ -566,4 +566,40 @@ input:checked + .slider:before {
 
 input:hover[type="submit"] {
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .panel {
+    flex-direction: column;
+    height: fit-content;
+  }
+
+  .panel-item {
+    width: 99.5%;
+  }
+
+  .panel-item-content {
+    height: 250px;
+  }
+
+  .group-content {
+    flex-direction: column;
+  }
+
+  .single-content {
+    width: 99.5%;
+    margin-right: 5px;
+  }
+
+  .single-top-bar {
+    width: 99.5%;
+  }
+
+  .box {
+    margin-right: 5px;
+  }
+
+  .priority {
+    width: 0.5%;
+  }
 }
