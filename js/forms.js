@@ -57,6 +57,7 @@ function printPriorityDropdown(selectedPriority = '2') {
 function printTaskForm(selectedGroupId = 'default') {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {
+    toggleDropdown('dropdown_create_content');
     var html = '\
     '+ addHeaderDynamicForm('Create Task') + '\
     <form action="'+ DIR_SYSTEM + 'php/action.php?action=createTask" autocomplete="off" method="post" >\
@@ -133,16 +134,6 @@ if (createAnotherTaskCheck == 'true') {
   printSubtaskForm();
 }
 
-// Task Form
-var createTaskButton = document.getElementById('createTaskButton');
-if (createTaskButton) {
-  createTaskButton.addEventListener('click',
-    function () {
-      printTaskForm();
-    }
-  )
-}
-
 // Subtask Form
 var createSubtaskButton = document.getElementById('createSubtaskButton');
 if (createSubtaskButton) {
@@ -154,23 +145,19 @@ if (createSubtaskButton) {
 }
 
 // Group Form
-var createGroupButton = document.getElementById('createGroupButton');
-if (createGroupButton) {
-  createGroupButton.addEventListener('click',
-    function () {
-      var container = document.getElementById("dynamic-modal-content");
-      if (container) {
-        var html = '\
-        '+ addHeaderDynamicForm('Create Group') + '\
-        <form action="'+ DIR_SYSTEM + 'php/action.php?action=createGroup" autocomplete="off" method="post" >\
-            <input class="input-login" placeholder="name" type="text" name="name"/>\
-            <input class="submit-login" type="submit" name="creategroup-submit" value="Create" />\
-        </form>';
-        showDynamicForm(container, html, 200);
-        closeDynamicFormListener();
-      }
-    }
-  )
+function printGroupForm() {
+  var container = document.getElementById("dynamic-modal-content");
+  if (container) {
+    toggleDropdown('dropdown_create_content');
+    var html = '\
+      '+ addHeaderDynamicForm('Create Group') + '\
+      <form action="'+ DIR_SYSTEM + 'php/action.php?action=createGroup" autocomplete="off" method="post" >\
+          <input class="input-login" placeholder="name" type="text" name="name"/>\
+          <input class="submit-login" type="submit" name="creategroup-submit" value="Create" />\
+      </form>';
+    showDynamicForm(container, html, 200);
+    closeDynamicFormListener();
+  }
 }
 
 // RT Form

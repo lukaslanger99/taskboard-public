@@ -30,15 +30,24 @@
                 </div>
             </div>
             <div class="top-bar-right">
-                <div class="button" id="createGroupButton"><p>Create Group</p></div>
-                <div class="button" id="createTaskButton"><p>Create Task</p></div>
-                <a href="<?php echo DIR_SYSTEM ?>php/groups.php"><div class="button"><p>Groups</p></div></a>
-                <a href="<?php echo DIR_SYSTEM ?>php/archive.php"><div class="button"><p>Archive</p></div></a>
                 <?php
                 if ($userID == 1) {
                     echo '<a href="'.DIR_SYSTEM.'php/admin.php"><div class="button"><p>Admin</p></div></a>';
                 }
                 ?>
+                <div class="dropbtn" onclick="toggleDropdown('dropdown_create_content')">
+                    <p><i class="fa fa-plus" aria-hidden="true"></i></p>
+                </div>
+                <div class="dropdown_content" id="dropdown_create_content">
+                    <div class="dropdown_create_button" onclick="printTaskForm()">
+                        <p><i class="fa fa-tasks"></i></p>
+                        <p>Create Task</p>
+                    </div>
+                    <div class="dropdown_create_button" onclick="printGroupForm()">
+                        <p><i class="fa fa-layer-group"></i></p>
+                        <p>Create Group</p>
+                    </div>
+                </div>
                 <div class="dropbtn" onclick="toggleDropdown('dropdown_messages_content')">
                     <p><i class="fa fa-bell" aria-hidden="true"></i></p>
                     <?php echo $notificationsHTML ?>
@@ -52,6 +61,19 @@
                     <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
                 </div>
                 <div class="dropdown_content" id="dropdown_content">
+                    <a href="http://lukaslanger.bplaced.net/taskboard/php/groups.php">
+                        <div class="dropdown_button">
+                            <p><i class="fa fa-layer-group"></i></p>
+                            <p>Groups</p>
+                        </div>
+                    </a>
+                    <a href="http://lukaslanger.bplaced.net/taskboard/php/archive.php">
+                        <div class="dropdown_button">
+                            <p><i class="fa fa-archive"></i></p>
+                            <p>Archive</p>
+                        </div>
+                    </a>
+                    <hr class="solid">
                     <a href="<?php echo DIR_SYSTEM ?>php/profile.php">
                         <div class="dropdown_button">
                             <p><i class="fa fa-cog"></i></p>
@@ -66,6 +88,7 @@
                             <span class="slider round"></span>
                         </label>
                     </div>
+                    <hr class="solid">
                     <a href="<?php echo DIR_SYSTEM ?>php/logout.inc.php">
                         <div class="dropdown_button">
                             <p><i class="fa fa-sign-out"></i></p>

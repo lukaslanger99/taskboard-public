@@ -539,6 +539,16 @@ input:checked + .slider:before {
   margin-bottom: 10px;
 }
 
+.dropdown_create_button {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.dropdown_create_button:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
 .dropdown_button_nightmode {
   display: flex;
   margin-bottom: 10px;
@@ -566,6 +576,10 @@ input:checked + .slider:before {
 
 input:hover[type="submit"] {
   cursor: pointer;
+}
+
+hr.solid {
+  margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
