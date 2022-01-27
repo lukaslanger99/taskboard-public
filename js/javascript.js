@@ -376,3 +376,18 @@ function toggleDropdown(id) {
     }
   }
 }
+
+function toggleUnfoldArea(targetId, buttonId) {
+  var container = document.getElementById(targetId)
+  var button = document.getElementById(buttonId)
+  if (container) {
+    var containerDisplay = getComputedStyle(container).display;
+    if (containerDisplay == 'none') {
+      container.style.display = 'flex'
+      button.style.webkitTransform = 'rotate(180deg)'
+    } else if (containerDisplay == 'flex') {
+      container.style.display = 'none'
+      button.style.webkitTransform = 'rotate(0deg)'
+    }
+  }
+}

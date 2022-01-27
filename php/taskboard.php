@@ -948,6 +948,8 @@ class TaskBoard {
         if ($type == 'appointment') {
             $createButtonID = 'createAppointmentButton';
             $detailsActionName = 'appointmentDetails';
+            $unfoldButtonID = 'appointmentUnfoldButton';
+            $contentAreaID = 'appointmentPanelContentArea';
 
             $sql = "SELECT m.* 
             FROM messages m
@@ -967,6 +969,8 @@ class TaskBoard {
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
             $detailsActionName = 'motdDetails';
+            $unfoldButtonID = 'motdUnfoldButton';
+            $contentAreaID = 'motdPanelContentArea';
             
             $sql = "SELECT m.* 
             FROM messages m
@@ -986,6 +990,8 @@ class TaskBoard {
         } else if ($type == 'rt') {
             $createButtonID = 'createRTButton';
             $detailsActionName = 'repeatingtasksDetails';
+            $unfoldButtonID = 'rtUnfoldButton';
+            $contentAreaID = 'rtPanelContentArea';
 
             $currentDay = $this->getWeekday();
             $week = $this->getWeek();
@@ -1011,14 +1017,17 @@ class TaskBoard {
                     </div>
                     <div class="top-bar-right">
                         <div class="panel-item-top-bar-button" id="'.$createButtonID.'">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
+                            <i class="fa fa-plus" aria-hidden="true"></i>
                         </div>
                         <div class="panel-item-top-bar-button">
-                        <a href="' . DIR_SYSTEM . 'php/details.php?action='.$detailsActionName.'"> <i class="fa fa-list" aria-hidden="true"></i> </a>
+                            <a href="' . DIR_SYSTEM . 'php/details.php?action='.$detailsActionName.'"> <i class="fa fa-list" aria-hidden="true"></i> </a>
+                        </div>
+                        <div class="panel_item_top_bar_unfold_button" id="'.$unfoldButtonID.'" onclick="toggleUnfoldArea(\''.$contentAreaID.'\',\''.$unfoldButtonID.'\')">
+                           <i class="fa fa-caret-down" aria-hidden="true"></i>
                         </div>
                     </div>
                 </div>
-                <div class="panel-item-area">
+                <div class="panel-item-area" id="'.$contentAreaID.'">
 
         ';
 
@@ -1117,14 +1126,17 @@ class TaskBoard {
                         <p>'.$title.'</p>
                     </div>
                     <div class="top-bar-right">
-                    <form action="'.DIR_SYSTEM.'php/action.php?action=addQueue" autocomplete="off" method="post" >
-                    <input type="text" name="item">
-                    <input type="checkbox" name="highprio" style="outline: 1px solid red;">
-                    <input type="submit" name="add-queue-submit" value="Add" />
-                    </form>
+                        <form action="'.DIR_SYSTEM.'php/action.php?action=addQueue" autocomplete="off" method="post" >
+                            <input type="text" name="item">
+                            <input type="checkbox" name="highprio" style="outline: 1px solid red;">
+                            <input type="submit" name="add-queue-submit" value="Add" />
+                        </form>
+                    </div>
+                    <div class="panel_item_top_bar_unfold_button" id="queueUnfoldButton" onclick="toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\')">
+                       <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </div>
                 </div>
-                <div class="panel-item-area">
+                <div class="panel-item-area" id="queuePanelContentArea">
 
         ';
 

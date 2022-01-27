@@ -257,6 +257,14 @@ th {
   padding: 0 5px;
 }
 
+.panel_item_top_bar_unfold_button {
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0 5px;
+  display: none;
+}
+
 .panel-item-area {
   overflow-y: auto;
   display: flex;
@@ -592,8 +600,12 @@ hr.solid {
     width: 99.5%;
   }
 
-  .panel-item-content {
-    height: 250px;
+  .panel-item-area {
+    display: none;
+  }
+
+  .panel_item_top_bar_unfold_button {
+    display: flex;
   }
 
   .group-content {

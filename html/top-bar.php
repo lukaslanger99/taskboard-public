@@ -57,7 +57,7 @@
                         echo $messageDropdownVerifyMailMessageHtml . $messageDropdownInvitesHtml;
                     ?>
                 </div>
-                <div class="dropbtn" onclick="toggleDropdown('dropdown_content')">
+                <div class="dropbtn" id="dropbtnUnfoldButton" onclick="toggleUnfoldArea('dropdown_content','dropbtnUnfoldButton')">
                     <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
                 </div>
                 <div class="dropdown_content" id="dropdown_content">
