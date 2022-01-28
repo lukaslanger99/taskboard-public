@@ -122,6 +122,12 @@ function printSubtaskForm() {
   }
 }
 
+//check nightmode toggled to show dropdown
+var nightmodeChangeCheck = document.URL.replace(/.*nightmodechange=([^&]*).*|(.*)/, '$1')
+if (nightmodeChangeCheck == 'true') {
+  toggleUnfoldArea('dropdown_content','dropbtnUnfoldButton')
+}
+
 //check create another task
 var createAnotherTaskCheck = document.URL.replace(/.*createTask=([^&]*).*|(.*)/, '$1');
 if (createAnotherTaskCheck == 'true') {

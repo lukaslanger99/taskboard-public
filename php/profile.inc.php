@@ -104,7 +104,14 @@
 
         case 'toggleNightmode':
             $taskBoard->mysqliQueryPrepared("UPDATE users SET userNightmode = ? WHERE userID = ?", $_GET['n'], $userID);
-            break;
+            if ($_SESSION['enteredUrl']) {
+                $destinationUrl = DOMAIN.$_SESSION['enteredUrl'];
+            } else {
+                $destinationUrl = DIR_SYSTEM."php/profile.php";
+            }
+            $taskBoard->locationEnteredUrl($_SESSION['enteredUrl'], "nightmodechange=true");
+            header("Location: ".$destinationUrl);
+            exit;
 
         case 'toggleQueuepanel':
             $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelQueue = ? WHERE userID = ?", $_GET['n'], $userID);
