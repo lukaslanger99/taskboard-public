@@ -608,12 +608,28 @@ class TaskBoard {
         $assignedTasksCount = $this->getTaskCount($group, 'assigned');
         $finishedTasksCount = $this->getTaskCount($group, 'finshed');
 
+        $mobileLine = '';
+        if ($openTasksCount != '') {
+            $mobileLine .= $openTasksCount.' Open ';
+        }
+        if ($assignedTasksCount != '') {
+            $mobileLine .= $openTasksCount.' In progress';
+        }
+
         $html =  '
         <div class="group-box">
             <div class="group-top-bar">
-                <a href="php/details.php?action=groupDetails&id=' . $groupID . '">' . $groupName . '</a>
+                <div class="group_top_bar_left">
+                    <a href="php/details.php?action=groupDetails&id=' . $groupID . '"><p>' . $groupName . '</p></a>
+                </div>
+                <div class="group_top_bar_right">
+                    <p>'.$mobileLine.'</p>
+                    <div class="group_dropbtn" id="groupUnfoldButton_'.$groupName.'" onclick="toggleUnfoldArea(\'groupContent_'.$groupName.'\',\'groupUnfoldButton_'.$groupName.'\')">
+                        <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
+                    </div>
+                </div>
             </div>
-            <div class="group-content">
+            <div class="group-content" id="groupContent_'.$groupName.'">
                 <div class="single-content">
                     <div class="single-top-bar">
                     <p>Open '.$openTasksCount.'</p>

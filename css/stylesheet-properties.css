@@ -48,13 +48,6 @@ th {
   float: right;
 }
 
-.subtask-top-bar {
-  width: 85%;
-  height: 35px;
-  padding: 5px;
-  border-radius: 5px;
-}
-
 .top_bar_title {
   border-radius: 5px;
   margin: 5px;
@@ -71,9 +64,16 @@ th {
 }
 
 .group-top-bar {
-  height: 25px;
-  padding: 5px;
   border-radius: 5px;
+  height: 35px;
+  display: flex;
+  justify-content: stretch;
+}
+
+.group_top_bar_right {
+  justify-content: space-between;
+  flex: 1;
+  display: none;
 }
 
 .group-content {
@@ -99,20 +99,6 @@ th {
   padding: 5px;
   margin-top: 5px;
   width: 32.5%;
-}
-
-.single-top-bar-subtask {
-  width: 255px;
-  height: 25px;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.single-content-subtask {
-  float: left;
-  width: 265px;
-  margin: 5px 10px 5px 0;
-  border-radius: 5px;
 }
 
 .fifty-percent-width {
@@ -146,19 +132,6 @@ th {
 }
 
 .box:hover {
-  opacity: 0.9;
-}
-
-.subtask-box {
-  float: left;
-  width: 250px;
-  padding: 5px;
-  border-radius: 5px;
-  margin: 2px;
-  display: flex;
-}
-
-.subtask-box:hover {
   opacity: 0.9;
 }
 
@@ -255,6 +228,8 @@ th {
   border-radius: 5px;
   cursor: pointer;
   padding: 0 5px;
+  padding-top: 2px;
+  text-align: center;
 }
 
 .panel_item_top_bar_unfold_button {
@@ -263,6 +238,15 @@ th {
   cursor: pointer;
   padding: 0 5px;
   display: none;
+  padding-top: 3px;
+  text-align: center;
+  width: 15px;
+}
+
+.panel_item_top_bar_unfold_button i {
+  margin: 0;
+  margin-left: 2px;
+  margin-top: 2px;
 }
 
 .panel-item-area {
@@ -506,6 +490,20 @@ input:checked + .slider:before {
   text-align: center;
 }
 
+.group_dropbtn {
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+  width: 25px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.group_dropbtn p {
+  margin: 0;
+  padding-top: 3px;
+}
+
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
   position: relative;
@@ -608,7 +606,12 @@ hr.solid {
     display: flex;
   }
 
+  .group_top_bar_right {
+    display: flex;
+  }
+
   .group-content {
+    display: none;
     flex-direction: column;
   }
 
@@ -625,7 +628,7 @@ hr.solid {
     margin-right: 5px;
   }
 
-  .priority {
-    width: 0.5%;
+  .taskdetails_panel {
+    flex-direction: column;
   }
 }

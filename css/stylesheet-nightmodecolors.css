@@ -21,15 +21,16 @@ th {
   color: #f2f2f2;
 }
 
-.subtask-top-bar {
-  background-color: #333333;
-}
-
 .group-box {
   background-color: #262626;
 }
 
 .group-top-bar {
+  background-color: #333333;
+  color: #f2f2f2;
+}
+
+.group_top_bar_left {
   background-color: #333333;
   color: #f2f2f2;
 }
@@ -43,14 +44,6 @@ th {
 }
 
 .single-content {
-  background-color: #404040;
-}
-
-.single-top-bar-subtask {
-  background-color: #333333;
-}
-
-.single-content-subtask {
   background-color: #404040;
 }
 
@@ -79,10 +72,6 @@ th {
 .box {
   background-color: #1a1a1a;
   color: #f2f2f2;
-}
-
-.subtask-box {
-  background-color: #1a1a1a;
 }
 
 .bottom_label {
@@ -219,6 +208,11 @@ th {
 
 /* Dropdown Button */
 .dropbtn {
+  background-color: #262626;
+  color: #f2f2f2;
+}
+
+.group_dropbtn {
   background-color: #262626;
   color: #f2f2f2;
 }
