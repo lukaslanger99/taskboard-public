@@ -201,15 +201,15 @@ th {
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown_content {
-  background-color: #f2f2f2;
+  background-color: #ccc;
 }
 
 .dropdown_message {
-  background-color: #fff;
+  background-color: #ccc;
 }
 
 .dropdown-item {
-  background-color: #f2f2f2;
+  background-color: #ccc;
   color: black;
 }
 
