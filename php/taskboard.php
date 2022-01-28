@@ -113,7 +113,7 @@ class TaskBoard {
         $words = explode(' ', $string);
         foreach ($words as &$word) {
             if (filter_var($word, FILTER_VALIDATE_URL)) {
-                $word = '<a style="text-decoration:underline;" href="'.$word.'">'.$word.'</a>';
+                $word = '<a style="text-decoration:underline;" href="'.$word.'" target="_blank">'.$word.'</a>';
             }
         }
         return implode(' ', $words);
