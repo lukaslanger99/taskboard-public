@@ -1198,12 +1198,17 @@ class TaskBoard {
         $html = '
             <div class="taskdetails_panel_right">
                 <div class="group-box">
-                    <div class="top-bar">
-                        <div class="top_bar_title">
+                    <div class="group-top-bar">
+                        <div class="group_top_bar_left">
                             <p>Subtasks</p>
                         </div>
+                        <div class="group_top_bar_right">
+                            <div class="group_dropbtn" id="groupUnfoldButton_subtask" onclick="toggleUnfoldArea(\'groupContent_subtask\',\'groupUnfoldButton_subtask\')">
+                                <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="group-content">
+                    <div class="group-content" id="groupContent_subtask">
                         <div class="single-content">
                             <div class="single-top-bar">
                             Open '.$openTasksCount.'
