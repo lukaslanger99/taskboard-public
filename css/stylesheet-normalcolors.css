@@ -83,6 +83,11 @@ th {
   background-color: #ffffff;
 }
 
+.weather__panel__content {
+  border: 5px solid #cccccc;
+  background-color: #ffffff;
+}
+
 .panel-item-top-bar {
   background-color: #cccccc;
 }

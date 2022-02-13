@@ -101,6 +101,11 @@ th {
   background-color: #1a1a1a;
 }
 
+.weather__panel__content {
+  border: 5px solid #333333;
+  background-color: #1a1a1a;
+}
+
 .panel-item-top-bar {
   background-color: #333333;
 }

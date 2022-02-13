@@ -129,6 +129,10 @@
             $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelAppointment = ? WHERE userID = ?", $_GET['n'], $userID);
             break;
 
+        case 'toggleWeatherpanel':
+            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelWeather = ? WHERE userID = ?", $_GET['n'], $userID);
+            break;
+
         case 'updateMail':
             $mail = $_POST['mail'];
             if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {

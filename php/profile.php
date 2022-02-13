@@ -123,6 +123,12 @@
         $queueState = '';
     }
 
+    if ($panelData->panelWeather == 'true') {
+        $weatherState = 'checked';
+    } else {
+        $weatherState = '';
+    }
+
     echo '
     <div class="group-box">
         PANELS
@@ -160,6 +166,15 @@
                 <td>
                     <label class="switch">
                     <input id="queuepanel-checkbox" type="checkbox" '.$queueState.'>
+                      <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+            <td>Weather Panel</td>
+                <td>
+                    <label class="switch">
+                    <input id="weatherpanel-checkbox" type="checkbox" '.$weatherState.'>
                       <span class="slider round"></span>
                     </label>
                 </td>

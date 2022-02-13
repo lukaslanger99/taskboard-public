@@ -372,3 +372,4 @@ addCheckboxListener("rtpanel-checkbox", "toggleRTpanel"); //RT checkbox
 addCheckboxListener("motdpanel-checkbox", "toggleMOTDpanel"); //MOTD checkbox
 addCheckboxListener("appointmentpanel-checkbox", "toggleAppointmentpanel"); //Appointment checkbox
 addCheckboxListener("queuepanel-checkbox", "toggleQueuepanel"); //Queue checkbox
+addCheckboxListener("weatherpanel-checkbox", "toggleWeatherpanel"); //Queue checkbox

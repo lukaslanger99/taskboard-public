@@ -44,16 +44,27 @@
                 $queueItems = explode(",", $_POST['item']);
                 foreach ($queueItems as $item) {
                     $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messagePrio) VALUES (?, 'queue', ?, ?)";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $item, $prio);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $item, $prio);
                 }
                 $taskBoard->locationIndex("?success=queueadded");
             }
             break;
 
+        case 'updateWeatherCity':
+            if (isset($_POST['update-weather-submit'])) {
+                if (empty($_POST['city'])) {
+                    $taskBoard->locationIndex("?error=emptyfields");
+                }
+                $city = $_POST['city'];
+                $sql = "UPDATE panels SET panelWeatherCity = ? WHERE userID = ?;";
+                $taskBoard->mysqliQueryPrepared($sql, $city, $userID);
+                $taskBoard->locationIndex("?success=weathercityupdated");
+            }
+            break;
+
         case 'assign':
             if (isset($_POST['assign-submit'])) {
-                $state = 'assigned';
-                $sql = "UPDATE tasks SET taskState = '$state', taskDateAssigned = '$currentDate', taskAssignedBy = '$userID' WHERE taskID = ?;";
+                $sql = "UPDATE tasks SET taskState = 'assigned', taskDateAssigned = '$currentDate', taskAssignedBy = '$userID' WHERE taskID = ?;";
                 $taskBoard->mysqliQueryPrepared($sql , $id);
                 $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$id&success=taskassigned");
             }
@@ -70,7 +81,7 @@
                 $sql = "INSERT INTO messages 
                 (messageOwner, messageGroup, messageType, messageTitle, messageDate) 
                 VALUES (?, ?, 'appointment', ?, ?);";
-                $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $groupID, $title, $date);
+                $taskBoard->mysqliQueryPrepared($sql, $userID, $groupID, $title, $date);
                 $taskBoard->locationIndex("?success=appointmentcreated");
             }
             break;
@@ -93,7 +104,6 @@
         
         case 'createGroup':
             if (isset($_POST['creategroup-submit'])) {
-                $userID = $_SESSION['userID'];
                 if ($taskBoard->getMailState($userID) == 'unverified') {
                     if (strpos($_SESSION['enteredUrl'], '?')) {
                         header("Location: " . DOMAIN.$_SESSION['enteredUrl']."&error=unverifiedmail");
@@ -131,7 +141,7 @@
                 $title = str_replace(array("\r","\n")," ", $_POST['title']);
                 $groupID = (int) $_POST['groupID'];
                 $sql = "INSERT INTO messages (messageOwner, messageGroup, messageType, messageTitle) VALUES (?, ?, 'motd', ?);";
-                $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $groupID, $title);
+                $taskBoard->mysqliQueryPrepared($sql, $userID, $groupID, $title);
                 $taskBoard->locationIndex("?success=motdcreated");
             }
             break;
@@ -180,24 +190,24 @@
                     }
                     $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
                             VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, 'Mon', $state1);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Mon', $state1);
                             $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
                             VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, 'Wed', $state1);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Wed', $state1);
                             $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
                             VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, 'Fri', $state1);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Fri', $state1);
                     $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
                             VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, 'Sun', $state1);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Sun', $state1);
 
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, 'Tue', $state2);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Tue', $state2);
                     $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
                             VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, 'Thu', $state2);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Thu', $state2);
                     $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
                             VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, 'Sat', $state2);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Sat', $state2);
                 } else {
                     if (empty($_POST['title'])) {
                         $taskBoard->locationIndex("?error=emptyfields");
@@ -205,7 +215,7 @@
                     $weekday = $_POST['weekday'];
                     $quantity = $_POST['quantity'];
                     $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $_SESSION['userID'], $title, $weekday, $quantity);
+                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, $weekday, $quantity);
                 }
                 $taskBoard->locationIndex("?success=rtcreated");
             }
@@ -268,7 +278,7 @@
             break;
         
         case 'deleteTask':
-            if ($taskBoard->deleteTaskPermission($id, $_SESSION['userID'], $type)) {
+            if ($taskBoard->deleteTaskPermission($id, $userID, $type)) {
                 $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskID = ?", $id);
                 $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $id);
                 $taskBoard->mysqliQueryPrepared("DELETE FROM comments WHERE commentTaskID = ?", $id);
@@ -313,8 +323,7 @@
                     header("Location: " . DIR_SYSTEM . "php/details.php?action=taskDetails&id=$id&error=unfinishedsubtasks");
                     exit;
                 }
-                $state = 'finished';
-                $sql = "UPDATE tasks SET taskState = '$state', taskDateFinished = '$currentDate' WHERE taskID = ?";
+                $sql = "UPDATE tasks SET taskState = 'finished', taskDateFinished = '$currentDate' WHERE taskID = ?";
                 $taskBoard->mysqliQueryPrepared($sql, $id);
 
                 if ($type == 'task') {

@@ -1,0 +1,32 @@
+.weather__panel__content {
+    height: 96%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+
+    border: 5px solid #333333;
+    background-color: #1a1a1a;
+}
+
+.weather__city {
+    margin: 5px;
+    font-size: large;
+}
+
+.weather__block {
+    display: flex;
+    margin-right: 5px;
+}
+
+.weather__temp {
+    margin: auto;
+    font-size: large;
+}
+
+.weather__date {
+    margin: auto;
+}
+
+.weather__input form{
+    display: flex;
+}

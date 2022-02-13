@@ -49,6 +49,8 @@ panelRT | rt enabled true,false
 panelMOTD | motd enabled true,false
 panelAppointment | appointment enabled true,false
 panelQueue | queue enabled true,false
+panelWeather | weather enabled true, false
+panelWeatherCity | selected city if weather panel enabled (will be saved if user disables and enables panel again), default berlin
 
 ## tasks
 Column name | Description
