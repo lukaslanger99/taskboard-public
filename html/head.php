@@ -7,12 +7,11 @@
     <?php
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-properties.css">';
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/weather.css">';
-    if ($_SESSION['userID'] && $taskBoard->getNightmodeEnabled($_SESSION['userID'])) {
-        echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-nightmodecolors.css">
-                    ';
+    echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/login.css">';
+    if ($_SESSION['userID'] && !$taskBoard->getNightmodeEnabled($_SESSION['userID'])) {
+        echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-normalcolors.css">';
     } else {
-        echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-normalcolors.css">
-                    ';
+        echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-nightmodecolors.css">';
     }
     ?>
     <link rel="icon" type="image/png" href="<?php echo DIR_SYSTEM ?>img/favicon.png">
