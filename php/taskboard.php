@@ -1625,7 +1625,15 @@ class TaskBoard
         }
         $html = '
         <div class="panel-item">
-            <div class="weather__panel__content">
+            <div class="panel-item-top-bar">
+                <div class="top-bar-left">
+                    <p>Weather</p>
+                </div>
+                <div class="panel_item_top_bar_unfold_button" id="weatherUnfoldButton" onclick="toggleUnfoldArea(\'weatherPanelContentArea\',\'weatherUnfoldButton\')">
+                   <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="weather__panel__content" id="weatherPanelContentArea">
                 <div class="weather">
                     <div class="weather__input">
                         <form action="' . DIR_SYSTEM . 'php/action.php?action=updateWeatherCity" autocomplete="off" method="post" >
