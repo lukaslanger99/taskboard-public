@@ -150,7 +150,7 @@ function openEditGroupForm(groupID, name, priority, archiveTime) {
                   </td>\
               </tr>\
               <tr>\
-              <td>Times till task archived:</td>\
+              <td>Number of days till task archived:</td>\
                   <td>\
                       <input type="number" name="archivetime" min="1" max="365" value="'+ archiveTime + '">\
                   </td>\
