@@ -1,6 +1,6 @@
 # taskboard v1.0
 
-Working page: http://lukaslanger.bplaced.net/taskboard/
+Live page: http://lukaslanger.bplaced.net/taskboard/
 
 ### Introduction and Overview
 I started this project in august 2020. At this time I became familiar with the kanban process and started using some of the sites, but there were some points that I didn't like about the site and I also wanted to be independent. At the beginning it was very straightforward and had hardly any features, but this changed faster and faster, so that the site that I wanted to develop in order to manage my projects quickly became a project of its own.
@@ -53,8 +53,8 @@ I did that panel to protect myself from procrastination. You set to-do's and are
 
 ### What is still in progress?
 - [ ] CSS reworking
-- [ ] Mobile layout
-- [ ] Weather API Panel
+- [X] Mobile layout
+- [X] Weather API Panel
 - [ ] Task labels similar to github issues
 - [ ] Upload profile pic
 - [ ] Add documents to task
