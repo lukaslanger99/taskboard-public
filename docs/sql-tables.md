@@ -68,6 +68,15 @@ taskAssignedBy | userID of assignee
 taskDateFinished | timestamp when finished eg. 2021-03-05 12:34
 taskDescription | description
 
+## timetables
+Column name | Description
+------------ | -------------
+timetableID | ID automatically initialized
+timetableText | activity text
+timetableTime | time block format eg. 17:00-19:30
+timetableDate | date format: 2022-12-31
+timetableOwnerID | userID of owner
+
 ## tokens
 Column name | Description
 ------------ | -------------
