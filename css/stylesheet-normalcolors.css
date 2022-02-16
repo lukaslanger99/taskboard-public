@@ -37,6 +37,10 @@ th {
   background-color: lightgray;
 }
 
+.single__content__subtask {
+  background-color: lightgray;
+}
+
 /* Button */
 .button {
   background-color: #f2f2f2;

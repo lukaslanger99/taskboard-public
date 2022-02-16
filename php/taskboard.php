@@ -393,28 +393,10 @@ class TaskBoard
         }
     }
 
-    private function getSubtaskCount($taskId, $state)
+    private function getTaskCount($type, $groupID, $state)
     {
-        $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'subtasks' AND taskParentID = ? AND taskState = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $taskId, $state);
-
-        if ($data != null) {
-            foreach ($data as $i) {
-                if ((int) $i->number > 0) {
-                    $taskCount = '(' . $i->number . ')';
-                } else {
-                    $taskCount = '';
-                }
-            }
-        }
-
-        return $taskCount;
-    }
-
-    private function getTaskCount($group, $state)
-    {
-        $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $group->groupID, $state);
+        $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = ? AND taskParentID = ? AND taskState = ?";
+        $data = $this->mysqliSelectFetchObject($sql, $type, $groupID, $state);
         if ($data != null) {
             if ((int) $data->number > 0) {
                 $taskCount = '(' . $data->number . ')';
@@ -638,9 +620,9 @@ class TaskBoard
     {
         $groupName = $group->groupName;
         $groupID = $group->groupID;
-        $openTasksCount = $this->getTaskCount($group, 'open');
-        $assignedTasksCount = $this->getTaskCount($group, 'assigned');
-        $finishedTasksCount = $this->getTaskCount($group, 'finshed');
+        $openTasksCount = $this->getTaskCount('task', $groupID, 'open');
+        $assignedTasksCount = $this->getTaskCount('task', $groupID, 'assigned');
+        $finishedTasksCount = $this->getTaskCount('task', $groupID, 'finshed');
 
         $mobileLine = '';
         if ($openTasksCount != '') {
@@ -1238,10 +1220,9 @@ class TaskBoard
 
     private function printSubtaskPanel($id)
     {
-        $openTasksCount = $this->getSubtaskCount($id, 'open');
-        $assignedTasksCount = $this->getSubtaskCount($id, 'assigned');
-        $finishedTasksCount = $this->getSubtaskCount($id, 'finshed');
-
+        $openTasksCount = $this->getTaskCount('subtask', $id, 'open');
+        $assignedTasksCount = $this->getTaskCount('subtask', $id, 'assigned');
+        $finishedTasksCount = $this->getTaskCount('subtask', $id, 'finshed');
         $html = '
             <div class="taskdetails_panel_right">
                 <div class="group-box">
@@ -1256,22 +1237,22 @@ class TaskBoard
                         </div>
                     </div>
                     <div class="group-content" id="groupContent_subtask">
-                        <div class="single-content">
+                        <div class="single__content__subtask">
                             <div class="single-top-bar">
-                            Open ' . $openTasksCount . '
+                            <p>Open ' . $openTasksCount . '</p>
                             </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'open' ORDER BY taskPriority DESC", $id);
         $html .= '</div>
-                    <div class="single-content">
+                    <div class="single__content__subtask">
                         <div class="single-top-bar">
-                        In progress ' . $assignedTasksCount . '
-                            </div>';
+                        <p>In progress ' . $assignedTasksCount . '</p>
+                        </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'assigned' ORDER BY taskDateAssigned", $id);
         $html .= '</div>
-                    <div class="single-content">
+                    <div class="single__content__subtask">
                         <div class="single-top-bar">
-                        Done ' . $finishedTasksCount . '
-                            </div>';
+                        <p>Done ' . $finishedTasksCount . '</p>
+                        </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'finished' ORDER BY taskDateFinished", $id);
         $html .=    '</div>
                 </div>
@@ -1531,7 +1512,7 @@ class TaskBoard
             obj['taskParentID'] = $task->taskParentID;
             obj['taskPriority'] = $task->taskPriority;
             obj['taskTitle'] = '$task->taskTitle';
-            obj['taskDescription'] = '".preg_replace('/\s+/', ' ', $task->taskDescription)."';
+            obj['taskDescription'] = '" . preg_replace('/\s+/', ' ', $task->taskDescription) . "';
             localStorage.setItem('TaskData', JSON.stringify(obj));
         </script>";
     }
