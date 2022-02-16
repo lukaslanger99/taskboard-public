@@ -1531,7 +1531,7 @@ class TaskBoard
             obj['taskParentID'] = $task->taskParentID;
             obj['taskPriority'] = $task->taskPriority;
             obj['taskTitle'] = '$task->taskTitle';
-            obj['taskDescription'] = '$task->taskDescription';
+            obj['taskDescription'] = '".preg_replace('/\s+/', ' ', $task->taskDescription)."';
             localStorage.setItem('TaskData', JSON.stringify(obj));
         </script>";
     }
