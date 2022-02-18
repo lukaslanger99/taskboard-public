@@ -129,6 +129,12 @@
         $weatherState = '';
     }
 
+    if ($panelData->panelTimetable == 'true') {
+        $timetableState = 'checked';
+    } else {
+        $timetableState = '';
+    }
+
     echo '
     <div class="group-box">
         PANELS
@@ -175,6 +181,15 @@
                 <td>
                     <label class="switch">
                     <input id="weatherpanel-checkbox" type="checkbox" '.$weatherState.'>
+                      <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+            <td>Timetable</td>
+                <td>
+                    <label class="switch">
+                    <input id="timetablepanel-checkbox" type="checkbox" '.$timetableState.'>
                       <span class="slider round"></span>
                     </label>
                 </td>

@@ -51,6 +51,7 @@ panelAppointment | appointment enabled true,false
 panelQueue | queue enabled true,false
 panelWeather | weather enabled true, false
 panelWeatherCity | selected city if weather panel enabled (will be saved if user disables and enables panel again), default berlin
+panelTimetable | timetable enabled true, false
 
 ## tasks
 Column name | Description
@@ -68,14 +69,24 @@ taskAssignedBy | userID of assignee
 taskDateFinished | timestamp when finished eg. 2021-03-05 12:34
 taskDescription | description
 
-## timetables
+## timetableentrys
 Column name | Description
 ------------ | -------------
-timetableID | ID automatically initialized
+timetableEntryID | ID automatically initialized
+timetableID | ID of timetable
 timetableText | activity text
-timetableTime | time block format eg. 17:00-19:30
+timetableTimeStart | string format eg. 17:00 
+timetableTimeEnd | same for ending time as timetableTimeStart
 timetableDate | date format: 2022-12-31
 timetableOwnerID | userID of owner
+
+## timetables
+Column name | Description
+------------|-------------
+timetableID | ID auto increment
+timetableUserID | userID of timetable owner
+timetableWeek | week number eg. 07, 43
+timetableYear | year eg. 2022
 
 ## tokens
 Column name | Description

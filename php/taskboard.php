@@ -1138,6 +1138,10 @@ class TaskBoard
             $panelHTML .= $this->printWeatherPanel($panelData->panelWeatherCity);
             $panelCounter++;
         }
+        if ($panelData->panelTimetable == 'true') {
+            $panelHTML .= $this->printTimetablePanel();
+            $panelCounter++;
+        }
         if ($panelCounter > 0) {
             $html = '
             <div class="panel">
@@ -1515,6 +1519,32 @@ class TaskBoard
             obj['taskDescription'] = '" . preg_replace('/\s+/', ' ', $task->taskDescription) . "';
             localStorage.setItem('TaskData', JSON.stringify(obj));
         </script>";
+    }
+
+    private function printTimetablePanel()
+    {
+        $html = '';
+        $html .= '
+        <div class="panel-item">
+            <div class="panel-item-content">
+                <div class="panel-item-top-bar">
+                    <div class="top-bar-left">
+                        <p>Timetable (KW'.date("W").')</p>
+                    </div>
+                    <div class="top-bar-right">
+                        <div class="panel-item-top-bar-button" id="timetableCurrentWeekButton" onclick="timetable.timetablePopup(\'current\')">
+                            Current week
+                        </div>
+                        <div class="panel-item-top-bar-button" id="timetableNextWeekButton" onclick="timetable.timetablePopup(\'next\')">
+                            Next week
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-item-area" id="appointmentPanelContentArea">
+                </div>
+            </div>
+        </div>';
+        return $html;
     }
 
     public function printUserDetails($userID)

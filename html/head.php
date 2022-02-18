@@ -21,4 +21,5 @@
     <script src="<?php echo DIR_SYSTEM ?>js/maps.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/javascript.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/weather.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/timetable.js"></script>
 </head>
