@@ -337,20 +337,32 @@ th {
 }
 
 .modal-content {
-  width: 500px;
-  height: 300px;
+  max-width: 90%;
+  max-height: 95%;
   border-radius: 5px;
   text-align: center;
-  position: relative;
+  position: absolute;
 }
 
 .modal-header {
   padding: 10px;
   text-align: left;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 40px;
 }
 
-.fa-close {
+.modal__header_left {
+  display: flex;
+}
+
+.modal__content__right {
+  display: flex;
+  justify-content: end;
+}
+
+.modal-header .fa-close {
   position: absolute;
   top: 0;
   right: 0;
@@ -674,5 +686,9 @@ hr.solid {
   
   .taskdetails_panel_right {
     width: 100%;
+  }
+
+  .modal-content {
+    margin-top: 50px;
   }
 }

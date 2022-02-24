@@ -82,7 +82,7 @@ function printTaskForm(selectedGroupId = 'default') {
         <input type="checkbox" id="createAnother" name="createAnother">\
         <label for="createAnother">Create Another</label>\
     </form>';
-    showDynamicForm(container, html, 280);
+    showDynamicForm(container, html);
     closeDynamicFormListener();
   }
 }
@@ -115,7 +115,7 @@ function printSubtaskForm() {
         <label for="createAnother">Create Another</label>\
     </form>';
     container.innerHTML = html;
-    showDynamicForm(container, html, 280);
+    showDynamicForm(container, html);
     document.querySelector('html').style.overflow = 'hidden';
     document.getElementById('bg-modal-dynamicform').style.display = 'flex';
     closeDynamicFormListener();
@@ -125,7 +125,7 @@ function printSubtaskForm() {
 //check nightmode toggled to show dropdown
 var nightmodeChangeCheck = document.URL.replace(/.*nightmodechange=([^&]*).*|(.*)/, '$1')
 if (nightmodeChangeCheck == 'true') {
-  toggleUnfoldArea('dropdown_content','dropbtnUnfoldButton')
+  toggleUnfoldArea('dropdown_content', 'dropbtnUnfoldButton')
 }
 
 //check create another task
@@ -161,7 +161,7 @@ function printGroupForm() {
           <input class="input-login" placeholder="name" type="text" name="name"/>\
           <input class="submit-login" type="submit" name="creategroup-submit" value="Create" />\
       </form>';
-    showDynamicForm(container, html, 200);
+    showDynamicForm(container, html);
     closeDynamicFormListener();
   }
 }
@@ -220,7 +220,7 @@ if (createRTButton) {
             <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
             <input class="submit-login" type="submit" name="creatert-submit" value="Create" />\
         </form>';
-        showDynamicForm(container, html, 250);
+        showDynamicForm(container, html);
         closeDynamicFormListener();
       }
     }
@@ -256,7 +256,7 @@ if (createMOTDButton) {
             <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
             <input class="submit-login" type="submit" name="createmotd-submit" value="Create" />\
         </form>';
-        showDynamicForm(container, html, 210);
+        showDynamicForm(container, html);
         closeDynamicFormListener();
       }
     }
@@ -285,7 +285,7 @@ if (createMOTDButton) {
             <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
             <input class="submit-login" type="submit" name="createappointment-submit" value="Create" />\
         </form>';
-        showDynamicForm(container, html, 230);
+        showDynamicForm(container, html);
         closeDynamicFormListener();
       }
     }
@@ -318,7 +318,7 @@ if (createTaskButton) {
             <textarea class="input-login" type="text" name="description" cols="40" rows="5">'+ task.taskDescription + '</textarea>\
             <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />\
         </form>';
-        showDynamicForm(container, html, 280);
+        showDynamicForm(container, html);
         closeDynamicFormListener();
       }
     }
@@ -333,9 +333,8 @@ function addHeaderDynamicForm(title) {
   </div>';
 }
 
-function showDynamicForm(container, html, boxHeight) {
+function showDynamicForm(container, html) {
   container.innerHTML = html;
-  container.style.height = boxHeight + 'px';
   document.querySelector('html').style.overflow = 'hidden';
   document.getElementById('bg-modal-dynamicform').style.display = 'flex';
 }

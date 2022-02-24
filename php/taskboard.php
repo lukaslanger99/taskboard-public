@@ -1115,7 +1115,8 @@ class TaskBoard
 
     public function printPanels()
     {
-        $panelData = $this->mysqliSelectFetchObject("SELECT * FROM panels WHERE userID = ?", $_SESSION['userID']);
+        $userID = $_SESSION['userID'];
+        $panelData = $this->mysqliSelectFetchObject("SELECT * FROM panels WHERE userID = ?", $userID);
         $panelHTML = '';
         $panelCounter = 0;
         if ($panelData->panelRT == 'true') {
@@ -1139,7 +1140,8 @@ class TaskBoard
             $panelCounter++;
         }
         if ($panelData->panelTimetable == 'true') {
-            $panelHTML .= $this->printTimetablePanel();
+            $timetable = $this->mysqliSelectFetchObject("SELECT * FROM timetables WHERE timetableUserID = ? AND timetableWeek = ?", $userID, date('W'));
+            $panelHTML .= $this->printTimetablePanel($timetable->timetableID);
             $panelCounter++;
         }
         if ($panelCounter > 0) {
@@ -1521,15 +1523,63 @@ class TaskBoard
         </script>";
     }
 
-    private function printTimetablePanel()
+    private function printTimetablePanel($timetableID)
     {
-        $html = '';
-        $html .= '
+        if ($timetableID) {
+            $tasks = $this->mysqliSelectFetchArray(
+                "SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableDate = ? ORDER BY timetableTimeStart",
+                $timetableID,
+                date('Y-m-d')
+            );
+            if ($tasks) {
+                $currentTime = date('H:i');
+                $nextTask = null;
+                for ($i = 0; $i < count($tasks); $i++) {
+                    if ($currentTime > $tasks[$i]->timetableTimeEnd) {
+                        $prevTask = $tasks[$i];
+                    }
+                    if ($currentTime > $tasks[$i]->timetableTimeStart && $currentTime < $tasks[$i]->timetableTimeEnd) {
+                        $activeTask = $tasks[$i];
+                    }
+                    if ($currentTime < $tasks[$i]->timetableTimeStart && !$nextTask) {
+                        $nextTask = $tasks[$i];
+                        if ($i < count($tasks) - 1) $nextTask2 = $tasks[$i + 1];
+                    }
+                }
+            }
+        }
+        $content = '';
+        if ($prevTask) {
+            $content .= '<div class="timetable__panel__prevtask">
+                    <div class="timetable__content__task__time">' . $prevTask->timetableTimeStart . ' - ' . $prevTask->timetableTimeEnd . '</div>
+                    <div class="timetable__content__task__text">' . $prevTask->timetableText . '</div>
+                </div>';
+        }
+        if ($activeTask) {
+            $content .= '<div class="timetable__panel__activetask">
+                    <div class="timetable__content__task__time">' . $activeTask->timetableTimeStart . ' - ' . $activeTask->timetableTimeEnd . '</div>
+                    <div class="timetable__content__task__text">' . $activeTask->timetableText . '</div>
+                </div>';
+        }
+        if ($nextTask) {
+            $content .= '<div class="timetable__panel__nexttask">
+                    <div class="timetable__content__task__time">' . $nextTask->timetableTimeStart . ' - ' . $nextTask->timetableTimeEnd . '</div>
+                    <div class="timetable__content__task__text">' . $nextTask->timetableText . '</div>
+                </div>';
+        }
+        if ($nextTask2) {
+            $content .= '<div class="timetable__panel__nexttask">
+                    <div class="timetable__content__task__time">' . $nextTask2->timetableTimeStart . ' - ' . $nextTask2->timetableTimeEnd . '</div>
+                    <div class="timetable__content__task__text">' . $nextTask2->timetableText . '</div>
+                </div>';
+        }
+
+        $html = '
         <div class="panel-item">
             <div class="panel-item-content">
                 <div class="panel-item-top-bar">
                     <div class="top-bar-left">
-                        <p>Timetable (KW'.date("W").')</p>
+                        <p>Timetable (KW' . date("W") . ')</p>
                     </div>
                     <div class="top-bar-right">
                         <div class="panel-item-top-bar-button" id="timetableCurrentWeekButton" onclick="timetable.timetablePopup(\'current\')">
@@ -1538,9 +1588,13 @@ class TaskBoard
                         <div class="panel-item-top-bar-button" id="timetableNextWeekButton" onclick="timetable.timetablePopup(\'next\')">
                             Next week
                         </div>
+                        <div class="panel_item_top_bar_unfold_button" id="timetableUnfoldButton" onclick="toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\')">
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="panel-item-area" id="appointmentPanelContentArea">
+                <div class="panel-item-area" id="timetablePanelContentArea">
+                    ' . $content . '
                 </div>
             </div>
         </div>';

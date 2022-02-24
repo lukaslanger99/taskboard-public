@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-properties.css">';
-    echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/weather.css">';
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/login.css">';
+    echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/timetable.css">';
+    echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/weather.css">';
     if ($_SESSION['userID'] && !$taskBoard->getNightmodeEnabled($_SESSION['userID'])) {
         echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-normalcolors.css">';
     } else {

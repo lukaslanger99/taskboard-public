@@ -1,0 +1,102 @@
+.timetable__entry__form {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px 20px 20px;
+}
+
+.timtetable__entry__form__time {
+  display: flex;
+}
+
+.timetable__entry__form__days {
+  display: flex;
+  flex-direction: column;
+}
+
+.timetable__entry__form__days__column {
+  display: flex;
+}
+
+.timetable__entry__form__bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.timetable__entry__form__intervall {
+  display: flex;
+}
+
+.timetable__content {
+  display: flex;
+  padding: 0 10px 20px 10px;
+}
+
+.timetable__content__row {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+}
+
+.timetable__content__head {
+  font-weight: 800;
+
+  background-color: #ccc;
+}
+
+.timetable__content__block {
+  padding: 5px;
+  margin: 5px;
+  text-align: left;
+
+  background-color: #d6e3ff;
+}
+
+.timetable__content__block:hover .timetable__content__task__delete .fa-close {
+  visibility: visible;
+}
+
+.timetable__content__task__row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.timetable__content__task__time {
+  font-weight: 200;
+  font-size: small;
+}
+
+.timetable__content__task__text {
+  font-weight: 400;
+}
+
+.timetable__content__task__delete .fa-close {
+  cursor: pointer;
+  color: red;
+  visibility: hidden;
+  margin: 0 5px 0 10px;
+}
+
+.timetable__panel__prevtask {
+  padding: 5px;
+  margin: 0 5px 5px 5px;
+  background-color: #f2f2f2;
+  color: #ccc;
+}
+
+.timetable__panel__activetask {
+  padding: 5px;
+  margin: 0 5px 5px 5px;
+  background-color: #29ff77;
+}
+
+.timetable__panel__nexttask {
+  padding: 5px;
+  margin: 0 5px 5px 5px;
+  background-color: #d6e3ff;
+}
+
+@media (max-width: 768px) {
+  .timetable__content {
+    flex-direction: column;
+  }
+}
