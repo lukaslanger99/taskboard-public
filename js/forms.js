@@ -54,11 +54,13 @@ function printPriorityDropdown(selectedPriority = '2') {
   return html;
 }
 
+function openTaskForm() {
+  printTaskForm()
+  toggleDropdown('dropdown_create_content')
+}
+
 function printTaskForm(selectedGroupId = 'default') {
-  var container = document.getElementById("dynamic-modal-content");
-  if (container) {
-    toggleDropdown('dropdown_create_content');
-    var html = '\
+  var html = '\
     '+ addHeaderDynamicForm('Create Task') + '\
     <form action="'+ DIR_SYSTEM + 'php/action.php?action=createTask" autocomplete="off" method="post" >\
         <table style="margin:0 auto 15px auto;">\
@@ -81,10 +83,9 @@ function printTaskForm(selectedGroupId = 'default') {
         <input style="margin-left:25%;" class="submit-login" type="submit" name="createtask-submit" value="Create" />\
         <input type="checkbox" id="createAnother" name="createAnother">\
         <label for="createAnother">Create Another</label>\
-    </form>';
-    showDynamicForm(container, html);
-    closeDynamicFormListener();
-  }
+    </form>'
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+  closeDynamicFormListener()
 }
 
 function printSubtaskForm() {

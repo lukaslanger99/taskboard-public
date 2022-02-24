@@ -39,7 +39,7 @@
                     <p><i class="fa fa-plus" aria-hidden="true"></i></p>
                 </div>
                 <div class="dropdown_content" id="dropdown_create_content">
-                    <div class="dropdown_create_button" onclick="printTaskForm()">
+                    <div class="dropdown_create_button" onclick="openTaskForm()">
                         <p><i class="fa fa-tasks"></i></p>
                         <p>Create Task</p>
                     </div>
