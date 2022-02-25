@@ -754,7 +754,8 @@ class TaskBoard
     public function printGroupDetails($group)
     {
         $groupID = $group->groupID;
-        if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
+        $groupOwnerCheck = $_SESSION['userID'] == $this->getGroupOwnerID($groupID);
+        if ($groupOwnerCheck) {
             $editGroupButton = '
             <div class="button" onclick="openEditGroupForm(' . $groupID . ', \'' . $group->groupName . '\', ' . $group->groupPriority . ', ' . $group->groupArchiveTime . ')">
                 <p><i class="fa fa-edit" aria-hidden="true"></i></p>
@@ -768,11 +769,17 @@ class TaskBoard
                                 <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                             </div>
                             ' . $editGroupButton . '
+                        </div>
+                        <div class="top-bar-right">
+                            <div class="dropbtn" id="groupdetailsUnfoldButton" onclick="toggleUnfoldArea(\'groupDetailsButtons\',\'groupdetailsUnfoldButton\')">
+                                <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
+                            </div>
                         </div>';
 
         $inviteToken = $this->mysqliSelectFetchObject("SELECT tokenToken FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $groupID);
-        if ($group->groupInvites == 'enabled') {
-            $groupInvites = '
+        if ($groupOwnerCheck) {
+            if ($group->groupInvites == 'enabled') {
+                $groupInvites = '
                 ' . DIR_SYSTEM . 'php/action.php?action=joingroup&t=' . $inviteToken->tokenToken . '
                 <div class="panel-item-top-bar-button">
                     <a href="' . DIR_SYSTEM . 'php/action.php?action=refreshinvite&id=' . $groupID . '"> <i class="fa fa-refresh" aria-hidden="true"></i> </a>
@@ -781,21 +788,22 @@ class TaskBoard
                     <input class="button" type="submit" name="groupinvites-submit" value="Disable Invites"/>
                 </form>
             ';
-        } else {
-            $groupInvites = '
-                <form action="action.php?action=groupinvites&invites=enable&id=' . $groupID . '" autocomplete="off" method="post" >
-                    <input class="button" type="submit" name="groupinvites-submit" value="Enable Invites"/>
-                </form>
+            } else {
+                $groupInvites = '
+            <form action="action.php?action=groupinvites&invites=enable&id=' . $groupID . '" autocomplete="off" method="post" >
+            <input class="button" type="submit" name="groupinvites-submit" value="Enable Invites"/>
+            </form>
             ';
+            }
         }
 
-        if ($group->groupState == 'active') {
+        if ($groupOwnerCheck && $group->groupState == 'active') {
             $changeGroupState = '
                 <form action="action.php?action=groupstate&state=hide&id=' . $groupID . '" autocomplete="off" method="post" >
                     <input class="button" type="submit" name="groupstate-submit" value="Hide Group"/>
                 </form>
             ';
-        } else if ($group->groupState == 'hidden') {
+        } else if ($groupOwnerCheck && $group->groupState == 'hidden') {
             $changeGroupState = '
                 <form action="action.php?action=groupstate&state=activate&id=' . $groupID . '" autocomplete="off" method="post" >
                     <input class="button" type="submit" name="groupstate-submit" value="Show Group"/>
@@ -803,26 +811,25 @@ class TaskBoard
             ';
         }
 
-        if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
-            $html .= '
-
-            <div class="top-bar-right">
-                ' . $groupInvites . '
-                    <form action="action.php?action=generateToken&id=' . $groupID . '" autocomplete="off" method="post" >
-                        <input type="text" name="name" placeholder="username"/>
-                        <input class="button" type="submit" name="groupinvite-submit" value="Invite"/>
-                    </form>
-                ' . $changeGroupState . '
-                <button class="button" type="button" onclick="deleteGroup(' . $groupID . ')">Delete Group</button>
-            </div>';
+        if ($groupOwnerCheck) {
+            $inviteUser = '<form action="action.php?action=generateToken&id=' . $groupID . '" autocomplete="off" method="post" >
+                    <input type="text" name="name" placeholder="username"/>
+                    <input class="button" type="submit" name="groupinvite-submit" value="Invite"/>
+                </form>';
+            $deleteGroup = '<button class="button" type="button" onclick="deleteGroup(' . $groupID . ')">Delete Group</button>';
         } else {
-            $html .= '<div class="top-bar-right">
-                    <button class="button" type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>
-                </div>';
+            $leaveGroup = '<button class="button" type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>';
         }
 
         $html .= '</div>
-                <div class="group-content">
+            <div class="group__deatils__buttons__hidden" id="groupDetailsButtons">
+                ' . $groupInvites . '
+                ' . $inviteUser . '
+                ' . $changeGroupState . '
+                ' . $leaveGroup . '
+                ' . $deleteGroup . '
+            </div>
+                <div class="group__details__content">
                 ';
         $html .= $this->printTaskTable($this->getTasksByGroupID($groupID));
         $html .= '</div>

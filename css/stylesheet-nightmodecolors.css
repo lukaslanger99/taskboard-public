@@ -248,3 +248,16 @@ th {
 .comment-background {
   background-color:#1a1a1a;
 }
+
+.timetable__panel__prevtask {
+  background-color: #262626;
+  color: #333;
+}
+
+.timetable__panel__activetask {
+  background-color: #00a50e;
+}
+
+.timetable__panel__nexttask {
+  background-color: #6596ff;
+}

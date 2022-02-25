@@ -81,6 +81,20 @@ th {
   justify-content: space-between;
 }
 
+.group__details__content {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.group__deatils__buttons__hidden {
+  display: none;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  flex-direction: column;
+}
+
 .big-top-bar {
   height: 35px;
   padding: 5px;

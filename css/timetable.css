@@ -79,20 +79,16 @@
 .timetable__panel__prevtask {
   padding: 5px;
   margin: 0 5px 5px 5px;
-  background-color: #f2f2f2;
-  color: #ccc;
 }
 
 .timetable__panel__activetask {
   padding: 5px;
   margin: 0 5px 5px 5px;
-  background-color: #29ff77;
 }
 
 .timetable__panel__nexttask {
   padding: 5px;
   margin: 0 5px 5px 5px;
-  background-color: #d6e3ff;
 }
 
 @media (max-width: 768px) {
