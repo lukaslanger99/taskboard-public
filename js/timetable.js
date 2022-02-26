@@ -56,30 +56,25 @@ let timetable = {
         showDynamicForm(container, html)
         closeDynamicFormListener()
     },
-    timetablePopup: function (type) {
-        fetch(
-            `${DIR_SYSTEM}server/request.php?action=getTimetable&type=${type}`
-        ).then((response) => response.json())
-            .then((data) => {
-                this.fillPopup(data, type)
-            })
+    request: async function (url) {
+        const response = await fetch(
+            url
+        )
+        return await response.json()
     },
-    createTimetable: function (type) {
-        fetch(`${DIR_SYSTEM}server/request.php?action=createTimetable&type=${type}&copycheck=${document.getElementById("copycheck").checked}`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.fillPopup(data, type)
-            })
+    timetablePopup: async function (type) {
+        const data = await this.request(`${DIR_SYSTEM}server/request.php?action=getTimetable&type=${type}`)
+        this.fillPopup(data, type)
     },
-    deleteTimetable: function (id, type) {
+    createTimetable: async function (type) {
+        const data = await this.request(`${DIR_SYSTEM}server/request.php?action=createTimetable&type=${type}&copycheck=${document.getElementById("copycheck").checked}`)
+        this.fillPopup(data, type)
+    },
+    deleteTimetable: async function (id, type) {
         var a = confirm("Are you sure you want to delete this timetable?");
         if (a == true) {
-            fetch(
-                `${DIR_SYSTEM}server/request.php?action=deleteTimetable&id=${id}`
-            ).then((response) => response.json())
-                .then((data) => {
-                    this.fillPopup(data, type)
-                })
+            const data = await this.request(`${DIR_SYSTEM}server/request.php?action=deleteTimetable&id=${id}`)
+            this.fillPopup(data, type)
         }
     },
     parentHTML: '',
@@ -129,7 +124,7 @@ let timetable = {
         showDynamicForm(container, html)
         closeDynamicFormListener()
     },
-    addEntry: function (id) {
+    addEntry: async function (id) {
         var url = `${DIR_SYSTEM}server/request.php?action=addEntrys&id=${id}`
         var formData = new FormData()
         formData.append('id', id)
@@ -146,11 +141,10 @@ let timetable = {
         formData.append('monfri', document.getElementById("monfri").checked)
         formData.append('monsun', document.getElementById("monsun").checked)
 
-        fetch(url, { method: 'POST', body: formData })
-            .then((response) => response.json())
-            .then((data) => {
-                this.fillPopup(data, this.type)
-            })
+        const response = await fetch(
+            url, { method: 'POST', body: formData }
+        )
+        this.fillPopup(await response.json(), this.type)
     },
     loadParentForm: function () {
         var container = document.getElementById("dynamic-modal-content");
@@ -172,15 +166,11 @@ let timetable = {
         }
         return html
     },
-    deleteEntry: function (id) {
+    deleteEntry: async function (id) {
         var a = confirm("Are you sure you want to delete this entry?");
         if (a == true) {
-            fetch(
-                `${DIR_SYSTEM}server/request.php?action=deleteEntry&id=${id}`
-            ).then((response) => response.json())
-                .then((data) => {
-                    this.fillPopup(data, this.type)
-                })
+            const data = await this.request(`${DIR_SYSTEM}server/request.php?action=deleteEntry&id=${id}`)
+            this.fillPopup(data, this.type)
         }
     }
 }
