@@ -1,4 +1,13 @@
-function printGroupDropdown(groups, selectedGroupId) {
+async function getGroups() {
+  const response = await fetch(
+    `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
+  )
+  const data = await response.json()
+  return data
+}
+
+const printGroupDropdown = async (selectedGroupId) => {
+  const groups = await getGroups()
   var groupsHtml = ''
   groups.forEach(group => {
     if (selectedGroupId != 'default' && selectedGroupId == group.groupID) {
@@ -56,12 +65,8 @@ function openTaskForm() {
   toggleDropdown('dropdown_create_content')
 }
 
-function printTaskForm(selectedGroupId = 'default') {
-  fetch(
-    `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
-  ).then((response) => response.json())
-    .then((data) => {
-      var html = '\
+const printTaskForm = async (selectedGroupId = 'default') => {
+  var html = '\
       '+ addHeaderDynamicForm('Create Task') + '\
       <form action="'+ DIR_SYSTEM + 'php/action.php?action=createTask" autocomplete="off" method="post" >\
         <table style="margin:0 auto 15px auto;">\
@@ -76,7 +81,7 @@ function printTaskForm(selectedGroupId = 'default') {
                 </select>\
                 </div>\
                 </td>\
-                '+ printGroupDropdown(data, selectedGroupId) + '\
+                '+ await printGroupDropdown(selectedGroupId) + '\
             </tr>\
             </table>\
             <textarea class="input-login" placeholder="title" name="title" cols="40" rows="1"></textarea>\
@@ -85,9 +90,8 @@ function printTaskForm(selectedGroupId = 'default') {
             <input type="checkbox" id="createAnother" name="createAnother">\
             <label for="createAnother">Create Another</label>\
             </form>'
-      showDynamicForm(document.getElementById("dynamic-modal-content"), html)
-      closeDynamicFormListener()
-    })
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+  closeDynamicFormListener()
 }
 
 function printSubtaskForm() {
@@ -242,39 +246,30 @@ if (checkboxTaskEverySecondDay) {
 }
 
 // MOTD Form
-function openMotdForm() {
-  fetch(
-    `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
-  ).then((response) => response.json())
-    .then((data) => {
-      var html = '\
+const openMotdForm = async () => {
+  var html = '\
       '+ addHeaderDynamicForm('Create Message of the Day') + '\
       <form action="'+ DIR_SYSTEM + 'php/action.php?action=createMotd" autocomplete="off" method="post" >\
           <table style="margin:0 auto 15px auto;">\
               <tr>\
-              '+ printGroupDropdown(data) + '\
+              '+ await printGroupDropdown() + '\
               </tr>\
           </table>\
           <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
           <input class="submit-login" type="submit" name="createmotd-submit" value="Create" />\
       </form>';
-      showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-      closeDynamicFormListener();
-    })
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
+  closeDynamicFormListener();
 }
 
 // Appointment Form
-function openAppointmentForm() {
-  fetch(
-    `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
-  ).then((response) => response.json())
-    .then((data) => {
-      var html = '\
+const openAppointmentForm = async () => {
+  var html = '\
       '+ addHeaderDynamicForm('Create Appointment') + '\
       <form action="'+ DIR_SYSTEM + 'php/action.php?action=createAppointment" autocomplete="off" method="post" >\
           <table style="margin:0 auto 15px auto;">\
               <tr>\
-                  '+ printGroupDropdown(data) + '\
+                  '+ await printGroupDropdown() + '\
                   <td>Date:</td>\
                   <td>\
                       <input type="date" name="date">\
@@ -284,26 +279,20 @@ function openAppointmentForm() {
           <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
           <input class="submit-login" type="submit" name="createappointment-submit" value="Create" />\
       </form>';
-      showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-      closeDynamicFormListener();
-    })
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
+  closeDynamicFormListener();
 }
 
 // Update Task Form
-function openUpdateTaskForm() {
-  fetch(
-    `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
-  ).then((response) => response.json())
-    .then((data) => {
+const openUpdateTaskForm = async () => {
+  var taskJsonString = localStorage.getItem('TaskData'), dropDowns = '';
+  task = JSON.parse(taskJsonString);
+  if (task.taskType == 'task') {
+    dropDowns += await printGroupDropdown(task.taskParentID);
+  }
+  dropDowns += printPriorityDropdown(task.taskPriority);
 
-      var taskJsonString = localStorage.getItem('TaskData'), dropDowns = '';
-      task = JSON.parse(taskJsonString);
-      if (task.taskType == 'task') {
-        dropDowns += printGroupDropdown(data, task.taskParentID);
-      }
-      dropDowns += printPriorityDropdown(task.taskPriority);
-
-      var html = '\
+  var html = '\
       '+ addHeaderDynamicForm('Update Task') + '\
       <form action="'+ DIR_SYSTEM + 'php/action.php?action=update&id=' + task.taskID + '" autocomplete="off" method="post" >\
       <table style="margin:0 auto 15px auto;">\
@@ -315,9 +304,8 @@ function openUpdateTaskForm() {
               <textarea class="input-login" type="text" name="description" cols="40" rows="5">'+ task.taskDescription + '</textarea>\
               <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />\
               </form>';
-      showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-      closeDynamicFormListener();
-    })
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
+  closeDynamicFormListener();
 }
 
 function addHeaderDynamicForm(title) {
