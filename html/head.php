@@ -19,8 +19,9 @@
     <script src="https://kit.fontawesome.com/41b6d947e6.js" crossorigin="anonymous"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/node_modules/tata-js/dist/tata.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/forms.js" async></script>
-    <script src="<?php echo DIR_SYSTEM ?>js/maps.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/javascript.js"></script>
-    <script src="<?php echo DIR_SYSTEM ?>js/weather.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/maps.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/panels.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/timetable.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/weather.js"></script>
 </head>

@@ -1165,72 +1165,27 @@ class TaskBoard
 
     private function printQueue()
     {
-        $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'queue' ORDER BY messagePrio, messageID";
-        $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-        if ($data) {
-            if (count($data) > 1) {
-                $title = 'Queue (' . count($data) . ' Tasks)';
-            } else if (count($data) == 1) {
-                $title = 'Queue (1 Task)';
-            }
-        } else {
-            $title = 'Queue';
-        }
-
-        $html = '
+        return '
         <div class="panel-item">
             <div class="panel-item-content">
                 <div class="panel-item-top-bar">
                     <div class="top-bar-left">
-                        <p>' . $title . '</p>
+                        <p id="queuePanelTitle"></p>
                     </div>
                     <div class="top-bar-right">
-                        <form action="' . DIR_SYSTEM . 'php/action.php?action=addQueue" autocomplete="off" method="post" >
-                            <input type="text" name="item">
-                            <input type="checkbox" name="highprio" style="outline: 1px solid red;">
-                            <input type="submit" name="add-queue-submit" value="Add" />
-                        </form>
-                    </div>
-                    <div class="panel_item_top_bar_unfold_button" id="queueUnfoldButton" onclick="toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\')">
-                       <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        <input type="text" id="queueItem" name="queueItem">
+                        <input type="checkbox" id="queueHighprio" name="queueHighprio" style="outline: 1px solid red;">
+                        <input type="submit" id="queueSubmit "name="add-queue-submit" value="Add" onclick="panels.addQueueTask()"/>
+                        <div class="panel_item_top_bar_unfold_button" id="queueUnfoldButton" onclick="toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\')">
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="panel-item-area" id="queuePanelContentArea">
-
-        ';
-
-        $toggle = false;
-        $first = true;
-        if ($data) {
-            ($this->getNightmodeEnabled($_SESSION['userID'])) ? $backgroundColor = '#333333' : $backgroundColor = '#f2f2f2';
-
-            foreach ($data as $task) {
-                $string = '
-                <div class="panel-item-message-title">
-                ' . $task->messageTitle . ' 
+                    <script>panels.printQueueTasks()</script>
                 </div>
-                <div class="panel-item-check-button">
-                    <a href="' . DIR_SYSTEM . 'php/action.php?action=deleteMessage&id=' . $task->messageID . '"> <i class="fa fa-check" aria-hidden="true"></i> </a>
-                </div>';
-                if ($first) {
-                    $html .= '<div class="panel-item-content-item" style="outline: 1px solid red;">' . $string . '</div>';
-                    $first = false;
-                } else {
-                    if ($toggle) {
-                        $html .= '<div class="panel-item-content-item" style="background-color:' . $backgroundColor . ';">' . $string . '</div>';
-                    } else {
-                        $html .= '<div class="panel-item-content-item">' . $string . '</div>';
-                    }
-                }
-                $toggle = !$toggle;
-                unset($string);
-            }
-        }
-
-        $html .= '</div>
             </div>
         </div>';
-        return $html;
     }
 
     private function printSubtaskPanel($id)

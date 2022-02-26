@@ -285,6 +285,13 @@ th {
   display: flex;
 }
 
+.panel-item-content-item__secondary {
+  border-radius: 5px;
+  padding: 0 5px;
+  margin: 0 5px 5px 5px;
+  display: flex;
+}
+
 .panel-item-message-title {
   width: 95%;
   overflow: hidden;

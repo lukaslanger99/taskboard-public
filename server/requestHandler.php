@@ -227,4 +227,32 @@ class RequestHandler
         }
         return 0;
     }
+
+    public function getQueueTasks($userID)
+    {
+        $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'queue' ORDER BY messagePrio, messageID";
+        return $this->mysqliSelectFetchArray($sql, $userID);
+    }
+
+    public function deleteQueueTask($userID, $id)
+    {
+        $messageData = $this->mysqliSelectFetchObject("SELECT * FROM messages WHERE messageID = ?", $id);
+        if ($messageData->messageOwner == $userID) {
+            $this->mysqliQueryPrepared("DELETE FROM messages WHERE messageID = ?", $id);
+        }
+        return $this->getQueueTasks($userID);
+    }
+
+    public function addQueueTask($userID, $text, $check)
+    {
+        if ($text) {
+            ($check == 'true') ? $prio = 2 : $prio = 1;
+            $queueItems = explode(",", $text);
+            foreach ($queueItems as $item) {
+                $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messagePrio) VALUES (?, 'queue', ?, ?)";
+                $this->mysqliQueryPrepared($sql, $userID, $item, $prio);
+            }
+        }
+        return $this->getQueueTasks($userID);
+    }
 }

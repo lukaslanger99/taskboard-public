@@ -96,6 +96,21 @@ switch ($_GET['action']) {
         echo json_encode($rh->timetableToJSON($rh->getTimetable($userID, $_GET['type'])));
         break;
 
+    case 'getQueueTasks':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getQueueTasks($userID));
+        break;
+
+    case 'deleteQueueTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->deleteQueueTask($userID, $_GET['id']));
+        break;
+
+    case 'addQueueTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->addQueueTask($userID, $_POST['text'], $_POST['check']));
+        break;
+
     default:
         # code...
         break;

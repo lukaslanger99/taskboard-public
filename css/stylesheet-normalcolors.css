@@ -116,6 +116,10 @@ th {
   background-color: rgba(242, 242, 242, 1);
 }
 
+.panel-item-content-item__secondary {
+  background-color: #f2f2f2;
+}
+
 .fa-check:hover {
   color: green;
 }

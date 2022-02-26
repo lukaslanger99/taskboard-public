@@ -30,26 +30,6 @@
             }
             break;
 
-        case 'addQueue':
-            if (isset($_POST['add-queue-submit'])) {
-                if (empty($_POST['item'])) {
-                    $taskBoard->locationIndex("?error=emptyfields");
-                }
-                if ($_POST['highprio'] == 'on') {
-                    $prio = 2;
-                } else {
-                    $prio = 1;
-                }
-
-                $queueItems = explode(",", $_POST['item']);
-                foreach ($queueItems as $item) {
-                    $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messagePrio) VALUES (?, 'queue', ?, ?)";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $item, $prio);
-                }
-                $taskBoard->locationIndex("?success=queueadded");
-            }
-            break;
-
         case 'updateWeatherCity':
             if (isset($_POST['update-weather-submit'])) {
                 if (empty($_POST['city'])) {
