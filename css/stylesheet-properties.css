@@ -531,6 +531,7 @@ input:checked + .slider:before {
   cursor: pointer;
   width: 35px;
   text-align: center;
+  overflow: hidden;
 }
 
 .group_dropbtn {

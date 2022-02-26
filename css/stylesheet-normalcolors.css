@@ -243,3 +243,11 @@ th {
 .timetable__panel__nexttask {
   background-color: #d6e3ff;
 }
+
+.timetable__content__head {
+  background-color: #ccc;
+}
+
+.timetable__content__block {
+  background-color: #d6e3ff;
+}

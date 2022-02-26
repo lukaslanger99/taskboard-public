@@ -39,16 +39,12 @@
 
 .timetable__content__head {
   font-weight: 800;
-
-  background-color: #ccc;
 }
 
 .timetable__content__block {
   padding: 5px;
   margin: 5px;
   text-align: left;
-
-  background-color: #d6e3ff;
 }
 
 .timetable__content__block:hover .timetable__content__task__delete .fa-close {
