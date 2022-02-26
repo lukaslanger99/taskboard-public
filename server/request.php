@@ -9,6 +9,11 @@ if (!$_SESSION['userID']) {
 }
 
 switch ($_GET['action']) {
+    case 'getActiveGroups':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getActiveGroups($userID));
+        break;
+
     case 'addEntrys':
         $id = intval($_GET['id']);
         $text = $_POST['text'];

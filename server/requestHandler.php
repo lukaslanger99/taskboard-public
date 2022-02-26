@@ -121,23 +121,23 @@ class RequestHandler
             LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
             WHERE  ga.userID = ? AND g.groupState = 'active'
             ORDER BY g.groupPriority DESC";
-        $groups = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-        if ($groups) {
-            $tasks = $this->mysqliSelectFetchArray(
-                "SELECT t.* 
-                    FROM tasks t
-                    LEFT JOIN groupaccess ga ON t.taskParentID = ga.groupID
-                    LEFT JOIN groups g ON g.groupID = ga.groupID
-                    WHERE  ga.userID = ? AND g.groupState = 'active' AND t.taskType = 'task' AND NOT t.taskState = 'archived'
-                    ORDER BY t.taskParentID DESC",
-                $userID
-            );
-            $json = [];
-            $json['groups'] = $groups;
-            $json['tasks'] = $tasks;
-            return $json;
-        }
-        return '';
+        return $this->mysqliSelectFetchArray($sql, $userID);
+        // if ($groups) {
+        //     $tasks = $this->mysqliSelectFetchArray(
+        //         "SELECT t.* 
+        //             FROM tasks t
+        //             LEFT JOIN groupaccess ga ON t.taskParentID = ga.groupID
+        //             LEFT JOIN groups g ON g.groupID = ga.groupID
+        //             WHERE  ga.userID = ? AND g.groupState = 'active' AND t.taskType = 'task' AND NOT t.taskState = 'archived'
+        //             ORDER BY t.taskParentID DESC",
+        //         $userID
+        //     );
+        //     $json = [];
+        //     $json['groups'] = $groups;
+        //     $json['tasks'] = $tasks;
+        //     return $json;
+        // }
+        // return '';
     }
 
     public function createTimetable($userID, $type, $copyLast)

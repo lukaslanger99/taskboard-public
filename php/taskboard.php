@@ -994,6 +994,7 @@ class TaskBoard
     {
         if ($type == 'appointment') {
             $createButtonID = 'createAppointmentButton';
+            $onclick = 'openAppointmentForm()';
             $detailsActionName = 'appointmentDetails';
             $unfoldButtonID = 'appointmentUnfoldButton';
             $contentAreaID = 'appointmentPanelContentArea';
@@ -1015,6 +1016,7 @@ class TaskBoard
             }
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
+            $onclick = 'openMotdForm()"';
             $detailsActionName = 'motdDetails';
             $unfoldButtonID = 'motdUnfoldButton';
             $contentAreaID = 'motdPanelContentArea';
@@ -1063,7 +1065,7 @@ class TaskBoard
                         <p>' . $title . '</p>
                     </div>
                     <div class="top-bar-right">
-                        <div class="panel-item-top-bar-button" id="' . $createButtonID . '">
+                        <div class="panel-item-top-bar-button" id="' . $createButtonID . '" onclick="'.$onclick.'">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </div>
                         <div class="panel-item-top-bar-button">
@@ -1353,7 +1355,7 @@ class TaskBoard
         } else {
             $backButton = '';
         }
-        $buttons = '<button class="button" id="updatetask-button" type="button" >Update</button>
+        $buttons = '<button class="button" onclick="openUpdateTaskForm()">Update</button>
             <button class="button" type="button" onclick="deleteTask(\'' . $task->taskID . '\')">Delete</button>
             <button class="button" id="createSubtaskButton" type="button">Create Subtask</button>';
         switch ($task->taskState) {
