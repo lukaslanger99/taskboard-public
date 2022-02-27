@@ -117,10 +117,6 @@
             $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelQueue = ? WHERE userID = ?", $_GET['n'], $userID);
             break;
 
-        case 'toggleRTpanel':
-            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelRT = ? WHERE userID = ?", $_GET['n'], $userID);
-            break;
-
         case 'toggleMOTDpanel':
             $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelMOTD = ? WHERE userID = ?", $_GET['n'], $userID);
             break;

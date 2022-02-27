@@ -111,6 +111,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->addQueueTask($userID, $_POST['text'], $_POST['check']));
         break;
 
+    case 'getAppointments':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getAppointments($userID));
+        break;
+
     default:
         # code...
         break;

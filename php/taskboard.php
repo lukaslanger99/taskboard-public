@@ -900,21 +900,6 @@ class TaskBoard
         return $string;
     }
 
-    private function printRT($task)
-    {
-        $string = '
-        <div class="panel-item-message-title">
-        ' . $task->messageTitle . ' 
-        </div>
-        <div class="panel-item-delete-button" onclick="printEditRTForm(' . $task->messageID . ', \'' . $task->messageTitle . '\', \'' . $task->messageWeekday . '\', \'' . $task->messageQuantity . '\')">
-        <i class="fa fa-edit" aria-hidden="true"></i>
-        </div>
-        <div class="panel-item-check-button">
-            <a href="' . DIR_SYSTEM . 'php/action.php?action=repeatingTaskDone&id=' . $task->messageID . '"> <i class="fa fa-check" aria-hidden="true"></i> </a>
-        </div>';
-        return $string;
-    }
-
     public function printPanelContentDetails($type)
     {
         if ($type == 'appointment') {
@@ -989,8 +974,12 @@ class TaskBoard
             </div>';
         echo $html;
     }
+    private function printPanel($type, $spec = '')
+    {
+        return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type) . '</div>';
+    }
 
-    private function printPanel($type)
+    private function panelHeader($type)
     {
         if ($type == 'appointment') {
             $createButtonID = 'createAppointmentButton';
@@ -998,128 +987,48 @@ class TaskBoard
             $detailsActionName = 'appointmentDetails';
             $unfoldButtonID = 'appointmentUnfoldButton';
             $contentAreaID = 'appointmentPanelContentArea';
-
-            $sql = "SELECT m.* 
-            FROM messages m
-                LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
-            WHERE  ga.userID = ? AND m.messageType = 'appointment'
-            ORDER BY m.messageDate";
-            $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-            if ($data) {
-                if (count($data) > 1) {
-                    $title = 'Appointments (' . count($data) . ' Appointments)';
-                } else if (count($data) == 1) {
-                    $title = 'Appointments (1 Appointment)';
-                }
-            } else {
-                $title = 'Appointments';
-            }
+            $titleID = 'appointmentPanelTitle';
+            $title = '';
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
             $onclick = 'openMotdForm()"';
             $detailsActionName = 'motdDetails';
             $unfoldButtonID = 'motdUnfoldButton';
             $contentAreaID = 'motdPanelContentArea';
-
-            $sql = "SELECT m.* 
-            FROM messages m
-                LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
-            WHERE  ga.userID = ? AND m.messageType = 'motd'
-            ORDER BY m.messageDate DESC, messageID DESC";
-            $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-            if ($data) {
-                if (count($data) > 1) {
-                    $title = 'MessageBoard (' . count($data) . ' Messages)';
-                } else if (count($data) == 1) {
-                    $title = 'MessageBoard (1 Message)';
-                }
-            } else {
-                $title = 'MessageBoard';
-            }
-        } else if ($type == 'rt') {
-            $createButtonID = 'createRTButton';
-            $detailsActionName = 'repeatingtasksDetails';
-            $unfoldButtonID = 'rtUnfoldButton';
-            $contentAreaID = 'rtPanelContentArea';
-
-            $currentDay = $this->getWeekday();
-            $week = $this->getWeek();
-            $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'repeatingtask' AND (messageWeekday = ? OR messageWeekday = 'everyday') AND (messageQuantity = ? OR messageQuantity = 'everyweek')";
-            $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID'], $currentDay, $week);
-            if ($data) {
-                if (count($data) > 1) {
-                    $title = 'Today\'s Tasks (' . count($data) . ' Tasks)';
-                } else if (count($data) == 1) {
-                    $title = 'Today\'s Tasks (1 Task)';
-                }
-            } else {
-                $title = 'Today\'s Tasks';
-            }
+            $titleID = 'motdPanelTitle';
+            $title = '';
         }
 
-        $html = '
-        <div class="panel-item">
-            <div class="panel-item-content">
-                <div class="panel-item-top-bar">
-                    <div class="top-bar-left">
-                        <p>' . $title . '</p>
-                    </div>
-                    <div class="top-bar-right">
-                        <div class="panel-item-top-bar-button" id="' . $createButtonID . '" onclick="'.$onclick.'">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                        </div>
-                        <div class="panel-item-top-bar-button">
-                            <a href="' . DIR_SYSTEM . 'php/details.php?action=' . $detailsActionName . '"> <i class="fa fa-list" aria-hidden="true"></i> </a>
-                        </div>
-                        <div class="panel_item_top_bar_unfold_button" id="' . $unfoldButtonID . '" onclick="toggleUnfoldArea(\'' . $contentAreaID . '\',\'' . $unfoldButtonID . '\')">
-                           <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </div>
-                    </div>
+        return '<div class="panel-item-top-bar">
+            <div class="top-bar-left">
+                <p id="' . $titleID . '">' . $title . '</p>
+            </div>
+            <div class="top-bar-right">
+                <div class="panel-item-top-bar-button" id="' . $createButtonID . '" onclick="' . $onclick . '">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
                 </div>
-                <div class="panel-item-area" id="' . $contentAreaID . '">
-
-        ';
-
-        $toggle = false;
-        if ($data) {
-            ($this->getNightmodeEnabled($_SESSION['userID'])) ? $backgroundColor = '#333333' : $backgroundColor = '#f2f2f2';
-
-            foreach ($data as $task) {
-                if ($type == 'appointment') {
-                    if ($this->getDateDifferenceDaysOnly($task->messageDate) > 0) {
-                        $sql = "DELETE FROM messages WHERE messageID = ?";
-                        $this->mysqliQueryPrepared($sql, $task->messageID);
-                    } else {
-                        $taskHTML = $this->printAppointmentOrMOTD($task);
-                    }
-                } else if ($type == 'motd') {
-                    $taskHTML = $this->printAppointmentOrMOTD($task);
-                } else if ($type == 'rt') {
-                    if ($task->messageState == '' || $this->getDateDifferenceDaysOnly($task->messageState) > 0) {
-                        $taskHTML = $this->printRT($task);
-                    }
-                }
-
-                if ($taskHTML) {
-                    if ($toggle) {
-                        $html .= '<div class="panel-item-content-item" style="background-color:' . $backgroundColor . ';">' . $taskHTML . '</div>';
-                    } else {
-                        $html .= '<div class="panel-item-content-item">' . $taskHTML . '</div>';
-                    }
-                    $toggle = !$toggle;
-                }
-                unset($taskHTML);
-            }
-        }
-
-        $html .= '</div>
+                <div class="panel-item-top-bar-button">
+                    <a href="' . DIR_SYSTEM . 'php/details.php?action=' . $detailsActionName . '"> <i class="fa fa-list" aria-hidden="true"></i> </a>
+                </div>
+                <div class="panel_item_top_bar_unfold_button" id="' . $unfoldButtonID . '" onclick="toggleUnfoldArea(\'' . $contentAreaID . '\',\'' . $unfoldButtonID . '\')">
+                   <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </div>
             </div>
         </div>';
+    }
 
-        if ($type == 'motd') {
+    private function panelContent($type)
+    {
+        if ($type == 'appointment') {
+            return '<div class="panel-item-area" id="appointmentPanelContentArea">
+                    <script>panels.printAppointments()</script>
+                </div>';
+        } else if ($type == 'motd') {
             $this->mysqliQueryPrepared("UPDATE users SET userLastMotd = CURRENT_TIMESTAMP WHERE userID = ?", $_SESSION['userID']);
+            return '<div class="panel-item-area" id="motdPanelContentArea">
+                    <script>panels.printMotd()</script>
+                </div>';
         }
-        return $html;
     }
 
     public function printPanels()
@@ -1128,10 +1037,6 @@ class TaskBoard
         $panelData = $this->mysqliSelectFetchObject("SELECT * FROM panels WHERE userID = ?", $userID);
         $panelHTML = '';
         $panelCounter = 0;
-        if ($panelData->panelRT == 'true') {
-            $panelHTML .= $this->printPanel('rt');
-            $panelCounter++;
-        }
         if ($panelData->panelMOTD == 'true') {
             $panelHTML .= $this->printPanel('motd');
             $panelCounter++;
@@ -1145,12 +1050,12 @@ class TaskBoard
             $panelCounter++;
         }
         if ($panelData->panelWeather == 'true') {
-            $panelHTML .= $this->printWeatherPanel($panelData->panelWeatherCity);
+            $panelHTML .= $this->printPanel('weather', $panelData->panelWeatherCity);
             $panelCounter++;
         }
         if ($panelData->panelTimetable == 'true') {
-            $timetable = $this->mysqliSelectFetchObject("SELECT * FROM timetables WHERE timetableUserID = ? AND timetableWeek = ?", $userID, date('W'));
-            $panelHTML .= $this->printTimetablePanel($timetable->timetableID);
+            $timetable = $this->mysqliSelectFetchObject("SELECT timetableID FROM timetables WHERE timetableUserID = ? AND timetableWeek = ?", $userID, date('W'));
+            $panelHTML .= $this->printPanel('timetable', $timetable->timetableID);
             $panelCounter++;
         }
         if ($panelCounter > 0) {

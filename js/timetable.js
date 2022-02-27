@@ -1,7 +1,6 @@
 let timetable = {
     fillPopup: function (data, type) {
         this.type = type
-        var container = document.getElementById("dynamic-modal-content");
         var title, buttons
         if (type == 'current') {
             title = 'Current week'
@@ -53,7 +52,7 @@ let timetable = {
                     </div>
                 </div>`
         }
-        showDynamicForm(container, html)
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
         closeDynamicFormListener()
     },
     request: async function (url) {

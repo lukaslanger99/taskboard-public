@@ -99,12 +99,6 @@
 
     $panelData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM panels WHERE userID = ?", $user->userID);
 
-    if ($panelData->panelRT == 'true') {
-        $rtState = 'checked';
-    } else {
-        $rtState = '';
-    }
-
     if ($panelData->panelMOTD == 'true') {
         $motdState = 'checked';
     } else {
@@ -140,15 +134,6 @@
         PANELS
 
         <table>
-            <tr>
-                <td>Repeating Tasks Panel</td>
-                <td>
-                    <label class="switch">
-                    <input id="rtpanel-checkbox" type="checkbox" '.$rtState.'>
-                      <span class="slider round"></span>
-                    </label>
-                </td>
-            </tr>
             <tr>
                 <td>Messages of the Day Panel</td>
                 <td>

@@ -255,4 +255,90 @@ class RequestHandler
         }
         return $this->getQueueTasks($userID);
     }
+
+    public function getAppointments($userID)
+    {
+        $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate
+        FROM messages m
+            LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
+        WHERE  ga.userID = ? AND m.messageType = 'appointment'
+        ORDER BY m.messageDate";
+        $data = $this->mysqliSelectFetchArray($sql, $userID);
+        if ($data) {
+            foreach ($data as $appointment) {
+                if ($this->getDateDifferenceDaysOnly($appointment->messageDate) > 0) {
+                    $sql = "DELETE FROM messages WHERE messageID = ?";
+                    $this->mysqliQueryPrepared($sql, $appointment->messageID);
+                    unset($appointment);
+                } 
+                $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
+                $appointment->messageDate = date("d.m.y", strtotime($appointment->messageDate));
+                $appointment->messageOwnerName = $this->getUsernameByID($appointment->messageOwner);
+                $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
+                $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
+                $appointment->messageDateFormFormat = date("Y-m-d", strtotime($appointment->messageDate));
+                $appointment->messagePermission = ($userID == $appointment->messageGroup || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+            }
+            return $data;
+        }
+        return 0;
+    }
+
+    public function getMotd() {
+        $sql = "SELECT m.* 
+        FROM messages m
+            LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
+        WHERE  ga.userID = ? AND m.messageType = 'motd'
+        ORDER BY m.messageDate DESC, messageID DESC";
+    }
+
+    private function getUsernameByID($userID)
+    {
+        if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') {
+            return $userID;
+        }
+        $sql = "SELECT * FROM users WHERE userID = ?";
+        $data = $this->mysqliSelectFetchObject($sql, $userID);
+        return $data->userName;
+    }
+
+    private function getGroupNameByID($groupID)
+    {
+        if ($groupID) {
+            $return = $this->mysqliSelectFetchObject("SELECT groupName FROM groups WHERE groupID = ?", $groupID);
+            return $return->groupName;
+        } else {
+            return '';
+        }
+    }
+
+    private function addTagsToUrlsInString($string)
+    {
+        $words = explode(' ', $string);
+        foreach ($words as &$word) {
+            if (filter_var($word, FILTER_VALIDATE_URL)) {
+                $word = '<a style="text-decoration:underline;" href="' . $word . '" target="_blank">' . $word . '</a>';
+            }
+        }
+        return implode(' ', $words);
+    }
+
+    private function groupOwnerCheck($groupID, $userID)
+    {
+        $groupOwnerID = $this->mysqliSelectFetchObject("SELECT groupOwner FROM groups WHERE groupID = ?", $groupID);
+        return $groupOwnerID->groupOwner == $userID;
+    }
+
+    private function getUserLastMotd($userID)
+    {
+        $sql = "SELECT userLastMotd FROM users WHERE userID = ?";
+        $data = $this->mysqliSelectFetchObject($sql, $userID);
+        return $data->userLastMotd;
+    }
+
+    private function getDateDifferenceDaysOnly($date)
+    {
+        $tmpDate = new DateTime($date);
+        return $tmpDate->diff(new DateTime(date('Y-m-d')))->format('%r%a');
+    }
 }
