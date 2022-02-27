@@ -100,13 +100,12 @@ th {
   background-color: #262626;
 }
 
-.panel-item-content {
+.panel-item {
   border: 5px solid #333333;
   background-color: #1a1a1a;
 }
 
 .weather__panel__content {
-  border: 5px solid #333333;
   background-color: #1a1a1a;
 }
 

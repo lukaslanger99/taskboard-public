@@ -974,9 +974,10 @@ class TaskBoard
             </div>';
         echo $html;
     }
+
     private function printPanel($type, $spec = '')
     {
-        return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type) . '</div>';
+        return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type, $spec) . '</div>';
     }
 
     private function panelHeader($type)
@@ -997,6 +998,46 @@ class TaskBoard
             $contentAreaID = 'motdPanelContentArea';
             $titleID = 'motdPanelTitle';
             $title = '';
+        } else if ($type == 'queue') {
+            return '<div class="panel-item-top-bar">
+                    <div class="top-bar-left">
+                        <p id="queuePanelTitle"></p>
+                    </div>
+                    <div class="top-bar-right">
+                        <input type="text" id="queueItem" name="queueItem">
+                        <input type="checkbox" id="queueHighprio" name="queueHighprio" style="outline: 1px solid red;">
+                        <input type="submit" id="queueSubmit "name="add-queue-submit" value="Add" onclick="panels.addQueueTask()"/>
+                        <div class="panel_item_top_bar_unfold_button" id="queueUnfoldButton" onclick="toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\')">
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>';
+        } else if ($type == 'weather') {
+            return '<div class="panel-item-top-bar">
+                    <div class="top-bar-left">
+                        <p>Weather</p>
+                    </div>
+                    <div class="panel_item_top_bar_unfold_button" id="weatherUnfoldButton" onclick="toggleUnfoldArea(\'weatherPanelContentArea\',\'weatherUnfoldButton\')">
+                       <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </div>
+                </div>';
+        } else if ($type == 'timetable') {
+            return '<div class="panel-item-top-bar">
+                    <div class="top-bar-left">
+                        <p>Timetable (KW' . date("W") . ')</p>
+                    </div>
+                    <div class="top-bar-right">
+                        <div class="panel-item-top-bar-button" id="timetableCurrentWeekButton" onclick="timetable.timetablePopup(\'current\')">
+                            Current week
+                        </div>
+                        <div class="panel-item-top-bar-button" id="timetableNextWeekButton" onclick="timetable.timetablePopup(\'next\')">
+                            Next week
+                        </div>
+                        <div class="panel_item_top_bar_unfold_button" id="timetableUnfoldButton" onclick="toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\')">
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>';
         }
 
         return '<div class="panel-item-top-bar">
@@ -1017,7 +1058,7 @@ class TaskBoard
         </div>';
     }
 
-    private function panelContent($type)
+    private function panelContent($type, $spec)
     {
         if ($type == 'appointment') {
             return '<div class="panel-item-area" id="appointmentPanelContentArea">
@@ -1027,6 +1068,98 @@ class TaskBoard
             $this->mysqliQueryPrepared("UPDATE users SET userLastMotd = CURRENT_TIMESTAMP WHERE userID = ?", $_SESSION['userID']);
             return '<div class="panel-item-area" id="motdPanelContentArea">
                     <script>panels.printMotd()</script>
+                </div>';
+        } else if ($type == 'queue') {
+            return '<div class="panel-item-area" id="queuePanelContentArea">
+                    <script>panels.printQueueTasks()</script>
+                </div>';
+        } else if ($type == 'weather') {
+            $prevRows = '';
+            for ($i = 1; $i < 6; $i++) {
+                $prevRows .= '
+                <div class="weather__block">
+                  <div class="weather__date" id="weatherPrevDate' . $i . '"></div>
+                  <img src="" alt="" id="weatherPrevIcon' . $i . '" />
+                  <div class="weather__temp" id="weatherPrevTemp' . $i . '"></div>
+                </div>';
+            }
+            return '<div class="weather__panel__content" id="weatherPanelContentArea">
+                    <div class="weather">
+                        <div class="weather__input">
+                            <form action="' . DIR_SYSTEM . 'php/action.php?action=updateWeatherCity" autocomplete="off" method="post" >
+                                <input type="text" name="city" placeholder="cityname">
+                                <input type="submit" name="update-weather-submit" value="Update" />
+                            </form>
+                        </div>
+                        <h2 class="weather__city"><h2>
+                        <div class="weather__block">
+                          <img src="" alt="" class="weather__icon" />
+                          <div class="weather__temp"></div>
+                        </div>
+                        <div class="weather__description"></div>
+                        <div class="weather__humidity"></div>
+                        <div class="weather__wind"></div>
+                    </div>
+                    <div class="weather__forecast">
+                        <h2 class="weather__city">5-Day Forecast<h2>
+                    ' . $prevRows . '
+                    </div>
+                    <script>
+                    weather.fetchWeather(\'' . $spec . '\')
+                    weather.fetchForecast(\'' . $spec . '\')
+                    </script>
+                </div>';
+        } else if ($type == 'timetable') {
+            if ($spec != '') {
+                $tasks = $this->mysqliSelectFetchArray(
+                    "SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableDate = ? ORDER BY timetableTimeStart",
+                    $spec,
+                    date('Y-m-d')
+                );
+                if ($tasks) {
+                    $currentTime = date('H:i');
+                    $nextTask = null;
+                    for ($i = 0; $i < count($tasks); $i++) {
+                        if ($currentTime > $tasks[$i]->timetableTimeEnd) {
+                            $prevTask = $tasks[$i];
+                        }
+                        if ($currentTime > $tasks[$i]->timetableTimeStart && $currentTime < $tasks[$i]->timetableTimeEnd) {
+                            $activeTask = $tasks[$i];
+                        }
+                        if ($currentTime < $tasks[$i]->timetableTimeStart && !$nextTask) {
+                            $nextTask = $tasks[$i];
+                            if ($i < count($tasks) - 1) $nextTask2 = $tasks[$i + 1];
+                        }
+                    }
+                }
+            }
+            $content = '';
+            if ($prevTask) {
+                $content .= '<div class="timetable__panel__prevtask">
+                        <div class="timetable__content__task__time">' . $prevTask->timetableTimeStart . ' - ' . $prevTask->timetableTimeEnd . '</div>
+                        <div class="timetable__content__task__text">' . $prevTask->timetableText . '</div>
+                    </div>';
+            }
+            if ($activeTask) {
+                $content .= '<div class="timetable__panel__activetask">
+                        <div class="timetable__content__task__time">' . $activeTask->timetableTimeStart . ' - ' . $activeTask->timetableTimeEnd . '</div>
+                        <div class="timetable__content__task__text">' . $activeTask->timetableText . '</div>
+                    </div>';
+            }
+            if ($nextTask) {
+                $content .= '<div class="timetable__panel__nexttask">
+                        <div class="timetable__content__task__time">' . $nextTask->timetableTimeStart . ' - ' . $nextTask->timetableTimeEnd . '</div>
+                        <div class="timetable__content__task__text">' . $nextTask->timetableText . '</div>
+                    </div>';
+            }
+            if ($nextTask2) {
+                $content .= '<div class="timetable__panel__nexttask">
+                        <div class="timetable__content__task__time">' . $nextTask2->timetableTimeStart . ' - ' . $nextTask2->timetableTimeEnd . '</div>
+                        <div class="timetable__content__task__text">' . $nextTask2->timetableText . '</div>
+                    </div>';
+            }
+            return '<div class="panel-item-area" id="timetablePanelContentArea">
+                    ' . $content . '
                 </div>';
         }
     }
@@ -1046,7 +1179,7 @@ class TaskBoard
             $panelCounter++;
         }
         if ($panelData->panelQueue == 'true') {
-            $panelHTML .= $this->printQueue();
+            $panelHTML .= $this->printPanel('queue');
             $panelCounter++;
         }
         if ($panelData->panelWeather == 'true') {
@@ -1066,31 +1199,6 @@ class TaskBoard
             ';
             echo $html;
         }
-    }
-
-    private function printQueue()
-    {
-        return '
-        <div class="panel-item">
-            <div class="panel-item-content">
-                <div class="panel-item-top-bar">
-                    <div class="top-bar-left">
-                        <p id="queuePanelTitle"></p>
-                    </div>
-                    <div class="top-bar-right">
-                        <input type="text" id="queueItem" name="queueItem">
-                        <input type="checkbox" id="queueHighprio" name="queueHighprio" style="outline: 1px solid red;">
-                        <input type="submit" id="queueSubmit "name="add-queue-submit" value="Add" onclick="panels.addQueueTask()"/>
-                        <div class="panel_item_top_bar_unfold_button" id="queueUnfoldButton" onclick="toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\')">
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-item-area" id="queuePanelContentArea">
-                    <script>panels.printQueueTasks()</script>
-                </div>
-            </div>
-        </div>';
     }
 
     private function printSubtaskPanel($id)
@@ -1392,84 +1500,6 @@ class TaskBoard
         </script>";
     }
 
-    private function printTimetablePanel($timetableID)
-    {
-        if ($timetableID) {
-            $tasks = $this->mysqliSelectFetchArray(
-                "SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableDate = ? ORDER BY timetableTimeStart",
-                $timetableID,
-                date('Y-m-d')
-            );
-            if ($tasks) {
-                $currentTime = date('H:i');
-                $nextTask = null;
-                for ($i = 0; $i < count($tasks); $i++) {
-                    if ($currentTime > $tasks[$i]->timetableTimeEnd) {
-                        $prevTask = $tasks[$i];
-                    }
-                    if ($currentTime > $tasks[$i]->timetableTimeStart && $currentTime < $tasks[$i]->timetableTimeEnd) {
-                        $activeTask = $tasks[$i];
-                    }
-                    if ($currentTime < $tasks[$i]->timetableTimeStart && !$nextTask) {
-                        $nextTask = $tasks[$i];
-                        if ($i < count($tasks) - 1) $nextTask2 = $tasks[$i + 1];
-                    }
-                }
-            }
-        }
-        $content = '';
-        if ($prevTask) {
-            $content .= '<div class="timetable__panel__prevtask">
-                    <div class="timetable__content__task__time">' . $prevTask->timetableTimeStart . ' - ' . $prevTask->timetableTimeEnd . '</div>
-                    <div class="timetable__content__task__text">' . $prevTask->timetableText . '</div>
-                </div>';
-        }
-        if ($activeTask) {
-            $content .= '<div class="timetable__panel__activetask">
-                    <div class="timetable__content__task__time">' . $activeTask->timetableTimeStart . ' - ' . $activeTask->timetableTimeEnd . '</div>
-                    <div class="timetable__content__task__text">' . $activeTask->timetableText . '</div>
-                </div>';
-        }
-        if ($nextTask) {
-            $content .= '<div class="timetable__panel__nexttask">
-                    <div class="timetable__content__task__time">' . $nextTask->timetableTimeStart . ' - ' . $nextTask->timetableTimeEnd . '</div>
-                    <div class="timetable__content__task__text">' . $nextTask->timetableText . '</div>
-                </div>';
-        }
-        if ($nextTask2) {
-            $content .= '<div class="timetable__panel__nexttask">
-                    <div class="timetable__content__task__time">' . $nextTask2->timetableTimeStart . ' - ' . $nextTask2->timetableTimeEnd . '</div>
-                    <div class="timetable__content__task__text">' . $nextTask2->timetableText . '</div>
-                </div>';
-        }
-
-        $html = '
-        <div class="panel-item">
-            <div class="panel-item-content">
-                <div class="panel-item-top-bar">
-                    <div class="top-bar-left">
-                        <p>Timetable (KW' . date("W") . ')</p>
-                    </div>
-                    <div class="top-bar-right">
-                        <div class="panel-item-top-bar-button" id="timetableCurrentWeekButton" onclick="timetable.timetablePopup(\'current\')">
-                            Current week
-                        </div>
-                        <div class="panel-item-top-bar-button" id="timetableNextWeekButton" onclick="timetable.timetablePopup(\'next\')">
-                            Next week
-                        </div>
-                        <div class="panel_item_top_bar_unfold_button" id="timetableUnfoldButton" onclick="toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\')">
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-item-area" id="timetablePanelContentArea">
-                    ' . $content . '
-                </div>
-            </div>
-        </div>';
-        return $html;
-    }
-
     public function printUserDetails($userID)
     {
         $userData = $this->mysqliSelectFetchObject("SELECT * FROM users WHERE userID = ?", $userID);
@@ -1544,57 +1574,6 @@ class TaskBoard
                 <p>Verify your mail please!</p>
             </div>
         </a>';
-    }
-
-    private function printWeatherPanel($city)
-    {
-        $prevRows = '';
-        for ($i = 1; $i < 6; $i++) {
-            $prevRows .= '
-            <div class="weather__block">
-              <div class="weather__date" id="weatherPrevDate' . $i . '"></div>
-              <img src="" alt="" id="weatherPrevIcon' . $i . '" />
-              <div class="weather__temp" id="weatherPrevTemp' . $i . '"></div>
-            </div>';
-        }
-        $html = '
-        <div class="panel-item">
-            <div class="panel-item-top-bar">
-                <div class="top-bar-left">
-                    <p>Weather</p>
-                </div>
-                <div class="panel_item_top_bar_unfold_button" id="weatherUnfoldButton" onclick="toggleUnfoldArea(\'weatherPanelContentArea\',\'weatherUnfoldButton\')">
-                   <i class="fa fa-caret-down" aria-hidden="true"></i>
-                </div>
-            </div>
-            <div class="weather__panel__content" id="weatherPanelContentArea">
-                <div class="weather">
-                    <div class="weather__input">
-                        <form action="' . DIR_SYSTEM . 'php/action.php?action=updateWeatherCity" autocomplete="off" method="post" >
-                            <input type="text" name="city" placeholder="cityname">
-                            <input type="submit" name="update-weather-submit" value="Update" />
-                        </form>
-                    </div>
-                    <h2 class="weather__city"><h2>
-                    <div class="weather__block">
-                      <img src="" alt="" class="weather__icon" />
-                      <div class="weather__temp"></div>
-                    </div>
-                    <div class="weather__description"></div>
-                    <div class="weather__humidity"></div>
-                    <div class="weather__wind"></div>
-                </div>
-                <div class="weather__forecast">
-                    <h2 class="weather__city">5-Day Forecast<h2>
-                ' . $prevRows . '
-                </div>
-            </div>
-        </div>
-        <script>
-        weather.fetchWeather(\'' . $city . '\')
-        weather.fetchForecast(\'' . $city . '\')
-        </script>';
-        return $html;
     }
 
     private function pwResetMailHTML($verifyUrl)

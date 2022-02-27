@@ -1,12 +1,12 @@
 let panels = {
-    getEntrys: async (action) => {
+    getEntrys: async function (action) {
         const response = await fetch(
             `${DIR_SYSTEM}server/request.php?action=${action}`
         )
         return await response.json()
     },
     // Queue
-    printQueueTasks: async (queueTasks = '') => {
+    printQueueTasks: async function (queueTasks = '') {
         if (queueTasks == '') queueTasks = await this.getEntrys('getQueueTasks')
         var html = '', toggle = false, title = ''
         if (queueTasks) {
@@ -34,7 +34,7 @@ let panels = {
         )
         this.printQueueTasks(await response.json())
     },
-    addQueueTask: async () => {
+    addQueueTask: async function () {
         var url = `${DIR_SYSTEM}server/request.php?action=addQueueTask`
         var formData = new FormData()
         formData.append('text', document.getElementById("queueItem").value)
@@ -47,9 +47,8 @@ let panels = {
         this.printQueueTasks(await response.json())
     },
     // Appointment
-    printAppointments: async (appointments = '') => {
+    printAppointments: async function (appointments = '') {
         if (appointments == '') appointments = await this.getEntrys('getAppointments')
-        console.log(appointments)
         var html = '', toggle = false, title = ''
         if (appointments) {
             appointments.forEach(entry => {
@@ -83,7 +82,7 @@ let panels = {
         }
         document.getElementById('appointmentPanelTitle').innerHTML = title
     },
-    openEditAppointmentForm: (id, title, date) => {
+    openEditAppointmentForm: function (id, title, date) {
         html = `<div class="modal-header">Update Appointment<i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i></div>
             <table style="margin:0 auto 15px auto;">
                 <tr>
