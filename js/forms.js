@@ -19,7 +19,7 @@ const printGroupDropdown = async (selectedGroupId) => {
   return `<td>Group:</td>
     <td>
         <div class="select">
-            <select name="groupID">
+            <select id="selectGroupID" name="groupID">
             ${groupsHtml}      
             </select>
         </div>
@@ -173,44 +173,6 @@ function printGroupForm() {
   }
 }
 
-// MOTD Form
-const openMotdForm = async () => {
-  var html = '\
-      '+ addHeaderDynamicForm('Create Message of the Day') + '\
-      <form action="'+ DIR_SYSTEM + 'php/action.php?action=createMotd" autocomplete="off" method="post" >\
-          <table style="margin:0 auto 15px auto;">\
-              <tr>\
-              '+ await printGroupDropdown() + '\
-              </tr>\
-          </table>\
-          <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
-          <input class="submit-login" type="submit" name="createmotd-submit" value="Create" />\
-      </form>';
-  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-  closeDynamicFormListener();
-}
-
-// Appointment Form
-const openAppointmentForm = async () => {
-  var html = '\
-      '+ addHeaderDynamicForm('Create Appointment') + '\
-      <form action="'+ DIR_SYSTEM + 'php/action.php?action=createAppointment" autocomplete="off" method="post" >\
-          <table style="margin:0 auto 15px auto;">\
-              <tr>\
-                  '+ await printGroupDropdown() + '\
-                  <td>Date:</td>\
-                  <td>\
-                      <input type="date" name="date">\
-                  </td>\
-              </tr>\
-          </table>\
-          <textarea class="input-login" placeholder="name" name="title" rows="1"></textarea>\
-          <input class="submit-login" type="submit" name="createappointment-submit" value="Create" />\
-      </form>';
-  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-  closeDynamicFormListener();
-}
-
 // Update Task Form
 const openUpdateTaskForm = async () => {
   var taskJsonString = localStorage.getItem('TaskData'), dropDowns = '';
@@ -248,6 +210,12 @@ function showDynamicForm(container, html) {
   container.innerHTML = html;
   document.querySelector('html').style.overflow = 'hidden';
   document.getElementById('bg-modal-dynamicform').style.display = 'flex';
+}
+
+function hideDynamicForm() {
+  document.getElementById("dynamic-modal-content").innerHTML = ''
+  document.getElementById('bg-modal-dynamicform').style.display = 'none';
+  document.querySelector('html').style.overflow = 'auto';
 }
 
 function closeDynamicFormListener() {

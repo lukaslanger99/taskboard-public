@@ -126,6 +126,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->deleteAppointment($userID, $_GET['id']));
         break;
 
+    case 'addAppointment':
+        header('Content-Type: application/json');
+        echo json_encode($rh->addAppointment($userID, $_POST['group'], $_POST['date'], $_POST['title']));
+        break;
+
     case 'getMotd':
         header('Content-Type: application/json');
         echo json_encode($rh->getMotd($userID));
@@ -139,6 +144,11 @@ switch ($_GET['action']) {
     case 'deleteMotd':
         header('Content-Type: application/json');
         echo json_encode($rh->deleteMotd($userID, $_GET['id']));
+        break;
+
+    case 'addMotd':
+        header('Content-Type: application/json');
+        echo json_encode($rh->addMotd($userID, $_POST['group'], $_POST['title']));
         break;
 
     default:

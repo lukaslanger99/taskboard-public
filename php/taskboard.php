@@ -984,7 +984,7 @@ class TaskBoard
     {
         if ($type == 'appointment') {
             $createButtonID = 'createAppointmentButton';
-            $onclick = 'openAppointmentForm()';
+            $onclick = 'panels.openAddAppointmentForm()';
             $detailsActionName = 'appointmentDetails';
             $unfoldButtonID = 'appointmentUnfoldButton';
             $contentAreaID = 'appointmentPanelContentArea';
@@ -992,7 +992,7 @@ class TaskBoard
             $title = '';
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
-            $onclick = 'openMotdForm()"';
+            $onclick = 'panels.openAddMotdForm()"';
             $detailsActionName = 'motdDetails';
             $unfoldButtonID = 'motdUnfoldButton';
             $contentAreaID = 'motdPanelContentArea';

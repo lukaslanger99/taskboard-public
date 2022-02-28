@@ -50,22 +50,6 @@
             }
             break;
 
-        case 'createAppointment':
-            if (isset($_POST['createappointment-submit'])) {
-                if (empty($_POST['date']) || empty($_POST['title'])) {
-                    $taskBoard->locationIndex("?error=emptyfields");
-                }
-                $title = str_replace(array("\r","\n")," ", $_POST['title']);
-                $date = $_POST['date'];
-                $groupID = (int) $_POST['groupID'];
-                $sql = "INSERT INTO messages 
-                (messageOwner, messageGroup, messageType, messageTitle, messageDate) 
-                VALUES (?, ?, 'appointment', ?, ?);";
-                $taskBoard->mysqliQueryPrepared($sql, $userID, $groupID, $title, $date);
-                $taskBoard->locationIndex("?success=appointmentcreated");
-            }
-            break;
-
         case 'createComment':
             if (isset($_POST['createcomment-submit'])) {
                 if (empty($_POST['description'])) {
@@ -110,19 +94,6 @@
                     $url = DOMAIN . $_SESSION['enteredUrl']."?success=groupcreated";
                 }
                 $taskBoard->localstorageGroupUpdate($url);
-            }
-            break;
-
-        case 'createMotd':
-            if (isset($_POST['createmotd-submit'])) {
-                if (empty($_POST['title'])) {
-                    $taskBoard->locationIndex("?error=emptyfields");
-                }
-                $title = str_replace(array("\r","\n")," ", $_POST['title']);
-                $groupID = (int) $_POST['groupID'];
-                $sql = "INSERT INTO messages (messageOwner, messageGroup, messageType, messageTitle) VALUES (?, ?, 'motd', ?);";
-                $taskBoard->mysqliQueryPrepared($sql, $userID, $groupID, $title);
-                $taskBoard->locationIndex("?success=motdcreated");
             }
             break;
         
@@ -329,14 +300,6 @@
                 $taskBoard->mysqliQueryPrepared("DELETE FROM groupaccess WHERE userID = ? AND groupID = ?", $_GET['userID'], $groupID);
                 $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$groupID&success=removeduser");
             }
-            break;
-
-        case 'repeatingTaskDone':
-            // if (isset($_POST['rtdone-submit'])) {
-                $date = date('Y-m-d');
-                $sql = "UPDATE messages SET messageState = '$date' WHERE messageID = ?";
-                $taskBoard->mysqliQueryPrepared($sql, $id);
-            // }
             break;
         
         case 'update':

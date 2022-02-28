@@ -35,16 +35,19 @@ let panels = {
         this.printQueueTasks(await response.json())
     },
     addQueueTask: async function () {
-        var url = `${DIR_SYSTEM}server/request.php?action=addQueueTask`
-        var formData = new FormData()
-        formData.append('text', document.getElementById("queueItem").value)
-        formData.append('check', document.getElementById("queueHighprio").checked)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        document.getElementById("queueItem").value = ''
-        document.getElementById("queueHighprio").checked = false
-        this.printQueueTasks(await response.json())
+        var text = document.getElementById("queueItem").value
+        if (text) {
+            var url = `${DIR_SYSTEM}server/request.php?action=addQueueTask`
+            var formData = new FormData()
+            formData.append('text', text)
+            formData.append('check', document.getElementById("queueHighprio").checked)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            document.getElementById("queueItem").value = ''
+            document.getElementById("queueHighprio").checked = false
+            this.printQueueTasks(await response.json())
+        }
     },
     // Appointment
     printAppointments: async function (appointments = '') {
@@ -82,6 +85,40 @@ let panels = {
         }
         document.getElementById('appointmentPanelTitle').innerHTML = title
     },
+    openAddAppointmentForm: async function () {
+        const groups = await printGroupDropdown()
+        html = `${addHeaderDynamicForm('Create Appointment')}
+            <table style="margin:0 auto 15px auto;">
+                <tr>
+                    ${groups}
+                    <td>Date:</td>
+                    <td>
+                        <input type="date" id="appointmentDate" name="date">
+                    </td>
+                </tr>
+            </table>
+            <textarea class="input-login" id="appointmentTitle" placeholder="name" name="title" rows="1"></textarea>
+            <input class="submit-login" type="submit" value="Create" onclick="panels.addAppointment()" />`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
+    addAppointment: async function () {
+        var group = document.getElementById("selectGroupID").value
+        var date = document.getElementById("appointmentDate").value
+        var title = document.getElementById("appointmentTitle").value
+        if (group && date && title) {
+            var url = `${DIR_SYSTEM}server/request.php?action=addAppointment`
+            var formData = new FormData()
+            formData.append('group', group)
+            formData.append('date', date)
+            formData.append('title', title)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            hideDynamicForm()
+            this.printAppointments(await response.json())
+        }
+    },
     openEditAppointmentForm: function (id, title, date) {
         html = `<div class="modal-header">Update Appointment<i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i></div>
             <table style="margin:0 auto 15px auto;">
@@ -98,17 +135,19 @@ let panels = {
         closeDynamicFormListener()
     },
     editAppointment: async function (id) {
-        var url = `${DIR_SYSTEM}server/request.php?action=editAppointment&id=${id}`
-        var formData = new FormData()
-        formData.append('date', document.getElementById("appointmentDate").value)
-        formData.append('title', document.getElementById("appointmentTitle").value)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        document.getElementById("dynamic-modal-content").innerHTML = ''
-        document.getElementById('bg-modal-dynamicform').style.display = 'none';
-        document.querySelector('html').style.overflow = 'auto';
-        this.printAppointments(await response.json())
+        var date = document.getElementById("appointmentDate").value
+        var title = document.getElementById("appointmentTitle").value
+        if (date && title) {
+            var url = `${DIR_SYSTEM}server/request.php?action=editAppointment&id=${id}`
+            var formData = new FormData()
+            formData.append('date', date)
+            formData.append('title', title)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            hideDynamicForm()
+            this.printAppointments(await response.json())
+        }
     },
     deleteAppointment: async function (id) {
         var a = confirm("Are you sure you want to delete this appointment?");
@@ -153,6 +192,34 @@ let panels = {
         }
         document.getElementById('motdPanelTitle').innerHTML = title
     },
+    openAddMotdForm: async function() {
+        const groups = await printGroupDropdown()
+        var html = `${addHeaderDynamicForm('Create Message of the Day')}
+            <table style="margin:0 auto 15px auto;">
+                <tr>
+                ${groups}
+                </tr>
+            </table>
+            <textarea class="input-login" id="motdTitle" placeholder="name" name="title" rows="1"></textarea>
+            <input class="submit-login" type="submit" value="Create" onclick="panels.addMotd()" />`
+    showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+    closeDynamicFormListener()
+    },
+    addMotd: async function() {
+        var group = document.getElementById("selectGroupID").value
+        var title = document.getElementById("motdTitle").value
+        if (group && title) {
+            var url = `${DIR_SYSTEM}server/request.php?action=addMotd`
+            var formData = new FormData()
+            formData.append('group', group)
+            formData.append('title', title)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            hideDynamicForm()
+            this.printMotd(await response.json())
+        }
+    },
     openEditMotdForm: function (id, title) {
         html = `<div class="modal-header">Edit Message<i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i></div>
             <textarea class="input-login" id="motdTitle" type="text" name="title" cols="40" rows="1">${title}</textarea>
@@ -161,16 +228,17 @@ let panels = {
         closeDynamicFormListener()
     },
     editMotd: async function (id) {
-        var url = `${DIR_SYSTEM}server/request.php?action=editMotd&id=${id}`
-        var formData = new FormData()
-        formData.append('title', document.getElementById("motdTitle").value)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        document.getElementById("dynamic-modal-content").innerHTML = ''
-        document.getElementById('bg-modal-dynamicform').style.display = 'none';
-        document.querySelector('html').style.overflow = 'auto';
-        this.printMotd(await response.json())
+        var title = document.getElementById("motdTitle").value
+        if (title) {
+            var url = `${DIR_SYSTEM}server/request.php?action=editMotd&id=${id}`
+            var formData = new FormData()
+            formData.append('title', title)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            hideDynamicForm()
+            this.printMotd(await response.json())
+        }
     },
     deleteMotd: async function (id) {
         var a = confirm("Are you sure you want to delete this motd?");
