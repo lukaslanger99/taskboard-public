@@ -125,81 +125,6 @@
                 $taskBoard->locationIndex("?success=motdcreated");
             }
             break;
-
-        case 'createRepeatingtask':
-            if (isset($_POST['creatert-submit'])) {
-                $title = str_replace(array("\r","\n")," ", $_POST['title']);
-                if ($_POST['taskEverySecondDay']) {
-                    $currentDay = $taskBoard->getWeekday();
-                    if ($currentDay == 'MON' || $currentDay == 'WED' || $currentDay == 'FRI' || $currentDay == 'SUN') {
-                        if ($taskBoard->getWeek() == 'odd') {
-                            if ($_POST['taskStartToday']) {
-                                $state1 = 'odd';
-                                $state2 = 'even';
-                            } else {
-                                $state1 = 'even';
-                                $state2 = 'odd';
-                            }
-                        } else {
-                            if ($_POST['taskStartToday']) {
-                                $state1 = 'even';
-                                $state2 = 'odd';
-                            } else {
-                                $state1 = 'odd';
-                                $state2 = 'even';
-                            }
-                        }
-                    } else {
-                        if ($taskBoard->getWeek() == 'odd') {
-                            if ($_POST['taskStartToday']) {
-                                $state1 = 'even';
-                                $state2 = 'odd';
-                            } else {
-                                $state1 = 'odd';
-                                $state2 = 'even';
-                            }
-                        } else {
-                            if ($_POST['taskStartToday']) {
-                                $state1 = 'odd';
-                                $state2 = 'even';
-                            } else {
-                                $state1 = 'even';
-                                $state2 = 'odd';
-                            }
-                        }
-                    }
-                    $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
-                            VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Mon', $state1);
-                            $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
-                            VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Wed', $state1);
-                            $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
-                            VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Fri', $state1);
-                    $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
-                            VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Sun', $state1);
-
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Tue', $state2);
-                    $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
-                            VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Thu', $state2);
-                    $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) 
-                            VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, 'Sat', $state2);
-                } else {
-                    if (empty($_POST['title'])) {
-                        $taskBoard->locationIndex("?error=emptyfields");
-                    }
-                    $weekday = $_POST['weekday'];
-                    $quantity = $_POST['quantity'];
-                    $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messageWeekday, messageQuantity) VALUES (?, 'repeatingtask', ?, ?, ?);";
-                    $taskBoard->mysqliQueryPrepared($sql, $userID, $title, $weekday, $quantity);
-                }
-                $taskBoard->locationIndex("?success=rtcreated");
-            }
-            break;
         
         case 'createSubtask':
             if (isset($_POST['createtask-submit'])) {
@@ -466,16 +391,6 @@
             }
             break;
 
-        case 'updateAppointment':
-            if (isset($_POST['updatemessage-submit'])) {
-                $title = $_POST['title'];
-                $date = $_POST['date'];
-                $sql = "UPDATE messages SET messageTitle = ?, messageDate = ? WHERE messageID = ?;";
-                $taskBoard->mysqliQueryPrepared($sql , $title, $date, $id);
-                $taskBoard->locationIndex("?success=updatedmessage");
-            }
-            break;
-
         case 'updateComment':
             if (isset($_POST['updatecomment-submit'])) {
                 $taskBoard->mysqliQueryPrepared("UPDATE comments SET commentDescription = ? WHERE commentID = ?", $_POST['text'], $_GET['commentID']);
@@ -495,26 +410,6 @@
                 $sql = "UPDATE groups SET groupName = ?, groupPriority = ?, groupArchiveTime = ? WHERE groupID = ?";
                 $taskBoard->mysqliQueryPrepared($sql, $name, $priority, $archiveTime, $id);
                 $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$id."&success=updatedgroup");
-            }
-            break;
-
-        case 'updateMessage':
-            if (isset($_POST['updatemessage-submit'])) {
-                $title = $_POST['title'];
-                $sql = "UPDATE messages SET messageTitle = ? WHERE messageID = ?;";
-                $taskBoard->mysqliQueryPrepared($sql , $title, $id);
-                $taskBoard->locationIndex("?success=updatedmessage");
-            }
-            break;
-
-        case 'updateRT':
-            if (isset($_POST['updatemessage-submit'])) {
-                $title = $_POST['title'];
-                $weekday = $_POST['weekday'];
-                $quantity = $_POST['quantity'];
-                $sql = "UPDATE messages SET messageTitle = ?, messageWeekday = ?, messageQuantity = ? WHERE messageID = ?;";
-                $taskBoard->mysqliQueryPrepared($sql , $title, $weekday, $quantity, $id);
-                $taskBoard->locationIndex("?success=updatedmessage");
             }
             break;
         

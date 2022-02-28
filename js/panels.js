@@ -52,15 +52,15 @@ let panels = {
         var html = '', toggle = false, title = ''
         if (appointments) {
             appointments.forEach(entry => {
-                html += `<div class="${(toggle) ? `panel-item-content-item` : `panel-item-content-item__secondary`}"">
-                        <div class="${(toggle) ? `panel-item-message-title__redrounded` : `panel-item-message-title`}">
-                            ${entry.messageDate}-${entry.messageTitleFormated}
+                html += `<div class="${(toggle) ? `panel-item-content-item` : `panel-item-content-item__secondary`}">
+                        <div class="panel-item-message-title">
+                            ${entry.messageDate} - ${entry.messageTitleFormated}
                             <small>${entry.messageOwnerName} - ${entry.messageGroupName}</small>
                         </div>
-                        ${(entry.messageGroupOwnerCheck) ?
+                        ${(entry.messagePermission) ?
                         `<div 
                             class="panel-item-delete-button" 
-                            onclick="panels.openEditAppointmentForm(${entry.messageID},'${entry.messageTitle}','${entry.messageDateFormFormated}')"
+                            onclick="panels.openEditAppointmentForm(${entry.messageID},'${entry.messageTitle}','${entry.messageDateFormFormat}')"
                             >
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </div>
@@ -98,9 +98,87 @@ let panels = {
         closeDynamicFormListener()
     },
     editAppointment: async function (id) {
-
+        var url = `${DIR_SYSTEM}server/request.php?action=editAppointment&id=${id}`
+        var formData = new FormData()
+        formData.append('date', document.getElementById("appointmentDate").value)
+        formData.append('title', document.getElementById("appointmentTitle").value)
+        const response = await fetch(
+            url, { method: 'POST', body: formData }
+        )
+        document.getElementById("dynamic-modal-content").innerHTML = ''
+        document.getElementById('bg-modal-dynamicform').style.display = 'none';
+        document.querySelector('html').style.overflow = 'auto';
+        this.printAppointments(await response.json())
     },
     deleteAppointment: async function (id) {
-
+        var a = confirm("Are you sure you want to delete this appointment?");
+        if (a == true) {
+            const response = await fetch(
+                `${DIR_SYSTEM}server/request.php?action=deleteAppointment&id=${id}`
+            )
+            this.printAppointments(await response.json())
+        }
+    },
+    printMotd: async function (motd = '') {
+        if (motd == '') motd = await this.getEntrys('getMotd')
+        var html = '', toggle = false, title = ''
+        if (motd) {
+            motd.forEach(entry => {
+                html += `<div class="${(toggle) ? `panel-item-content-item` : `panel-item-content-item__secondary`} ${(entry.messageRedRounded) ? `redrounded` : ``}">
+                        <div class="panel-item-message-title">
+                            ${entry.messageDate} - ${entry.messageTitleFormated}
+                            <small>${entry.messageOwnerName} - ${entry.messageGroupName}</small>
+                        </div>
+                        ${(entry.messagePermission) ?
+                        `<div 
+                            class="panel-item-delete-button" 
+                            onclick="panels.openEditMotdForm(${entry.messageID},'${entry.messageTitle}')"
+                            >
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </div>
+                            <div class="panel-item-delete-button" onclick="panels.deleteMotd(${entry.messageID})">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </div>`
+                        :
+                        ``
+                    }   
+                    </div>`
+                toggle = !toggle
+            })
+            document.getElementById('motdPanelContentArea').innerHTML = html
+            title = `Messages of the Day (${motd.length} MOTD)`
+        } else {
+            title = `Messages of the Day`
+            document.getElementById('motdPanelContentArea').innerHTML = ''
+        }
+        document.getElementById('motdPanelTitle').innerHTML = title
+    },
+    openEditMotdForm: function (id, title) {
+        html = `<div class="modal-header">Edit Message<i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i></div>
+            <textarea class="input-login" id="motdTitle" type="text" name="title" cols="40" rows="1">${title}</textarea>
+            <input class="submit-login" type="submit" value="Update" onclick="panels.editMotd(${id})"/>`;
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
+    editMotd: async function (id) {
+        var url = `${DIR_SYSTEM}server/request.php?action=editMotd&id=${id}`
+        var formData = new FormData()
+        formData.append('title', document.getElementById("motdTitle").value)
+        const response = await fetch(
+            url, { method: 'POST', body: formData }
+        )
+        document.getElementById("dynamic-modal-content").innerHTML = ''
+        document.getElementById('bg-modal-dynamicform').style.display = 'none';
+        document.querySelector('html').style.overflow = 'auto';
+        this.printMotd(await response.json())
+    },
+    deleteMotd: async function (id) {
+        var a = confirm("Are you sure you want to delete this motd?");
+        if (a == true) {
+            const response = await fetch(
+                `${DIR_SYSTEM}server/request.php?action=deleteMotd&id=${id}`
+            )
+            this.printMotd(await response.json())
+        }
     }
 }

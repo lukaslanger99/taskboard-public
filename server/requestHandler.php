@@ -272,11 +272,11 @@ class RequestHandler
                     unset($appointment);
                 } 
                 $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
+                $appointment->messageDateFormFormat = date("Y-m-d", strtotime($appointment->messageDate));
                 $appointment->messageDate = date("d.m.y", strtotime($appointment->messageDate));
                 $appointment->messageOwnerName = $this->getUsernameByID($appointment->messageOwner);
                 $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
                 $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
-                $appointment->messageDateFormFormat = date("Y-m-d", strtotime($appointment->messageDate));
                 $appointment->messagePermission = ($userID == $appointment->messageGroup || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
             }
             return $data;
@@ -284,12 +284,66 @@ class RequestHandler
         return 0;
     }
 
-    public function getMotd() {
+    public function editAppointment($userID, $id, $title, $date) {
+        $message = $this->mysqliSelectFetchObject("SELECT messageOwner, messageGroup FROM messages WHERE messageID = ?",  $id);
+        if ($message->messageOwner == $userID || $this->groupOwnerCheck($message->messageGroup, $userID)) {
+            $sql = "UPDATE messages SET messageTitle = ?, messageDate = ? WHERE messageID = ?;";
+            $this->mysqliQueryPrepared($sql , $title, $date, $id);
+        }
+        return $this->getAppointments($userID);
+    }
+
+    public function deleteAppointment($userID, $id) {
+        $message = $this->mysqliSelectFetchObject("SELECT messageOwner, messageGroup FROM messages WHERE messageID = ?",  $id);
+        if ($message->messageOwner == $userID || $this->groupOwnerCheck($message->messageGroup, $userID)) {
+            $sql = "DELETE FROM messages WHERE messageID = ?";
+            $this->mysqliQueryPrepared($sql, $id);
+        }
+        return $this->getAppointments($userID);
+    }
+
+    public function getMotd($userID) {
         $sql = "SELECT m.* 
         FROM messages m
             LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
         WHERE  ga.userID = ? AND m.messageType = 'motd'
         ORDER BY m.messageDate DESC, messageID DESC";
+                $data = $this->mysqliSelectFetchArray($sql, $userID);
+                if ($data) {
+                    foreach ($data as $appointment) {
+                        if ($this->getDateDifferenceDaysOnly($appointment->messageDate) > 0) {
+                            $sql = "DELETE FROM messages WHERE messageID = ?";
+                            $this->mysqliQueryPrepared($sql, $appointment->messageID);
+                            unset($appointment);
+                        } 
+                        $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
+                        $appointment->messageDate = date("d.m.y", strtotime($appointment->messageDate));
+                        $appointment->messageOwnerName = $this->getUsernameByID($appointment->messageOwner);
+                        $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
+                        $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
+                        $appointment->messagePermission = ($userID == $appointment->messageGroup || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+                    }
+                    return $data;
+                }
+                return 0;
+    }
+
+    public function editMotd($userID, $id, $title) {
+        $message = $this->mysqliSelectFetchObject("SELECT messageOwner, messageGroup FROM messages WHERE messageID = ?",  $id);
+        if ($message->messageOwner == $userID || $this->groupOwnerCheck($message->messageGroup, $userID)) {
+            $sql = "UPDATE messages SET messageTitle = ? WHERE messageID = ?;";
+            $this->mysqliQueryPrepared($sql , $title, $id);
+        }
+        return $this->getMotd($userID);
+    }
+
+    public function deleteMotd($userID, $id) {
+        $message = $this->mysqliSelectFetchObject("SELECT messageOwner, messageGroup FROM messages WHERE messageID = ?",  $id);
+        if ($message->messageOwner == $userID || $this->groupOwnerCheck($message->messageGroup, $userID)) {
+            $sql = "DELETE FROM messages WHERE messageID = ?";
+            $this->mysqliQueryPrepared($sql, $id);
+        }
+        return $this->getMotd($userID);
     }
 
     private function getUsernameByID($userID)
