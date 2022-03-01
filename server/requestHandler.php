@@ -366,6 +366,21 @@ class RequestHandler
         return $this->getMotd($userID);
     }
 
+    public function toggleUnfoldPanel($userID, $type, $checked) {
+        if ($type == 'motd') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelMOTDUnfolded = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'appointment') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelAppointmentUnfolded = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'queue') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelQueueUnfolded = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'weather') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherUnfolded = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'timetable') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelTimetableUnfolded = ? WHERE userID = ?", $checked, $userID);
+        }
+        return 1;
+    }
+
     private function getUsernameByID($userID)
     {
         if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') {

@@ -252,3 +252,9 @@ addCheckboxListener("appointmentpanel-checkbox", "toggleAppointmentpanel"); //Ap
 addCheckboxListener("queuepanel-checkbox", "toggleQueuepanel"); //Queue checkbox
 addCheckboxListener("weatherpanel-checkbox", "toggleWeatherpanel"); //Weather checkbox
 addCheckboxListener("timetablepanel-checkbox", "toggleTimetablepanel"); //Timetable checkbox
+
+panels.toggleUnfoldCheckboxListener('motdUnfoldedCheckbox', 'motd') // Unfold MOTD
+panels.toggleUnfoldCheckboxListener('appointmentUnfoldedCheckbox', 'appointment') // Unfold Appointment
+panels.toggleUnfoldCheckboxListener('queueUnfoldedCheckbox', 'queue') // Unfold Queue
+panels.toggleUnfoldCheckboxListener('weatherUnfoldedCheckbox', 'weather') // Unfold Weather
+panels.toggleUnfoldCheckboxListener('timetableUnfoldedCheckbox', 'timetable') // Unfold Timetable

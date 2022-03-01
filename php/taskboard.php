@@ -975,9 +975,9 @@ class TaskBoard
         echo $html;
     }
 
-    private function printPanel($type, $spec = '')
+    private function printPanel($type, $unfolded, $spec = '')
     {
-        return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type, $spec) . '</div>';
+        return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type, $unfolded, $spec) . '</div>';
     }
 
     private function panelHeader($type)
@@ -1058,20 +1058,32 @@ class TaskBoard
         </div>';
     }
 
-    private function panelContent($type, $spec)
+    private function panelContent($type, $unfolded, $spec)
     {
         if ($type == 'appointment') {
+            if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'appointmentPanelContentArea\',\'appointmentUnfoldButton\', \'true\')';
             return '<div class="panel-item-area" id="appointmentPanelContentArea">
-                    <script>panels.printAppointments()</script>
+                    <script>
+                        panels.printAppointments()
+                        ' . $unfoldPanel . '
+                    </script>
                 </div>';
         } else if ($type == 'motd') {
             $this->mysqliQueryPrepared("UPDATE users SET userLastMotd = CURRENT_TIMESTAMP WHERE userID = ?", $_SESSION['userID']);
+            if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'motdPanelContentArea\',\'motdUnfoldButton\', \'true\')';
             return '<div class="panel-item-area" id="motdPanelContentArea">
-                    <script>panels.printMotd()</script>
+                    <script>
+                        panels.printMotd()
+                        ' . $unfoldPanel . '
+                        </script>
                 </div>';
         } else if ($type == 'queue') {
+            if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\', \'true\')';
             return '<div class="panel-item-area" id="queuePanelContentArea">
-                    <script>panels.printQueueTasks()</script>
+                    <script>
+                        panels.printQueueTasks()
+                    ' . $unfoldPanel . '
+                    </script>
                 </div>';
         } else if ($type == 'weather') {
             $prevRows = '';
@@ -1083,6 +1095,7 @@ class TaskBoard
                   <div class="weather__temp" id="weatherPrevTemp' . $i . '"></div>
                 </div>';
             }
+            if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'weatherPanelContentArea\',\'weatherUnfoldButton\', \'true\')';
             return '<div class="weather__panel__content" id="weatherPanelContentArea">
                     <div class="weather">
                         <div class="weather__input">
@@ -1105,8 +1118,9 @@ class TaskBoard
                     ' . $prevRows . '
                     </div>
                     <script>
-                    weather.fetchWeather(\'' . $spec . '\')
-                    weather.fetchForecast(\'' . $spec . '\')
+                        weather.fetchWeather(\'' . $spec . '\')
+                        weather.fetchForecast(\'' . $spec . '\')
+                        ' . $unfoldPanel . '
                     </script>
                 </div>';
         } else if ($type == 'timetable') {
@@ -1158,8 +1172,10 @@ class TaskBoard
                         <div class="timetable__content__task__text">' . $nextTask2->timetableText . '</div>
                     </div>';
             }
+            if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\', \'true\')';
             return '<div class="panel-item-area" id="timetablePanelContentArea">
                     ' . $content . '
+                    <script>' . $unfoldPanel . '</script>
                 </div>';
         }
     }
@@ -1171,24 +1187,24 @@ class TaskBoard
         $panelHTML = '';
         $panelCounter = 0;
         if ($panelData->panelMOTD == 'true') {
-            $panelHTML .= $this->printPanel('motd');
+            $panelHTML .= $this->printPanel('motd', $panelData->panelMOTDUnfolded);
             $panelCounter++;
         }
         if ($panelData->panelAppointment == 'true') {
-            $panelHTML .= $this->printPanel('appointment');
+            $panelHTML .= $this->printPanel('appointment', $panelData->panelAppointmentUnfolded);
             $panelCounter++;
         }
         if ($panelData->panelQueue == 'true') {
-            $panelHTML .= $this->printPanel('queue');
+            $panelHTML .= $this->printPanel('queue', $panelData->panelQueueUnfolded);
             $panelCounter++;
         }
         if ($panelData->panelWeather == 'true') {
-            $panelHTML .= $this->printPanel('weather', $panelData->panelWeatherCity);
+            $panelHTML .= $this->printPanel('weather', $panelData->panelWeatherUnfolded, $panelData->panelWeatherCity);
             $panelCounter++;
         }
         if ($panelData->panelTimetable == 'true') {
             $timetable = $this->mysqliSelectFetchObject("SELECT timetableID FROM timetables WHERE timetableUserID = ? AND timetableWeek = ?", $userID, date('W'));
-            $panelHTML .= $this->printPanel('timetable', $timetable->timetableID);
+            $panelHTML .= $this->printPanel('timetable', $panelData->panelTimetableUnfolded, $timetable->timetableID);
             $panelCounter++;
         }
         if ($panelCounter > 0) {

@@ -248,5 +248,18 @@ let panels = {
             )
             this.printMotd(await response.json())
         }
+    },
+    toggleUnfoldCheckboxListener: async function (id, type) {
+        var checkboxElement = document.getElementById(id);
+        if (checkboxElement) {
+          checkboxElement.addEventListener("click",
+            async () => {
+                  const response = await fetch(
+                      `${DIR_SYSTEM}server/request.php?action=toggleUnfoldPanel&type=${type}&checked=${checkboxElement.checked}`
+                  )
+                  return await response.json()
+              }
+          )
+        }
     }
 }

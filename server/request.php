@@ -151,6 +151,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->addMotd($userID, $_POST['group'], $_POST['title']));
         break;
 
+    case 'toggleUnfoldPanel':
+        header('Content-Type: application/json');
+        echo json_encode($rh->toggleUnfoldPanel($userID, $_GET['type'], $_GET['checked']));
+        break;
+
     default:
         # code...
         break;
