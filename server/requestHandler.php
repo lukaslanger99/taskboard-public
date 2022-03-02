@@ -322,18 +322,13 @@ class RequestHandler
         ORDER BY m.messageDate DESC, messageID DESC";
         $data = $this->mysqliSelectFetchArray($sql, $userID);
         if ($data) {
-            foreach ($data as $appointment) {
-                if ($this->getDateDifferenceDaysOnly($appointment->messageDate) > 0) {
-                    $sql = "DELETE FROM messages WHERE messageID = ?";
-                    $this->mysqliQueryPrepared($sql, $appointment->messageID);
-                    unset($appointment);
-                }
-                $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
-                $appointment->messageDate = date("d.m.y", strtotime($appointment->messageDate));
-                $appointment->messageOwnerName = $this->getUsernameByID($appointment->messageOwner);
-                $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
-                $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
-                $appointment->messagePermission = ($userID == $appointment->messageGroup || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+            foreach ($data as $motd) {
+                $motd->messageRedRounded = new DateTime($motd->messageDate) > new DateTime($this->getUserLastMotd($userID));
+                $motd->messageDate = date("d.m.y", strtotime($motd->messageDate));
+                $motd->messageOwnerName = $this->getUsernameByID($motd->messageOwner);
+                $motd->messageGroupName = $this->getGroupNameByID($motd->messageGroup);
+                $motd->messageTitleFormated = $this->addTagsToUrlsInString($motd->messageTitle);
+                $motd->messagePermission = ($userID == $motd->messageGroup || $this->groupOwnerCheck($motd->messageGroup, $userID) || $userID == 1);
             }
             return $data;
         }
@@ -360,13 +355,15 @@ class RequestHandler
         return $this->getMotd($userID);
     }
 
-    public function addMotd($userID, $groupID, $title) {
+    public function addMotd($userID, $groupID, $title)
+    {
         $sql = "INSERT INTO messages (messageOwner, messageGroup, messageType, messageTitle) VALUES (?, ?, 'motd', ?);";
-        $this->mysqliQueryPrepared($sql, $userID, (int) $groupID, str_replace(array("\r","\n")," ", $title));
+        $this->mysqliQueryPrepared($sql, $userID, (int) $groupID, str_replace(array("\r", "\n"), " ", $title));
         return $this->getMotd($userID);
     }
 
-    public function toggleUnfoldPanel($userID, $type, $checked) {
+    public function toggleUnfoldPanel($userID, $type, $checked)
+    {
         if ($type == 'motd') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelMOTDUnfolded = ? WHERE userID = ?", $checked, $userID);
         } else if ($type == 'appointment') {
@@ -378,6 +375,12 @@ class RequestHandler
         } else if ($type == 'timetable') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelTimetableUnfolded = ? WHERE userID = ?", $checked, $userID);
         }
+        return 1;
+    }
+
+    public function toggleUnfoldGroup($userID, $groupID, $checked)
+    {
+        $this->mysqliQueryPrepared("UPDATE groupaccess SET groupUnfolded = ? WHERE userID = ? AND groupID = ?", $checked, $userID, $groupID);
         return 1;
     }
 

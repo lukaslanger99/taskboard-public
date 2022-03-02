@@ -259,6 +259,12 @@ class TaskBoard
         return $return->groupOwner;
     }
 
+    private function getGroupUnfolded($userID, $groupID)
+    {
+        $data = $this->mysqliSelectFetchObject("SELECT groupUnfolded FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID);
+        return $data->groupUnfolded;
+    }
+
     public function getMailByUserID($userID)
     {
         $return = $this->mysqliSelectFetchObject("SELECT userMail FROM users WHERE userID = ?", $userID);
@@ -419,13 +425,6 @@ class TaskBoard
         $sql = "SELECT * FROM users WHERE userName = ?";
         $data = $this->mysqliSelectFetchObject($sql, $username);
         return $data->userID;
-    }
-
-    private function getUserLastMotd($userID)
-    {
-        $sql = "SELECT userLastMotd FROM users WHERE userID = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $userID);
-        return $data->userLastMotd;
     }
 
     public function getUsernameByID($userID)
@@ -624,6 +623,9 @@ class TaskBoard
         $assignedTasksCount = $this->getTaskCount('task', $groupID, 'assigned');
         $finishedTasksCount = $this->getTaskCount('task', $groupID, 'finshed');
 
+        $groupContentID = 'groupContent_' . $groupName;
+        $groupUnfoldButtonID = 'groupUnfoldButton_' . $groupName;
+
         $mobileLine = '';
         if ($openTasksCount != '') {
             $mobileLine .= $openTasksCount . ' Open ';
@@ -640,7 +642,7 @@ class TaskBoard
                 </div>
                 <div class="group_top_bar_right">
                     <p>' . $mobileLine . '</p>
-                    <div class="group_dropbtn" id="groupUnfoldButton_' . $groupName . '" onclick="toggleUnfoldArea(\'groupContent_' . $groupName . '\',\'groupUnfoldButton_' . $groupName . '\')">
+                    <div class="group_dropbtn" id="' . $groupUnfoldButtonID . '" onclick="toggleUnfoldArea(\'' . $groupContentID . '\',\'' . $groupUnfoldButtonID . '\')">
                         <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
                     </div>
                 </div>
@@ -669,6 +671,9 @@ class TaskBoard
                 </div>
             </div>
         </div>';
+        if ($this->getGroupUnfolded($_SESSION['userID'], $groupID) == 'true') {
+            $html .= '<script>toggleUnfoldArea(\'' . $groupContentID . '\',\'' . $groupUnfoldButtonID . '\', \'true\')</script>';
+        }
         echo $html;
     }
 
@@ -754,7 +759,8 @@ class TaskBoard
     public function printGroupDetails($group)
     {
         $groupID = $group->groupID;
-        $groupOwnerCheck = $_SESSION['userID'] == $this->getGroupOwnerID($groupID);
+        $userID = $_SESSION['userID'];
+        $groupOwnerCheck = $userID == $this->getGroupOwnerID($groupID);
         if ($groupOwnerCheck) {
             $editGroupButton = '
             <div class="button" onclick="openEditGroupForm(' . $groupID . ', \'' . $group->groupName . '\', ' . $group->groupPriority . ', ' . $group->groupArchiveTime . ')">
@@ -821,8 +827,16 @@ class TaskBoard
             $leaveGroup = '<button class="button" type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>';
         }
 
+        if($this->getGroupUnfolded($userID, $groupID) == 'true') $groupUnfoldedCheckbox = 'checked';
+        $groupUnfolded = '<div>
+                <input id="groupUnfoldCheckbox" type="checkbox" ' . $groupUnfoldedCheckbox . '>
+                <small>Unfolded by default on mobile</small>
+            </div>
+            <script>groupUnfoldCheckboxListener('.$groupID.')</script>';
+
         $html .= '</div>
             <div class="group__deatils__buttons__hidden" id="groupDetailsButtons">
+                ' . $groupUnfolded . '
                 ' . $groupInvites . '
                 ' . $inviteUser . '
                 ' . $changeGroupState . '
@@ -869,35 +883,6 @@ class TaskBoard
             return $html;
         }
         return '';
-    }
-
-    private function printAppointmentOrMOTD($message)
-    {
-        if ($message->messageType == 'appointment') {
-            $jsMethodName = 'printEditAppointmentForm';
-        } else if ($message->messageType == 'motd') {
-            $jsMethodName = 'printEditMessageForm';
-            if (new DateTime($message->messageDate) > new DateTime($this->getUserLastMotd($_SESSION['userID']))) {
-                $redOutline = 'style="outline: 1px solid red;"';
-            } else {
-                $redOutline = '';
-            }
-        }
-        $string = '
-        <div class="panel-item-message-title" ' . $redOutline . '>
-            ' . date("d.m.y", strtotime($message->messageDate)) . ' - ' . $this->addTagsToUrlsInString($message->messageTitle) . '
-            <small style="color:#d1d1e0">' . $this->getUsernameByID($message->messageOwner) . ' - ' . $this->getGroupNameByID($message->messageGroup) . '</small>
-        </div>';
-        if ($message->messageOwner == $_SESSION['userID'] || $this->groupOwnerCheck($message->messageGroup, $_SESSION['userID']) || $_SESSION['userID'] == 1) {
-            $string .= '
-            <div class="panel-item-delete-button" onclick="' . $jsMethodName . '(' . $message->messageID . ', \'' . $message->messageTitle . '\', \'' . date("Y-m-d", strtotime($message->messageDate)) . '\')">
-                <i class="fa fa-edit" aria-hidden="true"></i>
-            </div>
-            <div class="panel-item-delete-button" onclick="deleteMessage(\'' . $message->messageID . '\')">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-            </div>';
-        }
-        return $string;
     }
 
     public function printPanelContentDetails($type)

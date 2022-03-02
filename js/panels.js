@@ -250,7 +250,7 @@ let panels = {
         }
     },
     toggleUnfoldCheckboxListener: async function (id, type) {
-        var checkboxElement = document.getElementById(id);
+        var checkboxElement = document.getElementById(id)
         if (checkboxElement) {
           checkboxElement.addEventListener("click",
             async () => {
