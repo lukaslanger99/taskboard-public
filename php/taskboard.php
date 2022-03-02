@@ -631,7 +631,7 @@ class TaskBoard
             $mobileLine .= $openTasksCount . ' Open ';
         }
         if ($assignedTasksCount != '') {
-            $mobileLine .= $openTasksCount . ' In progress';
+            $mobileLine .= $assignedTasksCount . ' In progress';
         }
 
         $html =  '
