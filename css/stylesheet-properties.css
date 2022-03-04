@@ -450,6 +450,25 @@ th {
   border-radius: 4px;
   height: 30;
   cursor: pointer;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.createanother__bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.createanother__checkbox {
+  flex-grow: 1;
+}
+
+.createanother__left {
+  flex-grow: 1;
+}
+
+.createanother__center {
+  flex-grow: 1;
 }
 
 .submit-login:hover {

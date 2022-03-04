@@ -86,9 +86,16 @@ const printTaskForm = async (selectedGroupId = 'default') => {
             </table>\
             <textarea class="input-login" placeholder="title" name="title" cols="40" rows="1"></textarea>\
             <textarea class="input-login" placeholder="description" name="description" cols="40" rows="5"></textarea>\
-            <input style="margin-left:25%;" class="submit-login" type="submit" name="createtask-submit" value="Create" />\
-            <input type="checkbox" id="createAnother" name="createAnother">\
-            <label for="createAnother">Create Another</label>\
+            <div class="createanother__bottom">\
+                <div class="createanother__left"></div>\
+                <div class="createanother__center">\
+                    <input style="margin-left:25%;" class="submit-login" type="submit" name="createtask-submit" value="Create" />\
+                </div>\
+                <div class="createanother__checkbox">\
+                    <input type="checkbox" id="createAnother" name="createAnother">\
+                    <label for="createAnother">Create Another</label>\
+                </div>\
+            </div>\
             </form>'
   showDynamicForm(document.getElementById("dynamic-modal-content"), html)
   closeDynamicFormListener()
@@ -117,9 +124,16 @@ function printSubtaskForm() {
         </table>\
         <textarea class="input-login" placeholder="title" name="title" cols="40" rows="1"></textarea>\
         <textarea class="input-login" placeholder="description" name="description" cols="40" rows="5"></textarea>\
-        <input style="margin-left:25%;" class="submit-login" type="submit" name="createtask-submit" value="Create" />\
-        <input type="checkbox" id="createAnother" name="createAnother">\
-        <label for="createAnother">Create Another</label>\
+        <div class="createanother__bottom">\
+            <div class="createanother__left"></div>\
+            <div class="createanother__center">\
+                <input style="margin-left:25%;" class="submit-login" type="submit" name="createtask-submit" value="Create" />\
+            </div>\
+            <div class="createanother__checkbox">\
+                <input type="checkbox" id="createAnother" name="createAnother">\
+                <label for="createAnother">Create Another</label>\
+            </div>\
+        </div>\
     </form>';
     container.innerHTML = html;
     showDynamicForm(container, html);
