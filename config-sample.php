@@ -14,5 +14,7 @@
     define("PASS", "####");
     define("DB", "###");
 
+    define("NUMBER_OF_TOTAL_PANELS", 5);
+
     session_start();
     $taskBoard = new TaskBoard();

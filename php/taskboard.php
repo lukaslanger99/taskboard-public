@@ -1225,10 +1225,12 @@ class TaskBoard
                 'spec' => $timetable->timetableID
             ];
         }
-        for ($i = 0; $i < count($activePanels); $i++) {
+        for ($i = 0; $i < NUMBER_OF_TOTAL_PANELS; $i++) {
             $panelData = $activePanels[$i + 1];
-            $panelHTML .= $this->printPanel($panelData['name'], $panelData['unfolded'], $panelData['spec']);
-            $panelCounter++;
+            if ($panelData) {
+                $panelHTML .= $this->printPanel($panelData['name'], $panelData['unfolded'], $panelData['spec']);
+                $panelCounter++;
+            }
         }
         if ($panelCounter > 0) {
             $html = '
