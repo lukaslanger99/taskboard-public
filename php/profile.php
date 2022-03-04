@@ -86,17 +86,6 @@ if ($taskBoard->getNightmodeEnabled($user->userID)) {
     $nightModeState = '';
 }
 
-echo '
-    <div class="group-box">
-        <div>
-        Nightmode 
-        <label class="switch">
-          <input id="nightmode-checkbox" type="checkbox" ' . $nightModeState . '>
-          <span class="slider round"></span>
-        </label>
-        </div>
-    </div>';
-
 $panelData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM panels WHERE userID = ?", $user->userID);
 $activePanels = [];
 if ($panelData->panelMOTD == 'true') $motdState = 'checked';

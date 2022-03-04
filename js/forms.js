@@ -259,6 +259,8 @@ function addCheckboxListener(elementId, phpAction) {
   }
 }
 
+addCheckboxListener('nightmode-checkbox', 'toggleNightmode')
+
 panels.toggleActiveCheckboxListener('motdActiveCheckbox', 'motd') // Active MOTD
 panels.toggleActiveCheckboxListener('appointmentActiveCheckbox', 'appointment') // Active Appointment
 panels.toggleActiveCheckboxListener('queueActiveCheckbox', 'queue') // Active Queue
