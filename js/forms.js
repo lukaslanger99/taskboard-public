@@ -245,13 +245,11 @@ function addCheckboxListener(elementId, phpAction) {
   }
 }
 
-addCheckboxListener("nightmode-checkbox", "toggleNightmode"); //Nightmode checkbox
-addCheckboxListener("rtpanel-checkbox", "toggleRTpanel"); //RT checkbox
-addCheckboxListener("motdpanel-checkbox", "toggleMOTDpanel"); //MOTD checkbox
-addCheckboxListener("appointmentpanel-checkbox", "toggleAppointmentpanel"); //Appointment checkbox
-addCheckboxListener("queuepanel-checkbox", "toggleQueuepanel"); //Queue checkbox
-addCheckboxListener("weatherpanel-checkbox", "toggleWeatherpanel"); //Weather checkbox
-addCheckboxListener("timetablepanel-checkbox", "toggleTimetablepanel"); //Timetable checkbox
+panels.toggleActiveCheckboxListener('motdActiveCheckbox', 'motd') // Active MOTD
+panels.toggleActiveCheckboxListener('appointmentActiveCheckbox', 'appointment') // Active Appointment
+panels.toggleActiveCheckboxListener('queueActiveCheckbox', 'queue') // Active Queue
+panels.toggleActiveCheckboxListener('weatherActiveCheckbox', 'weather') // Active Weather
+panels.toggleActiveCheckboxListener('timetableActiveCheckbox', 'timetable') // Active Timetable
 
 panels.toggleUnfoldCheckboxListener('motdUnfoldedCheckbox', 'motd') // Unfold MOTD
 panels.toggleUnfoldCheckboxListener('appointmentUnfoldedCheckbox', 'appointment') // Unfold Appointment

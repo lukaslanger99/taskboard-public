@@ -378,9 +378,43 @@ class RequestHandler
         return 1;
     }
 
+    public function toggleActivePanel($userID, $type, $checked)
+    {
+        if ($type == 'motd') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelMOTD = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'appointment') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelAppointment = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'queue') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelQueue = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'weather') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelWeather = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'timetable') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelTimetable = ? WHERE userID = ?", $checked, $userID);
+        }
+        return 1;
+    }
+
     public function toggleUnfoldGroup($userID, $groupID, $checked)
     {
         $this->mysqliQueryPrepared("UPDATE groupaccess SET groupUnfolded = ? WHERE userID = ? AND groupID = ?", $checked, $userID, $groupID);
+        return 1;
+    }
+
+    public function updatePanelOrder($userID, $names)
+    {
+        for ($i = 0; $i < count($names); $i++) {
+            if ($names[$i] == 'motd') {
+                $this->mysqliQueryPrepared("UPDATE panels SET panelMOTDOrder = ? WHERE userID = ?", ($i + 1), $userID);
+            } else if ($names[$i] == 'appointment') {
+                $this->mysqliQueryPrepared("UPDATE panels SET panelAppointmentOrder = ? WHERE userID = ?", ($i + 1), $userID);
+            } else if ($names[$i] == 'queue') {
+                $this->mysqliQueryPrepared("UPDATE panels SET panelQueueOrder = ? WHERE userID = ?", ($i + 1), $userID);
+            } else if ($names[$i] == 'weather') {
+                $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherOrder = ? WHERE userID = ?", ($i + 1), $userID);
+            } else if ($names[$i] == 'timetable') {
+                $this->mysqliQueryPrepared("UPDATE panels SET panelTimetableOrder = ? WHERE userID = ?", ($i + 1), $userID);
+            }
+        }
         return 1;
     }
 

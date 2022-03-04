@@ -827,12 +827,12 @@ class TaskBoard
             $leaveGroup = '<button class="button" type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>';
         }
 
-        if($this->getGroupUnfolded($userID, $groupID) == 'true') $groupUnfoldedCheckbox = 'checked';
+        if ($this->getGroupUnfolded($userID, $groupID) == 'true') $groupUnfoldedCheckbox = 'checked';
         $groupUnfolded = '<div>
                 <input id="groupUnfoldCheckbox" type="checkbox" ' . $groupUnfoldedCheckbox . '>
                 <small>Unfolded by default on mobile</small>
             </div>
-            <script>groupUnfoldCheckboxListener('.$groupID.')</script>';
+            <script>groupUnfoldCheckboxListener(' . $groupID . ')</script>';
 
         $html .= '</div>
             <div class="group__deatils__buttons__hidden" id="groupDetailsButtons">
@@ -963,6 +963,23 @@ class TaskBoard
     private function printPanel($type, $unfolded, $spec = '')
     {
         return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type, $unfolded, $spec) . '</div>';
+    }
+
+    public function printPanelSettings($type, $title, $activeID, $activeState, $unfoldedID, $unfoldedState)
+    {
+        return '<div class="draggable__item" draggable="true" data-type="' . $type . '">
+                <p>' . $title . '</p>
+                <label class="switch">
+                    <input id="' . $activeID . '" type="checkbox" ' . $activeState . '/>
+                    <span class="slider round"></span>
+                </label>
+                <small>Activate</small>
+                <label class="switch">
+                    <input type="checkbox" id="' . $unfoldedID . '" ' . $unfoldedState . '/>
+                    <span class="slider round"></span>
+                </label>
+                <small>Unfolded by default on mobile</small>
+            </div>';
     }
 
     private function panelHeader($type)
@@ -1171,25 +1188,46 @@ class TaskBoard
         $panelData = $this->mysqliSelectFetchObject("SELECT * FROM panels WHERE userID = ?", $userID);
         $panelHTML = '';
         $panelCounter = 0;
+        $activePanels = [];
         if ($panelData->panelMOTD == 'true') {
-            $panelHTML .= $this->printPanel('motd', $panelData->panelMOTDUnfolded);
-            $panelCounter++;
+            $activePanels[$panelData->panelMOTDOrder] = [
+                'name' => 'motd',
+                'unfolded' => $panelData->panelMOTDUnfolded,
+                'spec' => ''
+            ];
         }
         if ($panelData->panelAppointment == 'true') {
-            $panelHTML .= $this->printPanel('appointment', $panelData->panelAppointmentUnfolded);
-            $panelCounter++;
+            $activePanels[$panelData->panelAppointmentOrder] = [
+                'name' => 'appointment',
+                'unfolded' => $panelData->panelAppointmentUnfolded,
+                'spec' => ''
+            ];
         }
         if ($panelData->panelQueue == 'true') {
-            $panelHTML .= $this->printPanel('queue', $panelData->panelQueueUnfolded);
-            $panelCounter++;
+            $activePanels[$panelData->panelQueueOrder] = [
+                'name' => 'queue',
+                'unfolded' => $panelData->panelQueueUnfolded,
+                'spec' => ''
+            ];
         }
         if ($panelData->panelWeather == 'true') {
-            $panelHTML .= $this->printPanel('weather', $panelData->panelWeatherUnfolded, $panelData->panelWeatherCity);
-            $panelCounter++;
+            $activePanels[$panelData->panelWeatherOrder] = [
+                'name' => 'weather',
+                'unfolded' => $panelData->panelWeatherUnfolded,
+                'spec' => $panelData->panelWeatherCity
+            ];
         }
         if ($panelData->panelTimetable == 'true') {
             $timetable = $this->mysqliSelectFetchObject("SELECT timetableID FROM timetables WHERE timetableUserID = ? AND timetableWeek = ?", $userID, date('W'));
-            $panelHTML .= $this->printPanel('timetable', $panelData->panelTimetableUnfolded, $timetable->timetableID);
+            $activePanels[$panelData->panelTimetableOrder] = [
+                'name' => 'timetable',
+                'unfolded' => $panelData->panelTimetableUnfolded,
+                'spec' => $timetable->timetableID
+            ];
+        }
+        for ($i = 0; $i < count($activePanels); $i++) {
+            $panelData = $activePanels[$i + 1];
+            $panelHTML .= $this->printPanel($panelData['name'], $panelData['unfolded'], $panelData['spec']);
             $panelCounter++;
         }
         if ($panelCounter > 0) {

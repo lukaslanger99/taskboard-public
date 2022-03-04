@@ -98,93 +98,74 @@ echo '
     </div>';
 
 $panelData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM panels WHERE userID = ?", $user->userID);
-
+$activePanels = [];
 if ($panelData->panelMOTD == 'true') $motdState = 'checked';
 if ($panelData->panelMOTDUnfolded == 'true') $motdUnfolded = 'checked';
-
+$activePanels[$panelData->panelMOTDOrder] = [
+    'type' => 'motd',
+    'title' => 'Messages of the Day Panel',
+    'activeID' => 'motdActiveCheckbox',
+    'active' => $motdState,
+    'unfoldedID' => 'motdUnfoldedCheckbox',
+    'unfolded' => $motdUnfolded,
+];
 if ($panelData->panelAppointment == 'true') $appointmentState = 'checked';
 if ($panelData->panelAppointmentUnfolded == 'true') $appointmentUnfolded = 'checked';
-
+$activePanels[$panelData->panelAppointmentOrder] = [
+    'type' => 'appointment',
+    'title' => 'Appointment Panel',
+    'activeID' => 'appointmentActiveCheckbox',
+    'active' => $appointmentState,
+    'unfoldedID' => 'appointmentUnfoldedCheckbox',
+    'unfolded' => $appointmentUnfolded,
+];
 if ($panelData->panelQueue == 'true') $queueState = 'checked';
 if ($panelData->panelQueueUnfolded == 'true') $queueUnfolded = 'checked';
-
+$activePanels[$panelData->panelQueueOrder] = [
+    'type' => 'queue',
+    'title' => 'Queue Panel',
+    'activeID' => 'queueActiveCheckbox',
+    'active' => $queueState,
+    'unfoldedID' => 'queueUnfoldedCheckbox',
+    'unfolded' => $queueUnfolded,
+];
 if ($panelData->panelWeather == 'true') $weatherState = 'checked';
 if ($panelData->panelWeatherUnfolded == 'true') $weatherUnfolded = 'checked';
-
+$activePanels[$panelData->panelWeatherOrder] = [
+    'type' => 'weather',
+    'title' => 'Weather Panel',
+    'activeID' => 'weatherActiveCheckbox',
+    'active' => $weatherState,
+    'unfoldedID' => 'weatherUnfoldedCheckbox',
+    'unfolded' => $weatherUnfolded,
+];
 if ($panelData->panelTimetable == 'true') $timetableState = 'checked';
 if ($panelData->panelTimetableUnfolded == 'true') $timetableUnfolded = 'checked';
-
-echo '
-    <div class="group-box">
+$activePanels[$panelData->panelTimetableOrder] = [
+    'type' => 'timetable',
+    'title' => 'Timetable Panel',
+    'activeID' => 'timetableActiveCheckbox',
+    'active' => $timetableState,
+    'unfoldedID' => 'timetableUnfoldedCheckbox',
+    'unfolded' => $timetableUnfolded,
+];
+$panelsHTML = '';
+for ($i = 0; $i < count($activePanels); $i++) {
+    $panelData = $activePanels[$i + 1];
+    $panelsHTML .= $taskBoard->printPanelSettings(
+        $panelData['type'],
+        $panelData['title'],
+        $panelData['activeID'],
+        $panelData['active'],
+        $panelData['unfoldedID'],
+        $panelData['unfolded']
+    );
+}
+echo '<div class="group-box">
         PANELS
-
-        <table>
-            <tr>
-                <td>Messages of the Day Panel</td>
-                <td>
-                    <label class="switch">
-                    <input id="motdpanel-checkbox" type="checkbox" ' . $motdState . '>
-                      <span class="slider round"></span>
-                    </label>
-                </td>
-                <td>
-                    <input type="checkbox" id="motdUnfoldedCheckbox" ' . $motdUnfolded . '/>
-                    <small>Unfolded by default on mobile</small>
-                </td>
-            </tr>
-            <tr>
-                <td>Appointment Panel</td>
-                <td>
-                    <label class="switch">
-                    <input id="appointmentpanel-checkbox" type="checkbox" ' . $appointmentState . '>
-                      <span class="slider round"></span>
-                    </label>
-                </td>
-                <td>
-                    <input type="checkbox" id="appointmentUnfoldedCheckbox" ' . $appointmentUnfolded . '/>
-                    <small>Unfolded by default on mobile</small>
-                </td>
-            </tr>
-            <tr>
-                <td>Queue Panel</td>
-                <td>
-                    <label class="switch">
-                    <input id="queuepanel-checkbox" type="checkbox" ' . $queueState . '>
-                      <span class="slider round"></span>
-                    </label>
-                </td>
-                <td>
-                    <input type="checkbox" id="queueUnfoldedCheckbox" ' . $queueUnfolded . '/>
-                    <small>Unfolded by default on mobile</small>
-                </td>
-            </tr>
-            <tr>
-                <td>Weather Panel</td>
-                <td>
-                    <label class="switch">
-                    <input id="weatherpanel-checkbox" type="checkbox" ' . $weatherState . '>
-                      <span class="slider round"></span>
-                    </label>
-                </td>
-                <td>
-                    <input type="checkbox" id="weatherUnfoldedCheckbox" ' . $weatherUnfolded . '/>
-                    <small>Unfolded by default on mobile</small>
-                </td>
-            </tr>
-            <tr>
-                <td>Timetable</td>
-                <td>
-                    <label class="switch">
-                    <input id="timetablepanel-checkbox" type="checkbox" ' . $timetableState . '>
-                      <span class="slider round"></span>
-                    </label>
-                </td>
-                <td>
-                    <input type="checkbox" id="timetableUnfoldedCheckbox" ' . $timetableUnfolded . '/>
-                    <small>Unfolded by default on mobile</small>
-                </td>
-            </tr>
-        </table>
+        <div class="draggable__container" id="draggablePanelsContainer">
+            ' . $panelsHTML . '
+        </div>
     </div>';
 
 require('../html/bottom.php');

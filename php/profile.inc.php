@@ -113,26 +113,6 @@
             header("Location: ".$destinationUrl);
             exit;
 
-        case 'toggleQueuepanel':
-            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelQueue = ? WHERE userID = ?", $_GET['n'], $userID);
-            break;
-
-        case 'toggleMOTDpanel':
-            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelMOTD = ? WHERE userID = ?", $_GET['n'], $userID);
-            break;
-
-        case 'toggleAppointmentpanel':
-            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelAppointment = ? WHERE userID = ?", $_GET['n'], $userID);
-            break;
-
-        case 'toggleWeatherpanel':
-            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelWeather = ? WHERE userID = ?", $_GET['n'], $userID);
-            break;
-
-        case 'toggleTimetablepanel':
-            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelTimetable = ? WHERE userID = ?", $_GET['n'], $userID);
-            break;
-
         case 'updateMail':
             $mail = $_POST['mail'];
             if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
