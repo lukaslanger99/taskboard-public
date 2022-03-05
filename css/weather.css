@@ -1,31 +1,74 @@
 .weather__panel__content {
-  height: 96%;
+  height: 81%;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
+  padding: 5px;
+  background-color: aqua;
 }
 
 .weather__city {
-  margin: 5px;
+  margin-top: 5px;
   font-size: large;
+}
+
+.weather__forecast {
+  width: 60%;
 }
 
 .weather__block {
   display: flex;
   margin-right: 5px;
+  font-weight: 200;
+  padding: 0;
+}
+
+.weather__block__forecast {
+  display: flex;
+  margin-right: 5px;
+  font-weight: 200;
+  padding: 0;
+  height: 15%;
+  justify-content: space-between;
+}
+
+.weather__forecast__header {
+  font-size: medium;
+  margin-left: 15px;
 }
 
 .weather__temp {
   margin: auto;
-  font-size: large;
+  font-size: small;
+  font-weight: 200;
+}
+
+.weather__temp__big {
+  margin: auto;
+  font-size: larger;
+  font-weight: 600;
 }
 
 .weather__date {
   margin: auto;
+  font-weight: 200;
+  font-size: small;
+}
+
+.weather__font__small {
+  font-weight: 200;
+  font-size: small;
 }
 
 .weather__input form {
   display: flex;
+  width: 90%;
+}
+
+.weather__input form input[type="submit"] {
+  font-weight: 200;
+  font-size: smaller;
+  width: 100px;
 }
 
 @media (max-width: 768px) {

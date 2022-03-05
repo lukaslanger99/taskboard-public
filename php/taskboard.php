@@ -1091,7 +1091,7 @@ class TaskBoard
             $prevRows = '';
             for ($i = 1; $i < 6; $i++) {
                 $prevRows .= '
-                <div class="weather__block">
+                <div class="weather__block__forecast"">
                   <div class="weather__date" id="weatherPrevDate' . $i . '"></div>
                   <img src="" alt="" id="weatherPrevIcon' . $i . '" />
                   <div class="weather__temp" id="weatherPrevTemp' . $i . '"></div>
@@ -1109,14 +1109,14 @@ class TaskBoard
                         <h2 class="weather__city"><h2>
                         <div class="weather__block">
                           <img src="" alt="" class="weather__icon" />
-                          <div class="weather__temp"></div>
+                          <div class="weather__temp__big"></div>
                         </div>
-                        <div class="weather__description"></div>
-                        <div class="weather__humidity"></div>
-                        <div class="weather__wind"></div>
+                        <div class="weather__description weather__font__small"></div>
+                        <div class="weather__humidity weather__font__small"></div>
+                        <div class="weather__wind weather__font__small"></div>
                     </div>
                     <div class="weather__forecast">
-                        <h2 class="weather__city">5-Day Forecast<h2>
+                        <p class="weather__forecast__header">5-Day Forecast</p>
                     ' . $prevRows . '
                     </div>
                     <script>
