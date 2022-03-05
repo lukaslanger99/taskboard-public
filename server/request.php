@@ -14,6 +14,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->getActiveGroups($userID));
         break;
 
+    case 'getTaskData':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getTaskData($_POST['id']));
+        break;
+
     case 'addEntrys':
         $id = intval($_GET['id']);
         $text = $_POST['text'];

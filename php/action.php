@@ -87,13 +87,7 @@
                 $taskBoard->mysqliQueryPrepared($sql, $groupName, $userID);
                 $group = $taskBoard->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", $groupName, $userID);
                 $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES ( ?, ?)", $group->groupID, $group->groupOwner);
-
-                if (strpos($_SESSION['enteredUrl'], '?')) {
-                    $url = DOMAIN . $_SESSION['enteredUrl']."&success=groupcreated";
-                } else {
-                    $url = DOMAIN . $_SESSION['enteredUrl']."?success=groupcreated";
-                }
-                $taskBoard->localstorageGroupUpdate($url);
+                $taskBoard->locationEnteredUrl($_SESSION['enteredUrl'], "success=groupcreated");
             }
             break;
         
@@ -187,7 +181,7 @@
         case 'deleteGroup':
             if ($_SESSION['deleteGroup'] == $id) {
                 $taskBoard->deleteGroup($id);
-                $taskBoard->localstorageGroupUpdate(DIR_SYSTEM . "?success=deletegroup");
+                $taskBoard->locationWithDir("?success=deletegroup");
             }
             break;
         
@@ -256,7 +250,7 @@
                 } else if ($stateAction == 'hide') {
                     $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'hidden' WHERE groupID = ?;" , $id);
                 }
-                $taskBoard->localstorageGroupUpdate(DIR_SYSTEM."php/details.php?action=groupDetails&id=".$id);
+                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$id);
                 exit;
             }
             break;
@@ -285,7 +279,7 @@
                     exit;
                 }
                 $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES (?, ?)", $tokenData->tokenGroupID, $user->userID);
-                $taskBoard->localstorageGroupUpdate(DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
+                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
             }
             break;
 

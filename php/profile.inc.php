@@ -83,7 +83,7 @@
                     }
                     $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES (?, ?)", $tokenData->tokenGroupID, $tokenData->tokenUserID);
                     $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenToken = ?", $tokenData->tokenToken);
-                    $taskBoard->localstorageGroupUpdate(DIR_SYSTEM . "php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
+                    $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=".$tokenData->tokenGroupID."&success=joinedgroup");
                 }
             }
             break;

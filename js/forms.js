@@ -1,9 +1,18 @@
+async function getTaskData(id) {
+  var url = `${DIR_SYSTEM}server/request.php?action=getTaskData`
+  var formData = new FormData()
+  formData.append('id', id)
+  const response = await fetch(
+    url, { method: 'POST', body: formData }
+  )
+  return await response.json()
+}
+
 async function getGroups() {
   const response = await fetch(
     `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
   )
-  const data = await response.json()
-  return data
+  return await response.json()
 }
 
 const printGroupDropdown = async (selectedGroupId) => {
@@ -189,13 +198,11 @@ function printGroupForm() {
 
 // Update Task Form
 const openUpdateTaskForm = async () => {
-  var taskJsonString = localStorage.getItem('TaskData'), dropDowns = '';
-  task = JSON.parse(taskJsonString);
+  var task = await getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1')), dropDowns = ''
   if (task.taskType == 'task') {
     dropDowns += await printGroupDropdown(task.taskParentID);
   }
   dropDowns += printPriorityDropdown(task.taskPriority);
-
   var html = '\
       '+ addHeaderDynamicForm('Update Task') + '\
       <form action="'+ DIR_SYSTEM + 'php/action.php?action=update&id=' + task.taskID + '" autocomplete="off" method="post" >\

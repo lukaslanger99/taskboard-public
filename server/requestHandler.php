@@ -140,6 +140,10 @@ class RequestHandler
         // return '';
     }
 
+    public function getTaskData($taskID) {
+        return $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
+    }
+
     public function createTimetable($userID, $type, $copyLast)
     {
         if ($copyLast == 'true') {

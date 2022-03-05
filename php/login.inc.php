@@ -11,12 +11,12 @@ if (isset($_POST['login-submit'])) {
             session_start();
             $_SESSION['userID'] = $userData->userID;
             if ($_SESSION['enteredUrl']) {
-                $destinationUrl = DOMAIN . $_SESSION['enteredUrl'];
+                header("Location: " . DOMAIN . $_SESSION['enteredUrl']);
+                exit;
             } else {
-                $destinationUrl = DIR_SYSTEM . "index.php?success=login";
+                $taskBoard->locationWithDir("index.php?success=login");
             }
             $taskBoard->mysqliQueryPrepared("UPDATE users SET userLastLogin = CURRENT_TIMESTAMP WHERE userID = ?", $userData->userID);
-            $taskBoard->localstorageGroupUpdate($destinationUrl);
         }
     }
     $taskBoard->locationIndex("?error=login&username=".$username);

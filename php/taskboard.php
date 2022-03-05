@@ -500,32 +500,6 @@ class TaskBoard
         return $groupOwnerID->groupOwner == $userID;
     }
 
-    public function localstorageCreateJSCode()
-    {
-        $groups = $this->sqlGetActiveGroups();
-        $localStorageInit = "
-        var json = '{}';
-        var obj = JSON.parse(json);
-        ";
-        foreach ($groups as $group) {
-            $localStorageInit .= "obj['$group->groupID'] = '$group->groupName';\n";
-        }
-        $localStorageInit .= "localStorage.setItem('Groups', JSON.stringify(obj));";
-        return $localStorageInit;
-    }
-
-    public function localstorageGroupUpdate($destionationUrl)
-    {
-        echo "
-        <script>
-            localStorage.removeItem('Groups');
-            " . $this->localstorageCreateJSCode() . "
-        </script>
-        <META HTTP-EQUIV=\"refresh\" content=\"0;URL=$destionationUrl\">
-        ";
-        exit;
-    }
-
     public function locationEnteredUrl($url, $getParam = '')
     {
         if (strpos($_SESSION['enteredUrl'], '?')) {
@@ -1352,7 +1326,6 @@ class TaskBoard
         if ($subtaskcount->number > 0) {
             $html .= $this->printSubtaskPanel($id);
         }
-        $this->addTaskDataToLocalstorage($task);
         echo $html;
     }
 
@@ -1522,23 +1495,6 @@ class TaskBoard
             }
         }
         return $html;
-    }
-
-    private function addTaskDataToLocalstorage($task)
-    {
-        echo "
-        <script>
-            var json = '{}';
-            var obj = JSON.parse(json);
-
-            obj['taskID'] = $task->taskID;
-            obj['taskType'] = '$task->taskType';
-            obj['taskParentID'] = $task->taskParentID;
-            obj['taskPriority'] = $task->taskPriority;
-            obj['taskTitle'] = '$task->taskTitle';
-            obj['taskDescription'] = '" . preg_replace('/\s+/', ' ', $task->taskDescription) . "';
-            localStorage.setItem('TaskData', JSON.stringify(obj));
-        </script>";
     }
 
     public function printUserDetails($userID)
