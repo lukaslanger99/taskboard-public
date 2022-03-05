@@ -230,7 +230,7 @@ class RequestHandler
 
     public function getQueueTasks($userID)
     {
-        $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'queue' ORDER BY messagePrio, messageID";
+        $sql = "SELECT * FROM messages WHERE messageOwner = ? AND messageType = 'queue' ORDER BY messagePrio DESC, messageID";
         return $this->mysqliSelectFetchArray($sql, $userID);
     }
 
