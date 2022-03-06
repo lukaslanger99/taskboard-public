@@ -958,7 +958,7 @@ class TaskBoard
     {
         if ($type == 'appointment') {
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'appointmentPanelContentArea\',\'appointmentUnfoldButton\', \'true\')';
-            return '<div class="panel-item-area__scrollable" id="appointmentPanelContentArea">
+            return '<div class="panel-item-area" id="appointmentPanelContentArea">
                     <script>
                         panels.printAppointments()
                         ' . $unfoldPanel . '
@@ -967,7 +967,7 @@ class TaskBoard
         } else if ($type == 'motd') {
             $this->mysqliQueryPrepared("UPDATE users SET userLastMotd = CURRENT_TIMESTAMP WHERE userID = ?", $_SESSION['userID']);
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'motdPanelContentArea\',\'motdUnfoldButton\', \'true\')';
-            return '<div class="panel-item-area__scrollable" id="motdPanelContentArea">
+            return '<div class="panel-item-area" id="motdPanelContentArea">
                     <script>
                         panels.printMotd()
                         ' . $unfoldPanel . '
@@ -975,7 +975,7 @@ class TaskBoard
                 </div>';
         } else if ($type == 'queue') {
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\', \'true\')';
-            return '<div class="panel-item-area__scrollable" id="queuePanelContentArea">
+            return '<div class="panel-item-area" id="queuePanelContentArea">
                     <script>
                         panels.printQueueTasks()
                     ' . $unfoldPanel . '

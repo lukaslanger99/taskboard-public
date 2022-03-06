@@ -29,7 +29,7 @@
 .timetable__content {
   display: flex;
   padding: 0 10px 20px 10px;
-  overflow-y: scroll;
+  overflow-y: auto;
   min-height: 500px;
 }
 

@@ -275,12 +275,7 @@ th {
 .panel-item-area {
   display: flex;
   flex-direction: column;
-}
-
-.panel-item-area__scrollable {
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto;
   height: 82%;
 }
 
@@ -721,10 +716,6 @@ hr.solid {
   }
 
   .panel-item-area {
-    display: none;
-  }
-
-  .panel-item-area__scrollable {
     display: none;
   }
 
