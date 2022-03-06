@@ -1034,16 +1034,19 @@ class TaskBoard
                             $prevTask = $tasks[$i];
                         }
                         if ($currentTime > $tasks[$i]->timetableTimeStart && $currentTime < $tasks[$i]->timetableTimeEnd) {
-                            $activeTask = $tasks[$i];
+                            $activeTasks[] = $tasks[$i];
                         }
                         if ($currentTime < $tasks[$i]->timetableTimeStart && !$nextTask) {
                             $nextTask = $tasks[$i];
                             if ($i < count($tasks) - 1) $nextTask2 = $tasks[$i + 1];
-                            if (!$activeTask && $i < count($tasks) - 2) $nextTask3 = $tasks[$i + 2];
+                            if ($i < count($tasks) - 2) $nextTask3 = $tasks[$i + 2];
+                            if ($i < count($tasks) - 3) $nextTask4 = $tasks[$i + 3];
                         }
                     }
                 }
             }
+            ($activeTasks) ? $prevAndActiveTasksCount = count($activeTasks) : $prevAndActiveTasksCount = 0;
+            if ($prevTask) $prevAndActiveTasksCount++;
             $content = '';
             if ($prevTask) {
                 $content .= '<div class="timetable__panel__prevtask">
@@ -1051,28 +1054,36 @@ class TaskBoard
                         <div class="timetable__content__task__text">' . $prevTask->timetableText . '</div>
                     </div>';
             }
-            if ($activeTask) {
-                $content .= '<div class="timetable__panel__activetask">
-                        <div class="timetable__content__task__time">' . $activeTask->timetableTimeStart . ' - ' . $activeTask->timetableTimeEnd . '</div>
-                        <div class="timetable__content__task__text">' . $activeTask->timetableText . '</div>
-                    </div>';
+            if ($activeTasks) {
+                foreach ($activeTasks as $activeTask) {
+                    $content .= '<div class="timetable__panel__activetask">
+                            <div class="timetable__content__task__time">' . $activeTask->timetableTimeStart . ' - ' . $activeTask->timetableTimeEnd . '</div>
+                            <div class="timetable__content__task__text">' . $activeTask->timetableText . '</div>
+                        </div>';
+                }
             }
-            if ($nextTask) {
+            if ($nextTask && $prevAndActiveTasksCount < 4) {
                 $content .= '<div class="timetable__panel__nexttask">
                         <div class="timetable__content__task__time">' . $nextTask->timetableTimeStart . ' - ' . $nextTask->timetableTimeEnd . '</div>
                         <div class="timetable__content__task__text">' . $nextTask->timetableText . '</div>
                     </div>';
             }
-            if ($nextTask2) {
+            if ($nextTask2 && $prevAndActiveTasksCount < 3) {
                 $content .= '<div class="timetable__panel__nexttask">
                         <div class="timetable__content__task__time">' . $nextTask2->timetableTimeStart . ' - ' . $nextTask2->timetableTimeEnd . '</div>
                         <div class="timetable__content__task__text">' . $nextTask2->timetableText . '</div>
                     </div>';
             }
-            if ($nextTask3) {
+            if ($nextTask3 && $prevAndActiveTasksCount < 2) {
                 $content .= '<div class="timetable__panel__nexttask">
                         <div class="timetable__content__task__time">' . $nextTask3->timetableTimeStart . ' - ' . $nextTask3->timetableTimeEnd . '</div>
                         <div class="timetable__content__task__text">' . $nextTask3->timetableText . '</div>
+                    </div>';
+            }
+            if (!$prevTask && $prevAndActiveTasksCount == 0) {
+                $content .= '<div class="timetable__panel__nexttask">
+                        <div class="timetable__content__task__time">' . $nextTask4->timetableTimeStart . ' - ' . $nextTask4->timetableTimeEnd . '</div>
+                        <div class="timetable__content__task__text">' . $nextTask4->timetableText . '</div>
                     </div>';
             }
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\', \'true\')';
