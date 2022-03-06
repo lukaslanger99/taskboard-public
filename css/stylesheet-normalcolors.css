@@ -213,7 +213,7 @@ th {
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown_content {
-  background-color: #ccc;
+  background-color: #dbdbdb;
 }
 
 .dropdown_message {
@@ -253,4 +253,8 @@ th {
 
 .timetable__content__block {
   background-color: #d6e3ff;
+}
+
+.draggable__item {
+  background-color: #fff;
 }

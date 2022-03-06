@@ -272,3 +272,7 @@ th {
 .timetable__content__block {
   background-color: #6596ff;
 }
+
+.dragabble__item {
+  background-color: #333;
+}
