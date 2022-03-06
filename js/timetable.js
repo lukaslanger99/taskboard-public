@@ -124,26 +124,30 @@ let timetable = {
         closeDynamicFormListener()
     },
     addEntry: async function (id) {
-        var url = `${DIR_SYSTEM}server/request.php?action=addEntrys&id=${id}`
-        var formData = new FormData()
-        formData.append('id', id)
-        formData.append('text', document.getElementById("text").value)
-        formData.append('start', document.getElementById("start").value)
-        formData.append('end', document.getElementById("end").value)
-        formData.append('mon', document.getElementById("mon").checked)
-        formData.append('tue', document.getElementById("tue").checked)
-        formData.append('wed', document.getElementById("wed").checked)
-        formData.append('thu', document.getElementById("thu").checked)
-        formData.append('fri', document.getElementById("fri").checked)
-        formData.append('sat', document.getElementById("sat").checked)
-        formData.append('sun', document.getElementById("sun").checked)
-        formData.append('monfri', document.getElementById("monfri").checked)
-        formData.append('monsun', document.getElementById("monsun").checked)
-
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        this.fillPopup(await response.json(), this.type)
+        var text = document.getElementById("text").value
+        var start = document.getElementById("start").value
+        var end = document.getElementById("end").value
+        if (text && start < end) {
+            var url = `${DIR_SYSTEM}server/request.php?action=addEntrys&id=${id}`
+            var formData = new FormData()
+            formData.append('id', id)
+            formData.append('text', text)
+            formData.append('start', start)
+            formData.append('end', end)
+            formData.append('mon', document.getElementById("mon").checked)
+            formData.append('tue', document.getElementById("tue").checked)
+            formData.append('wed', document.getElementById("wed").checked)
+            formData.append('thu', document.getElementById("thu").checked)
+            formData.append('fri', document.getElementById("fri").checked)
+            formData.append('sat', document.getElementById("sat").checked)
+            formData.append('sun', document.getElementById("sun").checked)
+            formData.append('monfri', document.getElementById("monfri").checked)
+            formData.append('monsun', document.getElementById("monsun").checked)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            this.fillPopup(await response.json(), this.type)
+        }
     },
     loadParentForm: function () {
         var container = document.getElementById("dynamic-modal-content");

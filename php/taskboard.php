@@ -1039,6 +1039,7 @@ class TaskBoard
                         if ($currentTime < $tasks[$i]->timetableTimeStart && !$nextTask) {
                             $nextTask = $tasks[$i];
                             if ($i < count($tasks) - 1) $nextTask2 = $tasks[$i + 1];
+                            if (!$activeTask && $i < count($tasks) - 2) $nextTask3 = $tasks[$i + 2];
                         }
                     }
                 }
@@ -1066,6 +1067,12 @@ class TaskBoard
                 $content .= '<div class="timetable__panel__nexttask">
                         <div class="timetable__content__task__time">' . $nextTask2->timetableTimeStart . ' - ' . $nextTask2->timetableTimeEnd . '</div>
                         <div class="timetable__content__task__text">' . $nextTask2->timetableText . '</div>
+                    </div>';
+            }
+            if ($nextTask3) {
+                $content .= '<div class="timetable__panel__nexttask">
+                        <div class="timetable__content__task__time">' . $nextTask3->timetableTimeStart . ' - ' . $nextTask3->timetableTimeEnd . '</div>
+                        <div class="timetable__content__task__text">' . $nextTask3->timetableText . '</div>
                     </div>';
             }
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\', \'true\')';
