@@ -34,21 +34,6 @@
             }
         
             break;
-
-        case 'repeatingtasksDetails':
-            require('../html/top-bar.php');
-            $taskBoard->printPanelContentDetails('rt');
-            break;
-
-        case 'motdDetails':
-            require('../html/top-bar.php');
-            $taskBoard->printPanelContentDetails('motd');
-            break;
-
-        case 'appointmentDetails':
-            require('../html/top-bar.php');
-            $taskBoard->printPanelContentDetails('appointment');
-            break;
         
         case 'userDetails':
             if ($_SESSION['userID'] == 1) {

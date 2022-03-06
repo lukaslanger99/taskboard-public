@@ -859,81 +859,6 @@ class TaskBoard
         return '';
     }
 
-    public function printPanelContentDetails($type)
-    {
-        if ($type == 'appointment') {
-            $sql = "SELECT * FROM messages WHERE messageType = 'appointment' AND messageOwner = ? ORDER BY messageDate, messageID DESC";
-        } else if ($type == 'motd') {
-            $sql = "SELECT * FROM messages WHERE messageType = 'motd' AND messageOwner = ? ORDER BY messageDate, messageID DESC";
-        } else if ($type == 'rt') {
-            $sql = "SELECT * FROM messages WHERE messageType = 'repeatingtask' AND messageOwner = ? ORDER BY messageDate, messageID DESC";
-        }
-        $data = $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-
-        if ($data != null) {
-            foreach ($data as $i) {
-                $tasks[] = $i;
-            }
-        }
-
-        $html = '<div class="group-box">
-                <div class="big-top-bar">
-                    <div class="top-bar-item">Repeating Tasks</div>
-                </div>
-            </div>
-            <div class="group-content">
-            ';
-
-        $html =  '
-            <table>
-                <tr>
-                    <td>ID</td>
-                    <td>GROUP</td>
-                    <td>TITLE</td>
-                    <td>WEEKDAY</td>
-                    <td>QUANTITY</td>
-                    <td>STATE</td>
-                    <td>DATE</td>
-                    <td></td>
-                </tr>';
-
-        if ($tasks != null) {
-            if ($this->getNightmodeEnabled($_SESSION['userID'])) {
-                $backgroundColor = '#333333';
-            } else {
-                $backgroundColor = '#f2f2f2';
-            }
-            $toggle = true;
-            foreach ($tasks as $task) {
-                $toggle = !$toggle;
-                if ($toggle) {
-                    $html .= '<tr style="background-color:' . $backgroundColor . ';">';
-                } else {
-                    $html .= '<tr>';
-                }
-                $html .= '
-                    <td>' . $task->messageID . '</td>
-                    <td>' . $this->getGroupNameByID($task->messageGroup) . '</td>
-                    <td>' . $task->messageTitle . '</td>
-                    <td>' . $task->messageWeekday . '</td>
-                    <td>' . $task->messageQuantity . '</td>
-                    <td>' . $task->messageState . '</td>
-                    <td>' . $task->messageDate . '</td>
-                    <td>
-                        <div class="panel-item-delete-button" onclick="deleteMessage(\'' . $task->messageID . '\')">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </div>
-                    </td>
-                </tr>
-                ';
-            }
-        }
-
-        $html .= '</table>
-            </div>';
-        echo $html;
-    }
-
     private function printPanel($type, $unfolded, $spec = '')
     {
         return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type, $unfolded, $spec) . '</div>';
@@ -961,7 +886,6 @@ class TaskBoard
         if ($type == 'appointment') {
             $createButtonID = 'createAppointmentButton';
             $onclick = 'panels.openAddAppointmentForm()';
-            $detailsActionName = 'appointmentDetails';
             $unfoldButtonID = 'appointmentUnfoldButton';
             $contentAreaID = 'appointmentPanelContentArea';
             $titleID = 'appointmentPanelTitle';
@@ -969,7 +893,6 @@ class TaskBoard
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
             $onclick = 'panels.openAddMotdForm()"';
-            $detailsActionName = 'motdDetails';
             $unfoldButtonID = 'motdUnfoldButton';
             $contentAreaID = 'motdPanelContentArea';
             $titleID = 'motdPanelTitle';
@@ -1023,9 +946,6 @@ class TaskBoard
             <div class="top-bar-right">
                 <div class="panel-item-top-bar-button" id="' . $createButtonID . '" onclick="' . $onclick . '">
                     <i class="fa fa-plus" aria-hidden="true"></i>
-                </div>
-                <div class="panel-item-top-bar-button">
-                    <a href="' . DIR_SYSTEM . 'php/details.php?action=' . $detailsActionName . '"> <i class="fa fa-list" aria-hidden="true"></i> </a>
                 </div>
                 <div class="panel_item_top_bar_unfold_button" id="' . $unfoldButtonID . '" onclick="toggleUnfoldArea(\'' . $contentAreaID . '\',\'' . $unfoldButtonID . '\')">
                    <i class="fa fa-caret-down" aria-hidden="true"></i>
