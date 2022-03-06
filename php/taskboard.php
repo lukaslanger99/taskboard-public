@@ -976,12 +976,12 @@ class TaskBoard
             $title = '';
         } else if ($type == 'queue') {
             return '<div class="panel-item-top-bar">
-                    <div class="top-bar-left">
+                    <div class="queue__top-bar-left">
                         <p id="queuePanelTitle"></p>
                     </div>
-                    <div class="top-bar-right">
-                        <input type="text" id="queueItem" name="queueItem">
-                        <input type="checkbox" id="queueHighprio" name="queueHighprio" style="outline: 1px solid red;">
+                    <div class="queue__top-bar-right">
+                        <input class="queue__input__text" type="text" id="queueItem" name="queueItem">
+                        <input class="queue__input__check" type="checkbox" id="queueHighprio" name="queueHighprio" style="outline: 1px solid red;">
                         <input type="submit" id="queueSubmit "name="add-queue-submit" value="Add" onclick="panels.addQueueTask()"/>
                         <div class="panel_item_top_bar_unfold_button" id="queueUnfoldButton" onclick="toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\')">
                             <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -1038,7 +1038,7 @@ class TaskBoard
     {
         if ($type == 'appointment') {
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'appointmentPanelContentArea\',\'appointmentUnfoldButton\', \'true\')';
-            return '<div class="panel-item-area" id="appointmentPanelContentArea">
+            return '<div class="panel-item-area__scrollable" id="appointmentPanelContentArea">
                     <script>
                         panels.printAppointments()
                         ' . $unfoldPanel . '
@@ -1047,7 +1047,7 @@ class TaskBoard
         } else if ($type == 'motd') {
             $this->mysqliQueryPrepared("UPDATE users SET userLastMotd = CURRENT_TIMESTAMP WHERE userID = ?", $_SESSION['userID']);
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'motdPanelContentArea\',\'motdUnfoldButton\', \'true\')';
-            return '<div class="panel-item-area" id="motdPanelContentArea">
+            return '<div class="panel-item-area__scrollable" id="motdPanelContentArea">
                     <script>
                         panels.printMotd()
                         ' . $unfoldPanel . '
@@ -1055,7 +1055,7 @@ class TaskBoard
                 </div>';
         } else if ($type == 'queue') {
             if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'queuePanelContentArea\',\'queueUnfoldButton\', \'true\')';
-            return '<div class="panel-item-area" id="queuePanelContentArea">
+            return '<div class="panel-item-area__scrollable" id="queuePanelContentArea">
                     <script>
                         panels.printQueueTasks()
                     ' . $unfoldPanel . '
@@ -1065,7 +1065,7 @@ class TaskBoard
             $prevRows = '';
             for ($i = 1; $i < 6; $i++) {
                 $prevRows .= '
-                <div class="weather__block__forecast"">
+                <div class="weather__block__forecast">
                   <div class="weather__date" id="weatherPrevDate' . $i . '"></div>
                   <img src="" alt="" id="weatherPrevIcon' . $i . '" />
                   <div class="weather__temp" id="weatherPrevTemp' . $i . '"></div>

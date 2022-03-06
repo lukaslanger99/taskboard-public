@@ -1,19 +1,19 @@
 .weather__panel__content {
-  height: 81%;
+  height: 80%;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
   padding: 5px;
-  background-color: aqua;
 }
 
 .weather__city {
   margin-top: 5px;
-  font-size: large;
 }
 
 .weather__forecast {
   width: 60%;
+  display: flex;
+  flex-direction: column;
 }
 
 .weather__block {
@@ -27,14 +27,13 @@
   display: flex;
   margin-right: 5px;
   font-weight: 200;
-  padding: 0;
   height: 15%;
   justify-content: space-between;
 }
 
 .weather__forecast__header {
   font-size: medium;
-  margin-left: 15px;
+  text-align: center;
 }
 
 .weather__temp {
@@ -63,6 +62,12 @@
 .weather__input form {
   display: flex;
   width: 90%;
+}
+
+.weather__input form input[type="text"] {
+  font-weight: 200;
+  font-size: smaller;
+  width: 100px;
 }
 
 .weather__input form input[type="submit"] {

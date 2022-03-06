@@ -3,7 +3,6 @@
   font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
   font-size: medium;
   font-weight: 600;
-  overflow-x: hidden;
 }
 
 a {
@@ -244,6 +243,7 @@ th {
   margin: 5px;
   display: flex;
   justify-content: space-between;
+  min-height: 35px;
 }
 
 .panel-item-top-bar-button {
@@ -273,9 +273,15 @@ th {
 }
 
 .panel-item-area {
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+
+.panel-item-area__scrollable {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  height: 82%;
 }
 
 .panel-item-content-item {
@@ -322,6 +328,23 @@ th {
 
 .panel-item-check-button:hover {
   cursor: pointer;
+}
+
+.queue__input__text {
+  width: 60%;
+}
+
+.queue__input__check {
+  margin: auto 5px;
+}
+
+.queue__top-bar-left {
+  width: 50%;
+}
+
+.queue__top-bar-right {
+  display: flex;
+  justify-content: end;
 }
 
 /* ??? */
@@ -698,6 +721,10 @@ hr.solid {
   }
 
   .panel-item-area {
+    display: none;
+  }
+
+  .panel-item-area__scrollable {
     display: none;
   }
 
