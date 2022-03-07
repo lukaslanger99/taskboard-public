@@ -253,8 +253,10 @@ class RequestHandler
             ($check == 'true') ? $prio = 2 : $prio = 1;
             $queueItems = explode(",", $text);
             foreach ($queueItems as $item) {
-                $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messagePrio) VALUES (?, 'queue', ?, ?)";
-                $this->mysqliQueryPrepared($sql, $userID, $item, $prio);
+                if (!empty(trim($item))) {
+                    $sql = "INSERT INTO messages (messageOwner, messageType, messageTitle, messagePrio) VALUES (?, 'queue', ?, ?)";
+                    $this->mysqliQueryPrepared($sql, $userID, $item, $prio);
+                }
             }
         }
         return $this->getQueueTasks($userID);
