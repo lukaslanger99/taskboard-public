@@ -1080,7 +1080,7 @@ class TaskBoard
                         <div class="timetable__content__task__text">' . $nextTask3->timetableText . '</div>
                     </div>';
             }
-            if (!$prevTask && $prevAndActiveTasksCount == 0) {
+            if ($nextTask4 && !$prevTask && $prevAndActiveTasksCount == 0) {
                 $content .= '<div class="timetable__panel__nexttask">
                         <div class="timetable__content__task__time">' . $nextTask4->timetableTimeStart . ' - ' . $nextTask4->timetableTimeEnd . '</div>
                         <div class="timetable__content__task__text">' . $nextTask4->timetableText . '</div>

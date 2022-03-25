@@ -10,13 +10,13 @@ if (isset($_POST['login-submit'])) {
         if ($pwdCheck) {
             session_start();
             $_SESSION['userID'] = $userData->userID;
+            $taskBoard->mysqliQueryPrepared("UPDATE users SET userLastLogin = CURRENT_TIMESTAMP WHERE userID = ?", $userData->userID);
             if ($_SESSION['enteredUrl']) {
                 header("Location: " . DOMAIN . $_SESSION['enteredUrl']);
                 exit;
             } else {
                 $taskBoard->locationWithDir("index.php?success=login");
             }
-            $taskBoard->mysqliQueryPrepared("UPDATE users SET userLastLogin = CURRENT_TIMESTAMP WHERE userID = ?", $userData->userID);
         }
     }
     $taskBoard->locationIndex("?error=login&username=".$username);
