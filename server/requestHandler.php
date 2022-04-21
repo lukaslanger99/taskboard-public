@@ -100,16 +100,15 @@ class RequestHandler
         }
     }
 
-    public function insertEntry($userID, $timetableID, $text, $start, $end, $date, $weekday)
+    public function insertEntry($userID, $timetableID, $text, $start, $end, $weekday)
     {
         $this->mysqliQueryPrepared(
-            "INSERT INTO timetableentrys (timetableID, timetableText, timetableTimeStart, timetableTimeEnd, timetableDate, timetableOwnerID, timetableWeekday) 
+            "INSERT INTO timetableentrys (timetableID, timetableText, timetableTimeStart, timetableTimeEnd, timetableOwnerID, timetableWeekday) 
             VALUES ( ?, ?, ?, ?, ?, ?, '$weekday')",
             $timetableID,
             $text,
             $start,
             $end,
-            $date,
             $userID
         );
     }
@@ -165,7 +164,6 @@ class RequestHandler
                         $entry->timetableText,
                         $entry->timetableTimeStart,
                         $entry->timetableTimeEnd,
-                        date("Y-m-d", strtotime("$entry->timetableDate +7 day")),
                         $entry->timetableWeekday
                     );
                 }
@@ -272,11 +270,11 @@ class RequestHandler
         $data = $this->mysqliSelectFetchArray($sql, $userID);
         if ($data) {
             foreach ($data as $appointment) {
-                if ($this->getDateDifferenceDaysOnly($appointment->messageDate) > 0) {
-                    $sql = "DELETE FROM messages WHERE messageID = ?";
-                    $this->mysqliQueryPrepared($sql, $appointment->messageID);
-                    unset($appointment);
-                }
+                // if ($this->getDateDifferenceDaysOnly($appointment->messageDate) > 0) {
+                //     $sql = "DELETE FROM messages WHERE messageID = ?";
+                //     $this->mysqliQueryPrepared($sql, $appointment->messageID);
+                //     unset($appointment);
+                // }
                 $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
                 $appointment->messageDateFormFormat = date("Y-m-d", strtotime($appointment->messageDate));
                 $appointment->messageDate = date("d.m.y", strtotime($appointment->messageDate));

@@ -1022,9 +1022,9 @@ class TaskBoard
         } else if ($type == 'timetable') {
             if ($spec != '') {
                 $tasks = $this->mysqliSelectFetchArray(
-                    "SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableDate = ? ORDER BY timetableTimeStart",
+                    "SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableWeekday = ? ORDER BY timetableTimeStart",
                     $spec,
-                    date('Y-m-d')
+                    date('D')
                 );
                 if ($tasks) {
                     $currentTime = date('H:i');
