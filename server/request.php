@@ -31,49 +31,33 @@ switch ($_GET['action']) {
         $week = $timetable->timetableWeek;
         $year = $timetable->timetableYear;
 
-        $dateTime = new DateTime();
-
         // Monday
         if ($_POST['mon'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $date = $dateTime->setISODate($year, $week, 1); //year , week num , day
-            $date = $date->format('Y-m-d'); // 2022-02-22
-            $rh->insertEntry($userID, $id, $text, $start, $end, $date, 'mon');
+            $rh->insertEntry($userID, $id, $text, $start, $end, 'mon');
         }
         // Tuesday
         if ($_POST['tue'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $date = $dateTime->setISODate($year, $week, 2); //year , week num , day
-            $date = $date->format('Y-m-d'); // 2022-02-22
-            $rh->insertEntry($userID, $id, $text, $start, $end, $date, 'tue');
+            $rh->insertEntry($userID, $id, $text, $start, $end, 'tue');
         }
         // Wednesday
         if ($_POST['wed'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $date = $dateTime->setISODate($year, $week, 3); //year , week num , day
-            $date = $date->format('Y-m-d'); // 2022-02-22
-            $rh->insertEntry($userID, $id, $text, $start, $end, $date, 'wed');
+            $rh->insertEntry($userID, $id, $text, $start, $end, 'wed');
         }
         // Thursday
         if ($_POST['thu'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $date = $dateTime->setISODate($year, $week, 4); //year , week num , day
-            $date = $date->format('Y-m-d'); // 2022-02-22
-            $rh->insertEntry($userID, $id, $text, $start, $end, $date, 'thu');
+            $rh->insertEntry($userID, $id, $text, $start, $end, 'thu');
         }
         // Friday
         if ($_POST['fri'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $date = $dateTime->setISODate($year, $week, 5); //year , week num , day
-            $date = $date->format('Y-m-d'); // 2022-02-22
-            $rh->insertEntry($userID, $id, $text, $start, $end, $date, 'fri');
+            $rh->insertEntry($userID, $id, $text, $start, $end, 'fri');
         }
         // Saturday
         if ($_POST['sat'] == 'true' || $monsun == 'true') {
-            $date = $dateTime->setISODate($year, $week, 6); //year , week num , day
-            $date = $date->format('Y-m-d'); // 2022-02-22
-            $rh->insertEntry($userID, $id, $text, $start, $end, $date, 'sat');
+            $rh->insertEntry($userID, $id, $text, $start, $end, 'sat');
         }
         // Sunday
         if ($_POST['sun'] == 'true' || $monsun == 'true') {
-            $date = $dateTime->setISODate($year, $week, 7); //year , week num , day
-            $date = $date->format('Y-m-d'); // 2022-02-22
-            $rh->insertEntry($userID, $id, $text, $start, $end, $date, 'sun');
+            $rh->insertEntry($userID, $id, $text, $start, $end, 'sun');
         }
         header('Content-Type: application/json');
         echo json_encode($rh->timetableToJSON($timetable));

@@ -78,7 +78,6 @@ timetableText | activity text
 timetableTimeStart | string format eg. 17:00 
 timetableTimeEnd | same for ending time as timetableTimeStart
 timetableWeekday | mon, tue, wed, thu, fri, sat, sun
-timetableDate | date format: 2022-12-31
 timetableOwnerID | userID of owner
 
 ## timetables
