@@ -96,6 +96,12 @@ let panels = {
                         <input type="date" id="appointmentDate" name="date">
                     </td>
                 </tr>
+                <tr>
+                    <td>Start:</td>
+                    <td><input type="time" name="start" id="start" value="00:00"/></td>
+                    <td>End (Optional):</td>
+                    <td><input type="time" name="end" id="end"/></td>
+                </tr>
             </table>
             <textarea class="input-login" id="appointmentTitle" placeholder="name" name="title" rows="1"></textarea>
             <input class="submit-login" type="submit" value="Create" onclick="panels.addAppointment()" />`
@@ -106,12 +112,16 @@ let panels = {
         var group = document.getElementById("selectGroupID").value
         var date = document.getElementById("appointmentDate").value
         var title = document.getElementById("appointmentTitle").value
-        if (group && date && title) {
+        var start = document.getElementById("start").value
+        var end = document.getElementById("end").value
+        if (group && date && title && start) {
             var url = `${DIR_SYSTEM}server/request.php?action=addAppointment`
             var formData = new FormData()
             formData.append('group', group)
             formData.append('date', date)
             formData.append('title', title)
+            formData.append('start', start)
+            if (end) formData.append('end', end)
             const response = await fetch(
                 url, { method: 'POST', body: formData }
             )
@@ -192,7 +202,7 @@ let panels = {
         }
         document.getElementById('motdPanelTitle').innerHTML = title
     },
-    openAddMotdForm: async function() {
+    openAddMotdForm: async function () {
         const groups = await printGroupDropdown()
         var html = `${addHeaderDynamicForm('Create Message of the Day')}
             <table style="margin:0 auto 15px auto;">
@@ -202,10 +212,10 @@ let panels = {
             </table>
             <textarea class="input-login" id="motdTitle" placeholder="name" name="title" rows="1"></textarea>
             <input class="submit-login" type="submit" value="Create" onclick="panels.addMotd()" />`
-    showDynamicForm(document.getElementById("dynamic-modal-content"), html)
-    closeDynamicFormListener()
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
     },
-    addMotd: async function() {
+    addMotd: async function () {
         var group = document.getElementById("selectGroupID").value
         var title = document.getElementById("motdTitle").value
         if (group && title) {
@@ -252,27 +262,27 @@ let panels = {
     toggleUnfoldCheckboxListener: async function (id, type) {
         var checkboxElement = document.getElementById(id)
         if (checkboxElement) {
-          checkboxElement.addEventListener("click",
-            async () => {
-                  const response = await fetch(
-                      `${DIR_SYSTEM}server/request.php?action=toggleUnfoldPanel&type=${type}&checked=${checkboxElement.checked}`
-                  )
-                  return await response.json()
-              }
-          )
+            checkboxElement.addEventListener("click",
+                async () => {
+                    const response = await fetch(
+                        `${DIR_SYSTEM}server/request.php?action=toggleUnfoldPanel&type=${type}&checked=${checkboxElement.checked}`
+                    )
+                    return await response.json()
+                }
+            )
         }
     },
     toggleActiveCheckboxListener: async function (id, type) {
         var checkboxElement = document.getElementById(id)
         if (checkboxElement) {
-          checkboxElement.addEventListener("click",
-            async () => {
-                  const response = await fetch(
-                      `${DIR_SYSTEM}server/request.php?action=toggleActivePanel&type=${type}&checked=${checkboxElement.checked}`
-                  )
-                  return await response.json()
-              }
-          )
+            checkboxElement.addEventListener("click",
+                async () => {
+                    const response = await fetch(
+                        `${DIR_SYSTEM}server/request.php?action=toggleActivePanel&type=${type}&checked=${checkboxElement.checked}`
+                    )
+                    return await response.json()
+                }
+            )
         }
     }
 }

@@ -104,7 +104,7 @@ class RequestHandler
     {
         $this->mysqliQueryPrepared(
             "INSERT INTO timetableentrys (timetableID, timetableText, timetableTimeStart, timetableTimeEnd, timetableOwnerID, timetableWeekday) 
-            VALUES ( ?, ?, ?, ?, ?, ?, '$weekday')",
+            VALUES ( ?, ?, ?, ?, ?, '$weekday')",
             $timetableID,
             $text,
             $start,
@@ -139,7 +139,8 @@ class RequestHandler
         // return '';
     }
 
-    public function getTaskData($taskID) {
+    public function getTaskData($taskID)
+    {
         return $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
     }
 
@@ -262,19 +263,20 @@ class RequestHandler
 
     public function getAppointments($userID)
     {
+        // nur aktuellen monat
+        // wenn less than 10 auffüllen
+        // type übergeben also current month next month, für css notwendig 
+
         $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate
         FROM messages m
             LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
-        WHERE  ga.userID = ? AND m.messageType = 'appointment'
+        WHERE  ga.userID = ? AND m.messageType = 'appointment' AND messageDate > CURRENT_DATE
         ORDER BY m.messageDate";
         $data = $this->mysqliSelectFetchArray($sql, $userID);
         if ($data) {
-            foreach ($data as $appointment) {
-                // if ($this->getDateDifferenceDaysOnly($appointment->messageDate) > 0) {
-                //     $sql = "DELETE FROM messages WHERE messageID = ?";
-                //     $this->mysqliQueryPrepared($sql, $appointment->messageID);
-                //     unset($appointment);
-                // }
+            for ($i = 0; $i < 10 && $i < sizeof($data); $i++) {
+                $appointment = $data[$i];
+                $appointment->currentMonth = (date("m", strtotime($appointment->messageDate)) == date("m"));
                 $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
                 $appointment->messageDateFormFormat = date("Y-m-d", strtotime($appointment->messageDate));
                 $appointment->messageDate = date("d.m.y", strtotime($appointment->messageDate));
@@ -282,8 +284,9 @@ class RequestHandler
                 $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
                 $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
                 $appointment->messagePermission = ($userID == $appointment->messageGroup || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+                $appointmentlist[] = $appointment;
             }
-            return $data;
+            return $appointmentlist;
         }
         return 0;
     }
@@ -308,12 +311,13 @@ class RequestHandler
         return $this->getAppointments($userID);
     }
 
-    public function addAppointment($userID, $groupID, $date, $title)
+    public function addAppointment($userID, $groupID, $date, $title, $start, $end)
     {
+        if (!$end) $end = '-';
         $sql = "INSERT INTO messages 
-            (messageOwner, messageGroup, messageType, messageTitle, messageDate) 
-            VALUES (?, ?, 'appointment', ?, ?);";
-        $this->mysqliQueryPrepared($sql, $userID, (int) $groupID, str_replace(array("\r", "\n"), " ", $title), $date);
+            (messageOwner, messageGroup, messageType, messageTitle, messageDate, messageStart, messageEnd) 
+            VALUES (?, ?, 'appointment', ?, ?, ?, ?);";
+        $this->mysqliQueryPrepared($sql, $userID, (int) $groupID, str_replace(array("\r", "\n"), " ", $title), $date, $start, $end);
         return $this->getAppointments($userID);
     }
 
