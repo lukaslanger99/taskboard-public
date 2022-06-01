@@ -74,6 +74,34 @@ let panels = {
                         ``
                     }   
                     </div>`
+                //htmlNew
+                html += `<div class="timetable__content__block">
+                    <div class="timetable__content__task__row">
+                        <div class="timetable__content__task__date">${entry.messageDate}</div>
+                        ${(entry.messagePermission) ?
+                        `<div class="timetable__content__task__delete">
+                            <div 
+                                class="panel-item-delete-button" 
+                                onclick="panels.openEditAppointmentForm(${entry.messageID},'${entry.messageTitle}','${entry.messageDateFormFormat}')"
+                            >
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </div>
+                            <div class="panel-item-delete-button" onclick="panels.deleteAppointment(${entry.messageID})">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </div>
+                        </div>`
+                        :
+                        ``
+                    }  
+                        </div>
+                    <div class="timetable__content__task__time">${entry.timeStart}
+                    ${entry.timeEnd != '-' ? `- ${entry.timeEnd}` : ``}
+                    </div>
+                    <div class="timetable__content__task__text">
+                        ${entry.messageTitleFormated}
+                        <small>${entry.messageOwnerName} - ${entry.messageGroupName}</small>
+                    </div>
+                </div>`
                 toggle = !toggle
             })
             document.getElementById('appointmentPanelContentArea').innerHTML = html

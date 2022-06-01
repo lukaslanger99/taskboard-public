@@ -267,7 +267,7 @@ class RequestHandler
         // wenn less than 10 auffüllen
         // type übergeben also current month next month, für css notwendig 
 
-        $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate
+        $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
         FROM messages m
             LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
         WHERE  ga.userID = ? AND m.messageType = 'appointment' AND messageDate > CURRENT_DATE
@@ -283,7 +283,9 @@ class RequestHandler
                 $appointment->messageOwnerName = $this->getUsernameByID($appointment->messageOwner);
                 $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
                 $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
-                $appointment->messagePermission = ($userID == $appointment->messageGroup || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+                $appointment->messagePermission = ($userID == $appointment->messageOwner || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+                $appointment->timeStart = $appointment->messageStart;
+                $appointment->timeEnd = $appointment->messageEnd;
                 $appointmentlist[] = $appointment;
             }
             return $appointmentlist;
