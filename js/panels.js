@@ -55,38 +55,18 @@ let panels = {
         var html = '', toggle = false, title = ''
         if (appointments) {
             appointments.forEach(entry => {
-                html += `<div class="${(toggle) ? `panel-item-content-item` : `panel-item-content-item__secondary`}">
-                        <div class="panel-item-message-title">
-                            ${entry.messageDate} - ${entry.messageTitleFormated}
-                            <small>${entry.messageOwnerName} - ${entry.messageGroupName}</small>
-                        </div>
-                        ${(entry.messagePermission) ?
-                        `<div 
-                            class="panel-item-delete-button" 
-                            onclick="panels.openEditAppointmentForm(${entry.messageID},'${entry.messageTitle}','${entry.messageDateFormFormat}')"
-                            >
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                            </div>
-                            <div class="panel-item-delete-button" onclick="panels.deleteAppointment(${entry.messageID})">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </div>`
-                        :
-                        ``
-                    }   
-                    </div>`
-                //htmlNew
                 html += `<div class="timetable__content__block">
                     <div class="timetable__content__task__row">
                         <div class="timetable__content__task__date">${entry.messageDate}</div>
                         ${(entry.messagePermission) ?
-                        `<div class="timetable__content__task__delete">
+                        `<div class="appointment__content__task__invisible__buttons">
                             <div 
-                                class="panel-item-delete-button" 
+                                class="appointment__invisible__button" 
                                 onclick="panels.openEditAppointmentForm(${entry.messageID},'${entry.messageTitle}','${entry.messageDateFormFormat}')"
                             >
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </div>
-                            <div class="panel-item-delete-button" onclick="panels.deleteAppointment(${entry.messageID})">
+                            <div class="appointment__invisible__button" onclick="panels.deleteAppointment(${entry.messageID})">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </div>
                         </div>`
@@ -99,8 +79,8 @@ let panels = {
                     </div>
                     <div class="timetable__content__task__text">
                         ${entry.messageTitleFormated}
-                        <small>${entry.messageOwnerName} - ${entry.messageGroupName}</small>
                     </div>
+                    <div class="appointment__text__author">${entry.messageOwnerName} - ${entry.messageGroupName}</div>
                 </div>`
                 toggle = !toggle
             })

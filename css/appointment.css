@@ -1,0 +1,22 @@
+.appointment__content__task__invisible__buttons {
+    display: none;
+}
+
+.appointment__invisible__button {
+    margin-right: 5px;
+}
+
+.appointment__text__author {
+    font-size: small;
+    color: grey;
+}
+
+.timetable__content__block:hover .appointment__content__task__invisible__buttons {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .appointment__content__task__invisible__buttons {
+        display: flex;
+    }
+  }
