@@ -36,13 +36,31 @@ let weather = {
             })
     },
     displayForecast: function (data) {
-        var singleDays = data.list.filter((entry) => entry.dt_txt.includes("15:00:00")) // filter only the 15:00:00 entrys
+        const LOWEST = 0
+        const HIGHEST = 1
+        const ICON = 2
+        const daysForecast = new Map()
+        data = data.list.filter((entry) => !entry.dt_txt.includes(new Date().toISOString().slice(0, 10))) // delete current day from forecast entrys
+        data.forEach(entry => {
+            var date = entry.dt_txt.split(' ')[0]
+            const temp  = entry.main.temp
+            const icon = entry.weather[0].icon
+            var singleForecastDay = daysForecast.get(date)
+            if (!singleForecastDay) {
+                daysForecast.set(date, [temp, temp, icon])
+            } else {
+                if (singleForecastDay[LOWEST] > temp) singleForecastDay[LOWEST] = temp
+                if (singleForecastDay[HIGHEST] < temp) singleForecastDay[HIGHEST] = temp
+                if (entry.dt_txt.includes("15:00:00")) singleForecastDay[ICON] = icon
+            }
+        });
+
         var i = 1
-        singleDays.forEach(entry => {
-            var date = new Date(entry.dt_txt.split(' ')[0]).toString().split(' ')
+        daysForecast.forEach((val, key) => {
+            var date = new Date(key).toString().split(' ')
             document.getElementById("weatherPrevDate" + i).innerText = date[0] + ', ' + date[1] + ' ' + date[2]
-            document.getElementById("weatherPrevIcon" + i).src = "https://openweathermap.org/img/wn/" + entry.weather[0].icon + ".png"
-            document.getElementById("weatherPrevTemp" + i).innerText = `${Math.floor(entry.main.temp)} °C`
+            document.getElementById("weatherPrevIcon" + i).src = "https://openweathermap.org/img/wn/" + val[ICON] + ".png"
+            document.getElementById("weatherPrevTemp" + i).innerText = `${Math.floor(val[HIGHEST])} / ${Math.floor(val[LOWEST])}°C`
             i++
         });
 
