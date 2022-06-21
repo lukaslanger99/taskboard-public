@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/stylesheet-properties.css">';
+    echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/appointment.css">';
+    echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/fa.css">';
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/login.css">';
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/timetable.css">';
     echo '<link rel="stylesheet" type="text/css" href="' . DIR_SYSTEM . 'css/weather.css">';

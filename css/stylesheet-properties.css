@@ -706,6 +706,10 @@ hr.solid {
   border-radius: 5px;
 }
 
+.fa {
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .panel {
     flex-direction: column;

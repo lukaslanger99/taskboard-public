@@ -117,7 +117,7 @@ switch ($_GET['action']) {
 
     case 'addAppointment':
         header('Content-Type: application/json');
-        echo json_encode($rh->addAppointment($userID, $_POST['group'], $_POST['date'], $_POST['title']));
+        echo json_encode($rh->addAppointment($userID, $_POST['group'], $_POST['date'], $_POST['title'], $_POST['start'], $_POST['end']));
         break;
 
     case 'getMotd':

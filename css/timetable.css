@@ -65,6 +65,7 @@
 
 .timetable__content__task__text {
   font-weight: 400;
+  overflow: hidden;
 }
 
 .timetable__content__task__delete .fa-close {
