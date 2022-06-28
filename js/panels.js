@@ -55,7 +55,7 @@ let panels = {
         var html = '', toggle = false, title = ''
         if (appointments) {
             appointments.forEach(entry => {
-                html += `<div class="timetable__content__block">
+                html += `<div class="${(entry.currentMonth) ? 'timetable__content__block' : 'timetable__panel__prevtask'}">
                     <div class="timetable__content__task__row">
                         <div class="timetable__content__task__date">${entry.messageDate}</div>
                         ${(entry.messagePermission) ?
@@ -113,6 +113,76 @@ let panels = {
             </table>
             <textarea class="input-login" id="appointmentTitle" placeholder="name" name="title" rows="1"></textarea>
             <input class="submit-login" type="submit" value="Create" onclick="panels.addAppointment()" />`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
+    openAppointmentCalendar: async function (month = -1, year = -1) {
+        var title = 'Calendar', buttons = `<button onclick="panels.openAddAppointmentForm()">Create Appointment</button>`
+        var content = `
+            <div class="calendar__day__head">Monday</div>
+            <div class="calendar__day__head">Tuesday</div>
+            <div class="calendar__day__head">Wednesday</div>
+            <div class="calendar__day__head">Thursday</div>
+            <div class="calendar__day__head">Friday</div>
+            <div class="calendar__day__head">Saturday</div>
+            <div class="calendar__day__head">Sunday</div>
+            `
+
+        if (month == -1 && year == -1) var currentDate = new Date(), month = currentDate.getMonth(), year = currentDate.getFullYear()
+        const appoinments = await this.getEntrys(`getAppointmentsFromMonth&month=${month + 1}&year=${year}`)
+        var days = getDaysInMonth(month, year)
+        var offsetFirstDay = days[0].getDay() - 1 // Sunday - Saturday : 0 - 6
+        var boxcounter = offsetFirstDay
+
+        for (let i = 0; i < offsetFirstDay; i++) {
+            content += '<div class="calendar__day__box"></div>'
+        }
+
+        days.forEach(day => {
+            var formatedDate = day.getFullYear() + '-' + ((day.getMonth() < 10) ? '0' : '') + (day.getMonth() + 1) + '-' + ((day.getDate() < 10) ? '0' : '') + day.getDate()
+            var appoinmentHTML = ''
+            if (appoinments) {
+                appoinments.forEach(appoinment => {
+                    if (appoinment.messageDateFormFormat == formatedDate) {
+                        appoinmentHTML += '<div class="calendar__day__box__entry">' + appoinment.messageTitle + '</div>'
+                    }
+                });
+            }
+            content += '<div class="calendar__day__box border__black"><div class="calendar__day__box__head">' + day.getDate() + '</div>' + appoinmentHTML + '</div>'
+            boxcounter++
+        });
+
+        while (boxcounter % 7 != 0) {
+            content += '<div class="calendar__day__box"></div>'
+            boxcounter++
+        }
+
+        var prevMonth, prevYear, nextMonth, nextYear
+        if (month == 0) prevMonth = 11, prevYear = year - 1, nextMonth = month + 1, nextYear = year
+        else if (month == 11) prevMonth = month - 1, prevYear = year, nextMonth = 0, nextYear = year + 1
+        else prevMonth = month - 1, prevYear = year, nextMonth = month + 1, nextYear = year
+
+        var html = `
+            <div class="modal-header">
+                <div class="modal__header__left">${title}</div>
+                <div class="modal__header__right">${buttons}</div>
+                <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>
+            </div>
+            <div class="appointment__content">
+                <div class="calendar__month__switch">
+                    <div class="calendar__changemonth__btn" onclick="panels.openAppointmentCalendar(${prevMonth}, ${prevYear})">
+                        <i class="fa fa-arrow-left"></i>
+                        ${getMonthNameByNumber(prevMonth)}, ${prevYear}
+                    </div>
+                    <div class="calendar__changemonth__btn" onclick="panels.openAppointmentCalendar(${nextMonth}, ${nextYear})">
+                        ${getMonthNameByNumber(nextMonth)}, ${nextYear}
+                        <i class="fa fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="calendar__day__area">
+                    ${content}
+                </div>
+            </div>`
         showDynamicForm(document.getElementById("dynamic-modal-content"), html)
         closeDynamicFormListener()
     },
@@ -293,4 +363,28 @@ let panels = {
             )
         }
     }
+}
+
+/**
+ * @param {int} The month number, 0 based
+ * @param {int} The year, not zero based, required to account for leap years
+ * @return {Date[]} List with date objects for each day of the month
+ */
+function getDaysInMonth(month, year) {
+    var date = new Date(year, month, 1);
+    var days = [];
+    while (date.getMonth() === month) {
+        days.push(new Date(date));
+        date.setDate(date.getDate() + 1);
+    }
+    return days;
+}
+
+/**
+ * @param {int} The month number, 0 based
+ * @return {String} Month name
+ */
+function getMonthNameByNumber(month) {
+    const days = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    return days[month]
 }

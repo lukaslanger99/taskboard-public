@@ -884,12 +884,22 @@ class TaskBoard
     private function panelHeader($type)
     {
         if ($type == 'appointment') {
-            $createButtonID = 'createAppointmentButton';
-            $onclick = 'panels.openAddAppointmentForm()';
-            $unfoldButtonID = 'appointmentUnfoldButton';
-            $contentAreaID = 'appointmentPanelContentArea';
-            $titleID = 'appointmentPanelTitle';
-            $title = '';
+            return '<div class="panel-item-top-bar">
+                <div class="top-bar-left">
+                    <p id="appointmentPanelTitle"></p>
+                </div>
+                <div class="top-bar-right">
+                    <div class="panel-item-top-bar-button" id="openAppointmentCalendarButton" onclick="panels.openAppointmentCalendar()">
+                        <i class="fa fa-calendar-day" aria-hidden="true"></i>
+                    </div>
+                    <div class="panel-item-top-bar-button" id="createAppointmentButton" onclick="panels.openAddAppointmentForm()">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </div>
+                    <div class="panel_item_top_bar_unfold_button" id="appointmentUnfoldButton" onclick="toggleUnfoldArea(\'appointmentPanelContentArea\',\'appointmentUnfoldButton\')">
+                       <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>';
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
             $onclick = 'panels.openAddMotdForm()"';

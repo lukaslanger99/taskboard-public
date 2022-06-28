@@ -105,6 +105,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->getAppointments($userID));
         break;
 
+    case 'getAppointmentsFromMonth':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getAppointmentsFromMonth($userID, $_GET['month'], $_GET['year']));
+        break;
+
     case 'editAppointment':
         header('Content-Type: application/json');
         echo json_encode($rh->editAppointment($userID, $_GET['id'], $_POST['title'], $_POST['date']));

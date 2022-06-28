@@ -1,3 +1,11 @@
+.appointment__content {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px 20px 10px;
+    overflow-y: auto;
+    min-height: 500px;
+}
+
 .appointment__content__task__invisible__buttons {
     display: none;
 }
@@ -13,6 +21,17 @@
 
 .timetable__content__block:hover .appointment__content__task__invisible__buttons {
     display: flex;
+}
+
+.calendar__month__switch {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+}
+
+.calendar__changemonth__btn:hover {
+    opacity: 0.7;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {

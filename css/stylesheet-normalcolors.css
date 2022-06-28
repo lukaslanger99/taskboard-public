@@ -258,3 +258,11 @@ th {
 .draggable__item {
   background-color: #fff;
 }
+
+.block__nextmonth {
+  background-color: #d6e3ff;
+}
+
+.calendar__day__head {
+  background-color: lightgray;
+}
