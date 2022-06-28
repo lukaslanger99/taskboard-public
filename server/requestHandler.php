@@ -295,7 +295,7 @@ class RequestHandler
         $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
         FROM messages m
             LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
-        WHERE  ga.userID = ? AND m.messageType = 'appointment' AND messageDate > CURRENT_DATE
+        WHERE  ga.userID = ? AND m.messageType = 'appointment'
         ORDER BY m.messageDate";
         $data = $this->mysqliSelectFetchArray($sql, $userID);
         if ($data) {
