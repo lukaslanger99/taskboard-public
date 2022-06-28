@@ -300,6 +300,7 @@ class RequestHandler
         $data = $this->mysqliSelectFetchArray($sql, $userID);
         if ($data) {
             foreach ($data as $appointment) {
+                $dateCheck = date("Y-m", strtotime($appointment->messageDate));
                 $appointment->currentMonth = (date("m", strtotime($appointment->messageDate)) == date("m"));
                 $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
                 $appointment->messageDateFormFormat = date("Y-m-d", strtotime($appointment->messageDate));
@@ -310,7 +311,7 @@ class RequestHandler
                 $appointment->messagePermission = ($userID == $appointment->messageOwner || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
                 $appointment->timeStart = $appointment->messageStart;
                 $appointment->timeEnd = $appointment->messageEnd;
-                if (date("Y-m", strtotime($appointment->messageDate)) == $monthKey) $appointmentlist[] = $appointment;
+                if ($dateCheck == $monthKey) $appointmentlist[] = $appointment;
             }
             return $appointmentlist;
         }
