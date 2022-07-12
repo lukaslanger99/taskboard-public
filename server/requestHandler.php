@@ -15,7 +15,7 @@ class RequestHandler
         return $mysqli;
     }
 
-    private function mysqliQueryPrepared($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '', $value6 = '')
+    private function mysqliQueryPrepared($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -23,25 +23,14 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '' && $value6 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else if ($value6 == '') {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            } else {
-                mysqli_stmt_bind_param($stmt, "ssssss", $value, $value2, $value3, $value4, $value5, $value6);
-            }
+            $types = str_repeat('s', count($params));
+            if (count($params) == 1) $params = $params[0];
+            mysqli_stmt_bind_param($stmt, $types, $params);
             mysqli_stmt_execute($stmt);
         }
     }
 
-    private function mysqliSelectFetchArray($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    private function mysqliSelectFetchArray($sql, $params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -49,18 +38,9 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            $types = str_repeat('s', count($params));
+            if (count($params) == 1) $params = $params[0];
+            mysqli_stmt_bind_param($stmt, $types, $params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -72,7 +52,7 @@ class RequestHandler
         }
     }
 
-    private function mysqliSelectFetchObject($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    private function mysqliSelectFetchObject($sql, $params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -80,18 +60,9 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            $types = str_repeat('s', count($params));
+            if (count($params) == 1) $params = $params[0];
+            mysqli_stmt_bind_param($stmt, $types, $params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -121,22 +92,6 @@ class RequestHandler
             WHERE  ga.userID = ? AND g.groupState = 'active'
             ORDER BY g.groupPriority DESC";
         return $this->mysqliSelectFetchArray($sql, $userID);
-        // if ($groups) {
-        //     $tasks = $this->mysqliSelectFetchArray(
-        //         "SELECT t.* 
-        //             FROM tasks t
-        //             LEFT JOIN groupaccess ga ON t.taskParentID = ga.groupID
-        //             LEFT JOIN groups g ON g.groupID = ga.groupID
-        //             WHERE  ga.userID = ? AND g.groupState = 'active' AND t.taskType = 'task' AND NOT t.taskState = 'archived'
-        //             ORDER BY t.taskParentID DESC",
-        //         $userID
-        //     );
-        //     $json = [];
-        //     $json['groups'] = $groups;
-        //     $json['tasks'] = $tasks;
-        //     return $json;
-        // }
-        // return '';
     }
 
     public function getTaskData($taskID)
@@ -289,7 +244,7 @@ class RequestHandler
         return 0;
     }
 
-    public function getAppointmentsFromMonth($userID, $month, $year) 
+    public function getAppointmentsFromMonth($userID, $month, $year)
     {
         $monthKey = $year . '-' . (((int) $month < 10) ? '0' : '') . $month;
         $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
@@ -490,6 +445,15 @@ class RequestHandler
         return $groupOwnerID->groupOwner == $userID;
     }
 
+    private function checkGroupPermission($userID, $groupID)
+    {
+        if ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     private function getUserLastMotd($userID)
     {
         $sql = "SELECT userLastMotd FROM users WHERE userID = ?";
@@ -497,9 +461,12 @@ class RequestHandler
         return $data->userLastMotd;
     }
 
-    private function getDateDifferenceDaysOnly($date)
+    public function createLabel($userID, $groupID, $title, $description, $color)
     {
-        $tmpDate = new DateTime($date);
-        return $tmpDate->diff(new DateTime(date('Y-m-d')))->format('%r%a');
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $count = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM labels WHERE labelGroupID = ?", $groupID);
+        $sql = "INSERT INTO labels (labelName, labelDescription, labelColor, labelGroupID, labelOrder) VALUES (?, ?, ?, ?, ?)";
+        $this->mysqliQueryPrepared($sql, $title, $description, $color, $groupID, ($count->number + 1));
+        return 1;
     }
 }

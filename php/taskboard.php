@@ -13,7 +13,7 @@ class TaskBoard
         return $mysqli;
     }
 
-    public function mysqliQueryPrepared($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    public function mysqliQueryPrepared($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -21,23 +21,14 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            $types = str_repeat('s', count($params));
+            if (count($params) == 1) $params = $params[0];
+            mysqli_stmt_bind_param($stmt, $types, $params);
             mysqli_stmt_execute($stmt);
         }
     }
 
-    public function mysqliSelectFetchObject($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    public function mysqliSelectFetchObject($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -45,18 +36,9 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            $types = str_repeat('s', count($params));
+            if (count($params) == 1) $params = $params[0];
+            mysqli_stmt_bind_param($stmt, $types, $params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -65,7 +47,7 @@ class TaskBoard
         }
     }
 
-    public function mysqliSelectFetchArray($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    public function mysqliSelectFetchArray($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -73,18 +55,9 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            $types = str_repeat('s', count($params));
+            if (count($params) == 1) $params = $params[0];
+            mysqli_stmt_bind_param($stmt, $types, $params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
