@@ -21,9 +21,7 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            $types = str_repeat('s', count($params));
-            if (count($params) == 1) $params = $params[0];
-            mysqli_stmt_bind_param($stmt, $types, $params);
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
         }
     }
@@ -36,9 +34,7 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            $types = str_repeat('s', count($params));
-            if (count($params) == 1) $params = $params[0];
-            mysqli_stmt_bind_param($stmt, $types, $params);
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -55,9 +51,7 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            $types = str_repeat('s', count($params));
-            if (count($params) == 1) $params = $params[0];
-            mysqli_stmt_bind_param($stmt, $types, $params);
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -722,6 +716,9 @@ class TaskBoard
                                 <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                             </div>
                             ' . $editGroupButton . '
+                            <div class="button" onclick="labelHandler.openGroupLabelsPopup(' . $groupID . ')">
+                                <p>Labels</p>
+                            </div>
                         </div>
                         <div class="top-bar-right">
                             <div class="dropbtn" id="groupdetailsUnfoldButton" onclick="toggleUnfoldArea(\'groupDetailsButtons\',\'groupdetailsUnfoldButton\')">

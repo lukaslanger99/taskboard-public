@@ -23,9 +23,7 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            $types = str_repeat('s', count($params));
-            if (count($params) == 1) $params = $params[0];
-            mysqli_stmt_bind_param($stmt, $types, $params);
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
         }
     }
@@ -38,9 +36,7 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            $types = str_repeat('s', count($params));
-            if (count($params) == 1) $params = $params[0];
-            mysqli_stmt_bind_param($stmt, $types, $params);
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -60,9 +56,7 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            $types = str_repeat('s', count($params));
-            if (count($params) == 1) $params = $params[0];
-            mysqli_stmt_bind_param($stmt, $types, $params);
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
