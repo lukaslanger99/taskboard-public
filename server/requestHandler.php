@@ -30,7 +30,7 @@ class RequestHandler
         }
     }
 
-    private function mysqliSelectFetchArray($sql, $params)
+    private function mysqliSelectFetchArray($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -52,7 +52,7 @@ class RequestHandler
         }
     }
 
-    private function mysqliSelectFetchObject($sql, $params)
+    private function mysqliSelectFetchObject($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
