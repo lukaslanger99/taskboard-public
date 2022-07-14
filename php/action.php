@@ -1,11 +1,6 @@
 <?php
 require('../config.php');
-if (!$_SESSION['userID']) {
-    $taskBoard->locationIndex();
-} else {
-    $userID = $_SESSION['userID'];
-}
-
+($_SESSION['userID']) ? $userID = $_SESSION['userID'] : $taskBoard->locationIndex();
 $id = $_GET['id'];
 $action = $_GET['action'];
 $currentDate = date('Y-m-d H:i');
@@ -20,47 +15,31 @@ if ($action == 'deleteTask' || $action == 'closeTask') {
 switch ($action) {
     case 'stateOpen':
         if (isset($_POST['stateopen-submit'])) {
-            $sql = "UPDATE tasks SET taskState = 'open', taskAssignedBy = '' WHERE taskID = ?;";
-            $taskBoard->mysqliQueryPrepared($sql, $id);
-
-            if ($taskBoard->getTaskType($id) == 'subtask') {
-                $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=" . $taskBoard->getParentIDOfTask($id));
-            }
+            $taskBoard->mysqliQueryPrepared("UPDATE tasks SET taskState = 'open', taskAssignedBy = '' WHERE taskID = ?", $id);
+            if ($taskBoard->getTaskType($id) == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=" . $taskBoard->getParentIDOfTask($id));
         }
         break;
 
     case 'updateWeatherCity':
         if (isset($_POST['update-weather-submit'])) {
-            if (empty($_POST['city'])) {
-                $taskBoard->locationIndex("?error=emptyfields");
-            }
-            $city = $_POST['city'];
-            $sql = "UPDATE panels SET panelWeatherCity = ? WHERE userID = ?;";
-            $taskBoard->mysqliQueryPrepared($sql, $city, $userID);
+            if (empty($_POST['city'])) $taskBoard->locationIndex("?error=emptyfields");
+            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelWeatherCity = ? WHERE userID = ?", $_POST['city'], $userID);
             $taskBoard->locationIndex("?success=weathercityupdated");
         }
         break;
 
     case 'assign':
         if (isset($_POST['assign-submit'])) {
-            $sql = "UPDATE tasks SET taskAssignedBy = '$userID' WHERE taskID = ?;";
-            $taskBoard->mysqliQueryPrepared($sql, $id);
+            $taskBoard->mysqliQueryPrepared("UPDATE tasks SET taskAssignedBy = '$userID' WHERE taskID = ?", $id);
             $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$id&success=taskassigned");
         }
         break;
 
     case 'createComment':
         if (isset($_POST['createcomment-submit'])) {
-            if (empty($_POST['description'])) {
-                $taskBoard->locationIndex("?error=emptyfields");
-            }
-            $type = $_GET['type'];
-            if (empty($_POST['description'])) {
-                $description = '-';
-            } else {
-                $description = $_POST['description'];
-            }
-            $taskBoard->createComment($id, $type, $userID, $description, $currentDate);
+            if (empty($_POST['description'])) $taskBoard->locationIndex("?error=emptyfields");
+            (empty($_POST['description'])) ? $description = '-' : $description = $_POST['description'];
+            $taskBoard->createComment($id, $_GET['type'], $userID, $description, $currentDate);
             $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$id&success=commentcreated");
         }
         break;
@@ -75,12 +54,8 @@ switch ($action) {
                 }
                 exit;
             }
-            if ($taskBoard->getNumberOfOwnedGroups($userID) > 9 && $taskBoard->getUserType($userID) == 'normal') {
-                $taskBoard->locationIndex("?error=maxgroups");
-            }
-            if (empty($_POST['name'])) {
-                $taskBoard->locationIndex("?error=emptyfields");
-            }
+            if ($taskBoard->getNumberOfOwnedGroups($userID) > 9 && $taskBoard->getUserType($userID) == 'normal') $taskBoard->locationIndex("?error=maxgroups");
+            if (empty($_POST['name'])) $taskBoard->locationIndex("?error=emptyfields");
             $groupName = $_POST['name'];
             $sql = "INSERT INTO groups (groupName, groupOwner) VALUES (?, ?);";
             $taskBoard->mysqliQueryPrepared($sql, $groupName, $userID);
@@ -92,48 +67,31 @@ switch ($action) {
 
     case 'createSubtask':
         if (isset($_POST['createtask-submit'])) {
-            if (empty($_POST['title'])) {
-                $taskBoard->locationIndex("?error=emptyfields");
-            }
+            if (empty($_POST['title'])) $taskBoard->locationIndex("?error=emptyfields");
             $priority = (int) $_POST['priority'];
             $priorityColor = $taskBoard->getPriorityColor($priority);
             $state = 'open';
             $title = $_POST['title'];
-            if (empty($_POST['description'])) {
-                $description = '-';
-            } else {
-                $description = $_POST['description'];
-            }
+            (empty($_POST['description'])) ? $description = '-' : $description = $_POST['description'];
             $taskId = $_GET['taskId'];
             $sql = "INSERT INTO tasks 
                 (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskState, taskDateCreated) 
                 VALUES ('subtask', ?, ?, '$priorityColor', ?, ?, '$state', '$currentDate');";
             $taskBoard->mysqliQueryPrepared($sql, $taskId, $priority, $title, $description);
-            if ($_POST['createAnother']) {
-                $createAnother = '&createSubtask=true';
-            } else {
-                $createAnother = '';
-            }
+            ($_POST['createAnother']) ? $createAnother = '&createSubtask=true' : $createAnother = '';
             $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=" . $taskId . $createAnother . "&success=subtaskcreated");
         }
         break;
 
     case 'createTask':
         if (isset($_POST['createtask-submit'])) {
-            if (empty($_POST['title'])) {
-                $taskBoard->locationIndex("?error=emptyfields");
-            }
+            if (empty($_POST['title'])) $taskBoard->locationIndex("?error=emptyfields");
             $priority = (int) $_POST['priority'];
             $priorityColor = $taskBoard->getPriorityColor($priority);
             $state = 'open';
             $title = $_POST['title'];
-            if (empty($_POST['description'])) {
-                $description = '-';
-            } else {
-                $description = $_POST['description'];
-            }
+            (empty($_POST['description'])) ? $description = '-' : $description = $_POST['description'];
             $groupID = (int) $_POST['groupID'];
-
             $sql = "INSERT INTO tasks 
                 (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskState, taskDateCreated) 
                 VALUES ('task', ?, ?, '$priorityColor', ?, ?, '$state', '$currentDate');";
@@ -151,12 +109,8 @@ switch ($action) {
             $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskID = ?", $id);
             $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $id);
             $taskBoard->mysqliQueryPrepared("DELETE FROM comments WHERE commentTaskID = ?", $id);
-
-            if ($type == 'task') {
-                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=deletetask");
-            } else if ($type == 'subtask') {
-                $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=deletesubtask");
-            }
+            if ($type == 'task') $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=deletetask");
+            else if ($type == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=deletesubtask");
             exit;
         }
         break;
@@ -171,9 +125,7 @@ switch ($action) {
 
     case 'deleteComment':
         $taskId = $_GET['taskId'];
-        if ($_SESSION['delete'] == $taskId) {
-            $taskBoard->mysqliQueryPrepared("DELETE FROM comments WHERE commentID = ?", $id);
-        }
+        if ($_SESSION['delete'] == $taskId) $taskBoard->mysqliQueryPrepared("DELETE FROM comments WHERE commentID = ?", $id);
         $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$taskId&success=deletecomment");
         exit;
 
@@ -194,11 +146,8 @@ switch ($action) {
             }
             $sql = "UPDATE tasks SET taskState = 'closed', taskDateClosed = '$currentDate' WHERE taskID = ?";
             $taskBoard->mysqliQueryPrepared($sql, $id);
-            if ($type == 'task') {
-                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=closedtask");
-            } else if ($type == 'subtask') {
-                $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=closedsubtask");
-            }
+            if ($type == 'task') $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=closedtask");
+            else if ($type == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=closedsubtask");
             exit;
         }
         break;
@@ -223,15 +172,12 @@ switch ($action) {
     case 'groupinvites':
         if (isset($_POST['groupinvites-submit'])) {
             $enableInvites = $_GET['invites']; // enable, disable
-
             if ($enableInvites == 'enable') {
                 $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupInvites = 'enabled' WHERE groupID = ?;", $id);
-                //token anlegen
                 $sql = "INSERT INTO tokens (tokenType, tokenGroupID, tokenToken) VALUES ('groupinvite', ?, ?)";
                 $taskBoard->mysqliQueryPrepared($sql, $id, $taskBoard->generateRandomString());
             } else if ($enableInvites == 'disable') {
                 $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupInvites = 'disabled' WHERE groupID = ?;", $id);
-                //token löschen
                 $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $id);
             }
             $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id);
@@ -242,12 +188,8 @@ switch ($action) {
     case 'groupstate':
         if (isset($_POST['groupstate-submit'])) {
             $stateAction = $_GET['state']; // activate, hide
-
-            if ($stateAction == 'activate') {
-                $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'active' WHERE groupID = ?;", $id);
-            } else if ($stateAction == 'hide') {
-                $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'hidden' WHERE groupID = ?;", $id);
-            }
+            if ($stateAction == 'activate') $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'active' WHERE groupID = ?;", $id);
+            else if ($stateAction == 'hide') $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'hidden' WHERE groupID = ?;", $id);
             $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id);
             exit;
         }
@@ -301,25 +243,14 @@ switch ($action) {
 
             $comment = '';
             $priority = (int) $_POST['priority'];
+            ($task->taskType == 'task') ? $parentID = $_POST['groupID'] : $parentID = $task->taskParentID;
 
-            if ($task->taskType == 'task') {
-                $parentID = $_POST['groupID'];
-            } else {
-                $parentID = $task->taskParentID;
-            }
-
-            if ($task->taskPriority != $priority) {
-                $comment .= 'PRIORITY[' . $task->taskPriority . ' -> ' . $priority . ']';
-            }
+            if ($task->taskPriority != $priority) $comment .= 'PRIORITY[' . $task->taskPriority . ' -> ' . $priority . ']';
             if ($task->taskType == 'task' && $task->taskParentID != $_POST['groupID']) {
                 $comment .= 'GROUP[' . $taskBoard->getGroupNameByID($task->taskParentID) . ' -> ' . $taskBoard->getGroupNameByID($parentID) . ']';
             }
-            if ($task->taskTitle != $_POST['title']) {
-                $comment .= 'TITLE[' . $task->taskTitle . ' -> ' . $_POST['title'] . ']';
-            }
-            if ($task->taskDescription != $_POST['description']) {
-                $comment .= 'DESCRIPTION[' . $task->taskDescription . ' -> ' . $_POST['description'] . ']';
-            }
+            if ($task->taskTitle != $_POST['title']) $comment .= 'TITLE[' . $task->taskTitle . ' -> ' . $_POST['title'] . ']';
+            if ($task->taskDescription != $_POST['description']) $comment .= 'DESCRIPTION[' . $task->taskDescription . ' -> ' . $_POST['description'] . ']';
             if ($comment != '') {
                 $comment = '[' . $taskBoard->getUsernameByID($_SESSION['userID']) . '] ' . $comment;
                 $taskBoard->createComment($id, $task->taskType, 'Auto-Created', $comment, $currentDate);
@@ -327,11 +258,7 @@ switch ($action) {
 
             $priorityColor = $taskBoard->getPriorityColor($priority);
             $title = $_POST['title'];
-            if (empty($_POST['description'])) {
-                $description = '-';
-            } else {
-                $description = $_POST['description'];
-            }
+            (empty($_POST['description'])) ? $description = '-' : $description = $_POST['description'];
 
             $sql = "UPDATE tasks SET 
                 taskParentID = ?,
@@ -359,9 +286,7 @@ switch ($action) {
             $priority = $_POST['priority'];
             $archiveTime = $_POST['archivetime'];
 
-            if ($priority > 1000 || $archiveTime > 365) {
-                $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id . "&error=highnumber");
-            }
+            if ($priority > 1000 || $archiveTime > 365) $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id . "&error=highnumber");
             $sql = "UPDATE groups SET groupName = ?, groupPriority = ?, groupArchiveTime = ? WHERE groupID = ?";
             $taskBoard->mysqliQueryPrepared($sql, $name, $priority, $archiveTime, $id);
             $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id . "&success=updatedgroup");
