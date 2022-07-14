@@ -24,6 +24,7 @@
     <script src="<?php echo DIR_SYSTEM ?>js/forms.js" defer></script>
     <script src="<?php echo DIR_SYSTEM ?>js/dragger.js" defer></script>
     <script src="<?php echo DIR_SYSTEM ?>js/javascript.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/labelHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/maps.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/panels.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/timetable.js"></script>

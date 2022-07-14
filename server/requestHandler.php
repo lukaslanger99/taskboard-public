@@ -463,4 +463,56 @@ class RequestHandler
         $this->mysqliQueryPrepared($sql, $title, $description, $color, $groupID, ($count->number + 1));
         return 1;
     }
+
+    public function getLabels($userID, $groupID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $data = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ?", $groupID);
+        if ($data) return $data;
+        return 0;
+    }
+
+    public function getLabelsForTask($userID, $groupID, $taskID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $labels = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ?", $groupID);
+        if ($labels) {
+            foreach ($labels as $label) {
+                $checkIfLabelIsActiveForTask = $this->mysqliSelectFetchObject("SELECT entryID FROM tasklabels WHERE taskID = ? AND labelID = ?", $taskID, $label->labelID);
+                if ($checkIfLabelIsActiveForTask) $label->isUsed = true;
+            }
+            return $labels;
+        }
+        return 0;
+    }
+
+    public function deleteLabel($userID, $groupID, $labelID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $this->mysqliQueryPrepared("DELETE FROM labels WHERE labelID = ?", $labelID);
+        return 1;
+    }
+
+    public function updateLabel($userID, $groupID, $labelID, $title, $description, $color)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $sql = "UPDATE labels SET
+            labelName = ?,
+            labeLDescription = ?,
+            labelColor = ?
+            WHERE labelID = ?";
+        $this->mysqliQueryPrepared($sql, $title, $description, $color, $labelID);
+        return 1;
+    }
+
+    public function updateTaskLabel($userID, $groupID, $taskID, $labelID, $checkboxChecked)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        if ($checkboxChecked == 'true') {
+            $this->mysqliQueryPrepared("INSERT INTO tasklabels (labelID, taskID) VALUES (?, ?)", $labelID, $taskID);
+        } else {
+            $this->mysqliQueryPrepared("DELETE FROM tasklabels WHERE labelID = ? AND taskID = ?", $labelID, $taskID);
+        }
+        return 1;
+    }
 }

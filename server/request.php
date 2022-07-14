@@ -165,6 +165,36 @@ switch ($_GET['action']) {
         echo json_encode($rh->updatePanelOrder($userID, explode(',', $_POST['order'])));
         break;
 
+    case 'createLabel':
+        header('Content-Type: application/json');
+        echo json_encode($rh->createLabel($userID, $_POST['groupID'], $_POST['title'], $_POST['description'], $_POST['color']));
+        break;
+
+    case 'getLabels':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getLabels($userID, $_POST['groupID']));
+        break;
+
+    case 'getLabelsForTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getLabelsForTask($userID, $_POST['groupID'], $_POST['taskID']));
+        break;
+
+    case 'deleteLabel':
+        header('Content-Type: application/json');
+        echo json_encode($rh->deleteLabel($userID, $_POST['groupID'], $_POST['labelID']));
+        break;
+
+    case 'updateLabel':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateLabel($userID, $_POST['groupID'], $_POST['labelID'], $_POST['title'], $_POST['description'], $_POST['color']));
+        break;
+
+    case 'updateTaskLabel':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateTaskLabel($userID, $_POST['groupID'], $_POST['taskID'], $_POST['labelID'], $_POST['checkboxChecked']));
+        break;
+
     default:
         # code...
         break;

@@ -14,3 +14,5 @@ Test Login Functionality
     [Tags]             Functional
 
     LoginDefinedKeywords.Verify Login Functionality
+
+Test Appointment Functionality

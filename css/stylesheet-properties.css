@@ -25,6 +25,10 @@ th {
   padding: 5px;
 }
 
+.display-flex {
+  display: flex;
+}
+
 /* Main Page */
 .top-bar {
   display: flex;
@@ -187,21 +191,7 @@ th {
   display: flex;
 }
 
-.bottom_label {
-  border-radius: 5px;
-  margin-right: 10px;
-  padding: 2px 5px;
-  width: fit-content;
-}
-
-.new_label {
-  border-radius: 5px;
-  margin-right: 10px;
-  padding: 2px 5px;
-  width: fit-content;
-}
-
-.subtask_label {
+.label {
   border-radius: 5px;
   margin-right: 10px;
   padding: 2px 5px;
@@ -383,6 +373,7 @@ th {
 
 .modal-content {
   max-width: 90%;
+  min-width: 30%;
   max-height: 95%;
   border-radius: 5px;
   text-align: center;
@@ -708,6 +699,22 @@ hr.solid {
 
 .fa {
   cursor: pointer;
+}
+
+.label__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+}
+
+.label__item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.label__left {
+  display: flex;
 }
 
 @media (max-width: 768px) {

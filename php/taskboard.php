@@ -288,9 +288,9 @@ class TaskBoard
         $numberOfSubtasks = $open + $inProgress;
 
         if ($numberOfSubtasks == 1) {
-            return '<div class="subtask_label">' . $numberOfSubtasks . ' Subtask</div>';
+            return '<div class="label subtask_label">' . $numberOfSubtasks . ' Subtask</div>';
         } else if ($numberOfSubtasks > 1) {
-            return '<div class="subtask_label">' . $numberOfSubtasks . ' Subtasks</div>';
+            return '<div class="label subtask_label">' . $numberOfSubtasks . ' Subtasks</div>';
         } else {
             return '';
         }
@@ -1206,7 +1206,7 @@ class TaskBoard
                 <div class="emptyspace">&nbsp;</div>';
 
             $html .= '<div class="bottom">
-                <div class="bottom_label">
+                <div class="label bottom_label">
                 id_' . $taskData->taskID . '
                 </div>';
 
@@ -1215,16 +1215,16 @@ class TaskBoard
                 $sql = "SELECT * FROM users WHERE userID = ?";
                 $userData = $this->mysqliSelectFetchObject($sql, $userID);
                 $assignerShort = $userData->userNameShort;
-                $html .= '<div class="bottom_label">' . $assignerShort . '</div>';
+                $html .= '<div class="label bottom_label">' . $assignerShort . '</div>';
             }
 
             if ($taskData->taskState != 'finished') {
                 if ($taskData->taskState == 'open' && $dateDiff == 0) {
-                    $html .= '<div class="new_label">NEW</div>';
+                    $html .= '<div class="label new_label">NEW</div>';
                 } else if ($taskData->taskState == 'open' && $dateDiff > 31) {
-                    $html .= '<div class="bottom_label" style="background-color:red;color:#fff;">' . $dateDiff . '</div>';
+                    $html .= '<div class="label bottom_label" style="background-color:red;color:#fff;">' . $dateDiff . '</div>';
                 } else {
-                    $html .= '<div class="bottom_label">' . $dateDiff . '</div>';
+                    $html .= '<div class="label bottom_label">' . $dateDiff . '</div>';
                 }
             }
             $html .= $this->getNumberOfSubtasks($taskData->taskID);
@@ -1239,21 +1239,18 @@ class TaskBoard
 
     public function printTaskDetails($task, $id)
     {
-        $html = $this->printTaskDetailsNew($task);
-        $subtaskcount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $task->taskID);
-        if ($subtaskcount->number > 0) {
-            $html .= $this->printSubtaskPanel($id);
-        }
-        echo $html;
-    }
-
-    public function printTaskDetailsNew($task)
-    {
         if ($task->taskType == 'subtask') {
             $backButton = '<a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id=' . $task->taskParentID . '"> 
                 <div class="button"><p><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</p></div></a>';
+            $labelTR = '';
         } else {
             $backButton = '';
+            $labelTR = '<tr>
+                <td>Labels:</td>
+                <td id="tasklabel-list">
+                    <script>labelHandler.showLabelsInTaskDetails(' . $task->taskParentID . ', ' . $task->taskID . ')</script>
+                </td>
+            </tr>';
         }
         $buttons = '<button class="button" onclick="openUpdateTaskForm()">Update</button>
             <button class="button" type="button" onclick="deleteTask(\'' . $task->taskID . '\')">Delete</button>
@@ -1341,10 +1338,15 @@ class TaskBoard
                             <td>Date Finished:</td>
                             <td>' . $task->taskDateFinished . '</td>
                         </tr>
+                        ' . $labelTR . '
                     </table>
         ';
         $html .= $this->printComments($task->taskID, $task->taskType);
-        return $html;
+        $subtaskcount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $task->taskID);
+        if ($subtaskcount->number > 0) {
+            $html .= $this->printSubtaskPanel($id);
+        }
+        echo $html;
     }
 
     private function printTaskTable($tasks)
