@@ -402,6 +402,14 @@ class RequestHandler
         return 1;
     }
 
+    public function updateLabelOrder($labelIDs)
+    {
+        for ($i = 0; $i < count($labelIDs); $i++) {
+            $this->mysqliQueryPrepared("UPDATE labels SET labelOrder = ? WHERE labelID = ?", ($i + 1), (int) $labelIDs[$i]);
+        }
+        return 1;
+    }
+
     private function getUsernameByID($userID)
     {
         if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') {
@@ -467,7 +475,7 @@ class RequestHandler
     public function getLabels($userID, $groupID)
     {
         if (!$this->checkGroupPermission($userID, $groupID)) return 0;
-        $data = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ?", $groupID);
+        $data = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
         if ($data) return $data;
         return 0;
     }
@@ -475,7 +483,7 @@ class RequestHandler
     public function getLabelsForTask($userID, $groupID, $taskID)
     {
         if (!$this->checkGroupPermission($userID, $groupID)) return 0;
-        $labels = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ?", $groupID);
+        $labels = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
         if ($labels) {
             foreach ($labels as $label) {
                 $checkIfLabelIsActiveForTask = $this->mysqliSelectFetchObject("SELECT entryID FROM tasklabels WHERE taskID = ? AND labelID = ?", $taskID, $label->labelID);

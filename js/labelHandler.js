@@ -20,14 +20,13 @@ let labelHandler = {
   },
   openGroupLabelsPopup: async function (groupID) {
     const labels = await this.getLabels(groupID)
-    console.log(labels)
     var labelsHTML = ``
     if (labels) {
       var flag = false
       labels.forEach(label => {
         (flag) ? labelsHTML += `<hr class="solid">` : flag = true
         labelsHTML += `
-        <div class="label__item draggable__item" draggable="true">
+        <div class="label__item draggable__item" draggable="true" data-type="${label.labelID}">
             <div class="label__left">
                 <i class="fa fa-circle fa-2x" aria-hidden="true" style="color:${label.labelColor}"></i>
                 <div>${label.labelName}</div>
@@ -52,6 +51,7 @@ let labelHandler = {
         <div class="label__list draggable__container">${labelsHTML}</div>`
     showDynamicForm(container, html)
     closeDynamicFormListener()
+    addDraggableHelper('updateLabelOrder')
   },
   deleteLabel: async function (labelID, groupID) {
     var popup = confirm("Are you sure you want to delete this label?");

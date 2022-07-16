@@ -1,7 +1,7 @@
 class DraggableHandler {
-  constructor(itemID, containerID, actionName) {
-    var draggables = document.querySelectorAll(itemID)
-    const containers = document.querySelectorAll(containerID)
+  constructor(actionName) {
+    var draggables = document.querySelectorAll('.draggable__item')
+    const containers = document.querySelectorAll('.draggable__container')
     var orderStart = []
     var orderEnd = []
     this.actionName = actionName

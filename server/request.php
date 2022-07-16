@@ -165,6 +165,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->updatePanelOrder($userID, explode(',', $_POST['order'])));
         break;
 
+    case 'updateLabelOrder':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateLabelOrder(explode(',', $_POST['order'])));
+        break;
+
     case 'createLabel':
         header('Content-Type: application/json');
         echo json_encode($rh->createLabel($userID, $_POST['groupID'], $_POST['title'], $_POST['description'], $_POST['color']));
