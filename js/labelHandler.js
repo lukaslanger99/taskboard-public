@@ -27,7 +27,7 @@ let labelHandler = {
       labels.forEach(label => {
         (flag) ? labelsHTML += `<hr class="solid">` : flag = true
         labelsHTML += `
-        <div class="label__item">
+        <div class="label__item draggable__item" draggable="true">
             <div class="label__left">
                 <i class="fa fa-circle fa-2x" aria-hidden="true" style="color:${label.labelColor}"></i>
                 <div>${label.labelName}</div>
@@ -49,7 +49,7 @@ let labelHandler = {
           <div class="modal__header__right"><button onclick="labelHandler.createLabelPopup(${groupID})">New Label</button></div>
           <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>
         </div>
-        <div class="label__list">${labelsHTML}</div>`
+        <div class="label__list draggable__container">${labelsHTML}</div>`
     showDynamicForm(container, html)
     closeDynamicFormListener()
   },

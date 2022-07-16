@@ -155,6 +155,7 @@ echo '<div class="group-box">
         <div class="draggable__container" id="draggablePanelsContainer">
             ' . $panelsHTML . '
         </div>
+        <script>let panelDragger = addDraggableHelper(\'.draggable__item\', \'.draggable__container\', \'updatePanelOrder\')</script>
     </div>';
 
 require('../html/bottom.php');

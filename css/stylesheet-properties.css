@@ -71,6 +71,7 @@ th {
   height: 35px;
   display: flex;
   justify-content: stretch;
+  margin: 0 5px;
 }
 
 .group_top_bar_right {
@@ -114,8 +115,8 @@ th {
   display: flex;
   flex-direction: column;
   padding: 5px;
-  margin-top: 5px;
-  width: 32.5%;
+  margin: 5px;
+  flex: 1 1 0;
 }
 
 .single__content__subtask {
@@ -691,7 +692,7 @@ hr.solid {
   overflow: hidden;
 }
 
-.draggable__item {
+.draggable__item__panelsettings {
   margin: 10px;
   padding: 5px;
   border-radius: 5px;

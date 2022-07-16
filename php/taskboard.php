@@ -533,13 +533,14 @@ class TaskBoard
         $html .=  '
                 </div>';
 
-        $groupLabels = $this->mysqliSelectFetchArray("SELECT * FROM labels WHERE labelGroupID = ?", $groupID);
+        $groupLabels = $this->mysqliSelectFetchArray("SELECT * FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
         if ($groupLabels) {
             foreach ($groupLabels as $label) {
-                $taskCount = $this->mysqliSelectFetchArray("SELECT COUNT(*) as number FROM tasklabels WHERE labelID = ?", $label->labelID);
+                $taskCount = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasklabels WHERE labelID = ?", $label->labelID);
+                ($taskCount->number) ? $taskCount = '(' . $taskCount->number . ')' : $taskCount = '';
                 $html .= '<div class="single-content">
                     <div class="single-top-bar">
-                        <p>' . $label->labelName . ' ' . $taskCount->number . '</p>
+                        <p>' . $label->labelName . ' ' . $taskCount . '</p>
                     </div>';
                 $html .= $this->printTasksFromSameLabel($label->labelID);
                 $html .=  '</div>';
@@ -767,7 +768,7 @@ class TaskBoard
 
     public function printPanelSettings($type, $title, $activeID, $activeState, $unfoldedID, $unfoldedState)
     {
-        return '<div class="draggable__item" draggable="true" data-type="' . $type . '">
+        return '<div class="draggable__item__panelsettings draggable__item" draggable="true" data-type="' . $type . '">
                 <p>' . $title . '</p>
                 <label class="switch">
                     <input id="' . $activeID . '" type="checkbox" ' . $activeState . '/>
@@ -1183,7 +1184,7 @@ class TaskBoard
 
             case 'closed':
                 $buttons .= '<form action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" >
-                    <input class="button" type="submit" name="stateopen-submit" value="Back to Open"/></form>';
+                    <input class="button" type="submit" name="stateopen-submit" value="Reopen"/></form>';
                 break;
 
             default:
@@ -1297,7 +1298,8 @@ class TaskBoard
         $html = '';
         if ($data = $this->mysqliSelectFetchArray("SELECT taskID FROM tasklabels WHERE labelID = ?", $labelID)) {
             foreach ($data as $i) {
-                if ($taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $i->taskID)) $html .= $this->printTask($taskData);
+                if ($taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $i->taskID))
+                    if ($taskData->taskState != 'closed') $html .= $this->printTask($taskData);
             }
         }
         return $html;
@@ -1307,8 +1309,10 @@ class TaskBoard
     {
         $html = '';
         if ($data = $this->mysqliSelectFetchArray($sql, $id)) {
-            foreach ($data as $i) {
-                $html .= $this->printTask($i);
+            foreach ($data as $taskData) {
+                if ($taskData->taskState == 'open')
+                    if ($this->mysqliSelectFetchArray("SELECT * FROM tasklabels WHERE taskID = ?", $taskData->taskID)) continue;
+                $html .= $this->printTask($taskData);
             }
         }
         return $html;
