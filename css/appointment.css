@@ -23,6 +23,10 @@
     display: flex;
 }
 
+.timetable__panel__prevtask:hover .appointment__content__task__invisible__buttons {
+    display: flex;
+}
+
 .calendar__month__switch {
     display: flex;
     justify-content: space-between;
