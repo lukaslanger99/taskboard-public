@@ -200,6 +200,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->updateTaskLabel($userID, $_POST['groupID'], $_POST['taskID'], $_POST['labelID'], $_POST['checkboxChecked']));
         break;
 
+    case 'createTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->createTask($userID, $_POST['type'], $_POST['parentID'], $_POST['tasktitle'], $_POST['taskdescription'], $_POST['taskprio']));
+        break;
+
     default:
         # code...
         break;

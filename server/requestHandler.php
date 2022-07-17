@@ -523,4 +523,20 @@ class RequestHandler
         }
         return 1;
     }
+
+    public function createTask($userID, $type, $parentID, $title, $description, $prio)
+    {
+        if ($type == 'task' && !$this->checkGroupPermission($userID, $parentID)) return 0;
+        $sql = "INSERT INTO tasks 
+            (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskState, taskDateCreated) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->mysqliQueryPrepared($sql, $type, $parentID, $prio, $this->getPriorityColor($prio), $title, $description, 'open', date('Y-m-d H:i'));
+        return 1;
+    }
+
+    private function getPriorityColor($priority)
+    {
+        $colors = ['green', '#ffcc00', 'red'];
+        return $colors[$priority - 1];
+    }
 }

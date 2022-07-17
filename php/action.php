@@ -65,45 +65,6 @@ switch ($action) {
         }
         break;
 
-    case 'createSubtask':
-        if (isset($_POST['createtask-submit'])) {
-            if (empty($_POST['title'])) $taskBoard->locationIndex("?error=emptyfields");
-            $priority = (int) $_POST['priority'];
-            $priorityColor = $taskBoard->getPriorityColor($priority);
-            $state = 'open';
-            $title = $_POST['title'];
-            (empty($_POST['description'])) ? $description = '-' : $description = $_POST['description'];
-            $taskId = $_GET['taskId'];
-            $sql = "INSERT INTO tasks 
-                (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskState, taskDateCreated) 
-                VALUES ('subtask', ?, ?, '$priorityColor', ?, ?, '$state', '$currentDate');";
-            $taskBoard->mysqliQueryPrepared($sql, $taskId, $priority, $title, $description);
-            ($_POST['createAnother']) ? $createAnother = '&createSubtask=true' : $createAnother = '';
-            $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=" . $taskId . $createAnother . "&success=subtaskcreated");
-        }
-        break;
-
-    case 'createTask':
-        if (isset($_POST['createtask-submit'])) {
-            if (empty($_POST['title'])) $taskBoard->locationIndex("?error=emptyfields");
-            $priority = (int) $_POST['priority'];
-            $priorityColor = $taskBoard->getPriorityColor($priority);
-            $state = 'open';
-            $title = $_POST['title'];
-            (empty($_POST['description'])) ? $description = '-' : $description = $_POST['description'];
-            $groupID = (int) $_POST['groupID'];
-            $sql = "INSERT INTO tasks 
-                (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskState, taskDateCreated) 
-                VALUES ('task', ?, ?, '$priorityColor', ?, ?, '$state', '$currentDate');";
-            $taskBoard->mysqliQueryPrepared($sql, $groupID, $priority, $title, $description);
-            if ($_POST['createAnother']) {
-                $taskBoard->locationEnteredUrl($_SESSION['enteredUrl'], "createTask=true&groupID=$groupID&success=taskcreated");
-            } else {
-                $taskBoard->locationEnteredUrl($_SESSION['enteredUrl'], "success=taskcreated");
-            }
-        }
-        break;
-
     case 'deleteTask':
         if ($taskBoard->deleteTaskPermission($id, $userID, $type)) {
             $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskID = ?", $id);

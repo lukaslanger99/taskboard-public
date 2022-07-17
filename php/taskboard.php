@@ -1171,7 +1171,7 @@ class TaskBoard
         }
         $buttons = '<button class="button" onclick="openUpdateTaskForm()">Update</button>
             <button class="button" type="button" onclick="deleteTask(\'' . $task->taskID . '\')">Delete</button>
-            <button class="button" id="createSubtaskButton" type="button">Create Subtask</button>
+            <button class="button" type="button" onclick="taskHandler.openCreateTaskForm(\'subtask\', ' . $task->taskID . ', \'false\')">Create Subtask</button>
             <form action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" >
                 <input class="button" type="submit" name="assign-submit" value="Assign Task"/>
             </form>

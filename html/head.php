@@ -27,6 +27,7 @@
     <script src="<?php echo DIR_SYSTEM ?>js/labelHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/maps.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/panels.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/taskHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/timetable.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/weather.js"></script>
 </head>

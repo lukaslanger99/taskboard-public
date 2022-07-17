@@ -19,7 +19,7 @@ const printGroupDropdown = async (selectedGroupId) => {
   const groups = await getGroups()
   var groupsHtml = ''
   groups.forEach(group => {
-    if (selectedGroupId != 'default' && selectedGroupId == group.groupID) {
+    if (selectedGroupId && selectedGroupId == group.groupID) {
       groupsHtml += '<option selected="selected" value="' + group.groupID + '">' + group.groupName + '</option>\n';
     } else {
       groupsHtml += '<option value="' + group.groupID + '">' + group.groupName + '</option>\n';
@@ -69,115 +69,10 @@ function printPriorityDropdown(selectedPriority = '2') {
   return html;
 }
 
-function openTaskForm() {
-  printTaskForm()
-  toggleDropdown('dropdown_create_content')
-}
-
-const printTaskForm = async (selectedGroupId = 'default') => {
-  var html = '\
-      '+ addHeaderDynamicForm('Create Task') + '\
-      <form action="'+ DIR_SYSTEM + 'php/action.php?action=createTask" autocomplete="off" method="post" >\
-        <table style="margin:0 auto 15px auto;">\
-            <tr>\
-                <td>Priority:</td>\
-                <td>\
-                <div class="select">\
-                <select name="priority">\
-                <option value="1">Low</option>\
-                <option selected="selected" value="2">Normal</option>\
-                <option value="3">High</option>\
-                </select>\
-                </div>\
-                </td>\
-                '+ await printGroupDropdown(selectedGroupId) + '\
-            </tr>\
-            </table>\
-            <textarea class="input-login" placeholder="title" name="title" cols="40" rows="1"></textarea>\
-            <textarea class="input-login" placeholder="description" name="description" cols="40" rows="5"></textarea>\
-            <div class="createanother__bottom">\
-                <div class="createanother__left"></div>\
-                <div class="createanother__center">\
-                    <input style="margin-left:25%;" class="submit-login" type="submit" name="createtask-submit" value="Create" />\
-                </div>\
-                <div class="createanother__checkbox">\
-                    <input type="checkbox" id="createAnother" name="createAnother">\
-                    <label for="createAnother">Create Another</label>\
-                </div>\
-            </div>\
-            </form>'
-  showDynamicForm(document.getElementById("dynamic-modal-content"), html)
-  closeDynamicFormListener()
-}
-
-function printSubtaskForm() {
-  var container = document.getElementById("dynamic-modal-content");
-  if (container) {
-    var taskId = document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1');
-    var html = '\
-    '+ addHeaderDynamicForm('Create Subtask') + '\
-    <form action="'+ DIR_SYSTEM + 'php/action.php?action=createSubtask&taskId=' + taskId + '" autocomplete="off" method="post" >\
-        <table style="margin:0 auto 15px auto;">\
-            <tr>\
-                <td>Priority:</td>\
-                <td>\
-                    <div class="select">\
-                        <select name="priority">\
-                            <option value="1">Low</option>\
-                            <option selected="selected" value="2">Normal</option>\
-                            <option value="3">High</option>\
-                        </select>\
-                    </div>\
-                </td>\
-            </tr>\
-        </table>\
-        <textarea class="input-login" placeholder="title" name="title" cols="40" rows="1"></textarea>\
-        <textarea class="input-login" placeholder="description" name="description" cols="40" rows="5"></textarea>\
-        <div class="createanother__bottom">\
-            <div class="createanother__left"></div>\
-            <div class="createanother__center">\
-                <input style="margin-left:25%;" class="submit-login" type="submit" name="createtask-submit" value="Create" />\
-            </div>\
-            <div class="createanother__checkbox">\
-                <input type="checkbox" id="createAnother" name="createAnother">\
-                <label for="createAnother">Create Another</label>\
-            </div>\
-        </div>\
-    </form>';
-    container.innerHTML = html;
-    showDynamicForm(container, html);
-    document.querySelector('html').style.overflow = 'hidden';
-    document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-    closeDynamicFormListener();
-  }
-}
-
 //check nightmode toggled to show dropdown
 var nightmodeChangeCheck = document.URL.replace(/.*nightmodechange=([^&]*).*|(.*)/, '$1')
 if (nightmodeChangeCheck == 'true') {
   toggleUnfoldArea('dropdown_content', 'dropbtnUnfoldButton')
-}
-
-//check create another task
-var createAnotherTaskCheck = document.URL.replace(/.*createTask=([^&]*).*|(.*)/, '$1');
-if (createAnotherTaskCheck == 'true') {
-  printTaskForm(document.URL.replace(/.*groupID=([^&]*).*|(.*)/, '$1'));
-}
-
-//check create another subtask
-var createAnotherTaskCheck = document.URL.replace(/.*createSubtask=([^&]*).*|(.*)/, '$1');
-if (createAnotherTaskCheck == 'true') {
-  printSubtaskForm();
-}
-
-// Subtask Form
-var createSubtaskButton = document.getElementById('createSubtaskButton');
-if (createSubtaskButton) {
-  createSubtaskButton.addEventListener('click',
-    function () {
-      printSubtaskForm();
-    }
-  )
 }
 
 // Group Form
@@ -244,15 +139,16 @@ function closeDynamicFormListener() {
   if (faCloseDynamicform) {
     faCloseDynamicform.addEventListener('click',
       function () {
-        var container = document.getElementById("dynamic-modal-content");
-        if (container) {
-          container.innerHTML = '';
-          document.getElementById('bg-modal-dynamicform').style.display = 'none';
-          document.querySelector('html').style.overflow = 'auto';
-        }
+        closeDynamicForm()
       }
     )
   }
+}
+
+function closeDynamicForm() {
+  document.getElementById('dynamic-modal-content').innerHTML = '';
+  document.getElementById('bg-modal-dynamicform').style.display = 'none';
+  document.querySelector('html').style.overflow = 'auto';
 }
 
 function addCheckboxListener(elementId, phpAction) {
