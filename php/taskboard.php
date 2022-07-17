@@ -1079,7 +1079,7 @@ class TaskBoard
                             </div>
                         </div>
                     </div>
-                    <div class="group-content" id="groupContent_subtask">
+                    <div class="group-content__subtask" id="groupContent_subtask">
                         <div class="single__content__subtask">
                             <div class="single-top-bar">
                             <p>Open ' . $openTasksCount . '</p>

@@ -125,7 +125,7 @@ th {
   flex-direction: column;
   padding: 5px;
   margin-top: 5px;
-  width: 32%;
+  width: 99.5%;
 }
 
 .fifty-percent-width {
@@ -718,6 +718,11 @@ hr.solid {
   display: flex;
 }
 
+.group-content__subtask {
+  display: flex;
+  flex-direction: column;
+}
+
 @media (max-width: 768px) {
   .panel {
     flex-direction: column;
@@ -751,7 +756,6 @@ hr.solid {
   }
 
   .single__content__subtask {
-    width: 99.5%;
     margin-right: 5px;
   }
 
