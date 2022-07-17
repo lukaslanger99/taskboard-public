@@ -1064,8 +1064,6 @@ class TaskBoard
 
     private function printSubtaskPanel($id)
     {
-        $openTasksCount = $this->getTaskCount('subtask', $id, 'open');
-        $closedTasksCount = $this->getTaskCount('subtask', $id, 'finshed');
         $html = '
             <div class="taskdetails_panel_right">
                 <div class="group-box">
@@ -1082,16 +1080,16 @@ class TaskBoard
                     <div class="group-content__subtask" id="groupContent_subtask">
                         <div class="single__content__subtask">
                             <div class="single-top-bar">
-                            <p>Open ' . $openTasksCount . '</p>
-                            </div>';
-        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'open' ORDER BY taskPriority DESC", $id);
-        $html .= '</div>
-                    <div class="single__content__subtask">
-                        <div class="single-top-bar">
-                        <p>Done ' . $closedTasksCount . '</p>
-                        </div>';
-        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'closed' ORDER BY taskDateClosed", $id);
-        $html .=    '</div>
+                                <p id="subtask-open-header"></p>
+                            </div>
+                            <div id="subtasks-open-area"></div>
+                        </div>
+                        <div class="single__content__subtask">
+                            <div class="single-top-bar">
+                                <p id="subtask-closed-header"></p>
+                            </div>
+                            <div id="subtasks-closed-area"></div>
+                        </div>
                 </div>
             </div>
         </div>';
@@ -1245,6 +1243,7 @@ class TaskBoard
         if ($subtaskcount->number > 0) {
             $html .= $this->printSubtaskPanel($id);
         }
+        $html .= '<script>taskHandler.printSubtasks(' . $task->taskID . ')</script>';
         echo $html;
     }
 

@@ -539,4 +539,47 @@ class RequestHandler
         $colors = ['green', '#ffcc00', 'red'];
         return $colors[$priority - 1];
     }
+
+    public function getSubtasks($userID, $parentID)
+    {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfSubtask($parentID))) return 0;
+        if ($subtasks = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ?", 'subtask', $parentID)) {
+            foreach ($subtasks as $task) {
+                if ($subtaskCount = $this->getNumberOfSubtasks($task->taskID)) $task->subtaskCount = $subtaskCount;
+                if ($task->taskAssignedBy) $task->assigneeNameShort = $this->getUserNameShort($task->taskAssignedBy);
+                if ($task->taskState == 'open') $task->daysActive = $this->getDateDifference($task->taskDateCreated);
+            }
+            return $subtasks;
+        }
+        return 0;
+    }
+
+    private function getGroupIDOfSubtask($taskID)
+    {
+        $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
+        if ($taskData->taskType == 'task') return $taskData->taskParentID;
+        do {
+            $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskData->parentID);
+        } while ($taskData->taskType == 'subtask');
+        return $taskData->taskParentID;
+    }
+
+    private function getNumberOfSubtasks($taskID)
+    {
+        $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskState = 'open'";
+        if ($data = $this->mysqliSelectFetchObject($sql, $taskID)) return $data->number;
+        return 0;
+    }
+
+    private function getUserNameShort($userID)
+    {
+        if ($userData = $this->mysqliSelectFetchObject("SELECT userNameShort FROM users WHERE userID = ?", $userID)) return $userData->userNameShort;
+        return 0;
+    }
+
+    private function getDateDifference($date)
+    {
+        $tmpDate = new DateTime($date);
+        return $tmpDate->diff(new DateTime(date('Y-m-d H:i')))->format('%r%a');
+    }
 }

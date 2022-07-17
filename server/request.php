@@ -26,41 +26,15 @@ switch ($_GET['action']) {
         $end = $_POST['end'];
         $monfri = $_POST['monfri'];
         $monsun = $_POST['monsun'];
-
-        $timetable = $rh->getTimetableByID($userID, $id);
-        $week = $timetable->timetableWeek;
-        $year = $timetable->timetableYear;
-
-        // Monday
-        if ($_POST['mon'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $rh->insertEntry($userID, $id, $text, $start, $end, 'mon');
-        }
-        // Tuesday
-        if ($_POST['tue'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $rh->insertEntry($userID, $id, $text, $start, $end, 'tue');
-        }
-        // Wednesday
-        if ($_POST['wed'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $rh->insertEntry($userID, $id, $text, $start, $end, 'wed');
-        }
-        // Thursday
-        if ($_POST['thu'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $rh->insertEntry($userID, $id, $text, $start, $end, 'thu');
-        }
-        // Friday
-        if ($_POST['fri'] == 'true' || $monfri == 'true' || $monsun == 'true') {
-            $rh->insertEntry($userID, $id, $text, $start, $end, 'fri');
-        }
-        // Saturday
-        if ($_POST['sat'] == 'true' || $monsun == 'true') {
-            $rh->insertEntry($userID, $id, $text, $start, $end, 'sat');
-        }
-        // Sunday
-        if ($_POST['sun'] == 'true' || $monsun == 'true') {
-            $rh->insertEntry($userID, $id, $text, $start, $end, 'sun');
-        }
+        if ($_POST['mon'] == 'true' || $monfri == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'mon'); // Monday
+        if ($_POST['tue'] == 'true' || $monfri == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'tue'); // Tuesday
+        if ($_POST['wed'] == 'true' || $monfri == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'wed'); // Wednesday
+        if ($_POST['thu'] == 'true' || $monfri == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'thu'); // Thursday
+        if ($_POST['fri'] == 'true' || $monfri == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'fri'); // Friday
+        if ($_POST['sat'] == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'sat'); // Saturday
+        if ($_POST['sun'] == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'sun'); // Sunday
         header('Content-Type: application/json');
-        echo json_encode($rh->timetableToJSON($timetable));
+        echo json_encode($rh->timetableToJSON($rh->getTimetableByID($userID, $id)));
         break;
 
     case 'createTimetable':
@@ -203,6 +177,11 @@ switch ($_GET['action']) {
     case 'createTask':
         header('Content-Type: application/json');
         echo json_encode($rh->createTask($userID, $_POST['type'], $_POST['parentID'], $_POST['tasktitle'], $_POST['taskdescription'], $_POST['taskprio']));
+        break;
+
+    case 'getSubtasks':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getSubtasks($userID, $_POST['parentID']));
         break;
 
     default:
