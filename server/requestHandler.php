@@ -559,7 +559,7 @@ class RequestHandler
         $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
         if ($taskData->taskType == 'task') return $taskData->taskParentID;
         do {
-            $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskData->parentID);
+            $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskData->taskParentID);
         } while ($taskData->taskType == 'subtask');
         return $taskData->taskParentID;
     }

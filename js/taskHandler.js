@@ -68,8 +68,6 @@ let taskHandler = {
         const openSubtasks = subtasks.filter((task) => task.taskState == 'open')
         const closedSubtasks = subtasks.filter((task) => task.taskState == 'closed')
         var openTasksHTML = '', closedTasksHTML = ''
-        console.log(subtasks)
-        console.log(openSubtasks)
         if (openSubtasks) {
             openSubtasks.forEach(task => {
                 openTasksHTML += this.printTask(task)
