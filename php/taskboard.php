@@ -332,6 +332,19 @@ class TaskBoard
         return $taskCount;
     }
 
+    private function getOpenTaskCount($groupID)
+    {
+        $sql = "SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ? AND taskState = ?";
+        $noLabelCounter = 0;
+        if ($data = $this->mysqliSelectFetchArray($sql, 'task', $groupID, 'open')) {
+            foreach ($data as $task) {
+                if (!$this->mysqliSelectFetchArray("SELECT entryID FROM tasklabels WHERE taskID = ?", $task->taskID)) $noLabelCounter++;
+            }
+            ($noLabelCounter > 0) ? $taskCount = '(' . $noLabelCounter . ')' : $taskCount = '';
+        }
+        return $taskCount;
+    }
+
     public function getUserIDByMail($mail)
     {
         $data = $this->mysqliSelectFetchObject("SELECT userID FROM users WHERE userMail = ?", $mail);
@@ -500,7 +513,7 @@ class TaskBoard
     {
         $groupName = $group->groupName;
         $groupID = $group->groupID;
-        $openTasksCount = $this->getTaskCount('task', $groupID, 'open');
+        $openTasksCount = $this->getOpenTaskCount($groupID);
         $closedTasksCount = $this->getTaskCount('task', $groupID, 'finshed');
 
         $groupContentID = 'groupContent_' . $groupName;
