@@ -49,6 +49,48 @@ let panels = {
             this.printQueueTasks(await response.json())
         }
     },
+    // Morningroutine
+    printMorningroutineTasks: async function (morningroutineTasks = '') {
+        if (morningroutineTasks == '') morningroutineTasks = await this.getEntrys('getMorningroutineTasks')
+        var html = '', toggle = false, title = ''
+        if (morningroutineTasks) {
+            morningroutineTasks.forEach(entry => {
+                html += `<div class="${(toggle) ? `panel-item-content-item` : `panel-item-content-item__secondary`}">
+                    <div class="panel-item-message-title">${entry.entryTitle}</div>
+                        <div class="panel-item-check-button" onclick="panels.completeMorningroutineTask(${entry.entryID})">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </div>
+                    </div>`
+                toggle = !toggle
+            })
+            document.getElementById('morningroutinePanelContentArea').innerHTML = html
+            if (morningroutineTasks.length == 1) title = `Morningroutine (1 Task)`
+            else if (morningroutineTasks.length > 1) title = `Morningroutine (${morningroutineTasks.length} Tasks)`
+        } else {
+            title = `Morningroutine`
+            document.getElementById('morningroutinePanelContentArea').innerHTML = ''
+        }
+        document.getElementById('morningroutinePanelTitle').innerHTML = title
+    },
+    addMorningroutineTask: async function () {
+        var text = document.getElementById("morningroutineItem").value
+        if (text) {
+            var url = `${DIR_SYSTEM}server/request.php?action=addMorningroutineTask`
+            var formData = new FormData()
+            formData.append('text', text)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            document.getElementById("morningroutineItem").value = ''
+            this.printMorningroutineTasks(await response.json())
+        }
+    },
+    completeMorningroutineTask: async function (id) {
+        const response = await fetch(
+            `${DIR_SYSTEM}server/request.php?action=completeMorningroutineTask&id=${id}`
+        )
+        this.printMorningroutineTasks(await response.json())
+    },
     // Appointment
     printAppointments: async function (appointments = '') {
         if (appointments == '') appointments = await this.getEntrys('getAppointments')

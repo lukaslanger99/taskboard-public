@@ -138,6 +138,16 @@ $activePanels[$panelData->panelTimetableOrder] = [
     'unfoldedID' => 'timetableUnfoldedCheckbox',
     'unfolded' => $timetableUnfolded,
 ];
+if ($panelData->panelMorningroutine == 'true') $morningroutineState = 'checked';
+if ($panelData->panelMorningroutineUnfolded == 'true') $morningroutineUnfolded = 'checked';
+$activePanels[$panelData->panelMorningroutineOrder] = [
+    'type' => 'morningroutine',
+    'title' => 'Morningroutine',
+    'activeID' => 'morningroutineActiveCheckbox',
+    'active' => $morningroutineState,
+    'unfoldedID' => 'morningroutineUnfoldedCheckbox',
+    'unfolded' => $morningroutineUnfolded,
+];
 $panelsHTML = '';
 for ($i = 0; $i < count($activePanels); $i++) {
     $panelData = $activePanels[$i + 1];

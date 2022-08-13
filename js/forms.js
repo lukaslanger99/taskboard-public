@@ -169,9 +169,11 @@ panels.toggleActiveCheckboxListener('appointmentActiveCheckbox', 'appointment') 
 panels.toggleActiveCheckboxListener('queueActiveCheckbox', 'queue') // Active Queue
 panels.toggleActiveCheckboxListener('weatherActiveCheckbox', 'weather') // Active Weather
 panels.toggleActiveCheckboxListener('timetableActiveCheckbox', 'timetable') // Active Timetable
+panels.toggleActiveCheckboxListener('morningroutineActiveCheckbox', 'morningroutine') // Active Morningroutine
 
 panels.toggleUnfoldCheckboxListener('motdUnfoldedCheckbox', 'motd') // Unfold MOTD
 panels.toggleUnfoldCheckboxListener('appointmentUnfoldedCheckbox', 'appointment') // Unfold Appointment
 panels.toggleUnfoldCheckboxListener('queueUnfoldedCheckbox', 'queue') // Unfold Queue
 panels.toggleUnfoldCheckboxListener('weatherUnfoldedCheckbox', 'weather') // Unfold Weather
 panels.toggleUnfoldCheckboxListener('timetableUnfoldedCheckbox', 'timetable') // Unfold Timetable
+panels.toggleUnfoldCheckboxListener('morningroutineUnfoldedCheckbox', 'morningroutine') // Unfold Morningroutine

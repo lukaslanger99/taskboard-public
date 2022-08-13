@@ -862,6 +862,19 @@ class TaskBoard
                         </div>
                     </div>
                 </div>';
+        } else if ($type == 'morningroutine') {
+            return '<div class="panel-item-top-bar">
+                    <div class="queue__top-bar-left">
+                        <p id="morningroutinePanelTitle"></p>
+                    </div>
+                    <div class="queue__top-bar-right">
+                        <input class="queue__input__text" type="text" id="morningroutineItem" name="morningroutineItem">
+                        <input type="submit" id="morningroutineSubmit "name="add-morningroutine-submit" value="Add" onclick="panels.addMorningroutineTask()"/>
+                        <div class="panel_item_top_bar_unfold_button" id="morningroutineUnfoldButton" onclick="toggleUnfoldArea(\'morningroutinePanelContentArea\',\'morningroutineUnfoldButton\')">
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>';
         }
 
         return '<div class="panel-item-top-bar">
@@ -1012,6 +1025,14 @@ class TaskBoard
                     ' . $content . '
                     <script>' . $unfoldPanel . '</script>
                 </div>';
+        } else if ($type == 'morningroutine') {
+            if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'morningroutinePanelContentArea\',\'morningroutineUnfoldButton\', \'true\')';
+            return '<div class="panel-item-area" id="morningroutinePanelContentArea">
+                    <script>
+                        panels.printMorningroutineTasks()
+                    ' . $unfoldPanel . '
+                    </script>
+                </div>';
         }
     }
 
@@ -1056,6 +1077,13 @@ class TaskBoard
                 'name' => 'timetable',
                 'unfolded' => $panelData->panelTimetableUnfolded,
                 'spec' => $timetable->timetableID
+            ];
+        }
+        if ($panelData->panelMorningroutine == 'true') {
+            $activePanels[$panelData->panelMorningroutineOrder] = [
+                'name' => 'morningroutine',
+                'unfolded' => $panelData->panelMorningroutineUnfolded,
+                'spec' => ''
             ];
         }
         for ($i = 0; $i < NUMBER_OF_TOTAL_PANELS; $i++) {

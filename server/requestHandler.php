@@ -210,6 +210,38 @@ class RequestHandler
         return $this->getQueueTasks($userID);
     }
 
+    public function getMorningroutineTasks($userID)
+    {
+        $sql = "SELECT * FROM morningroutine WHERE entryUserID = ? AND entryDate < ? ORDER BY entryOrder";
+        return $this->mysqliSelectFetchArray($sql, $userID, date("Y-m-d"));
+    }
+
+    public function completeMorningroutineTask($userID, $id)
+    {
+        $entryData = $this->mysqliSelectFetchObject("SELECT * FROM morningroutine WHERE entryID = ?", $id);
+        if ($entryData->entryUserID == $userID) {
+            $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = NOW() WHERE entryID = ?", $id);
+            return $this->getMorningroutineTasks($userID);
+        }
+        return 0;
+    }
+
+    public function addMorningroutineTask($userID, $text)
+    {
+        if ($text) {
+            $taskCount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM morningroutine WHERE entryUserID = ?", $userID);
+            $taskCount = $taskCount->number;
+            $tasks = explode(",", $text);
+            foreach ($tasks as $taskTitle) {
+                if (!empty(trim($taskTitle))) {
+                    $sql = "INSERT INTO morningroutine (entryUserID, entryTitle, entryOrder) VALUES (?, ?, ?)";
+                    $this->mysqliQueryPrepared($sql, $userID, $taskTitle, ++$taskCount);
+                }
+            }
+        }
+        return $this->getMorningroutineTasks($userID);
+    }
+
     public function getAppointments($userID)
     {
         $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
@@ -358,6 +390,8 @@ class RequestHandler
             $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherUnfolded = ? WHERE userID = ?", $checked, $userID);
         } else if ($type == 'timetable') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelTimetableUnfolded = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'morningroutine') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutineUnfolded = ? WHERE userID = ?", $checked, $userID);
         }
         return 1;
     }
@@ -374,6 +408,8 @@ class RequestHandler
             $this->mysqliQueryPrepared("UPDATE panels SET panelWeather = ? WHERE userID = ?", $checked, $userID);
         } else if ($type == 'timetable') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelTimetable = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'morningroutine') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutine = ? WHERE userID = ?", $checked, $userID);
         }
         return 1;
     }
@@ -397,6 +433,8 @@ class RequestHandler
                 $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherOrder = ? WHERE userID = ?", ($i + 1), $userID);
             } else if ($names[$i] == 'timetable') {
                 $this->mysqliQueryPrepared("UPDATE panels SET panelTimetableOrder = ? WHERE userID = ?", ($i + 1), $userID);
+            } else if ($names[$i] == 'morningroutine') {
+                $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutineOrder = ? WHERE userID = ?", ($i + 1), $userID);
             }
         }
         return 1;
@@ -449,11 +487,7 @@ class RequestHandler
 
     private function checkGroupPermission($userID, $groupID)
     {
-        if ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) ? 1 : 0;
     }
 
     private function getUserLastMotd($userID)
