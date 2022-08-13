@@ -138,6 +138,16 @@ $activePanels[$panelData->panelTimetableOrder] = [
     'unfoldedID' => 'timetableUnfoldedCheckbox',
     'unfolded' => $timetableUnfolded,
 ];
+if ($panelData->panelMorningroutine == 'true') $morningroutineState = 'checked';
+if ($panelData->panelMorningroutineUnfolded == 'true') $morningroutineUnfolded = 'checked';
+$activePanels[$panelData->panelMorningroutineOrder] = [
+    'type' => 'morningroutine',
+    'title' => 'Morningroutine',
+    'activeID' => 'morningroutineActiveCheckbox',
+    'active' => $morningroutineState,
+    'unfoldedID' => 'morningroutineUnfoldedCheckbox',
+    'unfolded' => $morningroutineUnfolded,
+];
 $panelsHTML = '';
 for ($i = 0; $i < count($activePanels); $i++) {
     $panelData = $activePanels[$i + 1];
@@ -155,6 +165,7 @@ echo '<div class="group-box">
         <div class="draggable__container" id="draggablePanelsContainer">
             ' . $panelsHTML . '
         </div>
+        <script>addDraggableHelper(\'updatePanelOrder\')</script>
     </div>';
 
 require('../html/bottom.php');

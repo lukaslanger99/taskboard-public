@@ -5,3 +5,4 @@ Fehler die lange gebraucht haben zu finden.
 - gucken ob er die cases reingeht wenn nix passiert wenn man auf nen button drückt (weil startseite = zielseite sein kann dann sieht es so aus als würde nix passieren)
 - css klasse richtig geschrieben?
 - sql parameter anzahl
+- bei select count fetcharray statt fetch object

@@ -15,7 +15,7 @@ class RequestHandler
         return $mysqli;
     }
 
-    private function mysqliQueryPrepared($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '', $value6 = '')
+    private function mysqliQueryPrepared($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -23,25 +23,12 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '' && $value6 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '' && $value6 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else if ($value6 == '') {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            } else {
-                mysqli_stmt_bind_param($stmt, "ssssss", $value, $value2, $value3, $value4, $value5, $value6);
-            }
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
         }
     }
 
-    private function mysqliSelectFetchArray($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    private function mysqliSelectFetchArray($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -49,18 +36,7 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -72,7 +48,7 @@ class RequestHandler
         }
     }
 
-    private function mysqliSelectFetchObject($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    private function mysqliSelectFetchObject($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -80,18 +56,7 @@ class RequestHandler
             var_dump($sql);
             return "?error=sqlerror";
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -121,22 +86,6 @@ class RequestHandler
             WHERE  ga.userID = ? AND g.groupState = 'active'
             ORDER BY g.groupPriority DESC";
         return $this->mysqliSelectFetchArray($sql, $userID);
-        // if ($groups) {
-        //     $tasks = $this->mysqliSelectFetchArray(
-        //         "SELECT t.* 
-        //             FROM tasks t
-        //             LEFT JOIN groupaccess ga ON t.taskParentID = ga.groupID
-        //             LEFT JOIN groups g ON g.groupID = ga.groupID
-        //             WHERE  ga.userID = ? AND g.groupState = 'active' AND t.taskType = 'task' AND NOT t.taskState = 'archived'
-        //             ORDER BY t.taskParentID DESC",
-        //         $userID
-        //     );
-        //     $json = [];
-        //     $json['groups'] = $groups;
-        //     $json['tasks'] = $tasks;
-        //     return $json;
-        // }
-        // return '';
     }
 
     public function getTaskData($taskID)
@@ -261,12 +210,46 @@ class RequestHandler
         return $this->getQueueTasks($userID);
     }
 
+    public function getMorningroutineTasks($userID)
+    {
+        $sql = "SELECT * FROM morningroutine WHERE entryUserID = ? AND entryDate < ? ORDER BY entryOrder";
+        return $this->mysqliSelectFetchArray($sql, $userID, date("Y-m-d"));
+    }
+
+    public function completeMorningroutineTask($userID, $id)
+    {
+        $entryData = $this->mysqliSelectFetchObject("SELECT * FROM morningroutine WHERE entryID = ?", $id);
+        if ($entryData->entryUserID == $userID) {
+            $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = NOW() WHERE entryID = ?", $id);
+            return $this->getMorningroutineTasks($userID);
+        }
+        return 0;
+    }
+
+    public function addMorningroutineTask($userID, $text)
+    {
+        if ($text) {
+            $taskCount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM morningroutine WHERE entryUserID = ?", $userID);
+            $taskCount = $taskCount->number;
+            $tasks = explode(",", $text);
+            foreach ($tasks as $taskTitle) {
+                if (!empty(trim($taskTitle))) {
+                    $sql = "INSERT INTO morningroutine (entryUserID, entryTitle, entryOrder) VALUES (?, ?, ?)";
+                    $this->mysqliQueryPrepared($sql, $userID, $taskTitle, ++$taskCount);
+                }
+            }
+        }
+        return $this->getMorningroutineTasks($userID);
+    }
+
+    public function resetMorningroutine($userID)
+    {
+        $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = '0000-00-00' WHERE entryUserID = ?", $userID);
+        return $this->getMorningroutineTasks($userID);
+    }
+
     public function getAppointments($userID)
     {
-        // nur aktuellen monat
-        // wenn less than 10 auffüllen
-        // type übergeben also current month next month, für css notwendig 
-
         $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
         FROM messages m
             LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
@@ -287,6 +270,35 @@ class RequestHandler
                 $appointment->timeStart = $appointment->messageStart;
                 $appointment->timeEnd = $appointment->messageEnd;
                 $appointmentlist[] = $appointment;
+            }
+            return $appointmentlist;
+        }
+        return 0;
+    }
+
+    public function getAppointmentsFromMonth($userID, $month, $year)
+    {
+        $monthKey = $year . '-' . (((int) $month < 10) ? '0' : '') . $month;
+        $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
+        FROM messages m
+            LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
+        WHERE  ga.userID = ? AND m.messageType = 'appointment'
+        ORDER BY m.messageDate";
+        $data = $this->mysqliSelectFetchArray($sql, $userID);
+        if ($data) {
+            foreach ($data as $appointment) {
+                $dateCheck = date("Y-m", strtotime($appointment->messageDate));
+                $appointment->currentMonth = (date("m", strtotime($appointment->messageDate)) == date("m"));
+                $appointment->messageRedRounded = new DateTime($appointment->messageDate) > new DateTime($this->getUserLastMotd($userID));
+                $appointment->messageDateFormFormat = date("Y-m-d", strtotime($appointment->messageDate));
+                $appointment->messageDate = date("d.m.y", strtotime($appointment->messageDate));
+                $appointment->messageOwnerName = $this->getUsernameByID($appointment->messageOwner);
+                $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
+                $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
+                $appointment->messagePermission = ($userID == $appointment->messageOwner || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+                $appointment->timeStart = $appointment->messageStart;
+                $appointment->timeEnd = $appointment->messageEnd;
+                if ($dateCheck == $monthKey) $appointmentlist[] = $appointment;
             }
             return $appointmentlist;
         }
@@ -384,6 +396,8 @@ class RequestHandler
             $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherUnfolded = ? WHERE userID = ?", $checked, $userID);
         } else if ($type == 'timetable') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelTimetableUnfolded = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'morningroutine') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutineUnfolded = ? WHERE userID = ?", $checked, $userID);
         }
         return 1;
     }
@@ -400,6 +414,8 @@ class RequestHandler
             $this->mysqliQueryPrepared("UPDATE panels SET panelWeather = ? WHERE userID = ?", $checked, $userID);
         } else if ($type == 'timetable') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelTimetable = ? WHERE userID = ?", $checked, $userID);
+        } else if ($type == 'morningroutine') {
+            $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutine = ? WHERE userID = ?", $checked, $userID);
         }
         return 1;
     }
@@ -423,7 +439,17 @@ class RequestHandler
                 $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherOrder = ? WHERE userID = ?", ($i + 1), $userID);
             } else if ($names[$i] == 'timetable') {
                 $this->mysqliQueryPrepared("UPDATE panels SET panelTimetableOrder = ? WHERE userID = ?", ($i + 1), $userID);
+            } else if ($names[$i] == 'morningroutine') {
+                $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutineOrder = ? WHERE userID = ?", ($i + 1), $userID);
             }
+        }
+        return 1;
+    }
+
+    public function updateLabelOrder($labelIDs)
+    {
+        for ($i = 0; $i < count($labelIDs); $i++) {
+            $this->mysqliQueryPrepared("UPDATE labels SET labelOrder = ? WHERE labelID = ?", ($i + 1), (int) $labelIDs[$i]);
         }
         return 1;
     }
@@ -465,6 +491,11 @@ class RequestHandler
         return $groupOwnerID->groupOwner == $userID;
     }
 
+    private function checkGroupPermission($userID, $groupID)
+    {
+        return ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) ? 1 : 0;
+    }
+
     private function getUserLastMotd($userID)
     {
         $sql = "SELECT userLastMotd FROM users WHERE userID = ?";
@@ -472,9 +503,123 @@ class RequestHandler
         return $data->userLastMotd;
     }
 
-    private function getDateDifferenceDaysOnly($date)
+    public function createLabel($userID, $groupID, $title, $description, $color)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $count = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM labels WHERE labelGroupID = ?", $groupID);
+        $sql = "INSERT INTO labels (labelName, labelDescription, labelColor, labelGroupID, labelOrder) VALUES (?, ?, ?, ?, ?)";
+        $this->mysqliQueryPrepared($sql, $title, $description, $color, $groupID, ($count->number + 1));
+        return 1;
+    }
+
+    public function getLabels($userID, $groupID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $data = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
+        if ($data) return $data;
+        return 0;
+    }
+
+    public function getLabelsForTask($userID, $groupID, $taskID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $labels = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
+        if ($labels) {
+            foreach ($labels as $label) {
+                $checkIfLabelIsActiveForTask = $this->mysqliSelectFetchObject("SELECT entryID FROM tasklabels WHERE taskID = ? AND labelID = ?", $taskID, $label->labelID);
+                if ($checkIfLabelIsActiveForTask) $label->isUsed = true;
+            }
+            return $labels;
+        }
+        return 0;
+    }
+
+    public function deleteLabel($userID, $groupID, $labelID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $this->mysqliQueryPrepared("DELETE FROM labels WHERE labelID = ?", $labelID);
+        return 1;
+    }
+
+    public function updateLabel($userID, $groupID, $labelID, $title, $description, $color)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        $sql = "UPDATE labels SET
+            labelName = ?,
+            labeLDescription = ?,
+            labelColor = ?
+            WHERE labelID = ?";
+        $this->mysqliQueryPrepared($sql, $title, $description, $color, $labelID);
+        return 1;
+    }
+
+    public function updateTaskLabel($userID, $groupID, $taskID, $labelID, $checkboxChecked)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return 0;
+        if ($checkboxChecked == 'true') {
+            $this->mysqliQueryPrepared("INSERT INTO tasklabels (labelID, taskID) VALUES (?, ?)", $labelID, $taskID);
+        } else {
+            $this->mysqliQueryPrepared("DELETE FROM tasklabels WHERE labelID = ? AND taskID = ?", $labelID, $taskID);
+        }
+        return 1;
+    }
+
+    public function createTask($userID, $type, $parentID, $title, $description, $prio)
+    {
+        if ($type == 'task' && !$this->checkGroupPermission($userID, $parentID)) return 0;
+        $sql = "INSERT INTO tasks 
+            (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskState, taskDateCreated) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->mysqliQueryPrepared($sql, $type, $parentID, $prio, $this->getPriorityColor($prio), $title, $description, 'open', date('Y-m-d H:i'));
+        return 1;
+    }
+
+    private function getPriorityColor($priority)
+    {
+        $colors = ['green', '#ffcc00', 'red'];
+        return $colors[$priority - 1];
+    }
+
+    public function getSubtasks($userID, $parentID)
+    {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfSubtask($parentID))) return 0;
+        if ($subtasks = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ?", 'subtask', $parentID)) {
+            foreach ($subtasks as $task) {
+                if ($subtaskCount = $this->getNumberOfSubtasks($task->taskID)) $task->subtaskCount = $subtaskCount;
+                if ($task->taskAssignedBy) $task->assigneeNameShort = $this->getUserNameShort($task->taskAssignedBy);
+                if ($task->taskState == 'open') $task->daysActive = $this->getDateDifference($task->taskDateCreated);
+            }
+            return $subtasks;
+        }
+        return 0;
+    }
+
+    private function getGroupIDOfSubtask($taskID)
+    {
+        $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
+        if ($taskData->taskType == 'task') return $taskData->taskParentID;
+        do {
+            $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskData->taskParentID);
+        } while ($taskData->taskType == 'subtask');
+        return $taskData->taskParentID;
+    }
+
+    private function getNumberOfSubtasks($taskID)
+    {
+        $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskState = 'open'";
+        if ($data = $this->mysqliSelectFetchObject($sql, $taskID)) return $data->number;
+        return 0;
+    }
+
+    private function getUserNameShort($userID)
+    {
+        if ($userData = $this->mysqliSelectFetchObject("SELECT userNameShort FROM users WHERE userID = ?", $userID)) return $userData->userNameShort;
+        return 0;
+    }
+
+    private function getDateDifference($date)
     {
         $tmpDate = new DateTime($date);
-        return $tmpDate->diff(new DateTime(date('Y-m-d')))->format('%r%a');
+        return $tmpDate->diff(new DateTime(date('Y-m-d H:i')))->format('%r%a');
     }
 }

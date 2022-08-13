@@ -13,7 +13,7 @@ class TaskBoard
         return $mysqli;
     }
 
-    public function mysqliQueryPrepared($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    public function mysqliQueryPrepared($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -21,23 +21,12 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
         }
     }
 
-    public function mysqliSelectFetchObject($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    public function mysqliSelectFetchObject($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -45,18 +34,7 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -65,7 +43,7 @@ class TaskBoard
         }
     }
 
-    public function mysqliSelectFetchArray($sql, $value = '', $value2 = '', $value3 = '', $value4 = '', $value5 = '')
+    public function mysqliSelectFetchArray($sql, ...$params)
     {
         $mysqli = $this->mysqliConnect();
         $stmt = mysqli_stmt_init($mysqli);
@@ -73,18 +51,7 @@ class TaskBoard
             var_dump($sql);
             $this->locationIndex("?error=sqlerror");
         } else {
-            if ($value == '' && $value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-            } else if ($value2 == '' && $value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "s", $value);
-            } else if ($value3 == '' && $value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ss", $value, $value2);
-            } else  if ($value4 == '' && $value5 == '') {
-                mysqli_stmt_bind_param($stmt, "sss", $value, $value2, $value3);
-            } else  if ($value5 == '') {
-                mysqli_stmt_bind_param($stmt, "ssss", $value, $value2, $value3, $value4);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssss", $value, $value2, $value3, $value4, $value5);
-            }
+            mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             if ($result) {
@@ -118,21 +85,14 @@ class TaskBoard
 
     public function checkGroupPermission($userID, $groupID)
     {
-        if ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) {
-            return 1;
-        } else {
-            return 0;
-        }
+        if ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) return 1;
+        return 0;
     }
 
     public function checkIfEmailIsTaken($email)
     {
-        $username = $this->mysqliSelectFetchObject("SELECT userMail FROM users WHERE userMail = ?", $email);
-        if ($username) {
-            return 'taken';
-        } else {
-            return 'untaken';
-        }
+        if ($this->mysqliSelectFetchObject("SELECT userMail FROM users WHERE userMail = ?", $email)) return 'taken';
+        return 'untaken';
     }
 
     public function checkTaskPermission($userID, $task)
@@ -212,16 +172,12 @@ class TaskBoard
 
     public function getArchivedTasks()
     {
-        $sql = "SELECT * FROM tasks WHERE taskState = 'archived' ORDER BY taskID DESC";
-        $data = $this->mysqliSelectFetchArray($sql);
-
-        if ($data != null) {
+        if ($data = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskState = 'archived' ORDER BY taskID DESC")) {
             foreach ($data as $i) {
                 if ($this->checkGroupPermission($_SESSION['userID'], $i->taskParentID))
                     $tasks[] = $i;
             }
         }
-
         return $tasks;
     }
 
@@ -237,6 +193,15 @@ class TaskBoard
         return $tmpDate->diff(new DateTime(date('Y-m-d')))->format('%r%a');
     }
 
+    private function getLabelsFromTask($taskID)
+    {
+        $sql = "SELECT l.* 
+            FROM labels l
+                LEFT JOIN tasklabels tl ON l.labelID = tl.labelID
+            WHERE  tl.taskID = ?";
+        return $this->mysqliSelectFetchArray($sql, $taskID);
+    }
+
     public function getParentIDOfTask($taskID)
     {
         $task = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
@@ -248,9 +213,8 @@ class TaskBoard
         if ($groupID) {
             $return = $this->mysqliSelectFetchObject("SELECT groupName FROM groups WHERE groupID = ?", $groupID);
             return $return->groupName;
-        } else {
-            return '';
         }
+        return '';
     }
 
     public function getGroupOwnerID($groupID)
@@ -299,34 +263,17 @@ class TaskBoard
 
     private function getNumberOfSubtasks($taskId)
     {
-        $sql = "SELECT * FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?";
-        $data = $this->mysqliSelectFetchArray($sql, $taskId);
-
         $open = 0;
-        $inProgress = 0;
-        $finished = 0;
-
-        if ($data != null) {
+        $closed = 0;
+        if ($data = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $taskId)) {
             foreach ($data as $i) {
-                if ($i->taskState == 'open') {
-                    $open += 1;
-                } else if ($i->taskState == 'assigned') {
-                    $inProgress += 1;
-                } else if ($i->taskState == 'finished') {
-                    $finished += 1;
-                }
+                if ($i->taskState == 'open') $open += 1;
+                else if ($i->taskState == 'closed') $closed += 1;
             }
         }
-
-        $numberOfSubtasks = $open + $inProgress;
-
-        if ($numberOfSubtasks == 1) {
-            return '<div class="subtask_label">' . $numberOfSubtasks . ' Subtask</div>';
-        } else if ($numberOfSubtasks > 1) {
-            return '<div class="subtask_label">' . $numberOfSubtasks . ' Subtasks</div>';
-        } else {
-            return '';
-        }
+        if ($open == 1) return '<div class="label subtask_label">' . $open . ' Subtask</div>';
+        else if ($open > 1) return '<div class="label subtask_label">' . $open . ' Subtasks</div>';
+        return '';
     }
 
     public function getUserData($userID)
@@ -349,19 +296,7 @@ class TaskBoard
             if ($isOwner && ($userID != $_SESSION['userID'])) {
                 $removeAccessHTML = '<button type="button" onclick="removeUserAccess(\'' . $groupID . '\',' . $userID . ', \'' . $this->getUsernameByID($userID) . '\')">Remove</button>';
             }
-            if ($nightmodeEnabled) {
-                if ($toggle) {
-                    $color = '#1a1a1a';
-                } else {
-                    $color = '#333';
-                }
-            } else {
-                if ($toggle) {
-                    $color = '#fff';
-                } else {
-                    $color = '#f2f2f2';
-                }
-            }
+            ($nightmodeEnabled) ? (($toggle) ? $color = '#1a1a1a' : $color = '#333') : (($toggle) ? $color = '#fff' : $color = '#f2f2f2');
             $html .=  '<tr style="background-color:' . $color . ';">
                     <td>' . $this->getUsernameByID($userID) . '</td>
                     <td>
@@ -384,56 +319,48 @@ class TaskBoard
 
     public function getPriorityColor($priority)
     {
-        switch ($priority) {
-            case 1:
-                return 'green';
-
-            case 2:
-                return '#ffcc00';
-
-            case 3:
-                return 'red';
-
-            default:
-                return 'black';
-        }
+        $colors = ['green', '#ffcc00', 'red'];
+        return $colors[$priority - 1];
     }
 
     private function getTaskCount($type, $groupID, $state)
     {
         $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = ? AND taskParentID = ? AND taskState = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $type, $groupID, $state);
-        if ($data != null) {
-            if ((int) $data->number > 0) {
-                $taskCount = '(' . $data->number . ')';
-            } else {
-                $taskCount = '';
+        if ($data = $this->mysqliSelectFetchObject($sql, $type, $groupID, $state)) {
+            ((int) $data->number > 0) ? $taskCount = '(' . $data->number . ')' : $taskCount = '';
+        }
+        return $taskCount;
+    }
+
+    private function getOpenTaskCount($groupID)
+    {
+        $sql = "SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ? AND taskState = ?";
+        $noLabelCounter = 0;
+        if ($data = $this->mysqliSelectFetchArray($sql, 'task', $groupID, 'open')) {
+            foreach ($data as $task) {
+                if (!$this->mysqliSelectFetchArray("SELECT entryID FROM tasklabels WHERE taskID = ?", $task->taskID)) $noLabelCounter++;
             }
+            ($noLabelCounter > 0) ? $taskCount = '(' . $noLabelCounter . ')' : $taskCount = '';
         }
         return $taskCount;
     }
 
     public function getUserIDByMail($mail)
     {
-        $sql = "SELECT userID FROM users WHERE userMail = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $mail);
+        $data = $this->mysqliSelectFetchObject("SELECT userID FROM users WHERE userMail = ?", $mail);
         return $data->userID;
     }
 
     public function getUserIDByUsername($username)
     {
-        $sql = "SELECT * FROM users WHERE userName = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $username);
+        $data = $this->mysqliSelectFetchObject("SELECT * FROM users WHERE userName = ?", $username);
         return $data->userID;
     }
 
     public function getUsernameByID($userID)
     {
-        if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') {
-            return $userID;
-        }
-        $sql = "SELECT * FROM users WHERE userID = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $userID);
+        if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') return $userID;
+        $data = $this->mysqliSelectFetchObject("SELECT * FROM users WHERE userID = ?", $userID);
         return $data->userName;
     }
 
@@ -442,10 +369,8 @@ class TaskBoard
      */
     public function getUserGroupInvitesCount($userID)
     {
-        $data = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tokens WHERE tokenType = 'joingroup' AND tokenUserID = ?;", $userID);
-        if ($data) {
-            return $data->number;
-        }
+        $sql = "SELECT COUNT(*) AS number FROM tokens WHERE tokenType = 'joingroup' AND tokenUserID = ?";
+        if ($data = $this->mysqliSelectFetchObject($sql, $userID)) return $data->number;
         return 0;
     }
 
@@ -463,15 +388,13 @@ class TaskBoard
      */
     public function getUserVerificationState($userID)
     {
-        $sql = "SELECT userMailState FROM users WHERE userID = ?";
-        $data = $this->mysqliSelectFetchObject($sql, $userID);
+        $data = $this->mysqliSelectFetchObject("SELECT userMailState FROM users WHERE userID = ?", $userID);
         return $data->userMailState == 'verified';
     }
 
     public function getTasksByGroupID($groupID)
     {
-        $sql = "SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? ORDER BY taskID DESC";
-        return $this->mysqliSelectFetchArray($sql, $groupID);
+        return $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? ORDER BY taskID DESC", $groupID);
     }
 
     public function getTaskType($taskID)
@@ -482,11 +405,8 @@ class TaskBoard
 
     public function getWeek()
     {
-        if (date('W') % 2 == 1) {
-            return 'odd';
-        } else {
-            return 'even';
-        }
+        if (date('W') % 2 == 1) return 'odd';
+        return 'even';
     }
 
     public function getWeekday()
@@ -593,9 +513,8 @@ class TaskBoard
     {
         $groupName = $group->groupName;
         $groupID = $group->groupID;
-        $openTasksCount = $this->getTaskCount('task', $groupID, 'open');
-        $assignedTasksCount = $this->getTaskCount('task', $groupID, 'assigned');
-        $finishedTasksCount = $this->getTaskCount('task', $groupID, 'finshed');
+        $openTasksCount = $this->getOpenTaskCount($groupID);
+        $closedTasksCount = $this->getTaskCount('task', $groupID, 'finshed');
 
         $groupContentID = 'groupContent_' . $groupName;
         $groupUnfoldButtonID = 'groupUnfoldButton_' . $groupName;
@@ -603,9 +522,6 @@ class TaskBoard
         $mobileLine = '';
         if ($openTasksCount != '') {
             $mobileLine .= $openTasksCount . ' Open ';
-        }
-        if ($assignedTasksCount != '') {
-            $mobileLine .= $assignedTasksCount . ' In progress';
         }
 
         $html =  '
@@ -615,7 +531,7 @@ class TaskBoard
                     <a href="php/details.php?action=groupDetails&id=' . $groupID . '"><p>' . $groupName . '</p></a>
                 </div>
                 <div class="group_top_bar_right">
-                    <p>' . $mobileLine . '</p>
+                        <p>' . $mobileLine . '</p>
                     <div class="group_dropbtn" id="' . $groupUnfoldButtonID . '" onclick="toggleUnfoldArea(\'' . $groupContentID . '\',\'' . $groupUnfoldButtonID . '\')">
                         <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
                     </div>
@@ -624,23 +540,31 @@ class TaskBoard
             <div class="group-content" id="groupContent_' . $groupName . '">
                 <div class="single-content">
                     <div class="single-top-bar">
-                    <p>Open ' . $openTasksCount . '</p>
+                        <p>Open ' . $openTasksCount . '</p>
                     </div>';
         $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'open' ORDER BY taskPriority DESC, taskID ", $groupID);
         $html .=  '
-                </div>
-                <div class="single-content">
+                </div>';
+
+        $groupLabels = $this->mysqliSelectFetchArray("SELECT * FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
+        if ($groupLabels) {
+            foreach ($groupLabels as $label) {
+                $taskCount = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasklabels WHERE labelID = ?", $label->labelID);
+                ($taskCount->number) ? $taskCount = '(' . $taskCount->number . ')' : $taskCount = '';
+                $html .= '<div class="single-content">
                     <div class="single-top-bar">
-                    <p>In progress ' . $assignedTasksCount . '</p>
+                        <p>' . $label->labelName . ' ' . $taskCount . '</p>
                     </div>';
-        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'assigned' ORDER BY taskPriority DESC, taskDateAssigned", $groupID);
-        $html .=  '
-                </div>
-                <div class="single-content">
+                $html .= $this->printTasksFromSameLabel($label->labelID);
+                $html .=  '</div>';
+            }
+        }
+
+        $html .= '<div class="single-content">
                     <div class="single-top-bar">
-                    <p>Done ' . $finishedTasksCount . '</p>
+                        <p>Closed ' . $closedTasksCount . '</p>
                     </div>';
-        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'finished' ORDER BY taskDateFinished", $groupID);
+        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'closed' ORDER BY taskDateClosed", $groupID);
         $html .=  '
                 </div>
             </div>
@@ -684,22 +608,16 @@ class TaskBoard
                     <th>PRIORITY</th>
                     <th>TOTAL_NUM_OF_TASKS</th>
                     <th>CURRENTLY_OPEN</th>
-                    <th>CURRENTLY_IN_PROGRESS</th>
                     <th></th>
                 </tr>';
 
         if ($groups != null) {
-            if ($this->getNightmodeEnabled($_SESSION['userID'])) {
-                $backgroundColor = '#333333';
-            } else {
-                $backgroundColor = '#fff';
-            }
+            ($this->getNightmodeEnabled($_SESSION['userID'])) ? $backgroundColor = '#333333' : $backgroundColor = '#fff';
             $toggle = true;
             foreach ($groups as $group) {
                 $groupID = $group->groupID;
                 $totalTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ?", $groupID);
                 $openTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'open'", $groupID);
-                $tasksInProgress = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'assigned'", $groupID);
 
                 if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
                     $deleteOrLeaveGroup = '<td><button type="button" onclick="deleteGroup(' . $groupID . ')">Delete Group</button>';
@@ -708,11 +626,7 @@ class TaskBoard
                 }
 
                 $toggle = !$toggle;
-                if ($toggle) {
-                    $html .= '<tr style="background-color:' . $backgroundColor . ';">';
-                } else {
-                    $html .= '<tr>';
-                }
+                ($toggle) ? $html .= '<tr style="background-color:' . $backgroundColor . ';">' : $html .= '<tr>';
                 $html .= '
                     <td>' . $groupID . '</td>
                     <td><a href="' . DIR_SYSTEM . 'php/details.php?action=groupDetails&id=' . $groupID . '">' . $group->groupName . '</a></td>
@@ -720,7 +634,6 @@ class TaskBoard
                     <td>' . $group->groupPriority . '</td>
                     <td>' . $totalTasks->number . '</td>
                     <td>' . $openTasks->number . '</td>
-                    <td>' . $tasksInProgress->number . '</td>
                     <td>' . $deleteOrLeaveGroup . '</td>
                 </tr>
                 ';
@@ -749,6 +662,9 @@ class TaskBoard
                                 <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                             </div>
                             ' . $editGroupButton . '
+                            <div class="button" onclick="labelHandler.openGroupLabelsPopup(' . $groupID . ')">
+                                <p>Labels</p>
+                            </div>
                         </div>
                         <div class="top-bar-right">
                             <div class="dropbtn" id="groupdetailsUnfoldButton" onclick="toggleUnfoldArea(\'groupDetailsButtons\',\'groupdetailsUnfoldButton\')">
@@ -837,8 +753,7 @@ class TaskBoard
 
     public function printInviteMessages($userID)
     {
-        $invites = $this->getGroupInvites($userID);
-        if ($invites) {
+        if ($invites = $this->getGroupInvites($userID)) {
             $html = '';
             foreach ($invites as $invite) {
                 $groupID = $invite->tokenGroupID;
@@ -866,7 +781,7 @@ class TaskBoard
 
     public function printPanelSettings($type, $title, $activeID, $activeState, $unfoldedID, $unfoldedState)
     {
-        return '<div class="draggable__item" draggable="true" data-type="' . $type . '">
+        return '<div class="draggable__item__panelsettings draggable__item" draggable="true" data-type="' . $type . '">
                 <p>' . $title . '</p>
                 <label class="switch">
                     <input id="' . $activeID . '" type="checkbox" ' . $activeState . '/>
@@ -884,12 +799,22 @@ class TaskBoard
     private function panelHeader($type)
     {
         if ($type == 'appointment') {
-            $createButtonID = 'createAppointmentButton';
-            $onclick = 'panels.openAddAppointmentForm()';
-            $unfoldButtonID = 'appointmentUnfoldButton';
-            $contentAreaID = 'appointmentPanelContentArea';
-            $titleID = 'appointmentPanelTitle';
-            $title = '';
+            return '<div class="panel-item-top-bar">
+                <div class="top-bar-left">
+                    <p id="appointmentPanelTitle"></p>
+                </div>
+                <div class="top-bar-right">
+                    <div class="panel-item-top-bar-button" id="openAppointmentCalendarButton" onclick="panels.openAppointmentCalendar()">
+                        <i class="fa fa-calendar-day" aria-hidden="true"></i>
+                    </div>
+                    <div class="panel-item-top-bar-button" id="createAppointmentButton" onclick="panels.openAddAppointmentForm()">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </div>
+                    <div class="panel_item_top_bar_unfold_button" id="appointmentUnfoldButton" onclick="toggleUnfoldArea(\'appointmentPanelContentArea\',\'appointmentUnfoldButton\')">
+                       <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>';
         } else if ($type == 'motd') {
             $createButtonID = 'createMOTDButton';
             $onclick = 'panels.openAddMotdForm()"';
@@ -933,6 +858,22 @@ class TaskBoard
                             Next week
                         </div>
                         <div class="panel_item_top_bar_unfold_button" id="timetableUnfoldButton" onclick="toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\')">
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>';
+        } else if ($type == 'morningroutine') {
+            return '<div class="panel-item-top-bar">
+                    <div class="queue__top-bar-left">
+                        <p id="morningroutinePanelTitle"></p>
+                    </div>
+                    <div class="queue__top-bar-right">
+                        <div class="panel-item-top-bar-button" onclick="panels.resetMorningroutine()">
+                            <i class="fa fa-rotate-right" aria-hidden="true"></i>
+                        </div>
+                        <input class="queue__input__text" type="text" id="morningroutineItem" name="morningroutineItem">
+                        <input type="submit" id="morningroutineSubmit "name="add-morningroutine-submit" value="Add" onclick="panels.addMorningroutineTask()"/>
+                        <div class="panel_item_top_bar_unfold_button" id="morningroutineUnfoldButton" onclick="toggleUnfoldArea(\'morningroutinePanelContentArea\',\'morningroutineUnfoldButton\')">
                             <i class="fa fa-caret-down" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -1030,12 +971,8 @@ class TaskBoard
                     $currentTime = date('H:i');
                     $nextTask = null;
                     for ($i = 0; $i < count($tasks); $i++) {
-                        if ($currentTime > $tasks[$i]->timetableTimeEnd) {
-                            $prevTask = $tasks[$i];
-                        }
-                        if ($currentTime > $tasks[$i]->timetableTimeStart && $currentTime < $tasks[$i]->timetableTimeEnd) {
-                            $activeTasks[] = $tasks[$i];
-                        }
+                        if ($currentTime > $tasks[$i]->timetableTimeEnd) $prevTask = $tasks[$i];
+                        if ($currentTime > $tasks[$i]->timetableTimeStart && $currentTime < $tasks[$i]->timetableTimeEnd) $activeTasks[] = $tasks[$i];
                         if ($currentTime < $tasks[$i]->timetableTimeStart && !$nextTask) {
                             $nextTask = $tasks[$i];
                             if ($i < count($tasks) - 1) $nextTask2 = $tasks[$i + 1];
@@ -1091,6 +1028,14 @@ class TaskBoard
                     ' . $content . '
                     <script>' . $unfoldPanel . '</script>
                 </div>';
+        } else if ($type == 'morningroutine') {
+            if ($unfolded == 'true') $unfoldPanel = 'toggleUnfoldArea(\'morningroutinePanelContentArea\',\'morningroutineUnfoldButton\', \'true\')';
+            return '<div class="panel-item-area" id="morningroutinePanelContentArea">
+                    <script>
+                        panels.printMorningroutineTasks()
+                    ' . $unfoldPanel . '
+                    </script>
+                </div>';
         }
     }
 
@@ -1137,6 +1082,13 @@ class TaskBoard
                 'spec' => $timetable->timetableID
             ];
         }
+        if ($panelData->panelMorningroutine == 'true') {
+            $activePanels[$panelData->panelMorningroutineOrder] = [
+                'name' => 'morningroutine',
+                'unfolded' => $panelData->panelMorningroutineUnfolded,
+                'spec' => ''
+            ];
+        }
         for ($i = 0; $i < NUMBER_OF_TOTAL_PANELS; $i++) {
             $panelData = $activePanels[$i + 1];
             if ($panelData) {
@@ -1156,9 +1108,6 @@ class TaskBoard
 
     private function printSubtaskPanel($id)
     {
-        $openTasksCount = $this->getTaskCount('subtask', $id, 'open');
-        $assignedTasksCount = $this->getTaskCount('subtask', $id, 'assigned');
-        $finishedTasksCount = $this->getTaskCount('subtask', $id, 'finshed');
         $html = '
             <div class="taskdetails_panel_right">
                 <div class="group-box">
@@ -1172,25 +1121,19 @@ class TaskBoard
                             </div>
                         </div>
                     </div>
-                    <div class="group-content" id="groupContent_subtask">
+                    <div class="group-content__subtask" id="groupContent_subtask">
                         <div class="single__content__subtask">
                             <div class="single-top-bar">
-                            <p>Open ' . $openTasksCount . '</p>
-                            </div>';
-        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'open' ORDER BY taskPriority DESC", $id);
-        $html .= '</div>
-                    <div class="single__content__subtask">
-                        <div class="single-top-bar">
-                        <p>In progress ' . $assignedTasksCount . '</p>
-                        </div>';
-        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'assigned' ORDER BY taskDateAssigned", $id);
-        $html .= '</div>
-                    <div class="single__content__subtask">
-                        <div class="single-top-bar">
-                        <p>Done ' . $finishedTasksCount . '</p>
-                        </div>';
-        $html .= $this->printTasksFromSameState("SELECT * FROM tasks WHERE taskType = 'subtask' and taskParentID = ? AND taskState = 'finished' ORDER BY taskDateFinished", $id);
-        $html .=    '</div>
+                                <p id="subtask-open-header"></p>
+                            </div>
+                            <div id="subtasks-open-area"></div>
+                        </div>
+                        <div class="single__content__subtask">
+                            <div class="single-top-bar">
+                                <p id="subtask-closed-header"></p>
+                            </div>
+                            <div id="subtasks-closed-area"></div>
+                        </div>
                 </div>
             </div>
         </div>';
@@ -1199,21 +1142,10 @@ class TaskBoard
 
     private function printTask($taskData)
     {
-        switch ($taskData->taskState) {
-            case 'open':
-                $dateDiff = $this->getDateDifference($taskData->taskDateCreated);
-                break;
-            case 'assigned':
-                $dateDiff = $this->getDateDifference($taskData->taskDateAssigned);
-                break;
-            case 'finished':
-                $dateDiff = $this->getDateDifference($taskData->taskDateFinished);
-                break;
-            default:
-                break;
-        }
+        if ($taskData->taskState == 'open') $dateDiff = $this->getDateDifference($taskData->taskDateCreated);
+        else if ($taskData->taskState == 'closed') $dateDiff = $this->getDateDifference($taskData->taskDateClosed);
 
-        if ($taskData->taskType == 'task' && $taskData->taskState == 'finished' && $this->archiveCheck($taskData->taskParentID, $dateDiff)) {
+        if ($taskData->taskType == 'task' && $taskData->taskState == 'closed' && $this->archiveCheck($taskData->taskParentID, $dateDiff)) {
             $this->moveToArchive($taskData->taskID);
         } else {
             $html = '<a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id=' . $taskData->taskID . '">
@@ -1226,7 +1158,7 @@ class TaskBoard
                 <div class="emptyspace">&nbsp;</div>';
 
             $html .= '<div class="bottom">
-                <div class="bottom_label">
+                <div class="label bottom_label">
                 id_' . $taskData->taskID . '
                 </div>';
 
@@ -1235,18 +1167,25 @@ class TaskBoard
                 $sql = "SELECT * FROM users WHERE userID = ?";
                 $userData = $this->mysqliSelectFetchObject($sql, $userID);
                 $assignerShort = $userData->userNameShort;
-                $html .= '<div class="bottom_label">' . $assignerShort . '</div>';
+                $html .= '<div class="label bottom_label">' . $assignerShort . '</div>';
             }
 
-            if ($taskData->taskState != 'finished') {
+            if ($taskData->taskState != 'closed') {
                 if ($taskData->taskState == 'open' && $dateDiff == 0) {
-                    $html .= '<div class="new_label">NEW</div>';
+                    $html .= '<div class="label new_label">NEW</div>';
                 } else if ($taskData->taskState == 'open' && $dateDiff > 31) {
-                    $html .= '<div class="bottom_label" style="background-color:red;color:#fff;">' . $dateDiff . '</div>';
+                    $html .= '<div class="label bottom_label" style="background-color:red;color:#fff;">' . $dateDiff . '</div>';
                 } else {
-                    $html .= '<div class="bottom_label">' . $dateDiff . '</div>';
+                    $html .= '<div class="label bottom_label">' . $dateDiff . '</div>';
                 }
             }
+
+            if ($labels = $this->getLabelsFromTask($taskData->taskID)) {
+                foreach ($labels as $label) {
+                    $html .= '<div class="label" style="background-color: ' . $label->labelColor . ';">' . $label->labelName . '</div>';
+                }
+            }
+
             $html .= $this->getNumberOfSubtasks($taskData->taskID);
             $html .= '</div>
                     </div>
@@ -1259,60 +1198,43 @@ class TaskBoard
 
     public function printTaskDetails($task, $id)
     {
-        $html = $this->printTaskDetailsNew($task);
-        $subtaskcount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $task->taskID);
-        if ($subtaskcount->number > 0) {
-            $html .= $this->printSubtaskPanel($id);
-        }
-        echo $html;
-    }
-
-    public function printTaskDetailsNew($task)
-    {
         if ($task->taskType == 'subtask') {
             $backButton = '<a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id=' . $task->taskParentID . '"> 
                 <div class="button"><p><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</p></div></a>';
+            $labelTR = '';
         } else {
             $backButton = '';
+            $labelTR = '<tr>
+                <td>Labels:</td>
+                <td id="tasklabel-list">
+                    <script>labelHandler.showLabelsInTaskDetails(' . $task->taskParentID . ', ' . $task->taskID . ')</script>
+                </td>
+            </tr>';
         }
         $buttons = '<button class="button" onclick="openUpdateTaskForm()">Update</button>
             <button class="button" type="button" onclick="deleteTask(\'' . $task->taskID . '\')">Delete</button>
-            <button class="button" id="createSubtaskButton" type="button">Create Subtask</button>';
+            <button class="button" type="button" onclick="taskHandler.openCreateTaskForm(\'subtask\', ' . $task->taskID . ', \'false\')">Create Subtask</button>
+            <form action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" >
+                <input class="button" type="submit" name="assign-submit" value="Assign Task"/>
+            </form>
+            ';
         switch ($task->taskState) {
             case 'open':
-                $buttons .= '<form action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="assign-submit" value="Start Work"/></form>';
+                $buttons .= '<form action="action.php?action=closeTask&id=' . $task->taskID . '" autocomplete="off" method="post" >
+                    <input class="button" type="submit" name="finish-submit" value="Close"/></form>';
                 break;
 
-            case 'assigned':
-                $buttons .= '<form action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="stateopen-submit" value="Back to Open"/></form>';
-                $buttons .= '<form action="action.php?action=finishTask&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="finish-submit" value="Finish"/></form>';
-                break;
-
-            case 'finished':
-                $buttons .= '<form action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="stateopen-submit" value="Back to Open"/></form>';
-                $buttons .= '<form action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" ><input class="button" type="submit" name="assign-submit" value="Back to in progress"/></form>';
+            case 'closed':
+                $buttons .= '<form action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" >
+                    <input class="button" type="submit" name="stateopen-submit" value="Reopen"/></form>';
                 break;
 
             default:
                 break;
         }
-        $priority = $task->taskPriority;
-        switch ($priority) {
-            case 1:
-                $priority = 'low';
-                break;
+        $priorities = ['low', 'normal', 'high'];
+        $priority = $priorities[($task->taskPriority) - 1];
 
-            case 2:
-                $priority = 'normal';
-                break;
-
-            case 3:
-                $priority = 'high';
-                break;
-
-            default:
-                break;
-        }
         $html = '
             <div class="taskdetails_panel">
                 <div class="taskdetails_panel_left">
@@ -1350,21 +1272,23 @@ class TaskBoard
                             <td>' . $task->taskDateCreated . '</td>
                         </tr>
                         <tr>
-                            <td>Date Assigned:</td>
-                            <td>' . $task->taskDateAssigned . '</td>
-                        </tr>
-                        <tr>
                             <td>Assigned By:</td>
                             <td>' . $this->getUsernameByID($task->taskAssignedBy) . '</td>
                         </tr>
                         <tr>
-                            <td>Date Finished:</td>
-                            <td>' . $task->taskDateFinished . '</td>
+                            <td>Date Closed:</td>
+                            <td>' . $task->taskDateClosed . '</td>
                         </tr>
+                        ' . $labelTR . '
                     </table>
         ';
         $html .= $this->printComments($task->taskID, $task->taskType);
-        return $html;
+        $subtaskcount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $task->taskID);
+        if ($subtaskcount->number > 0) {
+            $html .= $this->printSubtaskPanel($id);
+        }
+        $html .= '<script>taskHandler.printSubtasks(' . $task->taskID . ')</script>';
+        echo $html;
     }
 
     private function printTaskTable($tasks)
@@ -1378,25 +1302,16 @@ class TaskBoard
                     <th>GROUP_ID</th>
                     <th>PRIORITY</th>
                     <th>DATE_CREATED</th>
-                    <th>DATE_ASSIGNED</th>
                     <th>ASSIGNED_BY</th>
-                    <th>DATE_FINISHED</th>
+                    <th>DATE_CLOSED</th>
                     <th></th>
                 </tr>';
-        if ($tasks != null) {
-            if ($this->getNightmodeEnabled($_SESSION['userID'])) {
-                $backgroundColor = '#333333';
-            } else {
-                $backgroundColor = '#fff';
-            }
+        if ($tasks) {
+            ($this->getNightmodeEnabled($_SESSION['userID'])) ? $backgroundColor = '#333333' : $backgroundColor = '#fff';
             $toggle = true;
             foreach ($tasks as $task) {
                 $toggle = !$toggle;
-                if ($toggle) {
-                    $html .= '<tr style="background-color:' . $backgroundColor . ';">';
-                } else {
-                    $html .= '<tr>';
-                }
+                ($toggle) ? $html .= '<tr style="background-color:' . $backgroundColor . ';">' : $html .= '<tr>';
                 $html .= '
                     <td><a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id=' . $task->taskID . '">' . $task->taskID . '</a></td>
                     <td>' . $task->taskTitle . '</td>
@@ -1404,9 +1319,8 @@ class TaskBoard
                     <td>' . $task->taskParentID . '</td>
                     <td>' . $task->taskPriority . '</td>
                     <td>' . $task->taskDateCreated . '</td>
-                    <td>' . $task->taskDateAssigned . '</td>
                     <td>' . $this->getUsernameByID($task->taskAssignedBy) . '</td>
-                    <td>' . $task->taskDateFinished . '</td>
+                    <td>' . $task->taskDateClosed . '</td>
                     <td style="white-space: nowrap;">
                         <div class="editgroup-button" onclick="deleteTask(' . $task->taskID . ')">
                             Delete
@@ -1422,14 +1336,26 @@ class TaskBoard
         return $html;
     }
 
+    private function printTasksFromSameLabel($labelID)
+    {
+        $html = '';
+        if ($data = $this->mysqliSelectFetchArray("SELECT taskID FROM tasklabels WHERE labelID = ?", $labelID)) {
+            foreach ($data as $i) {
+                if ($taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $i->taskID))
+                    if ($taskData->taskState != 'closed') $html .= $this->printTask($taskData);
+            }
+        }
+        return $html;
+    }
+
     public function printTasksFromSameState($sql, $id)
     {
-        $data = $this->mysqliSelectFetchArray($sql, $id);
-
         $html = '';
-        if ($data != null) {
-            foreach ($data as $i) {
-                $html .= $this->printTask($i);
+        if ($data = $this->mysqliSelectFetchArray($sql, $id)) {
+            foreach ($data as $taskData) {
+                if ($taskData->taskState == 'open')
+                    if ($this->mysqliSelectFetchArray("SELECT * FROM tasklabels WHERE taskID = ?", $taskData->taskID)) continue;
+                $html .= $this->printTask($taskData);
             }
         }
         return $html;
@@ -1438,24 +1364,20 @@ class TaskBoard
     public function printUserDetails($userID)
     {
         $userData = $this->mysqliSelectFetchObject("SELECT * FROM users WHERE userID = ?", $userID);
-        $ownedGroups = $this->mysqliSelectFetchArray("SELECT * FROM groups WHERE groupOwner = ?", $userID);
         $groupAccess = $this->mysqliSelectFetchArray("SELECT * FROM groupaccess WHERE userID = ?", $userID);
 
         $backButton = '<div style="float:left;"><a href="' . DIR_SYSTEM . 'php/admin.php">
             <div class="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</div></a></div>';
 
         $ownedGroupsHTML = '';
-        if ($ownedGroups) {
+        $groupAccessHTML = '';
+        if ($ownedGroups = $this->mysqliSelectFetchArray("SELECT * FROM groups WHERE groupOwner = ?", $userID)) {
             foreach ($ownedGroups as $group) {
                 $ownedGroupsHTML .= '
                 <tr>
                     <td><a href="' . DIR_SYSTEM . 'php/details.php?action=groupDetails&id=' . $group->groupID . '">' . $group->groupName . '</a></td>
                 </tr>';
             }
-        }
-
-        $groupAccessHTML = '';
-        if ($ownedGroups) {
             foreach ($groupAccess as $group) {
                 $groupID = $group->groupID;
                 $groupAccessHTML .= '
@@ -1936,11 +1858,8 @@ class TaskBoard
                     LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
                 WHERE  ga.userID = ? AND g.groupState = 'active'
                 ORDER BY g.groupPriority DESC";
-        if ($userID == '') {
-            return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-        } else {
-            return $this->mysqliSelectFetchArray($sql, $userID);
-        }
+        if ($userID == '') return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
+        return $this->mysqliSelectFetchArray($sql, $userID);
     }
 
     public function sqlGetAllGroups($userID = '')
@@ -1950,11 +1869,8 @@ class TaskBoard
                     LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
                 WHERE  ga.userID = ?
                 ORDER BY g.groupPriority DESC";
-        if ($userID == '') {
-            return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-        } else {
-            return $this->mysqliSelectFetchArray($sql, $userID);
-        }
+        if ($userID == '') return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
+        return $this->mysqliSelectFetchArray($sql, $userID);
     }
 
     public function sqlGetHiddenGroups($userID = '')
@@ -1964,10 +1880,7 @@ class TaskBoard
                     LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
                 WHERE  ga.userID = ? AND g.groupState = 'hidden'
                 ORDER BY g.groupPriority DESC";
-        if ($userID == '') {
-            return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-        } else {
-            return $this->mysqliSelectFetchArray($sql, $userID);
-        }
+        if ($userID == '') return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
+        return $this->mysqliSelectFetchArray($sql, $userID);
     }
 }

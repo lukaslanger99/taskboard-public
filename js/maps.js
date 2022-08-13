@@ -11,8 +11,8 @@ function fillSuccessMap() {
         "deletemessage": "Successfully deleted message !",
         "deletetask": "Successfully deleted task !",
         "deletesubtask": "Successfully deleted subtask !",
-        "finishedtask": "Successfully finished task !",
-        "finishedsubtask": "Successfully finished subtask !",
+        "closedtask": "Successfully closed task !",
+        "closedsubtask": "Successfully closed subtask !",
         "groupcreated": "Successfully created group !",
         "invited": "Successfully send invite !",
         "joinedgroup": "Successfully joined group !",
@@ -66,7 +66,7 @@ function fillErrorMap() {
         "mailtaken": "Mail already taken !",
         "nouserfound": "No user found !",
         "pwnotequal": "Passwords are not equal !",
-        "unfinishedsubtasks": "Unfinished subtasks !",
+        "unclosedsubtasks": "Unclosed subtasks !",
         "unverifiedmail": "Verify your mail before creating new groups !",
         "wrongmail": "Wrong mail !"
     };

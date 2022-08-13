@@ -62,11 +62,10 @@ taskParentID | groupID for task, taskID of parent for subtask
 taskPriority | 1=low,2=normal,3=high
 taskPriorityColor | red,#ffcc00,green
 taskTitle | title
-taskState | open,assigned,finished,archived
+taskState | open,closed,archived
 taskDateCreated | timestamp when created eg. 2021-03-05 12:34
-taskDateAssigned | timestamp when assigned eg. 2021-03-05 12:34
 taskAssignedBy | userID of assignee 
-taskDateFinished | timestamp when finished eg. 2021-03-05 12:34
+taskDateClosed | timestamp when closed eg. 2021-03-05 12:34
 taskDescription | description
 
 ## timetableentrys

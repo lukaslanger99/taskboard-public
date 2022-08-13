@@ -255,6 +255,14 @@ th {
   background-color: #d6e3ff;
 }
 
-.draggable__item {
+.draggable__item__panelsettings {
   background-color: #fff;
+}
+
+.block__nextmonth {
+  background-color: #d6e3ff;
+}
+
+.calendar__day__head {
+  background-color: lightgray;
 }

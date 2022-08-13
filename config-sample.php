@@ -1,20 +1,20 @@
 <?php
-    error_reporting(E_ALL ^ E_NOTICE);
-    require('php/taskboard.php');
-    
-    if (__DIR__ == "/users/lukaslanger/www/taskboard") {
-        define("DIR_SYSTEM", "http://lukaslanger.bplaced.net/taskboard/");
-        define("DOMAIN", "http://lukaslanger.bplaced.net");
-    } else {
-        define("DIR_SYSTEM", "http://localhost/lukaslanger/taskboard/taskboard/");
-    }
+error_reporting(E_ALL ^ E_NOTICE);
+require('php/taskboard.php');
 
-    define("SERVER_NAME", "###");
-    define("USER", "###");
-    define("PASS", "####");
-    define("DB", "###");
+if (__DIR__ == "/users/lukaslanger/www/taskboard") {
+    define("DIR_SYSTEM", "http://lukaslanger.bplaced.net/taskboard/");
+    define("DOMAIN", "http://lukaslanger.bplaced.net");
+} else {
+    define("DIR_SYSTEM", "http://localhost/lukaslanger/taskboard/taskboard/");
+}
 
-    define("NUMBER_OF_TOTAL_PANELS", 5);
+define("SERVER_NAME", "###");
+define("USER", "###");
+define("PASS", "####");
+define("DB", "###");
 
-    session_start();
-    $taskBoard = new TaskBoard();
+define("NUMBER_OF_TOTAL_PANELS", 6);
+
+session_start();
+$taskBoard = new TaskBoard();
