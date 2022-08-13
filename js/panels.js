@@ -64,13 +64,10 @@ let panels = {
                 toggle = !toggle
             })
             document.getElementById('morningroutinePanelContentArea').innerHTML = html
-            if (morningroutineTasks.length == 1) title = `Morningroutine (1 Task)`
-            else if (morningroutineTasks.length > 1) title = `Morningroutine (${morningroutineTasks.length} Tasks)`
         } else {
-            title = `Morningroutine`
             document.getElementById('morningroutinePanelContentArea').innerHTML = ''
         }
-        document.getElementById('morningroutinePanelTitle').innerHTML = title
+        document.getElementById('morningroutinePanelTitle').innerHTML = 'Morningroutine'
     },
     addMorningroutineTask: async function () {
         var text = document.getElementById("morningroutineItem").value
@@ -88,6 +85,12 @@ let panels = {
     completeMorningroutineTask: async function (id) {
         const response = await fetch(
             `${DIR_SYSTEM}server/request.php?action=completeMorningroutineTask&id=${id}`
+        )
+        this.printMorningroutineTasks(await response.json())
+    },
+    resetMorningroutine: async function () {
+        const response = await fetch(
+            `${DIR_SYSTEM}server/request.php?action=resetMorningroutine`
         )
         this.printMorningroutineTasks(await response.json())
     },

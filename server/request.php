@@ -89,6 +89,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->addMorningroutineTask($userID, $_POST['text']));
         break;
 
+    case 'resetMorningroutine':
+        header('Content-Type: application/json');
+        echo json_encode($rh->resetMorningroutine($userID));
+        break;
+
     case 'getAppointments':
         header('Content-Type: application/json');
         echo json_encode($rh->getAppointments($userID));

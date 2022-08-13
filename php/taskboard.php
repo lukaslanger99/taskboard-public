@@ -868,6 +868,9 @@ class TaskBoard
                         <p id="morningroutinePanelTitle"></p>
                     </div>
                     <div class="queue__top-bar-right">
+                        <div class="panel-item-top-bar-button" onclick="panels.resetMorningroutine()">
+                            <i class="fa fa-rotate-right" aria-hidden="true"></i>
+                        </div>
                         <input class="queue__input__text" type="text" id="morningroutineItem" name="morningroutineItem">
                         <input type="submit" id="morningroutineSubmit "name="add-morningroutine-submit" value="Add" onclick="panels.addMorningroutineTask()"/>
                         <div class="panel_item_top_bar_unfold_button" id="morningroutineUnfoldButton" onclick="toggleUnfoldArea(\'morningroutinePanelContentArea\',\'morningroutineUnfoldButton\')">

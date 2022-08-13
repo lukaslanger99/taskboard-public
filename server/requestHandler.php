@@ -242,6 +242,12 @@ class RequestHandler
         return $this->getMorningroutineTasks($userID);
     }
 
+    public function resetMorningroutine($userID)
+    {
+        $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = '0000-00-00' WHERE entryUserID = ?", $userID);
+        return $this->getMorningroutineTasks($userID);
+    }
+
     public function getAppointments($userID)
     {
         $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
