@@ -75,6 +75,6 @@ class DraggableHandler {
   }
 }
 
-function addDraggableHelper(itemID, containerID, actionName) {
-  return new DraggableHandler(itemID, containerID, actionName)
+function addDraggableHelper(actionName) {
+  return new DraggableHandler(actionName)
 }

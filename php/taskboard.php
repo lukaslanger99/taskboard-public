@@ -868,6 +868,9 @@ class TaskBoard
                         <p id="morningroutinePanelTitle"></p>
                     </div>
                     <div class="queue__top-bar-right">
+                        <div class="panel-item-top-bar-button" onclick="panels.showMorningroutinePopup()">
+                            <i class="fa fa-list" aria-hidden="true"></i>
+                        </div>
                         <div class="panel-item-top-bar-button" onclick="panels.resetMorningroutine()">
                             <i class="fa fa-rotate-right" aria-hidden="true"></i>
                         </div>

@@ -210,10 +210,16 @@ class RequestHandler
         return $this->getQueueTasks($userID);
     }
 
-    public function getMorningroutineTasks($userID)
+    public function getUnfinishedMorningroutineTasks($userID)
     {
         $sql = "SELECT * FROM morningroutine WHERE entryUserID = ? AND entryDate < ? ORDER BY entryOrder";
         return $this->mysqliSelectFetchArray($sql, $userID, date("Y-m-d"));
+    }
+
+    public function getAllMorningroutineTasks($userID)
+    {
+        $sql = "SELECT * FROM morningroutine WHERE entryUserID = ? ORDER BY entryOrder";
+        return $this->mysqliSelectFetchArray($sql, $userID);
     }
 
     public function completeMorningroutineTask($userID, $id)
@@ -221,7 +227,7 @@ class RequestHandler
         $entryData = $this->mysqliSelectFetchObject("SELECT * FROM morningroutine WHERE entryID = ?", $id);
         if ($entryData->entryUserID == $userID) {
             $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = NOW() WHERE entryID = ?", $id);
-            return $this->getMorningroutineTasks($userID);
+            return $this->getUnfinishedMorningroutineTasks($userID);
         }
         return 0;
     }
@@ -239,13 +245,26 @@ class RequestHandler
                 }
             }
         }
-        return $this->getMorningroutineTasks($userID);
+        return $this->getUnfinishedMorningroutineTasks($userID);
     }
 
     public function resetMorningroutine($userID)
     {
         $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = '0000-00-00' WHERE entryUserID = ?", $userID);
-        return $this->getMorningroutineTasks($userID);
+        return $this->getUnfinishedMorningroutineTasks($userID);
+    }
+
+    public function updateMorningroutineOrder($entryIDs)
+    {
+        for ($i = 0; $i < count($entryIDs); $i++) {
+            $this->mysqliQueryPrepared("UPDATE morningroutine SET entryOrder = ? WHERE entryID = ?", ($i + 1), (int) $entryIDs[$i]);
+        }
+    }
+
+    public function deleteMorningroutineTask($entryID)
+    {
+        $this->mysqliQueryPrepared("DELETE FROM morningroutine WHERE entryID = ?", $entryID);
+        return 1;
     }
 
     public function getAppointments($userID)
