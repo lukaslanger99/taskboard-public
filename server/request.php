@@ -14,6 +14,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->getActiveGroups($userID));
         break;
 
+    case 'getActiveGroupsWithTasks':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getActiveGroupsWithTasks($userID));
+        break;
+
     case 'getTaskData':
         header('Content-Type: application/json');
         echo json_encode($rh->getTaskData($_POST['id']));
@@ -74,9 +79,14 @@ switch ($_GET['action']) {
         echo json_encode($rh->addQueueTask($userID, $_POST['text'], $_POST['check']));
         break;
 
-    case 'getMorningroutineTasks':
+    case 'getUnfinishedMorningroutineTasks':
         header('Content-Type: application/json');
-        echo json_encode($rh->getMorningroutineTasks($userID));
+        echo json_encode($rh->getUnfinishedMorningroutineTasks($userID));
+        break;
+
+    case 'getAllMorningroutineTasks':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getAllMorningroutineTasks($userID));
         break;
 
     case 'completeMorningroutineTask':
@@ -92,6 +102,16 @@ switch ($_GET['action']) {
     case 'resetMorningroutine':
         header('Content-Type: application/json');
         echo json_encode($rh->resetMorningroutine($userID));
+        break;
+
+    case 'updateMorningroutineOrder':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateMorningroutineOrder(explode(',', $_POST['order'])));
+        break;
+
+    case 'deleteMorningroutineTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->deleteMorningroutineTask($_POST['entryID']));
         break;
 
     case 'getAppointments':

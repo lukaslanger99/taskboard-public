@@ -70,6 +70,7 @@ switch ($action) {
             $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskID = ?", $id);
             $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $id);
             $taskBoard->mysqliQueryPrepared("DELETE FROM comments WHERE commentTaskID = ?", $id);
+            $taskBoard->mysqliQueryPrepared("DELETE FROM tasklabels WHERE taskID = ?", $id);
             if ($type == 'task') $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=deletetask");
             else if ($type == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=deletesubtask");
             exit;

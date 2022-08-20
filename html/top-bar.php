@@ -11,7 +11,7 @@ if ($userVerificationState) {
     $notificationCounter = 0;
 } else {
     $notificationCounter = 1;
-    $messageDropdownVerifyMailMessageHtml .= $taskBoard->printVerifyMailMessage($userID);
+    $messageDropdownVerifyMailMessageHtml .= $taskBoard->printVerifyMailMessage();
 }
 
 $inviteCounter = $taskBoard->getUserGroupInvitesCount($userID);

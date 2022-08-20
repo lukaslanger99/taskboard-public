@@ -51,8 +51,8 @@ let panels = {
     },
     // Morningroutine
     printMorningroutineTasks: async function (morningroutineTasks = '') {
-        if (morningroutineTasks == '') morningroutineTasks = await this.getEntrys('getMorningroutineTasks')
-        var html = '', toggle = false, title = ''
+        if (morningroutineTasks == '') morningroutineTasks = await this.getEntrys('getUnfinishedMorningroutineTasks')
+        var html = '', toggle = false
         if (morningroutineTasks) {
             morningroutineTasks.forEach(entry => {
                 html += `<div class="${(toggle) ? `panel-item-content-item` : `panel-item-content-item__secondary`}">
@@ -93,6 +93,46 @@ let panels = {
             `${DIR_SYSTEM}server/request.php?action=resetMorningroutine`
         )
         this.printMorningroutineTasks(await response.json())
+    },
+    showMorningroutinePopup: async function () {
+        const morningroutineTasks = await this.getEntrys('getAllMorningroutineTasks')
+        var popupHTML = ``
+        if (morningroutineTasks) {
+            var flag = false
+            morningroutineTasks.forEach(task => {
+                (flag) ? popupHTML += `<hr class="solid">` : flag = true
+                popupHTML += `
+                    <div class="label__item draggable__item" draggable="true" data-type="${task.entryID}">
+                        <div class="label__left">
+                            <div>${task.entryTitle}</div>
+                        </div>
+                        <div class="label__right">
+                            <i class="fa fa-trash fa-2x" aria-hidden="true" onclick="panels.deleteMorningroutineTask(${task.entryID})"></i>
+                        </div>
+                    </div>`
+            });
+        }
+        var container = document.getElementById("dynamic-modal-content")
+        var html = `<div class="modal-header">
+              <div class="modal__header__left">Morningroutine</div>
+              <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>
+            </div>
+            <div class="label__list draggable__container">${popupHTML}</div>`
+        showDynamicForm(container, html)
+        closeDynamicFormListener()
+        addDraggableHelper('updateMorningroutineOrder')
+    },
+    deleteMorningroutineTask: async function (entryID) {
+        var popup = confirm("Are you sure you want to delete this task?");
+        if (popup == true) {
+            var url = `${DIR_SYSTEM}server/request.php?action=deleteMorningroutineTask`
+            var formData = new FormData()
+            formData.append('entryID', entryID)
+            await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            this.showMorningroutinePopup()
+        }
     },
     // Appointment
     printAppointments: async function (appointments = '') {

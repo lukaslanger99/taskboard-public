@@ -88,6 +88,61 @@ class RequestHandler
         return $this->mysqliSelectFetchArray($sql, $userID);
     }
 
+    private function archiveCheck($groupID, $dateDiff)
+    {
+        $groupData = $this->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupID = ?", $groupID);
+        return $dateDiff >= $groupData->groupArchiveTime;
+    }
+
+    private function moveToArchive($id)
+    {
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskState = 'archived' WHERE taskID = ?", $id);
+    }
+
+    private function getUsernameShortByUserID($userID)
+    {
+        $userData = $this->mysqliSelectFetchObject("SELECT userNameShort FROM users WHERE userID = ?", $userID);
+        return $userData->userNameShort;
+    }
+
+    public function getActiveGroupsWithTasks($userID)
+    {
+        $groups = $this->getActiveGroups($userID);
+        foreach ($groups as $group) {
+            $groupID = $group->groupID;
+            $group->labels = $this->mysqliSelectFetchArray("SELECT * FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
+            $unfoldedState = $this->mysqliSelectFetchObject("SELECT groupUnfolded FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID);
+            $group->unfolded = $unfoldedState->groupUnfolded;
+            $tasks = $this->mysqliSelectFetchArray(
+                "SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND NOT taskState = 'archived' ORDER BY taskPriority DESC, taskID ",
+                $groupID
+            );
+            if ($tasks) {
+                foreach ($tasks as $task) {
+                    if ($task->taskState == 'open') $dateDiff = $this->getDateDifference($task->taskDateCreated);
+                    else if ($task->taskState == 'closed') $dateDiff = $this->getDateDifference($task->taskDateClosed);
+
+                    if ($task->taskState == 'closed' && $this->archiveCheck($task->taskParentID, $dateDiff)) {
+                        $this->moveToArchive($task->taskID);
+                        unset($task);
+                    }
+                    $task->taskAssignedBy = $this->getUsernameShortByUserID($task->taskAssignedBy);
+                    $task->dateDiff = $dateDiff;
+                    $task->numberOfSubtasks = $this->getNumberOfSubtasks($task->taskID);
+                    if ($labelIDs = $this->mysqliSelectFetchArray("SELECT labelID FROM tasklabels WHERE taskID = ?", $task->taskID)) {
+                        $labels = [];
+                        foreach ($labelIDs as $labelID) {
+                            $labels[] = $this->mysqliSelectFetchObject("SELECT * FROM labels WHERE labelID = ?", $labelID->labelID);
+                        }
+                        $task->activeLabels = $labels;
+                    }
+                }
+                $group->unarchivedTasks = $tasks;
+            }
+        }
+        return $groups;
+    }
+
     public function getTaskData($taskID)
     {
         return $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
@@ -210,10 +265,16 @@ class RequestHandler
         return $this->getQueueTasks($userID);
     }
 
-    public function getMorningroutineTasks($userID)
+    public function getUnfinishedMorningroutineTasks($userID)
     {
         $sql = "SELECT * FROM morningroutine WHERE entryUserID = ? AND entryDate < ? ORDER BY entryOrder";
         return $this->mysqliSelectFetchArray($sql, $userID, date("Y-m-d"));
+    }
+
+    public function getAllMorningroutineTasks($userID)
+    {
+        $sql = "SELECT * FROM morningroutine WHERE entryUserID = ? ORDER BY entryOrder";
+        return $this->mysqliSelectFetchArray($sql, $userID);
     }
 
     public function completeMorningroutineTask($userID, $id)
@@ -221,7 +282,7 @@ class RequestHandler
         $entryData = $this->mysqliSelectFetchObject("SELECT * FROM morningroutine WHERE entryID = ?", $id);
         if ($entryData->entryUserID == $userID) {
             $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = NOW() WHERE entryID = ?", $id);
-            return $this->getMorningroutineTasks($userID);
+            return $this->getUnfinishedMorningroutineTasks($userID);
         }
         return 0;
     }
@@ -239,13 +300,26 @@ class RequestHandler
                 }
             }
         }
-        return $this->getMorningroutineTasks($userID);
+        return $this->getUnfinishedMorningroutineTasks($userID);
     }
 
     public function resetMorningroutine($userID)
     {
         $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = '0000-00-00' WHERE entryUserID = ?", $userID);
-        return $this->getMorningroutineTasks($userID);
+        return $this->getUnfinishedMorningroutineTasks($userID);
+    }
+
+    public function updateMorningroutineOrder($entryIDs)
+    {
+        for ($i = 0; $i < count($entryIDs); $i++) {
+            $this->mysqliQueryPrepared("UPDATE morningroutine SET entryOrder = ? WHERE entryID = ?", ($i + 1), (int) $entryIDs[$i]);
+        }
+    }
+
+    public function deleteMorningroutineTask($entryID)
+    {
+        $this->mysqliQueryPrepared("DELETE FROM morningroutine WHERE entryID = ?", $entryID);
+        return 1;
     }
 
     public function getAppointments($userID)
