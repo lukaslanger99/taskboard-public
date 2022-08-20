@@ -6,9 +6,8 @@ if ($_SESSION['userID']) {
     $_SESSION['enteredUrl'] = $_SERVER['REQUEST_URI'];
     require('html/top-bar.php');
     $taskBoard->printPanels();
-    if (DIR_SYSTEM == "http://lukaslanger.bplaced.net/taskboard/") {
-        $taskBoard->printGroups($taskBoard->sqlGetActiveGroups());
-    }
+    echo '<div class="group__boxes" id="group__boxes"/>';
+    echo '<script>indexHandler.printIndexGroups()</script>';
 } else {
     require('html/head.php');
     echo '
