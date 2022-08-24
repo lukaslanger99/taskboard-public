@@ -5,7 +5,7 @@ $id = $_GET['id'];
 $action = $_GET['action'];
 $currentDate = date('Y-m-d H:i');
 
-if ($action == 'deleteTask' || $action == 'closeTask') {
+if ($action == 'closeTask') {
     $sql = "SELECT * FROM tasks WHERE taskID = ?;";
     $task = $taskBoard->mysqliSelectFetchObject($sql, $id);
     $parentID = $task->taskParentID;
@@ -13,39 +13,6 @@ if ($action == 'deleteTask' || $action == 'closeTask') {
 }
 
 switch ($action) {
-
-    case 'createGroup':
-        if (isset($_POST['creategroup-submit'])) {
-            if ($taskBoard->getMailState($userID) == 'unverified') {
-                if (strpos($_SESSION['enteredUrl'], '?')) {
-                    header("Location: " . DOMAIN . $_SESSION['enteredUrl'] . "&error=unverifiedmail");
-                } else {
-                    header("Location: " . DOMAIN . $_SESSION['enteredUrl'] . "?error=unverifiedmail");
-                }
-                exit;
-            }
-            if ($taskBoard->getNumberOfOwnedGroups($userID) > 9 && $taskBoard->getUserType($userID) == 'normal') $taskBoard->locationIndex("?error=maxgroups");
-            if (empty($_POST['name'])) $taskBoard->locationIndex("?error=emptyfields");
-            $groupName = $_POST['name'];
-            $sql = "INSERT INTO groups (groupName, groupOwner) VALUES (?, ?);";
-            $taskBoard->mysqliQueryPrepared($sql, $groupName, $userID);
-            $group = $taskBoard->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", $groupName, $userID);
-            $taskBoard->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES ( ?, ?)", $group->groupID, $group->groupOwner);
-            $taskBoard->locationEnteredUrl($_SESSION['enteredUrl'], "success=groupcreated");
-        }
-        break;
-
-    case 'deleteTask':
-        if ($taskBoard->deleteTaskPermission($id, $userID, $type)) {
-            $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskID = ?", $id);
-            $taskBoard->mysqliQueryPrepared("DELETE FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $id);
-            $taskBoard->mysqliQueryPrepared("DELETE FROM comments WHERE commentTaskID = ?", $id);
-            $taskBoard->mysqliQueryPrepared("DELETE FROM tasklabels WHERE taskID = ?", $id);
-            if ($type == 'task') $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=deletetask");
-            else if ($type == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=deletesubtask");
-            exit;
-        }
-        break;
 
     case 'deleteComment':
         $taskId = $_GET['taskId'];

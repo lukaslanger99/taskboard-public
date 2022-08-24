@@ -709,6 +709,22 @@ class RequestHandler
         return 1;
     }
 
+    private function deleteTaskPermission($taskID, $userID)
+    {
+        return $this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID));
+    }
+
+    public function deleteTask($userID, $taskID)
+    {
+        if (!$this->deleteTaskPermission($taskID, $userID)) return "nogroupaccess";
+        $this->mysqliQueryPrepared("DELETE FROM tasks WHERE taskID = ?", $taskID);
+        $this->mysqliQueryPrepared("DELETE FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $taskID);
+        $this->mysqliQueryPrepared("DELETE FROM comments WHERE commentTaskID = ?", $taskID);
+        $this->mysqliQueryPrepared("DELETE FROM tasklabels WHERE taskID = ?", $taskID);
+        $parentID = $this->mysqliSelectFetchObject("SELECT parentID FROM tasks WHERE taskID = ?", $taskID);
+        return ["ResponseCode" => "OK", "parentID" => $parentID->parentID];
+    }
+
     public function createComment($userID, $taskID, $description)
     {
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return 0;
@@ -717,6 +733,37 @@ class RequestHandler
         $sql = "INSERT INTO comments (commentTaskID, commentAutor, commentDescription, commentDate) VALUES (?, ?, ?, ?)";
         $this->mysqliQueryPrepared($sql, $taskID, $username, $description, $timestamp);
         return 1;
+    }
+
+    private function getMailState($userID)
+    {
+        $return = $this->mysqliSelectFetchObject("SELECT userMailState FROM users WHERE userID = ?", $userID);
+        return $return->userMailState;
+    }
+
+    private function getNumberOfOwnedGroups($userID)
+    {
+        $sql = "SELECT COUNT(*) as number FROM groups WHERE groupOwner = ?";
+        $return = $this->mysqliSelectFetchObject($sql, $userID);
+        return (int) $return->number;
+    }
+
+    private function getUserType($userID)
+    {
+        $user = $this->mysqliSelectFetchObject("SELECT userType FROM users WHERE userID = ?", $userID);
+        return $user->userType;
+    }
+
+    public function createGroup($userID, $groupName)
+    {
+        if ($this->getMailState($userID) == 'unverified') return "unverifiedmail";
+        if ($this->getNumberOfOwnedGroups($userID) > 9 && $this->getUserType($userID) == 'normal') return "maxgroups";
+        if ($this->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", $groupName, $userID)) return "groupnametaken";
+        $sql = "INSERT INTO groups (groupName, groupOwner) VALUES (?, ?);";
+        $this->mysqliQueryPrepared($sql, $groupName, $userID);
+        $group = $this->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", $groupName, $userID);
+        $this->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES ( ?, ?)", $group->groupID, $group->groupOwner);
+        return "OK";
     }
 
     private function getCurrentTimestamp()

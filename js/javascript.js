@@ -1,12 +1,5 @@
 const DIR_SYSTEM = 'http://lukaslanger.bplaced.net/taskboard/';
 
-function deleteTask(id) {
-  var b = confirm("Are you sure you want to delete Task id:" + id + "?");
-  if (b == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteTask&id=" + id;
-  }
-}
-
 function deleteComment(id, taskId) {
   var r = confirm("Are you sure you want to delete this Comment?");
   if (r == true) {

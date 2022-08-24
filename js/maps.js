@@ -59,6 +59,7 @@ function fillErrorMap() {
     var mapData = {
         "emptyfield": "Empty Fields !",
         "emptyfields": "Empty Fields !",
+        "groupnametaken": "Groupname already taken !",
         "highnumber": "Failed, number was to high !",
         "invalidInput": "Invalid Input !",
         "invalidurl": "Invalid Url !",

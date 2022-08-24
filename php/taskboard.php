@@ -997,7 +997,7 @@ class TaskBoard
             </tr>';
         }
         $buttons = '<button class="button" onclick="openUpdateTaskForm()">Update</button>
-            <button class="button" onclick="deleteTask(' . $task->taskID . ')">Delete</button>
+            <button class="button" onclick="taskHandler.deleteTask(' . $task->taskID . ', \'' . $task->taskType . '\')">Delete</button>
             <button class="button" onclick="taskHandler.openCreateTaskForm(\'subtask\', ' . $task->taskID . ', \'false\')">Create Subtask</button>
             <button class="button" onclick="taskHandler.assignTask(' . $task->taskID . ')">Assign Task</button>
             ';
@@ -1104,7 +1104,7 @@ class TaskBoard
                     <td>' . $this->getUsernameByID($task->taskAssignedBy) . '</td>
                     <td>' . $task->taskDateClosed . '</td>
                     <td style="white-space: nowrap;">
-                        <div class="editgroup-button" onclick="deleteTask(' . $task->taskID . ')">
+                        <div class="editgroup-button" onclick="taskHandler.deleteTask(' . $task->taskID . ', \'' . $task->taskType . '\')">
                             Delete
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </div>
