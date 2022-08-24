@@ -1,15 +1,11 @@
 let weather = {
     apiKey: "37ccc843e660d552aeafe5b8a89a9632",
     fetchWeather: function (city) {
-        fetch(
-            "https://api.openweathermap.org/data/2.5/weather?q="
-            + city
-            + "&units=metric&appid="
-            + this.apiKey
-        ).then((response) => response.json())
-            .then((data) => {
-                this.displayWeather(data)
-            })
+        const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`
+        )
+        const data = await response.json()
+        this.displayWeather(data)
     },
     displayWeather: function (data) {
         const { name } = data
@@ -25,15 +21,11 @@ let weather = {
         document.querySelector(".weather__wind").innerText = `Wind speed: ${speed} km/h`
     },
     fetchForecast: function (city) {
-        fetch(
-            "https://api.openweathermap.org/data/2.5/forecast?q="
-            + city
-            + "&units=metric&appid="
-            + this.apiKey
-        ).then((response) => response.json())
-            .then((data) => {
-                this.displayForecast(data)
-            })
+        const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${this.apiKey}`
+        )
+        const data = await response.json()
+        this.displayForecast(data)
     },
     displayForecast: function (data) {
         const LOWEST = 0
@@ -43,7 +35,7 @@ let weather = {
         data = data.list.filter((entry) => !entry.dt_txt.includes(new Date().toISOString().slice(0, 10))) // delete current day from forecast entrys
         data.forEach(entry => {
             var date = entry.dt_txt.split(' ')[0]
-            const temp  = entry.main.temp
+            const temp = entry.main.temp
             const icon = entry.weather[0].icon
             var singleForecastDay = daysForecast.get(date)
             if (!singleForecastDay) {
@@ -64,5 +56,19 @@ let weather = {
             i++
         });
 
+    },
+    updateWeatherCity: function () {
+        const city = document.getElementById("weatherPanelCity").value
+        if (city) {
+            var url = `${DIR_SYSTEM}server/request.php?action=updateWeatherCity`
+            var formData = new FormData()
+            formData.append('city', city)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            await response.json()
+            this.fetchWeather(city)
+            this.fetchForecast(city)
+        }
     }
 }

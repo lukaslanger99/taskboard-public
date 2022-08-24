@@ -530,9 +530,7 @@ class RequestHandler
 
     private function getUsernameByID($userID)
     {
-        if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') {
-            return $userID;
-        }
+        if ($userID == null || $userID == 'unknown' || $userID == 'Auto-Created') return $userID;
         $sql = "SELECT * FROM users WHERE userID = ?";
         $data = $this->mysqliSelectFetchObject($sql, $userID);
         return $data->userName;
@@ -656,7 +654,7 @@ class RequestHandler
 
     public function getSubtasks($userID, $parentID)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfSubtask($parentID))) return 0;
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return 0;
         if ($subtasks = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ?", 'subtask', $parentID)) {
             foreach ($subtasks as $task) {
                 if ($subtaskCount = $this->getNumberOfSubtasks($task->taskID)) $task->subtaskCount = $subtaskCount;
@@ -668,7 +666,7 @@ class RequestHandler
         return 0;
     }
 
-    private function getGroupIDOfSubtask($taskID)
+    private function getGroupIDOfTask($taskID)
     {
         $taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
         if ($taskData->taskType == 'task') return $taskData->taskParentID;
@@ -695,5 +693,40 @@ class RequestHandler
     {
         $tmpDate = new DateTime($date);
         return $tmpDate->diff(new DateTime(date('Y-m-d H:i')))->format('%r%a');
+    }
+
+    public function setTaskToOpen($userID, $taskID)
+    {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return 0;
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskState = 'open', taskAssignedBy = '' WHERE taskID = ?", $taskID);
+        return 1;
+    }
+
+    public function assignTask($userID, $taskID)
+    {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return 0;
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskAssignedBy = ? WHERE taskID = ?", $userID, $taskID);
+        return 1;
+    }
+
+    public function createComment($userID, $taskID, $description)
+    {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return 0;
+        $username = $this->getUsernameByID($userID);
+        $timestamp = $this->getCurrentTimestamp();
+        $sql = "INSERT INTO comments (commentTaskID, commentAutor, commentDescription, commentDate) VALUES (?, ?, ?, ?)";
+        $this->mysqliQueryPrepared($sql, $taskID, $username, $description, $timestamp);
+        return 1;
+    }
+
+    private function getCurrentTimestamp()
+    {
+        return date('Y-m-d H:i');
+    }
+
+    public function updateWeatherCity($userID, $city)
+    {
+        $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherCity = ? WHERE userID = ?", $city, $userID);
+        return 1;
     }
 }

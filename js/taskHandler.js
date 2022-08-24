@@ -61,6 +61,7 @@ let taskHandler = {
             if (createAnother) this.openCreateTaskForm(type, parentID, false)
             else closeDynamicForm()
             printSuccessToast('taskcreated')
+            this.printSubtasks(parentID)
         }
     },
     printSubtasks: async function (parentID) {
@@ -70,20 +71,20 @@ let taskHandler = {
         var openTasksHTML = '', closedTasksHTML = ''
         if (openSubtasks) {
             openSubtasks.forEach(task => {
-                openTasksHTML += this.printTask(task)
+                openTasksHTML += this.printSubtask(task)
             })
             document.getElementById('subtask-open-header').innerHTML = `Open ${(openSubtasks) ? `(${openSubtasks.length})` : ''}`
             document.getElementById('subtasks-open-area').innerHTML = openTasksHTML
         }
         if (closedSubtasks) {
             closedSubtasks.forEach(task => {
-                closedTasksHTML += this.printTask(task)
+                closedTasksHTML += this.printSubtask(task)
             })
             document.getElementById('subtask-closed-header').innerHTML = `Closed ${(closedSubtasks) ? `(${closedSubtasks.length})` : ''}`
             document.getElementById('subtasks-closed-area').innerHTML = closedTasksHTML
         }
     },
-    printTask: function (task) {
+    printSubtask: function (task) {
         var subtaskLabelHTML = '', dayCounter = ''
         if (task.taskState == 'open') {
             if (task.subtaskCount > 1) subtaskLabelHTML = `<div class="label subtask_label">${task.subtaskCount} Subtasks</div>`
@@ -116,5 +117,36 @@ let taskHandler = {
             url, { method: 'POST', body: formData }
         )
         return await response.json()
+    },
+    setTaskToOpen: async function (taskID) {
+        var url = `${DIR_SYSTEM}server/request.php?action=setTaskToOpen`
+        var formData = new FormData()
+        formData.append('taskID', taskID)
+        const response = await fetch(
+            url, { method: 'POST', body: formData }
+        )
+        await response.json()
+    },
+    assignTask: async function (taskID) {
+        var url = `${DIR_SYSTEM}server/request.php?action=assignTask`
+        var formData = new FormData()
+        formData.append('taskID', taskID)
+        const response = await fetch(
+            url, { method: 'POST', body: formData }
+        )
+        await response.json()
+    },
+    createComment: async function (taskID) {
+        const description = document.getElementById('commentDescription')
+        if (description) {
+            var url = `${DIR_SYSTEM}server/request.php?action=createComment`
+            var formData = new FormData()
+            formData.append('taskID', taskID)
+            formData.append('description', description)
+            const response = await fetch(
+                url, { method: 'POST', body: formData }
+            )
+            await response.json()
+        }
     }
 }

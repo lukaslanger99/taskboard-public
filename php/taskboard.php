@@ -107,12 +107,6 @@ class TaskBoard
         return $count->number;
     }
 
-    public function createComment($taskId, $type, $autor, $description, $date)
-    {
-        $sql = "INSERT INTO comments (commentTaskID, commentType, commentAutor, commentDescription, commentDate) VALUES (?, ?, '$autor', ?, '$date')";
-        $this->mysqliQueryPrepared($sql, $taskId, $type, $description);
-    }
-
     public function deleteGroup($id)
     {
         $this->mysqliQueryPrepared("DELETE FROM groups WHERE groupID = ?", $id);
@@ -429,16 +423,14 @@ class TaskBoard
         } else {
             $html =  '';
         }
-        $html .= '<form action="action.php?action=createComment&id=' . $id . '&type=' . $type . '" autocomplete="off" method="post">
-                    <table>
-                        <tr>
-                            <td><textarea cols="40" rows="3" type="text" name="description"></textarea></td>
-                        </td>
-                        <tr>
-                            <td style="float:right;"><input type="submit" name="createcomment-submit" value="Comment"/></td>
-                        </td>
-                    </table>
-                </form>
+        $html .= 'table>
+                    <tr>
+                        <td><textarea cols="40" rows="3" type="text" name="description" id="commentDescription"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td style="float:right;"><button class="button" onclick="taskHandler.createComment(' . $id . ')">Comment"</button></td>
+                    </tr>
+                </table>
             </div>';
         return $html;
     }
@@ -787,10 +779,8 @@ class TaskBoard
             return '<div class="weather__panel__content" id="weatherPanelContentArea">
                     <div class="weather">
                         <div class="weather__input">
-                            <form action="' . DIR_SYSTEM . 'php/action.php?action=updateWeatherCity" autocomplete="off" method="post" >
-                                <input type="text" name="city" placeholder="cityname">
-                                <input type="submit" name="update-weather-submit" value="Update" />
-                            </form>
+                            <input type="text" id="weatherPanelCity" name="city" placeholder="cityname">
+                            <button class="button" onclick="weather.updateWeatherCity()">Update</button>
                         </div>
                         <h2 class="weather__city"><h2>
                         <div class="weather__block">
@@ -1007,11 +997,9 @@ class TaskBoard
             </tr>';
         }
         $buttons = '<button class="button" onclick="openUpdateTaskForm()">Update</button>
-            <button class="button" type="button" onclick="deleteTask(\'' . $task->taskID . '\')">Delete</button>
-            <button class="button" type="button" onclick="taskHandler.openCreateTaskForm(\'subtask\', ' . $task->taskID . ', \'false\')">Create Subtask</button>
-            <form action="action.php?action=assign&id=' . $task->taskID . '" autocomplete="off" method="post" >
-                <input class="button" type="submit" name="assign-submit" value="Assign Task"/>
-            </form>
+            <button class="button" onclick="deleteTask(' . $task->taskID . ')">Delete</button>
+            <button class="button" onclick="taskHandler.openCreateTaskForm(\'subtask\', ' . $task->taskID . ', \'false\')">Create Subtask</button>
+            <button class="button" onclick="taskHandler.assignTask(' . $task->taskID . ')">Assign Task</button>
             ';
         switch ($task->taskState) {
             case 'open':
@@ -1020,8 +1008,7 @@ class TaskBoard
                 break;
 
             case 'closed':
-                $buttons .= '<form action="action.php?action=stateOpen&id=' . $task->taskID . '" autocomplete="off" method="post" >
-                    <input class="button" type="submit" name="stateopen-submit" value="Reopen"/></form>';
+                $buttons .= '<button class="button" onclick="taskHandler.setTaskToOpen(' . $task->taskID . ')">Reopen</div>';
                 break;
 
             default:

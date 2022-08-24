@@ -28,13 +28,6 @@ function leaveGroup(groupID) {
   }
 }
 
-function deleteMessage(id) {
-  var r = confirm("Are you sure you want to delete this Message?");
-  if (r == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteMessage&id=" + id;
-  }
-}
-
 function deleteUser(name, id) {
   var b = confirm("Are you sure you want to delete " + name + "?");
   if (b == true) {

@@ -13,36 +13,6 @@ if ($action == 'deleteTask' || $action == 'closeTask') {
 }
 
 switch ($action) {
-    case 'stateOpen':
-        if (isset($_POST['stateopen-submit'])) {
-            $taskBoard->mysqliQueryPrepared("UPDATE tasks SET taskState = 'open', taskAssignedBy = '' WHERE taskID = ?", $id);
-            if ($taskBoard->getTaskType($id) == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=" . $taskBoard->getParentIDOfTask($id));
-        }
-        break;
-
-    case 'updateWeatherCity':
-        if (isset($_POST['update-weather-submit'])) {
-            if (empty($_POST['city'])) $taskBoard->locationIndex("?error=emptyfields");
-            $taskBoard->mysqliQueryPrepared("UPDATE panels SET panelWeatherCity = ? WHERE userID = ?", $_POST['city'], $userID);
-            $taskBoard->locationIndex("?success=weathercityupdated");
-        }
-        break;
-
-    case 'assign':
-        if (isset($_POST['assign-submit'])) {
-            $taskBoard->mysqliQueryPrepared("UPDATE tasks SET taskAssignedBy = '$userID' WHERE taskID = ?", $id);
-            $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$id&success=taskassigned");
-        }
-        break;
-
-    case 'createComment':
-        if (isset($_POST['createcomment-submit'])) {
-            if (empty($_POST['description'])) $taskBoard->locationIndex("?error=emptyfields");
-            (empty($_POST['description'])) ? $description = '-' : $description = $_POST['description'];
-            $taskBoard->createComment($id, $_GET['type'], $userID, $description, $currentDate);
-            $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$id&success=commentcreated");
-        }
-        break;
 
     case 'createGroup':
         if (isset($_POST['creategroup-submit'])) {
@@ -74,14 +44,6 @@ switch ($action) {
             if ($type == 'task') $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=deletetask");
             else if ($type == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=deletesubtask");
             exit;
-        }
-        break;
-
-    case 'deleteMessage':
-        $messageData = $taskBoard->mysqliSelectFetchObject("SELECT * FROM messages WHERE messageID = ?", $id);
-        if ($messageData->messageOwner == $_SESSION['userID'] || $taskBoard->groupOwnerCheck($messageData->messageGroup, $_SESSION['userID']) || 1 == $_SESSION['userID']) {
-            $taskBoard->mysqliQueryPrepared("DELETE FROM messages WHERE messageID = ?", $id);
-            $taskBoard->locationIndex("?success=deletemessage");
         }
         break;
 
@@ -215,7 +177,8 @@ switch ($action) {
             if ($task->taskDescription != $_POST['description']) $comment .= 'DESCRIPTION[' . $task->taskDescription . ' -> ' . $_POST['description'] . ']';
             if ($comment != '') {
                 $comment = '[' . $taskBoard->getUsernameByID($_SESSION['userID']) . '] ' . $comment;
-                $taskBoard->createComment($id, $task->taskType, 'Auto-Created', $comment, $currentDate);
+                $sql = "INSERT INTO comments (commentTaskID, commentAutor, commentDescription, commentDate) VALUES (?, 'Auto-Created', ?, '$date')";
+                $this->mysqliQueryPrepared($sql, $taskId, $description);
             }
 
             $priorityColor = $taskBoard->getPriorityColor($priority);

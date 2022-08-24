@@ -224,6 +224,26 @@ switch ($_GET['action']) {
         echo json_encode($rh->getSubtasks($userID, $_POST['parentID']));
         break;
 
+    case 'setTaskToOpen':
+        header('Content-Type: application/json');
+        echo json_encode($rh->setTaskToOpen($userID, $_POST['taskID']));
+        break;
+
+    case 'assignTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->assignTask($userID, $_POST['taskID']));
+        break;
+
+    case 'createComment':
+        header('Content-Type: application/json');
+        echo json_encode($rh->createComment($userID, $_POST['taskID'], $_POST['description']));
+        break;
+
+    case 'updateWeatherCity':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateWeatherCity($userID, $_POST['city']));
+        break;
+
     default:
         # code...
         break;

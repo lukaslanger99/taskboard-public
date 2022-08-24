@@ -6,7 +6,7 @@ if ($_SESSION['userID']) {
     $_SESSION['enteredUrl'] = $_SERVER['REQUEST_URI'];
     require('html/top-bar.php');
     $taskBoard->printPanels();
-    echo '<div class="group__boxes" id="group__boxes"/>';
+    echo '<div class="group__boxes" id="group__boxes"></div>';
     echo '<script>indexHandler.printIndexGroups()</script>';
 } else {
     require('html/head.php');
