@@ -802,6 +802,47 @@ class RequestHandler
         return "OK";
     }
 
+    private function generateRandomString($length = 21)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function createGroupInvite($userID, $groupID, $username)
+    {
+        if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
+        if ($user = $this->mysqliSelectFetchObject("SELECT userID FROM users WHERE userName = ?", $username)) {
+            $sql = "INSERT INTO tokens (tokenType, tokenGroupID, tokenUserID, tokenToken) VALUES (?, ?, ?, ?)";
+            $this->mysqliQueryPrepared($sql, "joingroup", $groupID, $user->userID, $this->generateRandomString());
+            return "OK";
+        }
+        return "NO_USER_FOUND";
+    }
+
+    public function toggleGroupInvites($userID, $groupID, $state)
+    {
+        if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
+        $this->mysqliQueryPrepared("UPDATE groups SET groupInvites = ? WHERE groupID = ?;", $state, $groupID);
+        if ($state == 'enabled') {
+            $this->mysqliQueryPrepared("INSERT INTO tokens (tokenType, tokenGroupID, tokenToken) VALUES ('groupinvite', ?, ?)", $groupID, $this->generateRandomString());
+        } else if ($state == 'disabled') {
+            $this->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = ?", $groupID, "groupinvite");
+        }
+        return "OK";
+    }
+
+    public function toggleGroupState($userID, $groupID, $state)
+    {
+        if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
+        $this->mysqliQueryPrepared("UPDATE groups SET groupState = ? WHERE groupID = ?;", $state, $groupID);
+        return "OK";
+    }
+
     private function getCurrentTimestamp()
     {
         return date('Y-m-d H:i');

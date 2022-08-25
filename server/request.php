@@ -264,6 +264,21 @@ switch ($_GET['action']) {
         echo json_encode($rh->deleteGroup($userID, $_POST['groupID']));
         break;
 
+    case 'createGroupInvite':
+        header('Content-Type: application/json');
+        echo json_encode($rh->createGroupInvite($userID, $_POST['groupID'], $_POST['username']));
+        break;
+
+    case 'toggleGroupInvites':
+        header('Content-Type: application/json');
+        echo json_encode($rh->toggleGroupInvites($userID, $_POST['groupID'], $_POST['state']));
+        break;
+
+    case 'toggleGroupState':
+        header('Content-Type: application/json');
+        echo json_encode($rh->toggleGroupState($userID, $_POST['groupID'], $_POST['state']));
+        break;
+
     case 'updateWeatherCity':
         header('Content-Type: application/json');
         echo json_encode($rh->updateWeatherCity($userID, $_POST['city']));

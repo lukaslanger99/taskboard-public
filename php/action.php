@@ -7,49 +7,6 @@ $currentDate = date('Y-m-d H:i');
 
 switch ($action) {
 
-    case 'generateToken':
-        if (isset($_POST['groupinvite-submit'])) {
-            if (!empty($_POST['name'])) {
-                if ($taskBoard->checkUsername($_POST['name'])) {
-                    $user = $taskBoard->mysqliSelectFetchObject("SELECT userID FROM users WHERE userName = ?", $_POST['name']);
-                    $sql = "INSERT INTO tokens (tokenType, tokenGroupID, tokenUserID, tokenToken) VALUES ('joingroup', ?, ?, ?)";
-                    $taskBoard->mysqliQueryPrepared($sql, $id, $user->userID, $taskBoard->generateRandomString());
-                    $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id . "&success=invited");
-                    exit;
-                } else {
-                    $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id . "&error=nouserfound");
-                    exit;
-                }
-            }
-        }
-        break;
-
-    case 'groupinvites':
-        if (isset($_POST['groupinvites-submit'])) {
-            $enableInvites = $_GET['invites']; // enable, disable
-            if ($enableInvites == 'enable') {
-                $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupInvites = 'enabled' WHERE groupID = ?;", $id);
-                $sql = "INSERT INTO tokens (tokenType, tokenGroupID, tokenToken) VALUES ('groupinvite', ?, ?)";
-                $taskBoard->mysqliQueryPrepared($sql, $id, $taskBoard->generateRandomString());
-            } else if ($enableInvites == 'disable') {
-                $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupInvites = 'disabled' WHERE groupID = ?;", $id);
-                $taskBoard->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $id);
-            }
-            $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id);
-            exit;
-        }
-        break;
-
-    case 'groupstate':
-        if (isset($_POST['groupstate-submit'])) {
-            $stateAction = $_GET['state']; // activate, hide
-            if ($stateAction == 'activate') $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'active' WHERE groupID = ?;", $id);
-            else if ($stateAction == 'hide') $taskBoard->mysqliQueryPrepared("UPDATE groups SET groupState = 'hidden' WHERE groupID = ?;", $id);
-            $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=" . $id);
-            exit;
-        }
-        break;
-
     case 'refreshinvite':
         if ($taskBoard->groupOwnerCheck($id, $_SESSION['userID'])) {
             $taskBoard->mysqliQueryPrepared("UPDATE tokens 

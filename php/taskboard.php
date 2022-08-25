@@ -116,21 +116,6 @@ class TaskBoard
         $this->mysqliQueryPrepared("DELETE FROM messages WHERE messageGroup = ?", $id);
     }
 
-    public function deleteTaskPermission($taskID, $userID, $type)
-    {
-        if ($type == 'task') {
-            $groupID = $this->getParentIDOfTask($taskID);
-        } else {
-            $parent = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);;
-            do {
-                $parent = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $parent->taskParentID);
-                $type = $parent->taskType;
-            } while ($type == 'subtask');
-            $groupID = $parent->taskParentID;
-        }
-        return $this->checkGroupPermission($userID, $groupID);
-    }
-
     public function deleteUser($userID)
     {
         $groups = $this->sqlGetAllGroups($userID);
@@ -170,12 +155,6 @@ class TaskBoard
     {
         $tmpDate = new DateTime($date);
         return $tmpDate->diff(new DateTime(date('Y-m-d')))->format('%r%a');
-    }
-
-    public function getParentIDOfTask($taskID)
-    {
-        $task = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
-        return $task->taskParentID;
     }
 
     public function getGroupNameByID($groupID)
@@ -328,12 +307,6 @@ class TaskBoard
     public function getTasksByGroupID($groupID)
     {
         return $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? ORDER BY taskID DESC", $groupID);
-    }
-
-    public function getTaskType($taskID)
-    {
-        $taskData = $this->mysqliSelectFetchObject("SELECT taskType FROM tasks WHERE taskID = ?", $taskID);
-        return $taskData->taskType;
     }
 
     public function getWeek()
@@ -520,38 +493,22 @@ class TaskBoard
                 <div class="panel-item-top-bar-button">
                     <a href="' . DIR_SYSTEM . 'php/action.php?action=refreshinvite&id=' . $groupID . '"> <i class="fa fa-refresh" aria-hidden="true"></i> </a>
                 </div>
-                <form action="action.php?action=groupinvites&invites=disable&id=' . $groupID . '" autocomplete="off" method="post" >
-                    <input class="button" type="submit" name="groupinvites-submit" value="Disable Invites"/>
-                </form>
+                <button class="button" onclick="groupHandler.toggleGroupInvites(' . $groupID . ', \'disabled\')">Disable Invites</button>
             ';
             } else {
-                $groupInvites = '
-            <form action="action.php?action=groupinvites&invites=enable&id=' . $groupID . '" autocomplete="off" method="post" >
-            <input class="button" type="submit" name="groupinvites-submit" value="Enable Invites"/>
-            </form>
-            ';
+                $groupInvites = '<button class="button" onclick="groupHandler.toggleGroupInvites(' . $groupID . ', \'enabled\')">Enable Invites</button>';
             }
         }
 
         if ($groupOwnerCheck && $group->groupState == 'active') {
-            $changeGroupState = '
-                <form action="action.php?action=groupstate&state=hide&id=' . $groupID . '" autocomplete="off" method="post" >
-                    <input class="button" type="submit" name="groupstate-submit" value="Hide Group"/>
-                </form>
-            ';
+            $changeGroupState = '<button class="button" onclick="groupHandler.toggleGroupState(' . $groupID . ', \'hidden\')">Hide Group</button>';
         } else if ($groupOwnerCheck && $group->groupState == 'hidden') {
-            $changeGroupState = '
-                <form action="action.php?action=groupstate&state=activate&id=' . $groupID . '" autocomplete="off" method="post" >
-                    <input class="button" type="submit" name="groupstate-submit" value="Show Group"/>
-                </form>
-            ';
+            $changeGroupState = '<button class="button" onclick="groupHandler.toggleGroupState(' . $groupID . ', \'active\')">Show Group</button>';
         }
 
         if ($groupOwnerCheck) {
-            $inviteUser = '<form action="action.php?action=generateToken&id=' . $groupID . '" autocomplete="off" method="post" >
-                    <input type="text" name="name" placeholder="username"/>
-                    <input class="button" type="submit" name="groupinvite-submit" value="Invite"/>
-                </form>';
+            $inviteUser = '<input type="text" name="name" placeholder="username" id="groupInvite_username"/>
+                <button class="button" onclick="groupHandler.createGroupInvite()">Invite</button>';
             $deleteGroup = '<button class="button" type="button" onclick="groupHandler.deleteGroup(' . $groupID . ')">Delete Group</button>';
         } else {
             $leaveGroup = '<button class="button" type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>';
@@ -1607,34 +1564,12 @@ class TaskBoard
         return $html;
     }
 
-    public function sqlGetActiveGroups($userID = '')
-    {
-        $sql = "SELECT g.* 
-                FROM groups g
-                    LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
-                WHERE  ga.userID = ? AND g.groupState = 'active'
-                ORDER BY g.groupPriority DESC";
-        if ($userID == '') return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-        return $this->mysqliSelectFetchArray($sql, $userID);
-    }
-
     public function sqlGetAllGroups($userID = '')
     {
         $sql = "SELECT g.* 
                 FROM groups g
                     LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
                 WHERE  ga.userID = ?
-                ORDER BY g.groupPriority DESC";
-        if ($userID == '') return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
-        return $this->mysqliSelectFetchArray($sql, $userID);
-    }
-
-    public function sqlGetHiddenGroups($userID = '')
-    {
-        $sql = "SELECT g.* 
-                FROM groups g
-                    LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
-                WHERE  ga.userID = ? AND g.groupState = 'hidden'
                 ORDER BY g.groupPriority DESC";
         if ($userID == '') return $this->mysqliSelectFetchArray($sql, $_SESSION['userID']);
         return $this->mysqliSelectFetchArray($sql, $userID);
