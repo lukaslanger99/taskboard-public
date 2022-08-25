@@ -412,7 +412,7 @@ class TaskBoard
                                 Edit
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </div>
-                            <div class="editgroup-button" onclick="deleteComment(' . $i->commentID . ', ' . $i->commentTaskID . ')">
+                            <div class="editgroup-button" onclick="taskHandler.deleteComment(' . $i->commentID . ')">
                                 Delete
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </div>
@@ -460,7 +460,7 @@ class TaskBoard
                 $openTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'open'", $groupID);
 
                 if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
-                    $deleteOrLeaveGroup = '<td><button type="button" onclick="deleteGroup(' . $groupID . ')">Delete Group</button>';
+                    $deleteOrLeaveGroup = '<td><button type="button" onclick="groupHandler.deleteGroup(' . $groupID . ')">Delete Group</button>';
                 } else {
                     $deleteOrLeaveGroup = '<button type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>';
                 }
@@ -552,7 +552,7 @@ class TaskBoard
                     <input type="text" name="name" placeholder="username"/>
                     <input class="button" type="submit" name="groupinvite-submit" value="Invite"/>
                 </form>';
-            $deleteGroup = '<button class="button" type="button" onclick="deleteGroup(' . $groupID . ')">Delete Group</button>';
+            $deleteGroup = '<button class="button" type="button" onclick="groupHandler.deleteGroup(' . $groupID . ')">Delete Group</button>';
         } else {
             $leaveGroup = '<button class="button" type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>';
         }
@@ -1003,8 +1003,7 @@ class TaskBoard
             ';
         switch ($task->taskState) {
             case 'open':
-                $buttons .= '<form action="action.php?action=closeTask&id=' . $task->taskID . '" autocomplete="off" method="post" >
-                    <input class="button" type="submit" name="finish-submit" value="Close"/></form>';
+                $buttons .= '<button class="button" onlick="taskHandler.closeTask(' . $task->taskID . ')">Close</button>';
                 break;
 
             case 'closed':

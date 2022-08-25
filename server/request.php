@@ -234,6 +234,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->assignTask($userID, $_POST['taskID']));
         break;
 
+    case 'closeTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->closeTask($userID, $_POST['taskID']));
+        break;
+
     case 'deleteTask':
         header('Content-Type: application/json');
         echo json_encode($rh->deleteTask($userID, $_POST['taskID']));
@@ -244,9 +249,19 @@ switch ($_GET['action']) {
         echo json_encode($rh->createComment($userID, $_POST['taskID'], $_POST['description']));
         break;
 
+    case 'deleteComment':
+        header('Content-Type: application/json');
+        echo json_encode($rh->deleteComment($userID, $_POST['commentID']));
+        break;
+
     case 'createGroup':
         header('Content-Type: application/json');
         echo json_encode($rh->createGroup($userID, $_POST['groupName']));
+        break;
+
+    case 'deleteGroup':
+        header('Content-Type: application/json');
+        echo json_encode($rh->deleteGroup($userID, $_POST['groupID']));
         break;
 
     case 'updateWeatherCity':

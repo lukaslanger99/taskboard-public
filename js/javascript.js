@@ -1,18 +1,4 @@
-const DIR_SYSTEM = 'http://lukaslanger.bplaced.net/taskboard/';
-
-function deleteComment(id, taskId) {
-  var r = confirm("Are you sure you want to delete this Comment?");
-  if (r == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteComment&id=" + id + "&taskId=" + taskId;
-  }
-}
-
-function deleteGroup(groupID) {
-  var a = confirm("Are you sure you want to delete this group?");
-  if (a == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteGroup&id=" + groupID;
-  }
-}
+const DIR_SYSTEM = 'http://lukaslanger.bplaced.net/taskboard/'
 
 function leaveGroup(groupID) {
   var a = confirm("Are you sure you want to leave this group?");

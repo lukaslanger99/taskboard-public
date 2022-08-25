@@ -5,43 +5,7 @@ $id = $_GET['id'];
 $action = $_GET['action'];
 $currentDate = date('Y-m-d H:i');
 
-if ($action == 'closeTask') {
-    $sql = "SELECT * FROM tasks WHERE taskID = ?;";
-    $task = $taskBoard->mysqliSelectFetchObject($sql, $id);
-    $parentID = $task->taskParentID;
-    $type = $task->taskType;
-}
-
 switch ($action) {
-
-    case 'deleteComment':
-        $taskId = $_GET['taskId'];
-        if ($_SESSION['delete'] == $taskId) $taskBoard->mysqliQueryPrepared("DELETE FROM comments WHERE commentID = ?", $id);
-        $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$taskId&success=deletecomment");
-        exit;
-
-    case 'deleteGroup':
-        if ($_SESSION['deleteGroup'] == $id) {
-            $taskBoard->deleteGroup($id);
-            $taskBoard->locationWithDir("?success=deletegroup");
-        }
-        break;
-
-    case 'closeTask':
-        if (isset($_POST['finish-submit'])) {
-            $sql = "SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskState = 'open'";
-            $subtasks = $taskBoard->mysqliSelectFetchObject($sql, $id);
-            if ($subtasks->number > 0) {
-                header("Location: " . DIR_SYSTEM . "php/details.php?action=taskDetails&id=$id&error=unclosedsubtasks");
-                exit;
-            }
-            $sql = "UPDATE tasks SET taskState = 'closed', taskDateClosed = '$currentDate' WHERE taskID = ?";
-            $taskBoard->mysqliQueryPrepared($sql, $id);
-            if ($type == 'task') $taskBoard->locationWithDir("php/details.php?action=groupDetails&id=$parentID&success=closedtask");
-            else if ($type == 'subtask') $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$parentID&success=closedsubtask");
-            exit;
-        }
-        break;
 
     case 'generateToken':
         if (isset($_POST['groupinvite-submit'])) {

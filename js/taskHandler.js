@@ -136,6 +136,18 @@ let taskHandler = {
         )
         await response.json()
     },
+    closeTask: async function (taskID) {
+        var url = `${DIR_SYSTEM}server/request.php?action=closeTask`
+        var formData = new FormData()
+        formData.append('taskID', taskID)
+        const response = await fetch(
+            url, { method: 'POST', body: formData }
+        )
+        const responseCode = await response.json()
+        if (responseCode.ResponseCode != 'OK') return
+        if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=groupDetails&id=${responseCode.parentID}&success=closedtask`
+        else if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=taskDetails&id=${responseCode.parentID}&success=closedsubtask`
+    },
     deleteTask: async function (taskID, taskType) {
         if (!confirm("Are you sure you want to delete Task id:" + taskID + "?")) return
         var url = `${DIR_SYSTEM}server/request.php?action=deleteTask`
@@ -161,5 +173,15 @@ let taskHandler = {
             )
             await response.json()
         }
+    },
+    deleteComment: async function (commentID) {
+        if (!confirm("Are you sure you want to delete this Comment?")) return
+        var url = `${DIR_SYSTEM}server/request.php?action=deleteComment`
+        var formData = new FormData()
+        formData.append('commentID', commentID)
+        const response = await fetch(
+            url, { method: 'POST', body: formData }
+        )
+        await response.json()
     }
 }
