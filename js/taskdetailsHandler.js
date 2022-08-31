@@ -8,11 +8,51 @@ let taskdetailsHandler = {
         )
         return await response.json()
     },
+    getPriorityColor: function (priority) {
+        const priorities = ['green', '#ffcc00', 'red']
+        return priorities[priority - 1]
+    },
+    printSubtasks: function (subtasks) {
+        if (!subtasks) return ''
+        html = ''
+        subtasks.forEach(task => {
+            html += `
+                <div class="taskdetails__subtask">
+                    <p><i class="fa fa-square" style="color: ${this.getPriorityColor(task.taskPriority)};"></i></p>
+                    <p><a href="">ID_${task.taskID}"</a></p>
+                    <p class="taskdetails__subtask__title">${task.taskTitle}</p>
+                    <p>
+                        ${(task.taskStatus == 'open') 
+                        ? `<div class="status status__open">OPEN</div>`
+                        : `<div class="status status__resolved">RESOLVED</div>`}
+                    </p>
+                </div>
+                <hr>`
+        })
+        return html
+    },
+    printActivityComments: function (comments) {
+        if (!comments) return ''
+        const activityComments = comments.filter((entry) => entry.type == 'comment')
+        if (!activityComments) return ''
+        html = ``
+        activityComments.forEach(comment => {
+            html += `
+                <div class="activity__comment">
+                    <p class="comment__header">${comment.commentAuthor} added a comment - ${comment.commentDateFormatted}</p>
+                    <div class="comment__content">
+                        ${comment.commentDescription}
+                    </div>
+                </div>
+                <hr>`
+        })
+        return html
+    },
     printTaskdetails: async function () {
         const taskData = await this.getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
         _parentsListHTML = ``
         taskData.parents.forEach(item => {
-            if (item.type == 'group') _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=taskDetails&id=${item.id}">${item.name}</a></li>`
+            if (item.type == 'group') _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=groupDetails&id=${item.id}">${item.name}</a></li>`
             else _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=taskDetails&id=${item.id}">ID-${item.id}</a></li>`
         });
         headerHTML = `
@@ -54,7 +94,7 @@ let taskdetailsHandler = {
                             <tr>
                                 <td>Status:</td>
                                 <td>
-                                    ${(taskData.taskState == 'open') 
+                                    ${(taskData.taskStatus == 'open') 
                                     ? `<div class="status status__open">OPEN</div>` 
                                     : `<div class="status status__resolved">RESOLVED</div>`}
                                 </td>
@@ -69,29 +109,135 @@ let taskdetailsHandler = {
                                     </select>
                                 </td>
                             </tr>
+                            ${(taskData.taskType == 'task') ? `<tr><td>Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
+                        </table>
+                    </div>
+                </div>
+            </div>`
+        __descriptionModuleHTML = `
+            <div class="taskdetails__module">
+                <div class="taskdetails__module__left">
+                    <button
+                        type="button"
+                        class="toggle__wrap" 
+                        id="taskdetailsModuleButton_description" 
+                        onclick="taskdetailsHandler.taskdetailsToggleContent('taskdetailsModuleButton_description', 'taskdetailsModuleContent_description')"
+                    >
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                </div>
+                <div class="taskdetails__module__right">
+                    <div class="header__title">Description</div>
+                    <div class="taskdetails__module__content" id="taskdetailsModuleContent_description">
+                        ${taskData.taskDescription}
+                    </div>
+                </div>
+            </div>`
+        __subtasksModuleHTML = `
+            <div class="taskdetails__module">
+                <div class="taskdetails__module__left">
+                    <button
+                        type="button"
+                        class="toggle__wrap" 
+                        id="taskdetailsModuleButton_subtasks" 
+                        onclick="taskdetailsHandler.taskdetailsToggleContent('taskdetailsModuleButton_subtasks', 'taskdetailsModuleContent_subtasks')"
+                    >
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                </div>
+                <div class="taskdetails__module__right">
+                    <div class="header__title">Subtasks</div>
+                    <div class="taskdetails__module__content" id="taskdetailsModuleContent_subtasks">
+                        ${this.printSubtasks(taskData.subtasks)}
+                    </div>
+                </div>
+            </div>`
+        __activityModuleHTML = `
+            <div class="taskdetails__module">
+                <div class="taskdetails__module__left">
+                    <button
+                        type="button"
+                        class="toggle__wrap" 
+                        id="taskdetailsModuleButton_activity" 
+                        onclick="taskdetailsHandler.taskdetailsToggleContent('taskdetailsModuleButton_activity', 'taskdetailsModuleContent_activity')"
+                    >
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                </div>
+                <div class="taskdetails__module__right">
+                    <div class="header__title">Activity</div>
+                    <div class="taskdetails__module__content" id="taskdetailsModuleContent_activity">
+                        <div class="activity__header">
+                            <p class="activity__item"id="activity_all">All</p>
+                            <p class="activity__item activity__active" id="activity_comments">Comments</p>
+                            <p class="activity__item"id="activity_history">History</p>
+                        </div>
+                        <hr>
+                        ${this.printActivityComments(taskData.activity)}
+                    </div>
+                </div>
+            </div>`
+        _bigModulesHTML = `
+            <div class="taskdetails__big__modules">
+                ${__detailsModuleHTML}${__descriptionModuleHTML}${__subtasksModuleHTML}${__activityModuleHTML}
+            </div>`
+        __peopleModuleHTML = `
+            <div class="taskdetails__module">
+                <div class="taskdetails__module__left">
+                    <button
+                        type="button"
+                        class="toggle__wrap" 
+                        id="taskdetailsModuleButton_people" 
+                        onclick="taskdetailsHandler.taskdetailsToggleContent('taskdetailsModuleButton_people', 'taskdetailsModuleContent_people')"
+                    >
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                </div>
+                <div class="taskdetails__module__right">
+                    <div class="header__title">People</div>
+                    <div class="taskdetails__module__content" id="taskdetailsModuleContent_people">
+                        <table class="taskdetails__datatable">
                             <tr>
-                                <td>Labels:</td>
-                                <td>
-                                    ${TODO print labels}
-                                    <div class="display-flex">
-                                        <div class="label" style="background-color: #0091ff;">in progress</div>
-                                        <i class="fa fa-edit" aria-hidden="true" onclick="labelHandler.editTaskLabels(6, 456)"></i>
-                                    </div>
-                                </td>
+                                <td>Assignee:</td>
+                                <td>${taskData.assignee}</td>
+                            </tr>
+                            <tr>
+                                <td>Reporter:</td>
+                                <td>${taskData.reporter}</td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>`
-        __descriptionModuleHTML = ``
-        __subtasksModuleHTML = ``
-        __activityModuleHTML = ``
-        _bigModulesHTML = `
-            <div class="taskdetails__big__modules">
-                ${__detailsModuleHTML}${__descriptionModuleHTML}${__subtasksModuleHTML}${__activityModuleHTML}
+        __datesModuleHTML = `
+            <div class="taskdetails__module">
+                <div class="taskdetails__module__left">
+                <button
+                type="button"
+                class="toggle__wrap" 
+                id="taskdetailsModuleButton_dates" 
+                onclick="taskdetailsHandler.taskdetailsToggleContent('taskdetailsModuleButton_dates', 'taskdetailsModuleContent_dates')"
+            >
+                <i class="fa fa-angle-down"></i>
+            </button>
+                </div>
+                <div class="taskdetails__module__right">
+                    <div class="header__title">Dates</div>
+                    <div class="taskdetails__module__content" id="taskdetailsModuleContent_dates">
+                        <table class="taskdetails__datatable">
+                            <tr>
+                                <td>Created:</td>
+                                <td>${taskData.dateCreatedFormatted}</td>
+                            </tr>
+                            <tr>
+                                <td>Updated:</td>
+                                <td>${taskData.dateUpdatedFormatted}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
             </div>`
-        __peopleModuleHTML = ``
-        __datesModuleHTML = ``
         _smallModulesHTML = `
             <div class="taskdetails__small__modules">
                 ${__peopleModuleHTML}${__datesModuleHTML}
@@ -100,133 +246,8 @@ let taskdetailsHandler = {
             <div class="taskdetails__modules">
                 ${_bigModulesHTML}${_smallModulesHTML}
             </div>`
-            <!--Details-->
-
-            <!--Description-->
-            <div class="taskdetails__module">
-                <div class="taskdetails__module__left">
-                    <button class="toggle__wrap"><i class="fa fa-angle-down"></i></button>
-                </div>
-                <div class="taskdetails__module__right">
-                    <div class="header__title">Description</div>
-                    <div class="taskdetails__module__content" id="modulename_module_content">
-                        This is a description hello there <br>
-                        <p>test test test test test test</p>
-                        pümpel officer of the month <br><br>
-                        laggggggsagg
-                    </div>
-                </div>
-            </div>
-            <!--Subtasks-->
-            <div class="taskdetails__module">
-                <div class="taskdetails__module__left">
-                    <button class="toggle__wrap"><i class="fa fa-angle-down"></i></button>
-                </div>
-                <div class="taskdetails__module__right">
-                    <div class="header__title">Subtasks</div>
-                    <div class="taskdetails__module__content" id="modulename_module_content">
-                        <div class="taskdetails__subtask">
-                            <p><i class="fa fa-square" style="color: #ffcc00;"></i></p>
-                            <p><a href="">ID_629</a></p>
-                            <p class="taskdetails__subtask__title">in description so makros abbilden dass striche am anfang liste ergeben usw.</p>
-                            <p><div class="status status__open">OPEN</div></p>
-                        </div>
-                        <hr>
-                        <div class="taskdetails__subtask">
-                            <p><i class="fa fa-square" style="color: #ffcc00;"></i></p>
-                            <p><a href="">ID_934</a></p>
-                            <p class="taskdetails__subtask__title">update task with inputs</p>
-                            <p><div class="status status__open">OPEN</div></p>
-                        </div>
-                        <hr>
-                    </div>
-                </div>
-            </div>
-            <!--Activity-->
-            <div class="taskdetails__module">
-                <div class="taskdetails__module__left">
-                    <button class="toggle__wrap"><i class="fa fa-angle-down"></i></button>
-                </div>
-                <div class="taskdetails__module__right">
-                    <div class="header__title">Activity</div>
-                    <div class="taskdetails__module__content" id="modulename_module_content">
-                        <div class="activity__header">
-                            <p class="activity__item"id="activity_all">All</p>
-                            <p class="activity__item activity__active" id="activity_comments">Comments</p>
-                            <p class="activity__item"id="activity_history">History</p>
-                        </div>
-                        <hr>
-                        <div class="activity__comment">
-                            <p class="comment__header">lukaslanger99 added a comment - 14/Feb/2022 01:56</p>
-                            <div class="comment__content">
-                                Jira style
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="activity__comment">
-                            <p class="comment__header">lukaslanger99 added a comment - 15/Feb/2022 12:02</p>
-                            <div class="comment__content">
-                                Links scrollbar mit tasks asiigned und assigned label, dann open label und alle offenen die man annehmen kann. Links dann jira style details
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="activity__comment">
-                            <p class="comment__header">lukaslanger99 added a comment - 24/Feb/2022 11:52</p>
-                            <div class="comment__content">
-                                https://gyazo.com/a72619d037ea03e43f9afbf21fbf0b2b
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="taskdetails__small__modules">
-            <!--People-->
-            <div class="taskdetails__module">
-                <div class="taskdetails__module__left">
-                    <button class="toggle__wrap"><i class="fa fa-angle-down"></i></button>
-                </div>
-                <div class="taskdetails__module__right">
-                    <div class="header__title">People</div>
-                    <div class="taskdetails__module__content" id="modulename_module_content">
-                        <table class="taskdetails__datatable">
-                            <tr>
-                                <td>Assignee:</td>
-                                <td>lukaslanger99</td>
-                            </tr>
-                            <tr>
-                                <td>Reporter:</td>
-                                <td>Unknown</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!--Dates-->
-            <div class="taskdetails__module">
-                <div class="taskdetails__module__left">
-                    <button class="toggle__wrap"><i class="fa fa-angle-down"></i></button>
-                </div>
-                <div class="taskdetails__module__right">
-                    <div class="header__title">Dates</div>
-                    <div class="taskdetails__module__content" id="modulename_module_content">
-                        <table class="taskdetails__datatable">
-                            <tr>
-                                <td>Created:</td>
-                                <td>31/Dec/2020 02:56</td>
-                            </tr>
-                            <tr>
-                                <td>Updated:</td>
-                                <td>2 days ago</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    document.getElementById('taskdetails').innerHTML = `${headerHTML}${buttonsHTML}${modulesHTML}`
+    if (taskData.taskType == 'task') labelHandler.showLabelsInTaskDetails(taskData.taskParentID, taskData.taskID)
     },
     taskdetailsToggleContent: function (buttonID, contentAreaID) {
         var button = document.getElementById(buttonID)

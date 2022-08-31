@@ -83,7 +83,7 @@ class RequestHandler
         $sql = "SELECT g.* 
             FROM groups g
             LEFT JOIN groupaccess ga ON g.groupID = ga.groupID
-            WHERE  ga.userID = ? AND g.groupState = 'active'
+            WHERE  ga.userID = ? AND g.groupStatus = 'active'
             ORDER BY g.groupPriority DESC";
         return $this->mysqliSelectFetchArray($sql, $userID);
     }
@@ -96,7 +96,7 @@ class RequestHandler
 
     private function moveToArchive($id)
     {
-        $this->mysqliQueryPrepared("UPDATE tasks SET taskState = 'archived' WHERE taskID = ?", $id);
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskStatus = 'archived' WHERE taskID = ?", $id);
     }
 
     private function getUsernameShortByUserID($userID)
@@ -107,22 +107,22 @@ class RequestHandler
 
     public function getActiveGroupsWithTasks($userID)
     {
-        $groups = $this->getActiveGroups($userID);
+        if (!$groups = $this->getActiveGroups($userID)) return "NO_GROUPS";
         foreach ($groups as $group) {
             $groupID = $group->groupID;
             $group->labels = $this->mysqliSelectFetchArray("SELECT * FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
-            $unfoldedState = $this->mysqliSelectFetchObject("SELECT groupUnfolded FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID);
-            $group->unfolded = $unfoldedState->groupUnfolded;
+            $unfoldedStatus = $this->mysqliSelectFetchObject("SELECT groupUnfolded FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID);
+            $group->unfolded = $unfoldedStatus->groupUnfolded;
             $tasks = $this->mysqliSelectFetchArray(
-                "SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND NOT taskState = 'archived' ORDER BY taskPriority DESC, taskID ",
+                "SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND NOT taskStatus = 'archived' ORDER BY taskPriority DESC, taskID ",
                 $groupID
             );
             if ($tasks) {
                 foreach ($tasks as $task) {
-                    if ($task->taskState == 'open') $dateDiff = $this->getDateDifference($task->taskDateCreated);
-                    else if ($task->taskState == 'closed') $dateDiff = $this->getDateDifference($task->taskDateClosed);
+                    if ($task->taskStatus == 'open') $dateDiff = $this->getDateDifference($task->taskDateCreated);
+                    else if ($task->taskStatus == 'resolved') $dateDiff = $this->getDateDifference($task->taskDateResolved);
 
-                    if ($task->taskState == 'closed' && $this->archiveCheck($task->taskParentID, $dateDiff)) {
+                    if ($task->taskStatus == 'resolved' && $this->archiveCheck($task->taskParentID, $dateDiff)) {
                         $this->moveToArchive($task->taskID);
                         unset($task);
                     }
@@ -143,9 +143,34 @@ class RequestHandler
         return $groups;
     }
 
-    public function getTaskData($taskID)
+    public function getTaskData($userID, $taskID)
     {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
         return $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
+    }
+
+    public function getTaskDataTaskdetails($userID, $taskID)
+    {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
+        if (!$taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID)) return "NO_TASK_FOUND";
+        ### Parents ###
+        $parents = [];
+        $parentTask = $taskData;
+        do {
+            $parentTask = $this->mysqliSelectFetchObject("SELECT taskID, taskType, taskParentID FROM tasks WHERE taskID = ?", $parentTask->taskID);
+            $parents[] = ["id" => $parentTask->taskID, "name" => "", "type" => "task"];
+        } while ($parentTask->taskType == "subtask");
+        $group = $this->mysqliSelectFetchObject("SELECT groupID, groupName FROM groups WHERE groupID = ?", $parentTask->taskParentID);
+        $parents[] = ["id" => $group->groupID, "name" => $group->groupName, "type" => "group"];
+        $taskData->parents = array_reverse($parents);
+        $taskData->subtasks = 0;
+        // activity -> type
+        $taskData->activity = 0;
+        $taskData->assignee = 0;
+        $taskData->reporter = 0;
+        $taskData->dateCreatedFormatted = 0;
+        $taskData->dateUpdatedFormatted = 0;
+        return $taskData;
     }
 
     public function createTimetable($userID, $type, $copyLast)
@@ -640,7 +665,7 @@ class RequestHandler
     {
         if ($type == 'task' && !$this->checkGroupPermission($userID, $parentID)) return 0;
         $sql = "INSERT INTO tasks 
-            (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskState, taskDateCreated) 
+            (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskStatus, taskDateCreated) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->mysqliQueryPrepared($sql, $type, $parentID, $prio, $this->getPriorityColor($prio), $title, $description, 'open', date('Y-m-d H:i'));
         return "OK";
@@ -659,7 +684,7 @@ class RequestHandler
             foreach ($subtasks as $task) {
                 if ($subtaskCount = $this->getNumberOfSubtasks($task->taskID)) $task->subtaskCount = $subtaskCount;
                 if ($task->taskAssignedBy) $task->assigneeNameShort = $this->getUserNameShort($task->taskAssignedBy);
-                if ($task->taskState == 'open') $task->daysActive = $this->getDateDifference($task->taskDateCreated);
+                if ($task->taskStatus == 'open') $task->daysActive = $this->getDateDifference($task->taskDateCreated);
             }
             return $subtasks;
         }
@@ -678,7 +703,7 @@ class RequestHandler
 
     private function getNumberOfSubtasks($taskID)
     {
-        $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskState = 'open'";
+        $sql = "SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskStatus = 'open'";
         if ($data = $this->mysqliSelectFetchObject($sql, $taskID)) return $data->number;
         return 0;
     }
@@ -698,7 +723,7 @@ class RequestHandler
     public function setTaskToOpen($userID, $taskID)
     {
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
-        $this->mysqliQueryPrepared("UPDATE tasks SET taskState = 'open', taskAssignedBy = '' WHERE taskID = ?", $taskID);
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskStatus = 'open', taskAssignedBy = '' WHERE taskID = ?", $taskID);
         return "OK";
     }
 
@@ -709,13 +734,13 @@ class RequestHandler
         return "OK";
     }
 
-    public function closeTask($userID, $taskID)
+    public function resolveTask($userID, $taskID)
     {
         if (!$this->deleteTaskPermission($taskID, $userID)) return "NO_ACCESS";
-        $sql = "SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskState = 'open'";
+        $sql = "SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskStatus = 'open'";
         $subtasks = $this->mysqliSelectFetchObject($sql, $taskID);
-        if ($subtasks->number > 0) return "UNCLOSED_SUBTASKS";
-        $sql = "UPDATE tasks SET taskState = 'closed', taskDateClosed = ? WHERE taskID = ?";
+        if ($subtasks->number > 0) return "UNRESOLVED_SUBTASKS";
+        $sql = "UPDATE tasks SET taskStatus = 'resolved', taskDateResolved = ? WHERE taskID = ?";
         $this->mysqliQueryPrepared($sql, $this->getCurrentTimestamp(), $taskID);
         $parentID = $this->mysqliSelectFetchObject("SELECT parentID FROM tasks WHERE taskID = ?", $taskID);
         return ["ResponseCode" => "OK", "parentID" => $parentID->parentID];
@@ -755,10 +780,10 @@ class RequestHandler
         return "OK";
     }
 
-    private function getMailState($userID)
+    private function getMailStatus($userID)
     {
-        $return = $this->mysqliSelectFetchObject("SELECT userMailState FROM users WHERE userID = ?", $userID);
-        return $return->userMailState;
+        $return = $this->mysqliSelectFetchObject("SELECT userMailStatus FROM users WHERE userID = ?", $userID);
+        return $return->userMailStatus;
     }
 
     private function getNumberOfOwnedGroups($userID)
@@ -776,7 +801,7 @@ class RequestHandler
 
     public function createGroup($userID, $groupName)
     {
-        if ($this->getMailState($userID) == 'unverified') return "unverifiedmail";
+        if ($this->getMailStatus($userID) == 'unverified') return "unverifiedmail";
         if ($this->getNumberOfOwnedGroups($userID) > 9 && $this->getUserType($userID) == 'normal') return "maxgroups";
         if ($this->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", $groupName, $userID)) return "groupnametaken";
         $sql = "INSERT INTO groups (groupName, groupOwner) VALUES (?, ?);";
@@ -824,22 +849,22 @@ class RequestHandler
         return "NO_USER_FOUND";
     }
 
-    public function toggleGroupInvites($userID, $groupID, $state)
+    public function toggleGroupInvites($userID, $groupID, $status)
     {
         if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
-        $this->mysqliQueryPrepared("UPDATE groups SET groupInvites = ? WHERE groupID = ?;", $state, $groupID);
-        if ($state == 'enabled') {
+        $this->mysqliQueryPrepared("UPDATE groups SET groupInvites = ? WHERE groupID = ?;", $status, $groupID);
+        if ($status == 'enabled') {
             $this->mysqliQueryPrepared("INSERT INTO tokens (tokenType, tokenGroupID, tokenToken) VALUES ('groupinvite', ?, ?)", $groupID, $this->generateRandomString());
-        } else if ($state == 'disabled') {
+        } else if ($status == 'disabled') {
             $this->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = ?", $groupID, "groupinvite");
         }
         return "OK";
     }
 
-    public function toggleGroupState($userID, $groupID, $state)
+    public function toggleGroupStatus($userID, $groupID, $status)
     {
         if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
-        $this->mysqliQueryPrepared("UPDATE groups SET groupState = ? WHERE groupID = ?;", $state, $groupID);
+        $this->mysqliQueryPrepared("UPDATE groups SET groupStatus = ? WHERE groupID = ?;", $status, $groupID);
         return "OK";
     }
 

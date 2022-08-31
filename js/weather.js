@@ -1,6 +1,6 @@
 let weather = {
     apiKey: "37ccc843e660d552aeafe5b8a89a9632",
-    fetchWeather: function (city) {
+    fetchWeather: async function (city) {
         const response = await fetch(
             `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`
         )
@@ -11,16 +11,14 @@ let weather = {
         const { name } = data
         const { icon, description } = data.weather[0]
         const { temp, humidity } = data.main
-        const { speed } = data.wind
 
         document.querySelector(".weather__city").innerText = "Weather in " + name
         document.querySelector(".weather__icon").src = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
         document.querySelector(".weather__description").innerText = description
         document.querySelector(".weather__temp__big").innerText = `${Math.floor(temp)} °C`
         document.querySelector(".weather__humidity").innerText = "Humidity: " + humidity + "%"
-        document.querySelector(".weather__wind").innerText = `Wind speed: ${speed} km/h`
     },
-    fetchForecast: function (city) {
+    fetchForecast: async function (city) {
         const response = await fetch(
             `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${this.apiKey}`
         )
@@ -57,7 +55,7 @@ let weather = {
         });
 
     },
-    updateWeatherCity: function () {
+    updateWeatherCity: async function () {
         const city = document.getElementById("weatherPanelCity").value
         if (city) {
             var url = `${DIR_SYSTEM}server/request.php?action=updateWeatherCity`

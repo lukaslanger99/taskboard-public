@@ -142,7 +142,7 @@ class TaskBoard
 
     public function getArchivedTasks()
     {
-        if ($data = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskState = 'archived' ORDER BY taskID DESC")) {
+        if ($data = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskStatus = 'archived' ORDER BY taskID DESC")) {
             foreach ($data as $i) {
                 if ($this->checkGroupPermission($_SESSION['userID'], $i->taskParentID))
                     $tasks[] = $i;
@@ -184,10 +184,10 @@ class TaskBoard
         return $return->userMail;
     }
 
-    public function getMailState($userID)
+    public function getMailStatus($userID)
     {
-        $return = $this->mysqliSelectFetchObject("SELECT userMailState FROM users WHERE userID = ?", $userID);
-        return $return->userMailState;
+        $return = $this->mysqliSelectFetchObject("SELECT userMailStatus FROM users WHERE userID = ?", $userID);
+        return $return->userMailStatus;
     }
 
     public function getNightmodeEnabled($userID)
@@ -298,10 +298,10 @@ class TaskBoard
      * return true if mail is verified
      * return false if mail is unverified
      */
-    public function getUserVerificationState($userID)
+    public function getUserVerificationStatus($userID)
     {
-        $data = $this->mysqliSelectFetchObject("SELECT userMailState FROM users WHERE userID = ?", $userID);
-        return $data->userMailState == 'verified';
+        $data = $this->mysqliSelectFetchObject("SELECT userMailStatus FROM users WHERE userID = ?", $userID);
+        return $data->userMailStatus == 'verified';
     }
 
     public function getTasksByGroupID($groupID)
@@ -346,15 +346,6 @@ class TaskBoard
     {
         header("Location: " . DIR_SYSTEM . $url);
         exit;
-    }
-
-    private function parseParent($taskType, $parentID)
-    {
-        if ($taskType == 'task') {
-            return '<a href="' . DIR_SYSTEM . 'php/details.php?action=groupDetails&id=' . $parentID . '">' . $this->getGroupNameByID($parentID) . '</a>';
-        } else {
-            return '<a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id=' . $parentID . '">' . $parentID . '</a>';
-        }
     }
 
     public function printArchive()
@@ -417,7 +408,7 @@ class TaskBoard
                 <tr>
                     <th>ID</th>
                     <th>NAME</th>
-                    <th>STATE</th>
+                    <th>STATUS</th>
                     <th>PRIORITY</th>
                     <th>TOTAL_NUM_OF_TASKS</th>
                     <th>CURRENTLY_OPEN</th>
@@ -430,7 +421,7 @@ class TaskBoard
             foreach ($groups as $group) {
                 $groupID = $group->groupID;
                 $totalTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ?", $groupID);
-                $openTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskState = 'open'", $groupID);
+                $openTasks = $this->mysqliSelectFetchObject("SELECT COUNT(*) AS number FROM tasks WHERE taskType = 'task' AND taskParentID = ? AND taskStatus = 'open'", $groupID);
 
                 if ($_SESSION['userID'] == $this->getGroupOwnerID($groupID)) {
                     $deleteOrLeaveGroup = '<td><button type="button" onclick="groupHandler.deleteGroup(' . $groupID . ')">Delete Group</button>';
@@ -443,7 +434,7 @@ class TaskBoard
                 $html .= '
                     <td>' . $groupID . '</td>
                     <td><a href="' . DIR_SYSTEM . 'php/details.php?action=groupDetails&id=' . $groupID . '">' . $group->groupName . '</a></td>
-                    <td>' . $group->groupState . '</td>
+                    <td>' . $group->groupStatus . '</td>
                     <td>' . $group->groupPriority . '</td>
                     <td>' . $totalTasks->number . '</td>
                     <td>' . $openTasks->number . '</td>
@@ -500,10 +491,10 @@ class TaskBoard
             }
         }
 
-        if ($groupOwnerCheck && $group->groupState == 'active') {
-            $changeGroupState = '<button class="button" onclick="groupHandler.toggleGroupState(' . $groupID . ', \'hidden\')">Hide Group</button>';
-        } else if ($groupOwnerCheck && $group->groupState == 'hidden') {
-            $changeGroupState = '<button class="button" onclick="groupHandler.toggleGroupState(' . $groupID . ', \'active\')">Show Group</button>';
+        if ($groupOwnerCheck && $group->groupStatus == 'active') {
+            $changeGroupStatus = '<button class="button" onclick="groupHandler.toggleGroupStatus(' . $groupID . ', \'hidden\')">Hide Group</button>';
+        } else if ($groupOwnerCheck && $group->groupStatus == 'hidden') {
+            $changeGroupStatus = '<button class="button" onclick="groupHandler.toggleGroupStatus(' . $groupID . ', \'active\')">Show Group</button>';
         }
 
         if ($groupOwnerCheck) {
@@ -526,7 +517,7 @@ class TaskBoard
                 ' . $groupUnfolded . '
                 ' . $groupInvites . '
                 ' . $inviteUser . '
-                ' . $changeGroupState . '
+                ' . $changeGroupStatus . '
                 ' . $leaveGroup . '
                 ' . $deleteGroup . '
             </div>
@@ -576,17 +567,17 @@ class TaskBoard
         return '<div class="panel-item">' . $this->panelHeader($type) . $this->panelContent($type, $unfolded, $spec) . '</div>';
     }
 
-    public function printPanelSettings($type, $title, $activeID, $activeState, $unfoldedID, $unfoldedState)
+    public function printPanelSettings($type, $title, $activeID, $activeStatus, $unfoldedID, $unfoldedStatus)
     {
         return '<div class="draggable__item__panelsettings draggable__item" draggable="true" data-type="' . $type . '">
                 <p>' . $title . '</p>
                 <label class="switch">
-                    <input id="' . $activeID . '" type="checkbox" ' . $activeState . '/>
+                    <input id="' . $activeID . '" type="checkbox" ' . $activeStatus . '/>
                     <span class="slider round"></span>
                 </label>
                 <small>Activate</small>
                 <label class="switch">
-                    <input type="checkbox" id="' . $unfoldedID . '" ' . $unfoldedState . '/>
+                    <input type="checkbox" id="' . $unfoldedID . '" ' . $unfoldedStatus . '/>
                     <span class="slider round"></span>
                 </label>
                 <small>Unfolded by default on mobile</small>
@@ -746,7 +737,6 @@ class TaskBoard
                         </div>
                         <div class="weather__description weather__font__small"></div>
                         <div class="weather__humidity weather__font__small"></div>
-                        <div class="weather__wind weather__font__small"></div>
                     </div>
                     <div class="weather__forecast">
                         <p class="weather__forecast__header">5-Day Forecast</p>
@@ -904,131 +894,6 @@ class TaskBoard
         }
     }
 
-    private function printSubtaskPanel()
-    {
-        $html = '
-            <div class="taskdetails_panel_right">
-                <div class="group-box">
-                    <div class="group-top-bar">
-                        <div class="group_top_bar_left">
-                            <p>Subtasks</p>
-                        </div>
-                        <div class="group_top_bar_right">
-                            <div class="group_dropbtn" id="groupUnfoldButton_subtask" onclick="toggleUnfoldArea(\'groupContent_subtask\',\'groupUnfoldButton_subtask\')">
-                                <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="group-content__subtask" id="groupContent_subtask">
-                        <div class="single__content__subtask">
-                            <div class="single-top-bar">
-                                <p id="subtask-open-header"></p>
-                            </div>
-                            <div id="subtasks-open-area"></div>
-                        </div>
-                        <div class="single__content__subtask">
-                            <div class="single-top-bar">
-                                <p id="subtask-closed-header"></p>
-                            </div>
-                            <div id="subtasks-closed-area"></div>
-                        </div>
-                </div>
-            </div>
-        </div>';
-        return $html;
-    }
-
-    public function printTaskDetails($task)
-    {
-        if ($task->taskType == 'subtask') {
-            $backButton = '<a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id=' . $task->taskParentID . '"> 
-                <div class="button"><p><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</p></div></a>';
-            $labelTR = '';
-        } else {
-            $backButton = '';
-            $labelTR = '<tr>
-                <td>Labels:</td>
-                <td id="tasklabel-list">
-                    <script>labelHandler.showLabelsInTaskDetails(' . $task->taskParentID . ', ' . $task->taskID . ')</script>
-                </td>
-            </tr>';
-        }
-        $buttons = '<button class="button" onclick="openUpdateTaskForm()">Update</button>
-            <button class="button" onclick="taskHandler.deleteTask(' . $task->taskID . ', \'' . $task->taskType . '\')">Delete</button>
-            <button class="button" onclick="taskHandler.openCreateTaskForm(\'subtask\', ' . $task->taskID . ', \'false\')">Create Subtask</button>
-            <button class="button" onclick="taskHandler.assignTask(' . $task->taskID . ')">Assign Task</button>
-            ';
-        switch ($task->taskState) {
-            case 'open':
-                $buttons .= '<button class="button" onlick="taskHandler.closeTask(' . $task->taskID . ')">Close</button>';
-                break;
-
-            case 'closed':
-                $buttons .= '<button class="button" onclick="taskHandler.setTaskToOpen(' . $task->taskID . ')">Reopen</div>';
-                break;
-
-            default:
-                break;
-        }
-        $priorities = ['low', 'normal', 'high'];
-        $priority = $priorities[($task->taskPriority) - 1];
-
-        $html = '
-            <div class="taskdetails_panel">
-                <div class="taskdetails_panel_left">
-                    <div class="top-bar">
-                        <div class="top-bar-left">' . $backButton . '</div>
-                        <div class="top-bar-right">' . $buttons . '</div>
-                    </div>
-                    <table style="clear:both;">
-                        <tr>
-                            <td>ID:</td>
-                            <td>' . $task->taskID . '</td>
-                        </tr>
-                        <tr>
-                            <td>Priority:</td>
-                            <td>' . $priority . '</td>
-                        </tr>
-                        <tr>
-                            <td>Parent:</td>
-                            <td>' . $this->parseParent($task->taskType, $task->taskParentID) . '</td>
-                        </tr>
-                        <tr>
-                            <td>Title:</td>
-                            <td>' . $task->taskTitle . '</td>
-                        </tr>
-                        <tr>
-                            <td>Description:</td>
-                            <td>' . $this->addTagsToUrlsInString($task->taskDescription) . '</td>
-                        </tr>
-                        <tr>
-                            <td>State:</td>
-                            <td>' . $task->taskState . '</td>
-                        </tr>
-                        <tr>
-                            <td>Date Created:</td>
-                            <td>' . $task->taskDateCreated . '</td>
-                        </tr>
-                        <tr>
-                            <td>Assigned By:</td>
-                            <td>' . $this->getUsernameByID($task->taskAssignedBy) . '</td>
-                        </tr>
-                        <tr>
-                            <td>Date Closed:</td>
-                            <td>' . $task->taskDateClosed . '</td>
-                        </tr>
-                        ' . $labelTR . '
-                    </table>
-        ';
-        $html .= $this->printComments($task->taskID, $task->taskType);
-        $subtaskcount = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $task->taskID);
-        if ($subtaskcount->number > 0) {
-            $html .= $this->printSubtaskPanel();
-        }
-        $html .= '<script>taskHandler.printSubtasks(' . $task->taskID . ')</script>';
-        echo $html;
-    }
-
     private function printTaskTable($tasks)
     {
         $html =  '
@@ -1041,7 +906,7 @@ class TaskBoard
                     <th>PRIORITY</th>
                     <th>DATE_CREATED</th>
                     <th>ASSIGNED_BY</th>
-                    <th>DATE_CLOSED</th>
+                    <th>DATE_RESOLVED</th>
                     <th></th>
                 </tr>';
         if ($tasks) {
@@ -1058,7 +923,7 @@ class TaskBoard
                     <td>' . $task->taskPriority . '</td>
                     <td>' . $task->taskDateCreated . '</td>
                     <td>' . $this->getUsernameByID($task->taskAssignedBy) . '</td>
-                    <td>' . $task->taskDateClosed . '</td>
+                    <td>' . $task->taskDateResolved . '</td>
                     <td style="white-space: nowrap;">
                         <div class="editgroup-button" onclick="taskHandler.deleteTask(' . $task->taskID . ', \'' . $task->taskType . '\')">
                             Delete
@@ -1114,8 +979,8 @@ class TaskBoard
                     <td>' . $userData->userMail . '</td>
                 </tr>
                 <tr>
-                    <td>Mail-State</td>
-                    <td>' . $userData->userMailState . '</td>
+                    <td>Mail-Status</td>
+                    <td>' . $userData->userMailStatus . '</td>
                 </tr>
             </table>
         </div>

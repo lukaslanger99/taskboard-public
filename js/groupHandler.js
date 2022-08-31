@@ -36,21 +36,21 @@ let groupHandler = {
             await response.json()
         }
     },
-    toggleGroupInvites: async function (groupID, state) {
+    toggleGroupInvites: async function (groupID, status) {
         var url = `${DIR_SYSTEM}server/request.php?action=toggleGroupInvites`
         var formData = new FormData()
         formData.append('groupID', groupID)
-        formData.append('state', state) //enabled, disabled
+        formData.append('status', status) //enabled, disabled
         const response = await fetch(
             url, { method: 'POST', body: formData }
         )
         await response.json()
     },
-    toggleGroupState: async function (groupID, state) {
-        var url = `${DIR_SYSTEM}server/request.php?action=toggleGroupState`
+    toggleGroupStatus: async function (groupID, status) {
+        var url = `${DIR_SYSTEM}server/request.php?action=toggleGroupStatus`
         var formData = new FormData()
         formData.append('groupID', groupID)
-        formData.append('state', state) //active, hidden
+        formData.append('status', status) //active, hidden
         const response = await fetch(
             url, { method: 'POST', body: formData }
         )

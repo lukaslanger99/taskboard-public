@@ -66,9 +66,9 @@ let taskHandler = {
     },
     printSubtasks: async function (parentID) {
         const subtasks = await this.getSubtasks(parentID)
-        const openSubtasks = subtasks.filter((task) => task.taskState == 'open')
-        const closedSubtasks = subtasks.filter((task) => task.taskState == 'closed')
-        var openTasksHTML = '', closedTasksHTML = ''
+        const openSubtasks = subtasks.filter((task) => task.taskStatus == 'open')
+        const resolvedSubtasks = subtasks.filter((task) => task.taskStatus == 'resolved')
+        var openTasksHTML = '', resolvedTasksHTML = ''
         if (openSubtasks) {
             openSubtasks.forEach(task => {
                 openTasksHTML += this.printSubtask(task)
@@ -76,17 +76,17 @@ let taskHandler = {
             document.getElementById('subtask-open-header').innerHTML = `Open ${(openSubtasks) ? `(${openSubtasks.length})` : ''}`
             document.getElementById('subtasks-open-area').innerHTML = openTasksHTML
         }
-        if (closedSubtasks) {
-            closedSubtasks.forEach(task => {
-                closedTasksHTML += this.printSubtask(task)
+        if (resolvedSubtasks) {
+            resolvedSubtasks.forEach(task => {
+                resolvedTasksHTML += this.printSubtask(task)
             })
-            document.getElementById('subtask-closed-header').innerHTML = `Closed ${(closedSubtasks) ? `(${closedSubtasks.length})` : ''}`
-            document.getElementById('subtasks-closed-area').innerHTML = closedTasksHTML
+            document.getElementById('subtask-resolved-header').innerHTML = `Resolved ${(resolvedSubtasks) ? `(${resolvedSubtasks.length})` : ''}`
+            document.getElementById('subtasks-resolved-area').innerHTML = resolvedTasksHTML
         }
     },
     printSubtask: function (task) {
         var subtaskLabelHTML = '', dayCounter = ''
-        if (task.taskState == 'open') {
+        if (task.taskStatus == 'open') {
             if (task.subtaskCount > 1) subtaskLabelHTML = `<div class="label subtask_label">${task.subtaskCount} Subtasks</div>`
             else if (task.subtaskCount == 1) subtaskLabelHTML = `<div class="label subtask_label">1 Subtask</div>`
             dayCounter = `<div class="label bottom_label" ${(task.daysActive > 30) ? 'style="background-color:red;color:#fff;"' : ''}>${task.daysActive}</div>`
@@ -136,8 +136,8 @@ let taskHandler = {
         )
         await response.json()
     },
-    closeTask: async function (taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=closeTask`
+    resolveTask: async function (taskID) {
+        var url = `${DIR_SYSTEM}server/request.php?action=resolveTask`
         var formData = new FormData()
         formData.append('taskID', taskID)
         const response = await fetch(
@@ -145,8 +145,8 @@ let taskHandler = {
         )
         const responseCode = await response.json()
         if (responseCode.ResponseCode != 'OK') return
-        if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=groupDetails&id=${responseCode.parentID}&success=closedtask`
-        else if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=taskDetails&id=${responseCode.parentID}&success=closedsubtask`
+        if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=groupDetails&id=${responseCode.parentID}`
+        else if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=taskDetails&id=${responseCode.parentID}`
     },
     deleteTask: async function (taskID, taskType) {
         if (!confirm("Are you sure you want to delete Task id:" + taskID + "?")) return

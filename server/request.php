@@ -21,7 +21,12 @@ switch ($_GET['action']) {
 
     case 'getTaskData':
         header('Content-Type: application/json');
-        echo json_encode($rh->getTaskData($_POST['id']));
+        echo json_encode($rh->getTaskData($userID, $_POST['id']));
+        break;
+
+    case 'getTaskDataTaskdetails':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getTaskDataTaskdetails($userID, $_POST['taskID']));
         break;
 
     case 'addEntrys':
@@ -234,9 +239,9 @@ switch ($_GET['action']) {
         echo json_encode($rh->assignTask($userID, $_POST['taskID']));
         break;
 
-    case 'closeTask':
+    case 'resolveTask':
         header('Content-Type: application/json');
-        echo json_encode($rh->closeTask($userID, $_POST['taskID']));
+        echo json_encode($rh->resolveTask($userID, $_POST['taskID']));
         break;
 
     case 'deleteTask':
@@ -271,12 +276,12 @@ switch ($_GET['action']) {
 
     case 'toggleGroupInvites':
         header('Content-Type: application/json');
-        echo json_encode($rh->toggleGroupInvites($userID, $_POST['groupID'], $_POST['state']));
+        echo json_encode($rh->toggleGroupInvites($userID, $_POST['groupID'], $_POST['status']));
         break;
 
-    case 'toggleGroupState':
+    case 'toggleGroupStatus':
         header('Content-Type: application/json');
-        echo json_encode($rh->toggleGroupState($userID, $_POST['groupID'], $_POST['state']));
+        echo json_encode($rh->toggleGroupStatus($userID, $_POST['groupID'], $_POST['status']));
         break;
 
     case 'updateWeatherCity':
