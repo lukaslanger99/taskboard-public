@@ -61,62 +61,9 @@ let taskHandler = {
             if (createAnother) this.openCreateTaskForm(type, parentID, false)
             else closeDynamicForm()
             printSuccessToast('taskcreated')
-            this.printSubtasks(parentID)
+            if (type == 'task') indexHandler.printIndexGroups()
+            else taskdetailsHandler.printTaskdetails()
         }
-    },
-    printSubtasks: async function (parentID) {
-        const subtasks = await this.getSubtasks(parentID)
-        const openSubtasks = subtasks.filter((task) => task.taskStatus == 'open')
-        const resolvedSubtasks = subtasks.filter((task) => task.taskStatus == 'resolved')
-        var openTasksHTML = '', resolvedTasksHTML = ''
-        if (openSubtasks) {
-            openSubtasks.forEach(task => {
-                openTasksHTML += this.printSubtask(task)
-            })
-            document.getElementById('subtask-open-header').innerHTML = `Open ${(openSubtasks) ? `(${openSubtasks.length})` : ''}`
-            document.getElementById('subtasks-open-area').innerHTML = openTasksHTML
-        }
-        if (resolvedSubtasks) {
-            resolvedSubtasks.forEach(task => {
-                resolvedTasksHTML += this.printSubtask(task)
-            })
-            document.getElementById('subtask-resolved-header').innerHTML = `Resolved ${(resolvedSubtasks) ? `(${resolvedSubtasks.length})` : ''}`
-            document.getElementById('subtasks-resolved-area').innerHTML = resolvedTasksHTML
-        }
-    },
-    printSubtask: function (task) {
-        var subtaskLabelHTML = '', dayCounter = ''
-        if (task.taskStatus == 'open') {
-            if (task.subtaskCount > 1) subtaskLabelHTML = `<div class="label subtask_label">${task.subtaskCount} Subtasks</div>`
-            else if (task.subtaskCount == 1) subtaskLabelHTML = `<div class="label subtask_label">1 Subtask</div>`
-            dayCounter = `<div class="label bottom_label" ${(task.daysActive > 30) ? 'style="background-color:red;color:#fff;"' : ''}>${task.daysActive}</div>`
-        }
-        var html = ''
-        html += `<a href="http://lukaslanger.bplaced.net/taskboard/php/details.php?action=taskDetails&id=${task.taskID}">
-        <div class="box">
-        <div class="priority" style="background-color: ${task.taskPriorityColor};"></div>
-        <div class="content">
-        <div class="text">${task.taskTitle}</div>
-                    <div class="emptyspace"></div>
-                    <div class="bottom">
-                    <div class="label bottom_label">id_${task.taskID}</div>
-                        ${(task.assigneeNameShort) ? `<div class="label bottom_label">${task.assigneeNameShort}</div>` : ''}
-                        ${subtaskLabelHTML}
-                        ${dayCounter}
-                        </div>
-                        </div>
-                        </div>
-                        </a>`
-        return html
-    },
-    getSubtasks: async function (parentID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=getSubtasks`
-        var formData = new FormData()
-        formData.append('parentID', parentID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        return await response.json()
     },
     setTaskToOpen: async function (taskID) {
         var url = `${DIR_SYSTEM}server/request.php?action=setTaskToOpen`
@@ -126,6 +73,7 @@ let taskHandler = {
             url, { method: 'POST', body: formData }
         )
         await response.json()
+        taskdetailsHandler.printTaskdetails()
     },
     assignTask: async function (taskID) {
         var url = `${DIR_SYSTEM}server/request.php?action=assignTask`
@@ -135,6 +83,7 @@ let taskHandler = {
             url, { method: 'POST', body: formData }
         )
         await response.json()
+        taskdetailsHandler.printTaskdetails()
     },
     resolveTask: async function (taskID) {
         var url = `${DIR_SYSTEM}server/request.php?action=resolveTask`
@@ -144,11 +93,10 @@ let taskHandler = {
             url, { method: 'POST', body: formData }
         )
         const responseCode = await response.json()
-        if (responseCode.ResponseCode != 'OK') return
-        if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=groupDetails&id=${responseCode.parentID}`
-        else if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=taskDetails&id=${responseCode.parentID}`
+        if (responseCode != 'OK') return
+        taskdetailsHandler.printTaskdetails()
     },
-    deleteTask: async function (taskID, taskType) {
+    deleteTask: async function (taskID) {
         if (!confirm("Are you sure you want to delete Task id:" + taskID + "?")) return
         var url = `${DIR_SYSTEM}server/request.php?action=deleteTask`
         var formData = new FormData()
@@ -158,8 +106,7 @@ let taskHandler = {
         )
         const responseCode = await response.json()
         if (responseCode.ResponseCode != 'OK') return
-        if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=groupDetails&id=${responseCode.parentID}&success=deletetask`
-        else if (taskType == 'task') location.href = `${DIR_SYSTEM}php/details.php?action=taskDetails&id=${responseCode.parentID}&success=deletesubtask`
+        location.href = responseCode.location
     },
     createComment: async function (taskID) {
         const description = document.getElementById('commentDescription')

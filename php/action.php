@@ -65,8 +65,8 @@ switch ($action) {
             if ($task->taskDescription != $_POST['description']) $comment .= 'DESCRIPTION[' . $task->taskDescription . ' -> ' . $_POST['description'] . ']';
             if ($comment != '') {
                 $comment = '[' . $taskBoard->getUsernameByID($_SESSION['userID']) . '] ' . $comment;
-                $sql = "INSERT INTO comments (commentTaskID, commentAutor, commentDescription, commentDate) VALUES (?, 'Auto-Created', ?, '$date')";
-                $this->mysqliQueryPrepared($sql, $taskId, $description);
+                $sql = "INSERT INTO comments (commentTaskID, commentAuthor, commentDescription, commentDate) VALUES (?, 'Auto-Created', ?, '$date')";
+                $taskBoard->mysqliQueryPrepared($sql, $taskId, $description);
             }
 
             $priorityColor = $taskBoard->getPriorityColor($priority);

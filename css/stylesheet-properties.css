@@ -862,6 +862,15 @@ ul.breadcrumb li a:hover {
 
 .comment__content {
   padding: 0 5px;
+  margin-top: 5px;
+}
+
+code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: #6e768166;
+  border-radius: 6px;
 }
 
 @media (max-width: 768px) {

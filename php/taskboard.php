@@ -368,7 +368,7 @@ class TaskBoard
             foreach ($data as $i) {
                 $html .= '
                     <tr class="comment-background">
-                        <td width="15%">' . $this->getUsernameByID($i->commentAutor) . ':</td>
+                        <td width="15%">' . $this->getUsernameByID($i->commentAuthor) . ':</td>
                         <td style="font-size:14px;">' . $this->addTagsToUrlsInString($i->commentDescription) . '</td>
                         <td width="18%">' . $i->commentDate . '</td>
                         <td style="white-space: nowrap;">
@@ -922,7 +922,7 @@ class TaskBoard
                     <td>' . $task->taskParentID . '</td>
                     <td>' . $task->taskPriority . '</td>
                     <td>' . $task->taskDateCreated . '</td>
-                    <td>' . $this->getUsernameByID($task->taskAssignedBy) . '</td>
+                    <td>' . $this->getUsernameByID($task->taskAssignee) . '</td>
                     <td>' . $task->taskDateResolved . '</td>
                     <td style="white-space: nowrap;">
                         <div class="editgroup-button" onclick="taskHandler.deleteTask(' . $task->taskID . ', \'' . $task->taskType . '\')">

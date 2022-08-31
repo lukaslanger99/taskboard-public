@@ -19,7 +19,7 @@ let taskdetailsHandler = {
             html += `
                 <div class="taskdetails__subtask">
                     <p><i class="fa fa-square" style="color: ${this.getPriorityColor(task.taskPriority)};"></i></p>
-                    <p><a href="">ID_${task.taskID}"</a></p>
+                    <p><a href="${DIR_SYSTEM}php/details.php?action=taskDetails&id=${task.taskID}">ID_${task.taskID}</a></p>
                     <p class="taskdetails__subtask__title">${task.taskTitle}</p>
                     <p>
                         ${(task.taskStatus == 'open') 
@@ -33,7 +33,7 @@ let taskdetailsHandler = {
     },
     printActivityComments: function (comments) {
         if (!comments) return ''
-        const activityComments = comments.filter((entry) => entry.type == 'comment')
+        const activityComments = comments.filter((entry) => entry.commentType == 'comment')
         if (!activityComments) return ''
         html = ``
         activityComments.forEach(comment => {
@@ -41,41 +41,41 @@ let taskdetailsHandler = {
                 <div class="activity__comment">
                     <p class="comment__header">${comment.commentAuthor} added a comment - ${comment.commentDateFormatted}</p>
                     <div class="comment__content">
-                        ${comment.commentDescription}
+                        ${comment.descriptionWithMakros}
                     </div>
                 </div>
                 <hr>`
         })
         return html
     },
-    printTaskdetails: async function () {
-        const taskData = await this.getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
-        _parentsListHTML = ``
-        taskData.parents.forEach(item => {
-            if (item.type == 'group') _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=groupDetails&id=${item.id}">${item.name}</a></li>`
-            else _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=taskDetails&id=${item.id}">ID-${item.id}</a></li>`
-        });
-        headerHTML = `
+    printHeader: function (parentListHTML, title) {
+        return `
             <div class="taskdetails__header">
                 <div class="taskdetails__header__image">
                     <img alt="" src="">
                 </div>
                 <div class="taskdetails__header__main">
                     <ul class="breadcrumb">
-                        ${_parentsListHTML}
+                        ${parentListHTML}
                     </ul>
-                    <h1 class="taskdetails__title">${taskData.taskTitle}</h1>
+                    <h1 class="taskdetails__title">${title}</h1>
                 </div>
             </div>`
-        buttonsHTML = `
+    },
+    printButtons: function (taskID, type, status) {
+        return `
             <div class="taskdetails__buttons">
                 <button onclick="openUpdateTaskForm()">Update</button>
-                <button onclick="taskHandler.deleteTask(${taskData.taskID}, '${taskData.taskType}')">Delete</button>
-                <button onclick="taskHandler.openCreateTaskForm('${taskData.taskType}', ${taskData.taskID}, 'false')">Create Subtask</button>
-                <button onclick="taskHandler.assignTask(${taskData.taskID})">Assign Task</button>
-                <button onclick="taskHandler.resolveTask(${taskData.taskID})">Resolve</button>
+                <button onclick="taskHandler.deleteTask(${taskID}, '${type}')">Delete</button>
+                <button onclick="taskHandler.openCreateTaskForm('subtask', ${taskID}, 'false')">Create Subtask</button>
+                <button onclick="taskHandler.assignTask(${taskID})">Assign Task</button>
+                ${(status == 'open')
+                ? `<button onclick="taskHandler.resolveTask(${taskID})">Resolve</button>`
+                : `<button onclick="taskHandler.setTaskToOpen(${taskID})">Back to Open</button>`}
             </div>`
-        __detailsModuleHTML = `
+    },
+    printDetailsModule: function (status, priority, type) {
+        return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
                     <button
@@ -94,7 +94,7 @@ let taskdetailsHandler = {
                             <tr>
                                 <td>Status:</td>
                                 <td>
-                                    ${(taskData.taskStatus == 'open') 
+                                    ${(status == 'open') 
                                     ? `<div class="status status__open">OPEN</div>` 
                                     : `<div class="status status__resolved">RESOLVED</div>`}
                                 </td>
@@ -103,18 +103,20 @@ let taskdetailsHandler = {
                                 <td>Priority:</td>
                                 <td>
                                     <select name="priority" id="taskprio">
-                                        <option ${(taskData.taskPriority == 1) ? `selected="selected"` : ``} value="1">Low</option>
-                                        <option ${(taskData.taskPriority == 2) ? `selected="selected"` : ``} value="2">Normal</option>
-                                        <option ${(taskData.taskPriority == 3) ? `selected="selected"` : ``} value="3">High</option>
+                                        <option ${(priority == 1) ? `selected="selected"` : ``} value="1">Low</option>
+                                        <option ${(priority == 2) ? `selected="selected"` : ``} value="2">Normal</option>
+                                        <option ${(priority == 3) ? `selected="selected"` : ``} value="3">High</option>
                                     </select>
                                 </td>
                             </tr>
-                            ${(taskData.taskType == 'task') ? `<tr><td>Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
+                            ${(type == 'task') ? `<tr><td>Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
                         </table>
                     </div>
                 </div>
             </div>`
-        __descriptionModuleHTML = `
+    },
+    printDescriptionModule: function (description) {
+        return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
                     <button
@@ -129,11 +131,13 @@ let taskdetailsHandler = {
                 <div class="taskdetails__module__right">
                     <div class="header__title">Description</div>
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_description">
-                        ${taskData.taskDescription}
+                        ${description}
                     </div>
                 </div>
             </div>`
-        __subtasksModuleHTML = `
+    },
+    printSubtasksModule: function (subtasks) {
+        return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
                     <button
@@ -148,11 +152,13 @@ let taskdetailsHandler = {
                 <div class="taskdetails__module__right">
                     <div class="header__title">Subtasks</div>
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_subtasks">
-                        ${this.printSubtasks(taskData.subtasks)}
+                        ${this.printSubtasks(subtasks)}
                     </div>
                 </div>
             </div>`
-        __activityModuleHTML = `
+    },
+    printActivityModule: function (activity) {
+        return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
                     <button
@@ -173,15 +179,13 @@ let taskdetailsHandler = {
                             <p class="activity__item"id="activity_history">History</p>
                         </div>
                         <hr>
-                        ${this.printActivityComments(taskData.activity)}
+                        ${this.printActivityComments(activity)}
                     </div>
                 </div>
             </div>`
-        _bigModulesHTML = `
-            <div class="taskdetails__big__modules">
-                ${__detailsModuleHTML}${__descriptionModuleHTML}${__subtasksModuleHTML}${__activityModuleHTML}
-            </div>`
-        __peopleModuleHTML = `
+    },
+    printPeopleModule: function (assignee, reporter) {
+        return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
                     <button
@@ -199,17 +203,19 @@ let taskdetailsHandler = {
                         <table class="taskdetails__datatable">
                             <tr>
                                 <td>Assignee:</td>
-                                <td>${taskData.assignee}</td>
+                                <td>${assignee}</td>
                             </tr>
                             <tr>
                                 <td>Reporter:</td>
-                                <td>${taskData.reporter}</td>
+                                <td>${reporter}</td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>`
-        __datesModuleHTML = `
+    },
+    printDatesModule: function (status, dates) {
+        return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
                 <button
@@ -227,17 +233,40 @@ let taskdetailsHandler = {
                         <table class="taskdetails__datatable">
                             <tr>
                                 <td>Created:</td>
-                                <td>${taskData.dateCreatedFormatted}</td>
+                                <td>${dates.dateCreatedFormatted}</td>
                             </tr>
                             <tr>
                                 <td>Updated:</td>
-                                <td>${taskData.dateUpdatedFormatted}</td>
+                                <td>${dates.dateUpdatedFormatted}</td>
                             </tr>
+                            ${(status == 'resolved')
+                            ? `<tr><td>Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
+                            : ``}
                         </table>
                     </div>
                 </div>
                 </div>
             </div>`
+    },
+    printTaskdetails: async function () {
+        const taskData = await this.getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
+        _parentsListHTML = ``
+        taskData.parents.forEach(item => {
+            if (item.type == 'group') _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=groupDetails&id=${item.id}">${item.name}</a></li>`
+            else _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=taskDetails&id=${item.id}">ID-${item.id}</a></li>`
+        });
+        headerHTML = this.printHeader(_parentsListHTML, taskData.taskTitle)
+        buttonsHTML = this.printButtons(taskData.taskID, taskData.taskType, taskData.taskStatus)
+        __detailsModuleHTML = this.printDetailsModule(taskData.taskStatus, taskData.taskPriority, taskData.taskType)
+        __descriptionModuleHTML = this.printDescriptionModule(taskData.descriptionWithMakros)
+        __subtasksModuleHTML = this.printSubtasksModule(taskData.subtasks)
+        __activityModuleHTML = this.printActivityModule(taskData.activity)
+        _bigModulesHTML = `
+            <div class="taskdetails__big__modules">
+                ${__detailsModuleHTML}${__descriptionModuleHTML}${__subtasksModuleHTML}${__activityModuleHTML}
+            </div>`
+        __peopleModuleHTML = this.printPeopleModule(taskData.assignee, taskData.reporter)
+        __datesModuleHTML = this.printDatesModule(taskData.taskStatus, taskData.datesFormatted)
         _smallModulesHTML = `
             <div class="taskdetails__small__modules">
                 ${__peopleModuleHTML}${__datesModuleHTML}

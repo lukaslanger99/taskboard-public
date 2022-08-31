@@ -224,11 +224,6 @@ switch ($_GET['action']) {
         echo json_encode($rh->createTask($userID, $_POST['type'], $_POST['parentID'], $_POST['tasktitle'], $_POST['taskdescription'], $_POST['taskprio']));
         break;
 
-    case 'getSubtasks':
-        header('Content-Type: application/json');
-        echo json_encode($rh->getSubtasks($userID, $_POST['parentID']));
-        break;
-
     case 'setTaskToOpen':
         header('Content-Type: application/json');
         echo json_encode($rh->setTaskToOpen($userID, $_POST['taskID']));
