@@ -77,6 +77,10 @@ if ($inviteCounter > 0) {
                     </div>
                 </a>
                 <hr class="solid">
+                <div class="dropdown_button" onclick="openFeedbackForm()">
+                    <p><i class="fa fa-bug"></i></p>
+                    <p>Report a Bug | Feedback</p>
+                </div>
                 <a href="<?php echo DIR_SYSTEM ?>php/profile.php">
                     <div class="dropdown_button">
                         <p><i class="fa fa-cog"></i></p>

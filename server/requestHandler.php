@@ -691,6 +691,11 @@ class RequestHandler
         return "OK";
     }
 
+    public function createFeedback($userID, $description) {
+        $title = $this->getUsernameByID($userID) . " - " . $this->getCurrentTimestamp();
+        return $this->createTask($userID, 'task', 67, $title, $description, 1);
+    }
+
     private function getPriorityColor($priority)
     {
         $colors = ['green', '#ffcc00', 'red'];

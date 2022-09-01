@@ -111,6 +111,27 @@ const openUpdateTaskForm = async () => {
   closeDynamicFormListener();
 }
 
+function openFeedbackForm() {
+  var html = `
+    ${addHeaderDynamicForm('Update Task')}
+    <textarea class="input-login" type="text" name="description" id="feedbackDescription" cols="40" rows="5"></textarea>
+    <button class="button" onclick="createFeedback()">Update</button>`
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
+  closeDynamicFormListener();
+}
+
+async function createFeedback() {
+  const description = document.getElementById('feedbackDescription').value
+  if (!description) return
+  var url = `${DIR_SYSTEM}server/request.php?action=createFeedback`
+  var formData = new FormData()
+  formData.append('description', description)
+  const response = await fetch(
+    url, { method: 'POST', body: formData }
+  )
+  await response.json()
+}
+
 function addHeaderDynamicForm(title) {
   return '\
   <div class="modal-header">\
