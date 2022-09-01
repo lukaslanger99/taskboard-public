@@ -11,8 +11,8 @@ function fillSuccessMap() {
         "deletemessage": "Successfully deleted message !",
         "deletetask": "Successfully deleted task !",
         "deletesubtask": "Successfully deleted subtask !",
-        "closedtask": "Successfully closed task !",
-        "closedsubtask": "Successfully closed subtask !",
+        "resolvedtask": "Successfully resolved task !",
+        "resolvedsubtask": "Successfully resolved subtask !",
         "groupcreated": "Successfully created group !",
         "invited": "Successfully send invite !",
         "joinedgroup": "Successfully joined group !",
@@ -59,6 +59,7 @@ function fillErrorMap() {
     var mapData = {
         "emptyfield": "Empty Fields !",
         "emptyfields": "Empty Fields !",
+        "groupnametaken": "Groupname already taken !",
         "highnumber": "Failed, number was to high !",
         "invalidInput": "Invalid Input !",
         "invalidurl": "Invalid Url !",
@@ -66,7 +67,7 @@ function fillErrorMap() {
         "mailtaken": "Mail already taken !",
         "nouserfound": "No user found !",
         "pwnotequal": "Passwords are not equal !",
-        "unclosedsubtasks": "Unclosed subtasks !",
+        "unresolvedsubtasks": "Unresolved subtasks !",
         "unverifiedmail": "Verify your mail before creating new groups !",
         "wrongmail": "Wrong mail !"
     };

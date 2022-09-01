@@ -1,37 +1,9 @@
-const DIR_SYSTEM = 'http://lukaslanger.bplaced.net/taskboard/';
-
-function deleteTask(id) {
-  var b = confirm("Are you sure you want to delete Task id:" + id + "?");
-  if (b == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteTask&id=" + id;
-  }
-}
-
-function deleteComment(id, taskId) {
-  var r = confirm("Are you sure you want to delete this Comment?");
-  if (r == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteComment&id=" + id + "&taskId=" + taskId;
-  }
-}
-
-function deleteGroup(groupID) {
-  var a = confirm("Are you sure you want to delete this group?");
-  if (a == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteGroup&id=" + groupID;
-  }
-}
+const DIR_SYSTEM = 'http://lukaslanger.bplaced.net/taskboard/'
 
 function leaveGroup(groupID) {
   var a = confirm("Are you sure you want to leave this group?");
   if (a == true) {
     location.href = DIR_SYSTEM + "php/action.php?action=leaveGroup&groupID=" + groupID;
-  }
-}
-
-function deleteMessage(id) {
-  var r = confirm("Are you sure you want to delete this Message?");
-  if (r == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=deleteMessage&id=" + id;
   }
 }
 
@@ -225,4 +197,23 @@ async function groupUnfoldCheckboxListener(groupID) {
       )
       return await response.json()
     })
+}
+
+var runnedOnce = false
+function executeScriptElements(containerElement) {
+  if (runnedOnce) return
+  const scriptElements = containerElement.querySelectorAll("script")
+
+  Array.from(scriptElements).forEach((scriptElement) => {
+    const clonedElement = document.createElement("script")
+
+    Array.from(scriptElement.attributes).forEach((attribute) => {
+      clonedElement.setAttribute(attribute.name, attribute.value)
+    })
+    
+    clonedElement.text = scriptElement.text
+
+    scriptElement.parentNode.replaceChild(clonedElement, scriptElement)
+  })
+  runnedOnce = true
 }

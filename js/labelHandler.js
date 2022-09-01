@@ -172,11 +172,12 @@ let labelHandler = {
         labelHTML += `<div class="label" style="background-color: ${label.labelColor};">${label.labelName}</div>`
       });
     }
-    labelHTML += `<i 
-    class="fa fa-edit" 
-    aria-hidden="true" 
-    onclick="labelHandler.editTaskLabels(${groupID}, ${taskID})"
-    ></i>`
+    labelHTML += `
+      <i 
+        class="fa fa-edit" 
+        aria-hidden="true" 
+        onclick="labelHandler.editTaskLabels(${groupID}, ${taskID})"
+      ></i>`
     document.getElementById('tasklabel-list').innerHTML = `<div class="display-flex">${labelHTML}</div>`
   }
 }

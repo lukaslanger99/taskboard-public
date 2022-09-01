@@ -8,6 +8,7 @@
 
 .weather__city {
   margin-top: 5px;
+  font-size: medium;
 }
 
 .weather__forecast {

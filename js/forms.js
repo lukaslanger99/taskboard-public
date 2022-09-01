@@ -80,14 +80,11 @@ function printGroupForm() {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {
     toggleDropdown('dropdown_create_content');
-    var html = '\
-      '+ addHeaderDynamicForm('Create Group') + '\
-      <form action="'+ DIR_SYSTEM + 'php/action.php?action=createGroup" autocomplete="off" method="post" >\
-          <input class="input-login" placeholder="name" type="text" name="name"/>\
-          <input class="submit-login" type="submit" name="creategroup-submit" value="Create" />\
-      </form>';
-    showDynamicForm(container, html);
-    closeDynamicFormListener();
+    var html = `${addHeaderDynamicForm('Create Group')}
+      <input class="input-login" placeholder="name" type="text" name="name" id="createGroup_groupName"/>
+      <button class="button" onclick="groupHandler.createGroup()">Create</button>`
+    showDynamicForm(container, html)
+    closeDynamicFormListener()
   }
 }
 

@@ -1,7 +1,7 @@
 * {
   margin: 0;
   font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
-  font-size: medium;
+  /* font-size: medium; */
 }
 
 a {
@@ -720,6 +720,157 @@ hr.solid {
 .group-content__subtask {
   display: flex;
   flex-direction: column;
+}
+
+/* Style the list */
+ul.breadcrumb {
+  padding: 0 16px;
+  list-style: none;
+  /* background-color: #eee; */
+}
+
+/* Display list items side by side */
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+ul.breadcrumb li+li:before {
+  padding: 8px;
+  color: black;
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+.taskdetails__title {
+  padding: 0 16px;
+}
+
+.taskdetails__buttons {
+  padding: 10px 16px;
+}
+
+.taskdetails__modules {
+  display: flex;
+}
+
+.taskdetails__big__modules {
+  width: 70%;
+}
+
+.taskdetails__small__modules {
+  width: 30%;
+}
+
+.taskdetails__module {
+  padding: 30px 16px;
+  display: flex;
+  justify-content: stretch;
+}
+
+.taskdetails__module__right {
+  flex-grow: 1;
+}
+
+.header__title {
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.taskdetails__module__content {
+  padding: 10px;
+  display: block;
+}
+
+.taskdetails__subtask {
+  display: flex;
+}
+
+.taskdetails__subtask:hover {
+  display: flex;
+  background-color: #f2f2f2;
+}
+
+.taskdetails__subtask a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+.taskdetails__subtask a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+.taskdetails__subtask__title {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 75%;
+}
+
+.taskdetails__datatable {
+  width: 100%;
+}
+
+.taskdetails__datatable td {
+  align-items: left;
+}
+
+.status {
+  border-radius: 5px;
+  padding: 0 5px 2px 5px;
+  height: 20px;
+  margin: auto 0;
+  width: fit-content;
+}
+
+.status__open {
+  background-color: lightgray;
+}
+
+.status__resolved {
+  background-color: green;
+}
+
+.activity__header {
+  display: flex;
+}
+
+.activity__item:hover {
+  color: #0052cc;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.activity__active {
+  color: #0052cc;
+  border-bottom: #0747a6 solid 3px;
+  margin-bottom: 0;
+}
+
+.comment__content {
+  padding: 0 5px;
+  margin-top: 5px;
+}
+
+code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: #6e768166;
+  border-radius: 6px;
 }
 
 @media (max-width: 768px) {

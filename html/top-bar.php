@@ -2,12 +2,12 @@
 require('head.php');
 $userID = $_SESSION['userID'];
 if ($taskBoard->getNightmodeEnabled($userID)) {
-    $nightModeState = 'checked';
+    $nightModeStatus = 'checked';
 } else {
-    $nightModeState = '';
+    $nightModeStatus = '';
 }
-$userVerificationState = $taskBoard->getUserVerificationState($userID);
-if ($userVerificationState) {
+$userVerificationStatus = $taskBoard->getUserVerificationStatus($userID);
+if ($userVerificationStatus) {
     $notificationCounter = 0;
 } else {
     $notificationCounter = 1;
@@ -87,7 +87,7 @@ if ($inviteCounter > 0) {
                     <p><i class="fa fa-moon"></i></p>
                     <p>Nightmode</p>
                     <label class="switch">
-                        <input id="nightmode-checkbox" type="checkbox" <?php echo $nightModeState ?>>
+                        <input id="nightmode-checkbox" type="checkbox" <?php echo $nightModeStatus ?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
