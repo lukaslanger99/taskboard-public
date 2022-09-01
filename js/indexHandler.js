@@ -18,6 +18,7 @@ let indexHandler = {
                 </div>`
         }
         document.getElementById("group__boxes").innerHTML = html
+        executeScriptElements(document.getElementsByTagName("body")[0])
     },
     printGroup: function (group) {
         if (!group.unarchivedTasks) return ``
@@ -61,7 +62,7 @@ let indexHandler = {
         html += `</div>
             </div>`
         if (group.unfolded) {
-            html += `<script>toggleUnfoldArea(\'${groupContentID}\',\'${groupUnfoldButtonID}\', \'true\')</script>`
+            html += `<script>toggleUnfoldArea('${groupContentID}','${groupUnfoldButtonID}', 'true')</script>`
         }
         return html
     },

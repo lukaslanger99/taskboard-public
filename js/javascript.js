@@ -198,3 +198,22 @@ async function groupUnfoldCheckboxListener(groupID) {
       return await response.json()
     })
 }
+
+var runnedOnce = false
+function executeScriptElements(containerElement) {
+  if (runnedOnce) return
+  const scriptElements = containerElement.querySelectorAll("script")
+
+  Array.from(scriptElements).forEach((scriptElement) => {
+    const clonedElement = document.createElement("script")
+
+    Array.from(scriptElement.attributes).forEach((attribute) => {
+      clonedElement.setAttribute(attribute.name, attribute.value)
+    })
+    
+    clonedElement.text = scriptElement.text
+
+    scriptElement.parentNode.replaceChild(clonedElement, scriptElement)
+  })
+  runnedOnce = true
+}
