@@ -9,7 +9,7 @@ let taskHandler = {
                   <div class="select">
                     <select name="priority" id="taskprio">
                       <option value="1">Low</option>
-                      <option selected="selected" value="2">Normal</option>
+                      <option value="2" selected>Normal</option>
                       <option value="3">High</option>
                     </select>
                   </div>
@@ -45,7 +45,6 @@ let taskHandler = {
         var tasktitle = document.getElementById("tasktitle").value
         var taskdescription = document.getElementById("taskdescription").value
         var createAnother = document.getElementById("createAnother").checked
-
         if (taskprio && tasktitle && taskdescription) {
             var url = `${DIR_SYSTEM}server/request.php?action=createTask`
             var formData = new FormData()

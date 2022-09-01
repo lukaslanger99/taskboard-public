@@ -77,7 +77,7 @@ if ($inviteCounter > 0) {
                     </div>
                 </a>
                 <hr class="solid">
-                <div class="dropdown_button" onclick="openFeedbackForm()">
+                <div class="dropdown_create_button" onclick="openFeedbackForm()">
                     <p><i class="fa fa-bug"></i></p>
                     <p>Report a Bug | Feedback</p>
                 </div>

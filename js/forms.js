@@ -112,12 +112,13 @@ const openUpdateTaskForm = async () => {
 }
 
 function openFeedbackForm() {
+  toggleDropdown('dropdown_content')
   var html = `
     ${addHeaderDynamicForm('Update Task')}
     <textarea class="input-login" type="text" name="description" id="feedbackDescription" cols="40" rows="5"></textarea>
     <button class="button" onclick="createFeedback()">Update</button>`
-  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-  closeDynamicFormListener();
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+  closeDynamicFormListener()
 }
 
 async function createFeedback() {
@@ -128,8 +129,11 @@ async function createFeedback() {
   formData.append('description', description)
   const response = await fetch(
     url, { method: 'POST', body: formData }
-  )
-  await response.json()
+    )
+  const responseCode = await response.json()
+  if (responseCode != "OK") return
+  closeDynamicForm()
+  indexHandler.printIndexGroups()
 }
 
 function addHeaderDynamicForm(title) {

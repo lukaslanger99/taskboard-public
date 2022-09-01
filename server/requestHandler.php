@@ -194,15 +194,25 @@ class RequestHandler
     {
         if ($copyLast == 'true') {
             $lastTimetableID  = $this->mysqliSelectFetchObject(
-                "SELECT MAX(timetableID) as max_number FROM timetables WHERE timetableUserID = ?", $userID);
+                "SELECT MAX(timetableID) as max_number FROM timetables WHERE timetableUserID = ?",
+                $userID
+            );
         }
         $year = date("Y");
         $week = date("W");
         if ($type == 'next') $week = ($week + 1) % 52;
         $this->mysqliQueryPrepared(
-            "INSERT INTO timetables (timetableUserID, timetableWeek, timetableYear) VALUES (?, ?, ?)", $userID, $week, $year);
+            "INSERT INTO timetables (timetableUserID, timetableWeek, timetableYear) VALUES (?, ?, ?)",
+            $userID,
+            $week,
+            $year
+        );
         $timetable = $this->mysqliSelectFetchObject(
-            "SELECT * FROM timetables WHERE timetableUserID = ? AND timetableWeek = ? AND timetableYear = ?", $userID, $week, $year);
+            "SELECT * FROM timetables WHERE timetableUserID = ? AND timetableWeek = ? AND timetableYear = ?",
+            $userID,
+            $week,
+            $year
+        );
 
         if ($lastTimetableID) {
             $entrys = $this->mysqliSelectFetchArray("SELECT * FROM timetableentrys WHERE timetableID = ?", $lastTimetableID->max_number);
@@ -336,7 +346,9 @@ class RequestHandler
     {
         if ($text) {
             $taskCount = $this->mysqliSelectFetchObject(
-                "SELECT COUNT(*) as number FROM morningroutine WHERE entryUserID = ?", $userID);
+                "SELECT COUNT(*) as number FROM morningroutine WHERE entryUserID = ?",
+                $userID
+            );
             $taskCount = $taskCount->number;
             $tasks = explode(",", $text);
             foreach ($tasks as $taskTitle) {
@@ -415,8 +427,7 @@ class RequestHandler
                 $appointment->messageOwnerName = $this->getUsernameByID($appointment->messageOwner);
                 $appointment->messageGroupName = $this->getGroupNameByID($appointment->messageGroup);
                 $appointment->messageTitleFormated = $this->addTagsToUrlsInString($appointment->messageTitle);
-                $appointment->messagePermission = (
-                    $userID == $appointment->messageOwner || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
+                $appointment->messagePermission = ($userID == $appointment->messageOwner || $this->groupOwnerCheck($appointment->messageGroup, $userID) || $userID == 1);
                 $appointment->timeStart = $appointment->messageStart;
                 $appointment->timeEnd = $appointment->messageEnd;
                 if ($dateCheck == $monthKey) $appointmentlist[] = $appointment;
@@ -471,8 +482,7 @@ class RequestHandler
                 $motd->messageOwnerName = $this->getUsernameByID($motd->messageOwner);
                 $motd->messageGroupName = $this->getGroupNameByID($motd->messageGroup);
                 $motd->messageTitleFormated = $this->addTagsToUrlsInString($motd->messageTitle);
-                $motd->messagePermission = (
-                    $userID == $motd->messageOwner || $this->groupOwnerCheck($motd->messageGroup, $userID) || $userID == 1);
+                $motd->messagePermission = ($userID == $motd->messageOwner || $this->groupOwnerCheck($motd->messageGroup, $userID) || $userID == 1);
             }
             return $data;
         }
@@ -482,7 +492,9 @@ class RequestHandler
     public function editMotd($userID, $messageID, $title)
     {
         $message = $this->mysqliSelectFetchObject(
-            "SELECT messageOwner, messageGroup FROM messages WHERE messageID = ?",  $messageID);
+            "SELECT messageOwner, messageGroup FROM messages WHERE messageID = ?",
+            $messageID
+        );
         if ($message->messageOwner == $userID || $this->groupOwnerCheck($message->messageGroup, $userID)) {
             $sql = "UPDATE messages SET messageTitle = ? WHERE messageID = ?;";
             $this->mysqliQueryPrepared($sql, $title, $messageID);
@@ -610,7 +622,8 @@ class RequestHandler
 
     private function checkGroupPermission($userID, $groupID)
     {
-        return ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) ? 1 : 0;
+        $groupAccess =  $this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID);
+        return ($userID == 1 || $groupAccess) ? true : false;
     }
 
     private function getUserLastMotd($userID)
@@ -680,20 +693,32 @@ class RequestHandler
         return "OK";
     }
 
-    public function createTask($userID, $type, $parentID, $title, $description, $prio)
+    public function createTask($userID, $type, $parentID, $title, $description, $prio, $reporter = 0)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return "NO_ACCESS";
+        if ($type == 'task' && !$this->checkGroupPermission($userID, $parentID)) return "NO_ACCESS";
+        if ($type == 'subtask' && !$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return "NO_ACCESS";
         $sql = "INSERT INTO tasks 
             (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskStatus, taskReporter, taskDateCreated) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->mysqliQueryPrepared(
-            $sql, $type, $parentID, $prio, $this->getPriorityColor($prio), $title, $description, 'open', $userID, date('Y-m-d H:i'));
+            $sql,
+            $type,
+            $parentID,
+            $prio,
+            $this->getPriorityColor($prio),
+            $title,
+            $description,
+            'open',
+            (!$reporter) ? $userID : $reporter,
+            date('Y-m-d H:i')
+        );
         return "OK";
     }
 
-    public function createFeedback($userID, $description) {
+    public function createFeedback($userID, $description)
+    {
         $title = $this->getUsernameByID($userID) . " - " . $this->getCurrentTimestamp();
-        return $this->createTask($userID, 'task', 67, $title, $description, 1);
+        return $this->createTask(1, 'task', 67, $title, $description, 1, $userID);
     }
 
     private function getPriorityColor($priority)
@@ -705,7 +730,11 @@ class RequestHandler
     private function getSubtasks($userID, $parentID)
     {
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return "NO_ACCESS";
-        if ($subtasks = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ?", 'subtask', $parentID)) {
+        if ($subtasks = $this->mysqliSelectFetchArray(
+            "SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ? ORDER BY taskStatus, taskPriority DESC, taskID",
+            'subtask',
+            $parentID
+        )) {
             foreach ($subtasks as $task) {
                 if ($subtaskCount = $this->getNumberOfSubtasks($task->taskID)) $task->subtaskCount = $subtaskCount;
                 if ($task->taskAssignee) $task->assigneeNameShort = $this->getUserNameShort($task->taskAssignee);
@@ -831,13 +860,22 @@ class RequestHandler
         if ($this->getMailStatus($userID) == 'unverified') return "unverifiedmail";
         if ($this->getNumberOfOwnedGroups($userID) > 9 && $this->getUserType($userID) == 'normal') return "maxgroups";
         if ($this->mysqliSelectFetchObject(
-            "SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", $groupName, $userID)) return "groupnametaken";
+            "SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?",
+            $groupName,
+            $userID
+        )) return "groupnametaken";
         $sql = "INSERT INTO groups (groupName, groupOwner) VALUES (?, ?);";
         $this->mysqliQueryPrepared($sql, $groupName, $userID);
         $group = $this->mysqliSelectFetchObject(
-            "SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", $groupName, $userID);
+            "SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?",
+            $groupName,
+            $userID
+        );
         $this->mysqliQueryPrepared(
-            "INSERT INTO groupaccess (groupID, userID) VALUES ( ?, ?)", $group->groupID, $group->groupOwner);
+            "INSERT INTO groupaccess (groupID, userID) VALUES ( ?, ?)",
+            $group->groupID,
+            $group->groupOwner
+        );
         return "OK";
     }
 
@@ -886,7 +924,9 @@ class RequestHandler
         if ($status == 'enabled') {
             $this->mysqliQueryPrepared(
                 "INSERT INTO tokens (tokenType, tokenGroupID, tokenToken) VALUES ('groupinvite', ?, ?)",
-                $groupID, $this->generateRandomString());
+                $groupID,
+                $this->generateRandomString()
+            );
         } else if ($status == 'disabled') {
             $this->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = ?", $groupID, "groupinvite");
         }

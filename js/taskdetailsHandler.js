@@ -75,6 +75,7 @@ let taskdetailsHandler = {
             </div>`
     },
     printDetailsModule: function (status, priority, type) {
+        const priorities = ['Low', 'Normal', 'High']
         return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
@@ -101,13 +102,7 @@ let taskdetailsHandler = {
                             </tr>
                             <tr>
                                 <td>Priority:</td>
-                                <td>
-                                    <select name="priority" id="taskprio">
-                                        <option ${(priority == 1) ? `selected="selected"` : ``} value="1">Low</option>
-                                        <option ${(priority == 2) ? `selected="selected"` : ``} value="2">Normal</option>
-                                        <option ${(priority == 3) ? `selected="selected"` : ``} value="3">High</option>
-                                    </select>
-                                </td>
+                                <td>${priorities[priority-1]}</td>
                             </tr>
                             ${(type == 'task') ? `<tr><td>Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
                         </table>
