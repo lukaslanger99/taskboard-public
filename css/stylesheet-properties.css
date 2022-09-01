@@ -189,6 +189,8 @@ th {
 .bottom {
   padding: 5px;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .label {
