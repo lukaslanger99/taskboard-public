@@ -93,7 +93,7 @@ let taskdetailsHandler = {
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_details">
                         <table class="taskdetails__datatable">
                             <tr>
-                                <td>Status:</td>
+                                <td class="letf__td">Status:</td>
                                 <td>
                                     ${(status == 'open') 
                                     ? `<div class="status status__open">OPEN</div>` 
@@ -101,10 +101,10 @@ let taskdetailsHandler = {
                                 </td>
                             </tr>
                             <tr>
-                                <td>Priority:</td>
+                                <td class="letf__td">Priority:</td>
                                 <td>${priorities[priority-1]}</td>
                             </tr>
-                            ${(type == 'task') ? `<tr><td>Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
+                            ${(type == 'task') ? `<tr><td class="letf__td">Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
                         </table>
                     </div>
                 </div>
@@ -197,11 +197,11 @@ let taskdetailsHandler = {
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_people">
                         <table class="taskdetails__datatable">
                             <tr>
-                                <td>Assignee:</td>
+                                <td class="letf__td">Assignee:</td>
                                 <td>${assignee}</td>
                             </tr>
                             <tr>
-                                <td>Reporter:</td>
+                                <td class="letf__td">Reporter:</td>
                                 <td>${reporter}</td>
                             </tr>
                         </table>
@@ -227,15 +227,15 @@ let taskdetailsHandler = {
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_dates">
                         <table class="taskdetails__datatable">
                             <tr>
-                                <td>Created:</td>
+                                <td class="letf__td">Created:</td>
                                 <td>${dates.dateCreatedFormatted}</td>
                             </tr>
                             <tr>
-                                <td>Updated:</td>
+                                <td class="letf__td">Updated:</td>
                                 <td>${dates.dateUpdatedFormatted}</td>
                             </tr>
                             ${(status == 'resolved')
-                            ? `<tr><td>Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
+                            ? `<tr><td class="letf__td">Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
                             : ``}
                         </table>
                     </div>

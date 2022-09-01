@@ -823,7 +823,12 @@ ul.breadcrumb li a:hover {
 }
 
 .taskdetails__datatable {
-  width: 100%;
+  max-width:100%;
+  white-space:nowrap;
+}
+
+.letf__td{
+  padding-right: 100px;
 }
 
 #tasklabel-list {
@@ -933,5 +938,10 @@ code {
 
   .modal-content {
     margin-top: 50px;
+  }
+
+  .taskdetails__modules {
+    display: flex;
+    flex-direction: column;
   }
 }
