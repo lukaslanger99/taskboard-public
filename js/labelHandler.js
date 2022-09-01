@@ -173,11 +173,13 @@ let labelHandler = {
       });
     }
     labelHTML += `
-      <i 
-        class="fa fa-edit" 
-        aria-hidden="true" 
-        onclick="labelHandler.editTaskLabels(${groupID}, ${taskID})"
-      ></i>`
-    document.getElementById('tasklabel-list').innerHTML = `<div class="display-flex">${labelHTML}</div>`
+      <div>
+        <i 
+          class="fa fa-edit" 
+          aria-hidden="true" 
+          onclick="labelHandler.editTaskLabels(${groupID}, ${taskID})"
+        ></i>
+      </div>`
+    document.getElementById('tasklabel-list').innerHTML = labelHTML
   }
 }

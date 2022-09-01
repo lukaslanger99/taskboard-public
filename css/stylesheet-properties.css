@@ -826,8 +826,8 @@ ul.breadcrumb li a:hover {
   width: 100%;
 }
 
-.taskdetails__datatable td {
-  align-items: left;
+#tasklabel-list {
+  display: flex;
 }
 
 .status {
