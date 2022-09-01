@@ -6,21 +6,24 @@ let indexHandler = {
         return await response.json()
     },
     printIndexGroups: async function () {
-        const container = document.getElementById("group__boxes").innerHTML
+        const container = document.getElementById("group__boxes")
         if (!container) return
         const groups = await this.getGroupsWithTasks()
         html = ''
         if (groups) {
             groups.forEach(group => {
                 html += this.printGroup(group)
-            });
+            })
         } else {
             html += `<div = class="emptypage-modal">
                     <div class="emptypage">Nothing to do, go create some tasks or groups and start working :-)</div>
                 </div>`
         }
-        container = html
-        executeScriptElements(document.getElementsByTagName("body")[0])
+        container.innerHTML = html
+        const unfoldedGroups = groups.filter((entry) => entry.unfolded == 'true')
+        unfoldedGroups.forEach(group => {
+            toggleUnfoldArea(`groupContent_${group.groupName}`, `groupUnfoldButton_${group.groupName}`, 'true')
+        })
     },
     printGroup: function (group) {
         if (!group.unarchivedTasks) return ``
