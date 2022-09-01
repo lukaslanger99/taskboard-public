@@ -95,9 +95,9 @@ class RequestHandler
         return $dateDiff >= $groupData->groupArchiveTime;
     }
 
-    private function moveToArchive($id)
+    private function moveToArchive($taskID)
     {
-        $this->mysqliQueryPrepared("UPDATE tasks SET taskStatus = 'archived' WHERE taskID = ?", $id);
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskStatus = 'archived' WHERE taskID = ?", $taskID);
     }
 
     private function getUsernameShortByUserID($userID)

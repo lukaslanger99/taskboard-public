@@ -6,6 +6,8 @@ let indexHandler = {
         return await response.json()
     },
     printIndexGroups: async function () {
+        const container = document.getElementById("group__boxes").innerHTML
+        if (!container) return
         const groups = await this.getGroupsWithTasks()
         html = ''
         if (groups) {
@@ -17,7 +19,7 @@ let indexHandler = {
                     <div class="emptypage">Nothing to do, go create some tasks or groups and start working :-)</div>
                 </div>`
         }
-        document.getElementById("group__boxes").innerHTML = html
+        container = html
         executeScriptElements(document.getElementsByTagName("body")[0])
     },
     printGroup: function (group) {
