@@ -1,11 +1,12 @@
 let weather = {
     apiKey: "37ccc843e660d552aeafe5b8a89a9632",
+    sendRequest: async function (url) {
+        const response = await fetch(url)
+        return await response.json()
+    },
     fetchWeather: async function (city) {
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`
-        )
-        const data = await response.json()
-        this.displayWeather(data)
+        const response = await this.sendRequest(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`)
+        this.displayWeather(response)
     },
     displayWeather: function (data) {
         const { name } = data
@@ -19,11 +20,8 @@ let weather = {
         document.querySelector(".weather__humidity").innerText = "Humidity: " + humidity + "%"
     },
     fetchForecast: async function (city) {
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${this.apiKey}`
-        )
-        const data = await response.json()
-        this.displayForecast(data)
+        const response = await this.sendRequest(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${this.apiKey}`)
+        this.displayForecast(response)
     },
     displayForecast: function (data) {
         const LOWEST = 0
@@ -57,16 +55,9 @@ let weather = {
     },
     updateWeatherCity: async function () {
         const city = document.getElementById("weatherPanelCity").value
-        if (city) {
-            var url = `${DIR_SYSTEM}server/request.php?action=updateWeatherCity`
-            var formData = new FormData()
-            formData.append('city', city)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            await response.json()
-            this.fetchWeather(city)
-            this.fetchForecast(city)
-        }
+        if (!city) return
+        await requestHandler.sendRequest('updateWeatherCity', ['city', city])
+        this.fetchWeather(city)
+        this.fetchForecast(city)
     }
 }

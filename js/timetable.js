@@ -55,26 +55,18 @@ let timetable = {
         showDynamicForm(document.getElementById("dynamic-modal-content"), html)
         closeDynamicFormListener()
     },
-    request: async function (url) {
-        const response = await fetch(
-            url
-        )
-        return await response.json()
-    },
     timetablePopup: async function (type) {
-        const data = await this.request(`${DIR_SYSTEM}server/request.php?action=getTimetable&type=${type}`)
-        this.fillPopup(data, type)
+        const response = await requestHandler.sendRequest('getTimetable', ['type', type])
+        this.fillPopup(response, type)
     },
     createTimetable: async function (type) {
-        const data = await this.request(`${DIR_SYSTEM}server/request.php?action=createTimetable&type=${type}&copycheck=${document.getElementById("copycheck").checked}`)
-        this.fillPopup(data, type)
+        const response = await requestHandler.sendRequest('createTimetable', ['type', type], ['copycheck', document.getElementById("copycheck").checked])
+        this.fillPopup(response, type)
     },
     deleteTimetable: async function (id, type) {
-        var a = confirm("Are you sure you want to delete this timetable?");
-        if (a == true) {
-            const data = await this.request(`${DIR_SYSTEM}server/request.php?action=deleteTimetable&id=${id}`)
-            this.fillPopup(data, type)
-        }
+        if (!confirm("Are you sure you want to delete this timetable?")) return
+        const response = await requestHandler.sendRequest('deleteTimetable', ['id', id])
+        this.fillPopup(response, type)
     },
     parentHTML: '',
     type: '',
@@ -127,27 +119,14 @@ let timetable = {
         var text = document.getElementById("text").value
         var start = document.getElementById("start").value
         var end = document.getElementById("end").value
-        if (text && start < end) {
-            var url = `${DIR_SYSTEM}server/request.php?action=addEntrys&id=${id}`
-            var formData = new FormData()
-            formData.append('id', id)
-            formData.append('text', text)
-            formData.append('start', start)
-            formData.append('end', end)
-            formData.append('mon', document.getElementById("mon").checked)
-            formData.append('tue', document.getElementById("tue").checked)
-            formData.append('wed', document.getElementById("wed").checked)
-            formData.append('thu', document.getElementById("thu").checked)
-            formData.append('fri', document.getElementById("fri").checked)
-            formData.append('sat', document.getElementById("sat").checked)
-            formData.append('sun', document.getElementById("sun").checked)
-            formData.append('monfri', document.getElementById("monfri").checked)
-            formData.append('monsun', document.getElementById("monsun").checked)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            this.fillPopup(await response.json(), this.type)
-        }
+        if (!(text && start < end)) return
+        const response = await requestHandler.sendRequest(
+            'addEntry', ['id', id], ['text', text], ['start', start], ['end', end], 
+            ['mon', document.getElementById("mon").checked], ['tue', document.getElementById("tue").checked], ['wed', document.getElementById("wed").checked], 
+            ['thu', document.getElementById("thu").checked], ['fri', document.getElementById("fri").checked], ['sat', document.getElementById("sat").checked], 
+            ['sun', document.getElementById("sun").checked], 
+            ['monfri', document.getElementById("monfri").checked], ['monsun', document.getElementById("monsun").checked])
+        this.fillPopup(response, this.type)
     },
     loadParentForm: function () {
         var container = document.getElementById("dynamic-modal-content");
@@ -170,10 +149,8 @@ let timetable = {
         return html
     },
     deleteEntry: async function (id) {
-        var a = confirm("Are you sure you want to delete this entry?");
-        if (a == true) {
-            const data = await this.request(`${DIR_SYSTEM}server/request.php?action=deleteEntry&id=${id}`)
-            this.fillPopup(data, this.type)
-        }
+        if (!confirm("Are you sure you want to delete this entry?")) return
+        const response = await requestHandler.sendRequest('deleteEntry', ['id', id])
+        this.fillPopup(response, this.type)
     }
 }

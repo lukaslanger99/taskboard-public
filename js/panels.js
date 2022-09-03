@@ -1,10 +1,7 @@
 let panels = {
-    getEntrys: async function (action) {
-        return await requestHandler.sendRequest(action, ['groupID', groupID], ['taskID', taskID])
-    },
     // Queue
     printQueueTasks: async function (queueTasks = '') {
-        if (queueTasks == '') queueTasks = await this.getEntrys('getQueueTasks')
+        if (queueTasks == '') queueTasks = await requestHandler.sendRequest('getQueueTasks')
         var html = '', toggle = false, title = ''
         if (queueTasks) {
             queueTasks.forEach(entry => {
@@ -26,10 +23,8 @@ let panels = {
         document.getElementById('queuePanelTitle').innerHTML = title
     },
     deleteQueueTask: async function (id) {
-        const response = await fetch(
-            `${DIR_SYSTEM}server/request.php?action=deleteQueueTask&id=${id}`
-        )
-        this.printQueueTasks(await response.json())
+        const response = await requestHandler.sendRequest('deleteQueueTask', ['id', id])
+        this.printQueueTasks(response)
     },
     addQueueTask: async function () {
         var text = document.getElementById("queueItem").value
@@ -41,7 +36,7 @@ let panels = {
     },
     // Morningroutine
     printMorningroutineTasks: async function (morningroutineTasks = '') {
-        if (morningroutineTasks == '') morningroutineTasks = await this.getEntrys('getUnfinishedMorningroutineTasks')
+        if (morningroutineTasks == '') morningroutineTasks = await requestHandler.sendRequest('getUnfinishedMorningroutineTasks')
         var html = '', toggle = false
         if (morningroutineTasks) {
             morningroutineTasks.forEach(entry => {
@@ -67,17 +62,15 @@ let panels = {
         this.printMorningroutineTasks(response)
     },
     completeMorningroutineTask: async function (id) {
-        const response = await fetch(
-            `${DIR_SYSTEM}server/request.php?action=completeMorningroutineTask&id=${id}`
-        )
-        this.printMorningroutineTasks(await response.json())
+        const response = await requestHandler.sendRequest('completeMorningroutineTask', ['id', id])
+        this.printMorningroutineTasks(response)
     },
     resetMorningroutine: async function () {
         const response = await requestHandler.sendRequest('resetMorningroutine')
         this.printMorningroutineTasks(response)
     },
     showMorningroutinePopup: async function () {
-        const morningroutineTasks = await this.getEntrys('getAllMorningroutineTasks')
+        const morningroutineTasks = await requestHandler.sendRequest('getAllMorningroutineTasks')
         var popupHTML = ``
         if (morningroutineTasks) {
             var flag = false
@@ -106,12 +99,12 @@ let panels = {
     },
     deleteMorningroutineTask: async function (entryID) {
         if (!confirm("Are you sure you want to delete this task?")) return
-        await this.getEntrys('deleteMorningroutineTask', ['entryID', entryID])
+        await requestHandler.sendRequest('deleteMorningroutineTask', ['entryID', entryID])
         this.showMorningroutinePopup()
     },
     // Appointment
     printAppointments: async function (appointments = '') {
-        if (appointments == '') appointments = await this.getEntrys('getAppointments')
+        if (appointments == '') appointments = await requestHandler.sendRequest('getAppointments')
         var html = '', toggle = false, title = ''
         if (appointments) {
             appointments.forEach(entry => {
@@ -189,7 +182,7 @@ let panels = {
             `
 
         if (month == -1 && year == -1) var currentDate = new Date(), month = currentDate.getMonth(), year = currentDate.getFullYear()
-        const appoinments = await this.getEntrys(`getAppointmentsFromMonth&month=${month + 1}&year=${year}`)
+        const appoinments = await requestHandler.sendRequest('getAppointmentsFromMonth', ['month', month + 1], ['year', year])
         var days = getDaysInMonth(month, year)
         var offsetFirstDay = days[0].getDay() - 1 // Sunday - Saturday : 0 - 6
         var boxcounter = offsetFirstDay
@@ -278,29 +271,18 @@ let panels = {
     editAppointment: async function (id) {
         var date = document.getElementById("appointmentDate").value
         var title = document.getElementById("appointmentTitle").value
-        if (date && title) {
-            var url = `${DIR_SYSTEM}server/request.php?action=editAppointment&id=${id}`
-            var formData = new FormData()
-            formData.append('date', date)
-            formData.append('title', title)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            hideDynamicForm()
-            this.printAppointments(await response.json())
-        }
+        if (!(date && title)) return
+        const response = await requestHandler.sendRequest('editAppointment', ['id', id], ['date', date], ['title', title])
+        hideDynamicForm()
+        this.printAppointments(response)
     },
     deleteAppointment: async function (id) {
-        var a = confirm("Are you sure you want to delete this appointment?");
-        if (a == true) {
-            const response = await fetch(
-                `${DIR_SYSTEM}server/request.php?action=deleteAppointment&id=${id}`
-            )
-            this.printAppointments(await response.json())
-        }
+        if (!confirm("Are you sure you want to delete this appointment?")) return
+        const response = await requestHandler.sendRequest('deleteAppointment', ['id', id])
+        this.printAppointments(response)
     },
     printMotd: async function (motd = '') {
-        if (motd == '') motd = await this.getEntrys('getMotd')
+        if (motd == '') motd = await requestHandler.sendRequest('getMotd')
         var html = '', toggle = false, title = ''
         if (motd) {
             motd.forEach(entry => {
@@ -364,35 +346,23 @@ let panels = {
     },
     editMotd: async function (id) {
         var title = document.getElementById("motdTitle").value
-        if (title) {
-            var url = `${DIR_SYSTEM}server/request.php?action=editMotd&id=${id}`
-            var formData = new FormData()
-            formData.append('title', title)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            hideDynamicForm()
-            this.printMotd(await response.json())
-        }
+        if (!title) return
+        const response = await requestHandler.sendRequest('editMotd', ['id', id])
+        hideDynamicForm()
+        this.printMotd(response)
     },
     deleteMotd: async function (id) {
-        var a = confirm("Are you sure you want to delete this motd?");
-        if (a == true) {
-            const response = await fetch(
-                `${DIR_SYSTEM}server/request.php?action=deleteMotd&id=${id}`
-            )
-            this.printMotd(await response.json())
-        }
+        if (!confirm("Are you sure you want to delete this motd?")) return
+        const response = await requestHandler.sendRequest('deleteMotd', ['id', id])
+        hideDynamicForm()
+        this.printMotd(response)
     },
     toggleUnfoldCheckboxListener: async function (id, type) {
         var checkboxElement = document.getElementById(id)
         if (checkboxElement) {
             checkboxElement.addEventListener("click",
                 async () => {
-                    const response = await fetch(
-                        `${DIR_SYSTEM}server/request.php?action=toggleUnfoldPanel&type=${type}&checked=${checkboxElement.checked}`
-                    )
-                    return await response.json()
+                    return await requestHandler.sendRequest('toggleUnfoldPanel', ['type', type], ['checked', checkboxElement.checked])
                 }
             )
         }
@@ -402,10 +372,7 @@ let panels = {
         if (checkboxElement) {
             checkboxElement.addEventListener("click",
                 async () => {
-                    const response = await fetch(
-                        `${DIR_SYSTEM}server/request.php?action=toggleActivePanel&type=${type}&checked=${checkboxElement.checked}`
-                    )
-                    return await response.json()
+                    return await requestHandler.sendRequest('toggleActivePanel', ['type', type], ['checked', checkboxElement.checked])
                 }
             )
         }

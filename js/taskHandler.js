@@ -45,89 +45,41 @@ let taskHandler = {
         var tasktitle = document.getElementById("tasktitle").value
         var taskdescription = document.getElementById("taskdescription").value
         var createAnother = document.getElementById("createAnother").checked
-        if (taskprio && tasktitle && taskdescription) {
-            var url = `${DIR_SYSTEM}server/request.php?action=createTask`
-            var formData = new FormData()
-            formData.append('type', type)
-            formData.append('taskprio', taskprio)
-            formData.append('parentID', parentID)
-            formData.append('tasktitle', tasktitle)
-            formData.append('taskdescription', taskdescription)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            await response.json()
-            if (createAnother) this.openCreateTaskForm(type, parentID, false)
-            else closeDynamicForm()
-            printSuccessToast('taskcreated')
-            if (type == 'task') indexHandler.printIndexGroups()
-            else taskdetailsHandler.printTaskdetails()
-        }
+        if (!(taskprio && tasktitle && taskdescription)) return
+        await requestHandler.sendRequest(
+            'createTask', ['type', type], ['taskprio', taskprio], ['parentID', parentID], ['tasktitle', tasktitle], ['taskdescription', taskdescription])
+        if (createAnother) this.openCreateTaskForm(type, parentID, false)
+        else closeDynamicForm()
+        printSuccessToast('taskcreated')
+        if (type == 'task') indexHandler.printIndexGroups()
+        else taskdetailsHandler.printTaskdetails()
     },
     setTaskToOpen: async function (taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=setTaskToOpen`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        await response.json()
+        await requestHandler.sendRequest('setTaskToOpen', ['taskID', taskID])
         taskdetailsHandler.printTaskdetails()
     },
     assignTask: async function (taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=assignTask`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        await response.json()
+        await requestHandler.sendRequest('assignTask', ['taskID', taskID])
         taskdetailsHandler.printTaskdetails()
     },
     resolveTask: async function (taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=resolveTask`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        const responseCode = await response.json()
-        if (responseCode != 'OK') return
+        const response = await requestHandler.sendRequest('resolveTask', ['taskID', taskID])
+        if (response.ResponseCode != 'OK') return
         taskdetailsHandler.printTaskdetails()
     },
     deleteTask: async function (taskID) {
         if (!confirm("Are you sure you want to delete Task id:" + taskID + "?")) return
-        var url = `${DIR_SYSTEM}server/request.php?action=deleteTask`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        const responseCode = await response.json()
-        if (responseCode.ResponseCode != 'OK') return
-        location.href = responseCode.location
+        const response = await requestHandler.sendRequest('deleteTask', ['taskID', taskID])
+        if (response.ResponseCode != 'OK') return
+        location.href = response.location
     },
     createComment: async function (taskID) {
         const description = document.getElementById('commentDescription')
-        if (description) {
-            var url = `${DIR_SYSTEM}server/request.php?action=createComment`
-            var formData = new FormData()
-            formData.append('taskID', taskID)
-            formData.append('description', description)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            await response.json()
-        }
+        if (!description) return
+        await requestHandler.sendRequest('createComment', ['taskID', taskID], ['description', description])
     },
     deleteComment: async function (commentID) {
         if (!confirm("Are you sure you want to delete this Comment?")) return
-        var url = `${DIR_SYSTEM}server/request.php?action=deleteComment`
-        var formData = new FormData()
-        formData.append('commentID', commentID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        await response.json()
+        await requestHandler.sendRequest('deleteComment', ['commentID', commentID])
     }
 }

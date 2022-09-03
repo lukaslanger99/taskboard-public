@@ -1,12 +1,6 @@
 let taskdetailsHandler = {
     getTaskData: async function(taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=getTaskDataTaskdetails`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        return await response.json()
+        return await requestHandler.sendRequest('getTaskDataTaskdetails', ['taskID', taskID])
     },
     getPriorityColor: function (priority) {
         const priorities = ['green', '#ffcc00', 'red']

@@ -158,9 +158,6 @@ async function groupUnfoldCheckboxListener(groupID) {
   var checkboxElement = document.getElementById('groupUnfoldCheckbox')
   checkboxElement.addEventListener('click',
     async () => {
-      const response = await fetch(
-        `${DIR_SYSTEM}server/request.php?action=toggleUnfoldGroup&id=${groupID}&checked=${checkboxElement.checked}`
-      )
-      return await response.json()
+      return await requestHandler.sendRequest('toggleUnfoldGroup', ['id', id], ['checked', checkboxElement.checked])
     })
 }
