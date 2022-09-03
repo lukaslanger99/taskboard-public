@@ -71,7 +71,7 @@ let taskHandler = {
         if (!confirm("Are you sure you want to delete Task id:" + taskID + "?")) return
         const response = await requestHandler.sendRequest('deleteTask', ['taskID', taskID])
         if (response.ResponseCode != 'OK') return
-        location.href = response.location
+        location.href = response.data
     },
     createComment: async function (taskID) {
         const description = document.getElementById('commentDescription')

@@ -11,7 +11,9 @@ if (!$_SESSION['userID']) {
 switch ($_GET['action']) {
     case 'getActiveGroups':
         header('Content-Type: application/json');
-        echo json_encode($rh->getActiveGroups($userID));
+        if ($groups = $rh->getActiveGroups($userID)) $result = ["ResponseCode" => "OK", "data" => $groups];
+        else $result = ["ResponseCode" => "NO_GROUPS"];
+        echo json_encode($result);
         break;
 
     case 'getActiveGroupsWithTasks':
@@ -44,69 +46,77 @@ switch ($_GET['action']) {
         if ($_POST['sat'] == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'sat'); // Saturday
         if ($_POST['sun'] == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'sun'); // Sunday
         header('Content-Type: application/json');
-        echo json_encode($rh->timetableToJSON($rh->getTimetableByID($userID, $id)));
+        if ($json = $rh->timetableToJSON($rh->getTimetableByID($userID, $id)) != "NO_TIMETABLE") $result = ["ResponseCode" => "OK", "data" => $json];
+        else $result = ["ResponseCode" => "NO_TIMETABLE"];
+        echo json_encode($result);
         break;
 
     case 'createTimetable':
         header('Content-Type: application/json');
         $rh->createTimetable($userID, $_POST['type'], $_POST['copycheck']);
-        echo json_encode($rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])));
+        if ($json = $rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])) != "NO_TIMETABLE") $result = ["ResponseCode" => "OK", "data" => $json];
+        else $result = ["ResponseCode" => "NO_TIMETABLE"];
+        echo json_encode($result);
         break;
 
     case 'deleteTimetable':
         $rh->deleteTimetable($userID, $_POST['id']);
         header('Content-Type: application/json');
-        echo json_encode(0);
+        echo json_encode(["ResponseCode" => "OK"]);
         break;
 
     case 'deleteEntry':
         header('Content-Type: application/json');
-        echo json_encode($rh->deleteEntry($userID, $_POST['id']));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->deleteEntry($userID, $_POST['id'])]);
         break;
 
     case 'getTimetable':
         header('Content-Type: application/json');
-        echo json_encode($rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])));
+        if ($json = $rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])) != "NO_TIMETABLE") $result = ["ResponseCode" => "OK", "data" => $json];
+        else $result = ["ResponseCode" => "NO_TIMETABLE"];
+        echo json_encode($result);
         break;
 
     case 'getQueueTasks':
         header('Content-Type: application/json');
-        echo json_encode($rh->getQueueTasks($userID));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->getQueueTasks($userID)]);
         break;
 
     case 'deleteQueueTask':
         header('Content-Type: application/json');
-        echo json_encode($rh->deleteQueueTask($userID, $_POST['id']));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->deleteQueueTask($userID, $_POST['id'])]);
         break;
 
     case 'addQueueTask':
         header('Content-Type: application/json');
-        echo json_encode($rh->addQueueTask($userID, $_POST['text'], $_POST['check']));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->addQueueTask($userID, $_POST['text'], $_POST['check'])]);
         break;
 
     case 'getUnfinishedMorningroutineTasks':
         header('Content-Type: application/json');
-        echo json_encode($rh->getUnfinishedMorningroutineTasks($userID));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->getUnfinishedMorningroutineTasks($userID)]);
         break;
 
     case 'getAllMorningroutineTasks':
         header('Content-Type: application/json');
-        echo json_encode($rh->getAllMorningroutineTasks($userID));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->getAllMorningroutineTasks($userID)]);
         break;
 
     case 'completeMorningroutineTask':
         header('Content-Type: application/json');
-        echo json_encode($rh->completeMorningroutineTask($userID, $_POST['id']));
+        if ($data = $rh->completeMorningroutineTask($userID, $_POST['id']) != "NO_MORNINGROUTINE") $result = ["ResponseCode" => "OK", "data" => $data];
+        else $result = ["ResponseCode" => "NO_MORNINGROUTINE"];
+        echo json_encode($result);
         break;
 
     case 'addMorningroutineTask':
         header('Content-Type: application/json');
-        echo json_encode($rh->addMorningroutineTask($userID, $_POST['text']));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->addMorningroutineTask($userID, $_POST['text'])]);
         break;
 
     case 'resetMorningroutine':
         header('Content-Type: application/json');
-        echo json_encode($rh->resetMorningroutine($userID));
+        echo json_encode(["ResponseCode" => "OK", "data" => $rh->resetMorningroutine($userID)]);
         break;
 
     case 'updateMorningroutineOrder':

@@ -108,7 +108,7 @@ class RequestHandler
 
     public function getActiveGroupsWithTasks($userID)
     {
-        if (!$groups = $this->getActiveGroups($userID)) return "NO_GROUPS";
+        if (!$groups = $this->getActiveGroups($userID)) return ["ResponseCode" => "NO_GROUPS"];
         foreach ($groups as $group) {
             $groupID = $group->groupID;
             $group->labels = $this->mysqliSelectFetchArray("SELECT * FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
@@ -141,19 +141,19 @@ class RequestHandler
                 $group->unarchivedTasks = $tasks;
             }
         }
-        return $groups;
+        return ["ResponseCode" => "OK", "data" => $groups];
     }
 
     public function getTaskData($userID, $taskID)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
-        return $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
+        return ["ResponseCode" => "OK", "data" => $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID)];
     }
 
     public function getTaskDataTaskdetails($userID, $taskID)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
-        if (!$taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID)) return "NO_TASK_FOUND";
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
+        if (!$taskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID)) return ["ResponseCode" => "NO_TASK_FOUND"];
         $parsedown = new Parsedown();
         ### Parents ###
         $parents = [];
@@ -187,7 +187,7 @@ class RequestHandler
             "dateResolvedFormatted" => $taskData->taskDateResolved // TODO
         ];
         $taskData->descriptionWithMakros = $parsedown->text($taskData->taskDescription);
-        return $taskData;
+        return ["ResponseCode" => "OK", "data" => $taskData];
     }
 
     public function createTimetable($userID, $type, $copyLast)
@@ -372,12 +372,13 @@ class RequestHandler
         for ($i = 0; $i < count($entryIDs); $i++) {
             $this->mysqliQueryPrepared("UPDATE morningroutine SET entryOrder = ? WHERE entryID = ?", ($i + 1), (int) $entryIDs[$i]);
         }
+        return ["ResponseCode" => "OK"];
     }
 
     public function deleteMorningroutineTask($entryID)
     {
         $this->mysqliQueryPrepared("DELETE FROM morningroutine WHERE entryID = ?", $entryID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function getAppointments($userID)
@@ -403,9 +404,9 @@ class RequestHandler
                 $appointment->timeEnd = $appointment->messageEnd;
                 $appointmentlist[] = $appointment;
             }
-            return $appointmentlist;
+            return ["ResponseCode" => "OK", "data" => $appointmentlist];
         }
-        return "NO_APPOINTMENTS";
+        return ["ResponseCode" => "NO_APPOINTMENTS"];
     }
 
     public function getAppointmentsFromMonth($userID, $month, $year)
@@ -432,9 +433,9 @@ class RequestHandler
                 $appointment->timeEnd = $appointment->messageEnd;
                 if ($dateCheck == $monthKey) $appointmentlist[] = $appointment;
             }
-            return $appointmentlist;
+            return ["ResponseCode" => "OK", "data" => $appointmentlist];
         }
-        return "NO_APPOINTMENTS";
+        return ["ResponseCode" => "NO_APPOINTMENTS"];
     }
 
     public function editAppointment($userID, $messageID, $title, $date)
@@ -484,9 +485,9 @@ class RequestHandler
                 $motd->messageTitleFormated = $this->addTagsToUrlsInString($motd->messageTitle);
                 $motd->messagePermission = ($userID == $motd->messageOwner || $this->groupOwnerCheck($motd->messageGroup, $userID) || $userID == 1);
             }
-            return $data;
+            return ["ResponseCode" => "OK", "data" => $data];
         }
-        return "NO_MOTD";
+        return ["ResponseCode" => "NO_MOTD"];
     }
 
     public function editMotd($userID, $messageID, $title)
@@ -534,7 +535,7 @@ class RequestHandler
         } else if ($type == 'morningroutine') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutineUnfolded = ? WHERE userID = ?", $checked, $userID);
         }
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function toggleActivePanel($userID, $type, $checked)
@@ -552,13 +553,13 @@ class RequestHandler
         } else if ($type == 'morningroutine') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutine = ? WHERE userID = ?", $checked, $userID);
         }
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function toggleUnfoldGroup($userID, $groupID, $checked)
     {
         $this->mysqliQueryPrepared("UPDATE groupaccess SET groupUnfolded = ? WHERE userID = ? AND groupID = ?", $checked, $userID, $groupID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function updatePanelOrder($userID, $names)
@@ -578,7 +579,7 @@ class RequestHandler
                 $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutineOrder = ? WHERE userID = ?", ($i + 1), $userID);
             }
         }
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function updateLabelOrder($labelIDs)
@@ -586,7 +587,7 @@ class RequestHandler
         for ($i = 0; $i < count($labelIDs); $i++) {
             $this->mysqliQueryPrepared("UPDATE labels SET labelOrder = ? WHERE labelID = ?", ($i + 1), (int) $labelIDs[$i]);
         }
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     private function getUsernameByID($userID)
@@ -638,65 +639,65 @@ class RequestHandler
         $count = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM labels WHERE labelGroupID = ?", $groupID);
         $sql = "INSERT INTO labels (labelName, labelDescription, labelColor, labelGroupID, labelOrder) VALUES (?, ?, ?, ?, ?)";
         $this->mysqliQueryPrepared($sql, $title, $description, $color, $groupID, ($count->number + 1));
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function getLabels($userID, $groupID)
     {
-        if (!$this->checkGroupPermission($userID, $groupID)) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
         $data = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
-        if ($data) return $data;
-        return 0;
+        if ($data) return ["ResponseCode" => "OK", "data" => $data];
+        return ["ResponseCode" => "NO_LABELS"];
     }
 
     public function getLabelsForTask($userID, $groupID, $taskID)
     {
-        if (!$this->checkGroupPermission($userID, $groupID)) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
         $labels = $this->mysqliSelectFetchArray("SELECT labelID, labelName, labelDescription, labelColor FROM labels WHERE labelGroupID = ? ORDER BY labelOrder", $groupID);
         if ($labels) {
             foreach ($labels as $label) {
                 $checkIfLabelIsActiveForTask = $this->mysqliSelectFetchObject("SELECT entryID FROM tasklabels WHERE taskID = ? AND labelID = ?", $taskID, $label->labelID);
                 if ($checkIfLabelIsActiveForTask) $label->isUsed = true;
             }
-            return $labels;
+            return ["ResponseCode" => "OK", "data" => $labels];
         }
-        return 0;
+        return ["ResponseCode" => "NO_LABELS"];
     }
 
     public function deleteLabel($userID, $groupID, $labelID)
     {
-        if (!$this->checkGroupPermission($userID, $groupID)) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
         $this->mysqliQueryPrepared("DELETE FROM labels WHERE labelID = ?", $labelID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function updateLabel($userID, $groupID, $labelID, $title, $description, $color)
     {
-        if (!$this->checkGroupPermission($userID, $groupID)) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
         $sql = "UPDATE labels SET
             labelName = ?,
             labeLDescription = ?,
             labelColor = ?
             WHERE labelID = ?";
         $this->mysqliQueryPrepared($sql, $title, $description, $color, $labelID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function updateTaskLabel($userID, $groupID, $taskID, $labelID, $checkboxChecked)
     {
-        if (!$this->checkGroupPermission($userID, $groupID)) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
         if ($checkboxChecked == 'true') {
             $this->mysqliQueryPrepared("INSERT INTO tasklabels (labelID, taskID) VALUES (?, ?)", $labelID, $taskID);
         } else {
             $this->mysqliQueryPrepared("DELETE FROM tasklabels WHERE labelID = ? AND taskID = ?", $labelID, $taskID);
         }
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function createTask($userID, $type, $parentID, $title, $description, $prio, $reporter = 0)
     {
-        if ($type == 'task' && !$this->checkGroupPermission($userID, $parentID)) return "NO_ACCESS";
-        if ($type == 'subtask' && !$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return "NO_ACCESS";
+        if ($type == 'task' && !$this->checkGroupPermission($userID, $parentID)) return ["ResponseCode" => "NO_ACCESS"];
+        if ($type == 'subtask' && !$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return ["ResponseCode" => "NO_ACCESS"];
         $sql = "INSERT INTO tasks 
             (taskType, taskParentID, taskPriority, taskPriorityColor, taskTitle, taskDescription, taskStatus, taskReporter, taskDateCreated) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -712,7 +713,7 @@ class RequestHandler
             (!$reporter) ? $userID : $reporter,
             date('Y-m-d H:i')
         );
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function createFeedback($userID, $description)
@@ -729,7 +730,7 @@ class RequestHandler
 
     private function getSubtasks($userID, $parentID)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($parentID))) return ["ResponseCode" => "NO_ACCESS"];
         if ($subtasks = $this->mysqliSelectFetchArray(
             "SELECT * FROM tasks WHERE taskType = ? AND taskParentID = ? ORDER BY taskStatus, taskPriority DESC, taskID",
             'subtask',
@@ -742,7 +743,7 @@ class RequestHandler
             }
             return $subtasks;
         }
-        return "NO_SUBTASKS";
+        return ["ResponseCode" => "NO_SUBTASKS"];
     }
 
     private function getGroupIDOfTask($taskID)
@@ -776,27 +777,27 @@ class RequestHandler
 
     public function setTaskToOpen($userID, $taskID)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
         $this->mysqliQueryPrepared("UPDATE tasks SET taskStatus = 'open', taskAssignee = '' WHERE taskID = ?", $taskID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function assignTask($userID, $taskID)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
         $this->mysqliQueryPrepared("UPDATE tasks SET taskAssignee = ? WHERE taskID = ?", $userID, $taskID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function resolveTask($userID, $taskID)
     {
-        if (!$this->deleteTaskPermission($taskID, $userID)) return "NO_ACCESS";
+        if (!$this->deleteTaskPermission($taskID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
         $sql = "SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskStatus = 'open'";
         $subtasks = $this->mysqliSelectFetchObject($sql, $taskID);
         if ($subtasks->number > 0) return "UNRESOLVED_SUBTASKS";
         $sql = "UPDATE tasks SET taskStatus = 'resolved', taskDateResolved = ? WHERE taskID = ?";
         $this->mysqliQueryPrepared($sql, $this->getCurrentTimestamp(), $taskID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     private function deleteTaskPermission($taskID, $userID)
@@ -806,7 +807,7 @@ class RequestHandler
 
     public function deleteTask($userID, $taskID)
     {
-        if (!$this->deleteTaskPermission($taskID, $userID)) return "NO_ACCESS";
+        if (!$this->deleteTaskPermission($taskID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
         $taskData = $this->mysqliSelectFetchObject("SELECT taskType, taskParentID FROM tasks WHERE taskID = ?", $taskID);
         $this->mysqliQueryPrepared("DELETE FROM tasks WHERE taskID = ?", $taskID);
         $this->mysqliQueryPrepared("DELETE FROM tasks WHERE taskType = 'subtask' AND taskParentID = ?", $taskID);
@@ -815,25 +816,25 @@ class RequestHandler
         if ($taskData->taskType == 'task') $action = "groupDetails";
         else if ($taskData->taskType == 'subtask') $action = "taskDetails";
         $location = DIR_SYSTEM . "php/details.php?action=" . $action . "&id=" . $taskData->taskParentID . "&success=deletesubtask";
-        return ["ResponseCode" => "OK", "location" => $location];
+        return ["ResponseCode" => "OK", "data" => $location];
     }
 
     public function createComment($userID, $taskID, $description)
     {
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
         $username = $this->getUsernameByID($userID);
         $timestamp = $this->getCurrentTimestamp();
         $sql = "INSERT INTO comments (commentTaskID, commentAuthor, commentDescription, commentDate) VALUES (?, ?, ?, ?)";
         $this->mysqliQueryPrepared($sql, $taskID, $username, $description, $timestamp);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function deleteComment($userID, $commentID)
     {
         $commentData = $this->mysqliSelectFetchObject("SELECT commentTaskID FROM comments WHERE commentID = ?", $commentID);
-        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($commentData->commentTaskID))) return "NO_ACCESS";
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($commentData->commentTaskID))) return ["ResponseCode" => "NO_ACCESS"];
         $this->mysqliQueryPrepared("DELETE FROM comments WHERE commentID = ?", $commentID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     private function getMailStatus($userID)
@@ -857,13 +858,13 @@ class RequestHandler
 
     public function createGroup($userID, $groupName)
     {
-        if ($this->getMailStatus($userID) == 'unverified') return "unverifiedmail";
-        if ($this->getNumberOfOwnedGroups($userID) > 9 && $this->getUserType($userID) == 'normal') return "maxgroups";
+        if ($this->getMailStatus($userID) == 'unverified') return ["ResponseCode" => "UNVERIFIED_MAIL"];
+        if ($this->getNumberOfOwnedGroups($userID) > 9 && $this->getUserType($userID) == 'normal') return ["ResponseCode" => "MAX_GROUPS"];
         if ($this->mysqliSelectFetchObject(
             "SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?",
             $groupName,
             $userID
-        )) return "groupnametaken";
+        )) return ["ResponseCode" => "GROUPNAME_TAKEN"];
         $sql = "INSERT INTO groups (groupName, groupOwner) VALUES (?, ?);";
         $this->mysqliQueryPrepared($sql, $groupName, $userID);
         $group = $this->mysqliSelectFetchObject(
@@ -876,7 +877,7 @@ class RequestHandler
             $group->groupID,
             $group->groupOwner
         );
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     private function deleteGroupDependencies($groupID)
@@ -890,9 +891,9 @@ class RequestHandler
 
     public function deleteGroup($userID, $groupID)
     {
-        if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
+        if (!$this->groupOwnerCheck($groupID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
         $this->deleteGroupDependencies($groupID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     private function generateRandomString($length = 21)
@@ -908,18 +909,18 @@ class RequestHandler
 
     public function createGroupInvite($userID, $groupID, $username)
     {
-        if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
+        if (!$this->groupOwnerCheck($groupID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
         if ($user = $this->mysqliSelectFetchObject("SELECT userID FROM users WHERE userName = ?", $username)) {
             $sql = "INSERT INTO tokens (tokenType, tokenGroupID, tokenUserID, tokenToken) VALUES (?, ?, ?, ?)";
             $this->mysqliQueryPrepared($sql, "joingroup", $groupID, $user->userID, $this->generateRandomString());
-            return "OK";
+            return ["ResponseCode" => "OK"];
         }
-        return "NO_USER_FOUND";
+        return ["ResponseCode" => "NO_USER_FOUND"];
     }
 
     public function toggleGroupInvites($userID, $groupID, $status)
     {
-        if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
+        if (!$this->groupOwnerCheck($groupID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
         $this->mysqliQueryPrepared("UPDATE groups SET groupInvites = ? WHERE groupID = ?;", $status, $groupID);
         if ($status == 'enabled') {
             $this->mysqliQueryPrepared(
@@ -930,14 +931,14 @@ class RequestHandler
         } else if ($status == 'disabled') {
             $this->mysqliQueryPrepared("DELETE FROM tokens WHERE tokenGroupID = ? AND tokenType = ?", $groupID, "groupinvite");
         }
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     public function toggleGroupStatus($userID, $groupID, $status)
     {
-        if (!$this->groupOwnerCheck($groupID, $userID)) return "NO_ACCESS";
+        if (!$this->groupOwnerCheck($groupID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
         $this->mysqliQueryPrepared("UPDATE groups SET groupStatus = ? WHERE groupID = ?;", $status, $groupID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 
     private function getCurrentTimestamp()
@@ -948,6 +949,6 @@ class RequestHandler
     public function updateWeatherCity($userID, $city)
     {
         $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherCity = ? WHERE userID = ?", $city, $userID);
-        return "OK";
+        return ["ResponseCode" => "OK"];
     }
 }

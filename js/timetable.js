@@ -57,16 +57,16 @@ let timetable = {
     },
     timetablePopup: async function (type) {
         const response = await requestHandler.sendRequest('getTimetable', ['type', type])
-        this.fillPopup(response, type)
+        this.fillPopup(response.data, type)
     },
     createTimetable: async function (type) {
         const response = await requestHandler.sendRequest('createTimetable', ['type', type], ['copycheck', document.getElementById("copycheck").checked])
-        this.fillPopup(response, type)
+        this.fillPopup(response.data, type)
     },
     deleteTimetable: async function (id, type) {
         if (!confirm("Are you sure you want to delete this timetable?")) return
         const response = await requestHandler.sendRequest('deleteTimetable', ['id', id])
-        this.fillPopup(response, type)
+        this.fillPopup(response.data, type)
     },
     parentHTML: '',
     type: '',
@@ -126,7 +126,7 @@ let timetable = {
             ['thu', document.getElementById("thu").checked], ['fri', document.getElementById("fri").checked], ['sat', document.getElementById("sat").checked], 
             ['sun', document.getElementById("sun").checked], 
             ['monfri', document.getElementById("monfri").checked], ['monsun', document.getElementById("monsun").checked])
-        this.fillPopup(response, this.type)
+        this.fillPopup(response.data, this.type)
     },
     loadParentForm: function () {
         var container = document.getElementById("dynamic-modal-content");
@@ -151,6 +151,6 @@ let timetable = {
     deleteEntry: async function (id) {
         if (!confirm("Are you sure you want to delete this entry?")) return
         const response = await requestHandler.sendRequest('deleteEntry', ['id', id])
-        this.fillPopup(response, this.type)
+        this.fillPopup(response.data, this.type)
     }
 }

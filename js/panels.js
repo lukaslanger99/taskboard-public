@@ -24,7 +24,7 @@ let panels = {
     },
     deleteQueueTask: async function (id) {
         const response = await requestHandler.sendRequest('deleteQueueTask', ['id', id])
-        this.printQueueTasks(response)
+        this.printQueueTasks(response.data)
     },
     addQueueTask: async function () {
         var text = document.getElementById("queueItem").value
@@ -32,7 +32,7 @@ let panels = {
         const response = await requestHandler.sendRequest('addQueueTask', ['text', text], ['check', document.getElementById("queueHighprio").checked])
         document.getElementById("queueItem").value = ''
         document.getElementById("queueHighprio").checked = false
-        this.printQueueTasks(response)
+        this.printQueueTasks(response.data)
     },
     // Morningroutine
     printMorningroutineTasks: async function (morningroutineTasks = '') {
@@ -59,15 +59,15 @@ let panels = {
         if (!text) return
         const response = await requestHandler.sendRequest('addMorningroutineTask', ['text', text])
         document.getElementById("morningroutineItem").value = ''
-        this.printMorningroutineTasks(response)
+        this.printMorningroutineTasks(response.data)
     },
     completeMorningroutineTask: async function (id) {
         const response = await requestHandler.sendRequest('completeMorningroutineTask', ['id', id])
-        this.printMorningroutineTasks(response)
+        this.printMorningroutineTasks(response.data)
     },
     resetMorningroutine: async function () {
         const response = await requestHandler.sendRequest('resetMorningroutine')
-        this.printMorningroutineTasks(response)
+        this.printMorningroutineTasks(response.data)
     },
     showMorningroutinePopup: async function () {
         const morningroutineTasks = await requestHandler.sendRequest('getAllMorningroutineTasks')
@@ -250,7 +250,7 @@ let panels = {
             if (end) formDataList.append('end', end)
             const response = await requestHandler.sendRequest('addAppointment', formDataList)
             hideDynamicForm()
-            this.printAppointments(response)
+            this.printAppointments(response.data)
         }
     },
     openEditAppointmentForm: function (id, title, date) {
@@ -274,12 +274,12 @@ let panels = {
         if (!(date && title)) return
         const response = await requestHandler.sendRequest('editAppointment', ['id', id], ['date', date], ['title', title])
         hideDynamicForm()
-        this.printAppointments(response)
+        this.printAppointments(response.data)
     },
     deleteAppointment: async function (id) {
         if (!confirm("Are you sure you want to delete this appointment?")) return
         const response = await requestHandler.sendRequest('deleteAppointment', ['id', id])
-        this.printAppointments(response)
+        this.printAppointments(response.data)
     },
     printMotd: async function (motd = '') {
         if (motd == '') motd = await requestHandler.sendRequest('getMotd')
@@ -334,7 +334,7 @@ let panels = {
         if (group && title) {
             const response = await requestHandler.sendRequest('addMotd', ['group', group], ['title', title])
             hideDynamicForm()
-            this.printMotd(response)
+            this.printMotd(response.data)
         }
     },
     openEditMotdForm: function (id, title) {
@@ -349,13 +349,13 @@ let panels = {
         if (!title) return
         const response = await requestHandler.sendRequest('editMotd', ['id', id])
         hideDynamicForm()
-        this.printMotd(response)
+        this.printMotd(response.data)
     },
     deleteMotd: async function (id) {
         if (!confirm("Are you sure you want to delete this motd?")) return
         const response = await requestHandler.sendRequest('deleteMotd', ['id', id])
         hideDynamicForm()
-        this.printMotd(response)
+        this.printMotd(response.data)
     },
     toggleUnfoldCheckboxListener: async function (id, type) {
         var checkboxElement = document.getElementById(id)

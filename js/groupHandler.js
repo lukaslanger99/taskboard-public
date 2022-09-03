@@ -2,9 +2,9 @@ let groupHandler = {
     createGroup: async function () {
         const groupName = document.getElementById('createGroup_groupName')
         if (groupName) {
-            const responseCode = await requestHandler.sendRequest('createGroup', ['groupname', groupName])
-            const errors = ["groupnametaken","maxgroups","unverifiedmail"]
-            if (errors.includes(responseCode)) printErrorToast(responseCode)
+            const response = await requestHandler.sendRequest('createGroup', ['groupname', groupName])
+            const errors = ["GROUPNAME_TAKEN","MAX_GROUPS","UNVERIFIED_MAIL"]
+            if (errors.includes(response.ResponseCode)) printErrorToast(response.ResponseCode)
         }
     },
     deleteGroup: async function (groupID) {

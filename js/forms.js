@@ -115,8 +115,8 @@ function openFeedbackForm() {
 async function createFeedback() {
   const description = document.getElementById('feedbackDescription').value
   if (!description) return
-  const responseCode = await requestHandler.sendRequest('createFeedback', ['description', description])
-  if (responseCode != "OK") return
+  const response = await requestHandler.sendRequest('createFeedback', ['description', description])
+  if (response.ResponseCode != "OK") return
   closeDynamicForm()
   indexHandler.printIndexGroups()
 }
