@@ -1,9 +1,6 @@
 let indexHandler = {
     getGroupsWithTasks: async function () {
-        const response = await fetch(
-            `${DIR_SYSTEM}server/request.php?action=getActiveGroupsWithTasks`
-        )
-        return await response.json()
+        return await requestHandler.sendRequest('getActiveGroupsWithTasks')
     },
     printIndexGroups: async function () {
         const container = document.getElementById("group__boxes")

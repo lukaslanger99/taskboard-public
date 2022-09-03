@@ -1,9 +1,6 @@
 let panels = {
     getEntrys: async function (action) {
-        const response = await fetch(
-            `${DIR_SYSTEM}server/request.php?action=${action}`
-        )
-        return await response.json()
+        return await requestHandler.sendRequest(action, ['groupID', groupID], ['taskID', taskID])
     },
     // Queue
     printQueueTasks: async function (queueTasks = '') {
@@ -36,18 +33,11 @@ let panels = {
     },
     addQueueTask: async function () {
         var text = document.getElementById("queueItem").value
-        if (text) {
-            var url = `${DIR_SYSTEM}server/request.php?action=addQueueTask`
-            var formData = new FormData()
-            formData.append('text', text)
-            formData.append('check', document.getElementById("queueHighprio").checked)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            document.getElementById("queueItem").value = ''
-            document.getElementById("queueHighprio").checked = false
-            this.printQueueTasks(await response.json())
-        }
+        if (!text) return
+        const response = await requestHandler.sendRequest('addQueueTask', ['text', text], ['check', document.getElementById("queueHighprio").checked])
+        document.getElementById("queueItem").value = ''
+        document.getElementById("queueHighprio").checked = false
+        this.printQueueTasks(response)
     },
     // Morningroutine
     printMorningroutineTasks: async function (morningroutineTasks = '') {
@@ -71,16 +61,10 @@ let panels = {
     },
     addMorningroutineTask: async function () {
         var text = document.getElementById("morningroutineItem").value
-        if (text) {
-            var url = `${DIR_SYSTEM}server/request.php?action=addMorningroutineTask`
-            var formData = new FormData()
-            formData.append('text', text)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            document.getElementById("morningroutineItem").value = ''
-            this.printMorningroutineTasks(await response.json())
-        }
+        if (!text) return
+        const response = await requestHandler.sendRequest('addMorningroutineTask', ['text', text])
+        document.getElementById("morningroutineItem").value = ''
+        this.printMorningroutineTasks(response)
     },
     completeMorningroutineTask: async function (id) {
         const response = await fetch(
@@ -89,10 +73,8 @@ let panels = {
         this.printMorningroutineTasks(await response.json())
     },
     resetMorningroutine: async function () {
-        const response = await fetch(
-            `${DIR_SYSTEM}server/request.php?action=resetMorningroutine`
-        )
-        this.printMorningroutineTasks(await response.json())
+        const response = await requestHandler.sendRequest('resetMorningroutine')
+        this.printMorningroutineTasks(response)
     },
     showMorningroutinePopup: async function () {
         const morningroutineTasks = await this.getEntrys('getAllMorningroutineTasks')
@@ -123,16 +105,9 @@ let panels = {
         addDraggableHelper('updateMorningroutineOrder')
     },
     deleteMorningroutineTask: async function (entryID) {
-        var popup = confirm("Are you sure you want to delete this task?");
-        if (popup == true) {
-            var url = `${DIR_SYSTEM}server/request.php?action=deleteMorningroutineTask`
-            var formData = new FormData()
-            formData.append('entryID', entryID)
-            await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            this.showMorningroutinePopup()
-        }
+        if (!confirm("Are you sure you want to delete this task?")) return
+        await this.getEntrys('deleteMorningroutineTask', ['entryID', entryID])
+        this.showMorningroutinePopup()
     },
     // Appointment
     printAppointments: async function (appointments = '') {
@@ -278,18 +253,11 @@ let panels = {
         var start = document.getElementById("start").value
         var end = document.getElementById("end").value
         if (group && date && title && start) {
-            var url = `${DIR_SYSTEM}server/request.php?action=addAppointment`
-            var formData = new FormData()
-            formData.append('group', group)
-            formData.append('date', date)
-            formData.append('title', title)
-            formData.append('start', start)
-            if (end) formData.append('end', end)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
+            var formDataList = [['group', group], ['date', date], ['title', title], ['start', start]]
+            if (end) formDataList.append('end', end)
+            const response = await requestHandler.sendRequest('addAppointment', formDataList)
             hideDynamicForm()
-            this.printAppointments(await response.json())
+            this.printAppointments(response)
         }
     },
     openEditAppointmentForm: function (id, title, date) {
@@ -382,15 +350,9 @@ let panels = {
         var group = document.getElementById("selectGroupID").value
         var title = document.getElementById("motdTitle").value
         if (group && title) {
-            var url = `${DIR_SYSTEM}server/request.php?action=addMotd`
-            var formData = new FormData()
-            formData.append('group', group)
-            formData.append('title', title)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
+            const response = await requestHandler.sendRequest('addMotd', ['group', group], ['title', title])
             hideDynamicForm()
-            this.printMotd(await response.json())
+            this.printMotd(response)
         }
     },
     openEditMotdForm: function (id, title) {

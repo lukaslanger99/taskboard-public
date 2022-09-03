@@ -65,13 +65,7 @@ class DraggableHandler {
   }
 
   async updateOrder() {
-    var url = `${DIR_SYSTEM}server/request.php?action=${this.actionName}`
-    var formData = new FormData()
-    formData.append('order', this.orderEnd)
-    const response = await fetch(
-      url, { method: 'POST', body: formData }
-    )
-    return await response.json()
+    return await requestHandler.sendRequest(this.actionName, ['order', this.orderEnd])
   }
 }
 

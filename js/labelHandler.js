@@ -1,22 +1,9 @@
 let labelHandler = {
   getLabels: async function (groupID) {
-    var url = `${DIR_SYSTEM}server/request.php?action=getLabels`
-    var formData = new FormData()
-    formData.append('groupID', groupID)
-    const response = await fetch(
-      url, { method: 'POST', body: formData }
-    )
-    return await response.json()
+    return await requestHandler.sendRequest('getLabels', ['groupID', groupID])
   },
   getLabelsForTask: async function (groupID, taskID) {
-    var url = `${DIR_SYSTEM}server/request.php?action=getLabelsForTask`
-    var formData = new FormData()
-    formData.append('groupID', groupID)
-    formData.append('taskID', taskID)
-    const response = await fetch(
-      url, { method: 'POST', body: formData }
-    )
-    return await response.json()
+    return await requestHandler.sendRequest('getLabelsForTask', ['groupID', groupID], ['taskID', taskID])
   },
   openGroupLabelsPopup: async function (groupID) {
     const labels = await this.getLabels(groupID)

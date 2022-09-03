@@ -33,50 +33,39 @@ function showForm(id) {
 function openEditGroupForm(groupID, name, priority, archiveTime) {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {
-    html = '\
-          <div class="modal-header">\
-            Update Group\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-          </div>\
-          <form action="'+ DIR_SYSTEM + 'php/action.php?action=updateGroup&id=' + groupID + '" autocomplete="off" method="post" >\
-          <table style="margin:0 auto 15px auto;">\
-              <tr>\
-                  <td>Name:</td>\
-                  <td>\
-                      <input type="text" name="name" value="'+ name + '">\
-                  </td>\
-              </tr>\
-              <tr>\
-                  <td>Priority:</td>\
-                  <td>\
-                      <input type="number" name="priority" min="1" max="1000" value="'+ priority + '">\
-                  </td>\
-              </tr>\
-              <tr>\
-              <td>Number of days till task archived:</td>\
-                  <td>\
-                      <input type="number" name="archivetime" min="1" max="365" value="'+ archiveTime + '">\
-                  </td>\
-              </tr>\
-          </table>\
-            <input class="submit-login" type="submit" name="updategroup-submit" value="Update" />\
-          </form>';
+    html = `
+      <div class="modal-header">
+        Update Group
+        <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>
+      </div>
+      <form action="${DIR_SYSTEM}php/action.php?action=updateGroup&id=${groupID}" autocomplete="off" method="post" >
+      <table style="margin:0 auto 15px auto;">
+          <tr>
+              <td>Name:</td>
+              <td>
+                  <input type="text" name="name" value="${name}">
+              </td>
+          </tr>
+          <tr>
+              <td>Priority:</td>
+              <td>
+                  <input type="number" name="priority" min="1" max="1000" value="${priority}">
+              </td
+          </tr>
+          <tr>
+          <td>Number of days till task archived:</td>
+              <td>
+                  <input type="number" name="archivetime" min="1" max="365" value="${archiveTime}">
+              </td>
+          </tr>
+      </table>
+        <input class="submit-login" type="submit" name="updategroup-submit" value="Update" />
+      </form>`
     container.innerHTML = html;
     container.style.height = '230px';
 
-    document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-    var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-    if (faCloseDynamicform) {
-      faCloseDynamicform.addEventListener('click',
-        function () {
-          var container = document.getElementById("dynamic-modal-content");
-          if (container) {
-            container.innerHTML = '';
-            document.getElementById('bg-modal-dynamicform').style.display = 'none';
-          }
-        }
-      )
-    }
+    document.getElementById('bg-modal-dynamicform').style.display = 'flex'
+    closeDynamicFormListener()
   }
 }
 
@@ -97,18 +86,7 @@ function openEditCommentForm(commentID, text) {
     container.style.height = '230px';
 
     document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-    var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-    if (faCloseDynamicform) {
-      faCloseDynamicform.addEventListener('click',
-        function () {
-          var container = document.getElementById("dynamic-modal-content");
-          if (container) {
-            container.innerHTML = '';
-            document.getElementById('bg-modal-dynamicform').style.display = 'none';
-          }
-        }
-      )
-    }
+    closeDynamicFormListener()
   }
 }
 
@@ -145,19 +123,7 @@ function printEditMailForm(mail) {
     container.style.height = '180px';
 
     document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-
-    var faCloseDynamicform = document.getElementById('fa-close-dynamicform');
-    if (faCloseDynamicform) {
-      faCloseDynamicform.addEventListener('click',
-        function () {
-          var container = document.getElementById("dynamic-modal-content");
-          if (container) {
-            container.innerHTML = '';
-            document.getElementById('bg-modal-dynamicform').style.display = 'none';
-          }
-        }
-      )
-    }
+    closeDynamicFormListener()
   }
 }
 

@@ -1,18 +1,9 @@
-async function getTaskData(id) {
-  var url = `${DIR_SYSTEM}server/request.php?action=getTaskData`
-  var formData = new FormData()
-  formData.append('id', id)
-  const response = await fetch(
-    url, { method: 'POST', body: formData }
-  )
-  return await response.json()
+async function getTaskData(taskID) {
+  return await requestHandler.sendRequest('getTaskData', ['id', taskID])
 }
 
 async function getGroups() {
-  const response = await fetch(
-    `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
-  )
-  return await response.json()
+  return await requestHandler.sendRequest('getActiveGroups')
 }
 
 const printGroupDropdown = async (selectedGroupId) => {
@@ -124,13 +115,7 @@ function openFeedbackForm() {
 async function createFeedback() {
   const description = document.getElementById('feedbackDescription').value
   if (!description) return
-  var url = `${DIR_SYSTEM}server/request.php?action=createFeedback`
-  var formData = new FormData()
-  formData.append('description', description)
-  const response = await fetch(
-    url, { method: 'POST', body: formData }
-    )
-  const responseCode = await response.json()
+  const responseCode = await requestHandler.sendRequest('createFeedback', ['description', description])
   if (responseCode != "OK") return
   closeDynamicForm()
   indexHandler.printIndexGroups()
