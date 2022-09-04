@@ -78,10 +78,12 @@ switch ($action) {
                 taskPriority = ?,
                 taskPriorityColor = '$priorityColor',
                 taskTitle = ?,
-                taskDescription = ? 
+                taskDescription = ?,
+                taskDateUpdated = ?
                 WHERE taskID = ?";
-            $taskBoard->mysqliQueryPrepared($sql, $parentID, $priority, $title, $description, $id);
+            $taskBoard->mysqliQueryPrepared($sql, $parentID, $priority, $title, $description, date('Y-m-d H:i'), $id); // switch date to function call when moved to request.php
             $taskBoard->locationWithDir("php/details.php?action=taskDetails&id=$id&success=updatedtask");
+
             exit;
         }
         break;

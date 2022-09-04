@@ -1,13 +1,16 @@
 async function getTaskData(taskID) {
-  return await requestHandler.sendRequest('getTaskData', ['id', taskID])
+  const response = await requestHandler.sendRequest('getTaskData', ['id', taskID])
+  return response.data
 }
 
 async function getGroups() {
-  return await requestHandler.sendRequest('getActiveGroups')
+  const response = await requestHandler.sendRequest('getActiveGroups')
+  return response.data
 }
 
 const printGroupDropdown = async (selectedGroupId) => {
   const groups = await getGroups()
+  if (!groups) return printErrorToast('NO_GROUPS')
   var groupsHtml = ''
   groups.forEach(group => {
     if (selectedGroupId && selectedGroupId == group.groupID) {
@@ -81,7 +84,9 @@ function printGroupForm() {
 
 // Update Task Form
 const openUpdateTaskForm = async () => {
-  var task = await getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1')), dropDowns = ''
+  const task = await getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
+  var dropDowns = ''
+  console.log(task)
   if (task.taskType == 'task') {
     dropDowns += await printGroupDropdown(task.taskParentID);
   }

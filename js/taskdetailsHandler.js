@@ -1,5 +1,5 @@
 let taskdetailsHandler = {
-    getTaskData: async function (taskID) {
+    getTaskDataTaskdetails: async function (taskID) {
         const response = await requestHandler.sendRequest('getTaskDataTaskdetails', ['taskID', taskID])
         return response.data
     },
@@ -8,7 +8,7 @@ let taskdetailsHandler = {
         return priorities[priority - 1]
     },
     printSubtasks: function (subtasks) {
-        if (!subtasks) return ''
+        if (subtasks.ResponseCode == 'NO_SUBTASKS') return ''
         html = ''
         subtasks.forEach(task => {
             html += `
@@ -239,7 +239,7 @@ let taskdetailsHandler = {
             </div>`
     },
     printTaskdetails: async function () {
-        const taskData = await this.getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
+        const taskData = await this.getTaskDataTaskdetails(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
         _parentsListHTML = ``
         taskData.parents.forEach(item => {
             if (item.type == 'group') _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=groupDetails&id=${item.id}">${item.name}</a></li>`

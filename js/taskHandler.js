@@ -50,21 +50,24 @@ let taskHandler = {
             'createTask', ['type', type], ['taskprio', taskprio], ['parentID', parentID], ['tasktitle', tasktitle], ['taskdescription', taskdescription])
         if (createAnother) this.openCreateTaskForm(type, parentID, false)
         else closeDynamicForm()
-        printSuccessToast('taskcreated')
+        printSuccessToast('TASK_CREATED')
         if (type == 'task') indexHandler.printIndexGroups()
         else taskdetailsHandler.printTaskdetails()
     },
     setTaskToOpen: async function (taskID) {
         await requestHandler.sendRequest('setTaskToOpen', ['taskID', taskID])
+        printSuccessToast('TASK_OPEN')
         taskdetailsHandler.printTaskdetails()
     },
     assignTask: async function (taskID) {
         await requestHandler.sendRequest('assignTask', ['taskID', taskID])
+        printSuccessToast('TASK_ASSIGNED')
         taskdetailsHandler.printTaskdetails()
     },
     resolveTask: async function (taskID) {
         const response = await requestHandler.sendRequest('resolveTask', ['taskID', taskID])
         if (response.ResponseCode != 'OK') return
+        printSuccessToast('RESOLVED_TASK')
         taskdetailsHandler.printTaskdetails()
     },
     deleteTask: async function (taskID) {

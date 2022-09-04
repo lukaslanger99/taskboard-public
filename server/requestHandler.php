@@ -691,6 +691,7 @@ class RequestHandler
         } else {
             $this->mysqliQueryPrepared("DELETE FROM tasklabels WHERE labelID = ? AND taskID = ?", $labelID, $taskID);
         }
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskDateUpdated = ? WHERE tasKID = ?", $this->getCurrentTimestamp(), $taskID);
         return ["ResponseCode" => "OK"];
     }
 
@@ -785,7 +786,7 @@ class RequestHandler
     public function assignTask($userID, $taskID)
     {
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
-        $this->mysqliQueryPrepared("UPDATE tasks SET taskAssignee = ? WHERE taskID = ?", $userID, $taskID);
+        $this->mysqliQueryPrepared("UPDATE tasks SET taskAssignee = ?, taskDateUpdated = ? WHERE taskID = ?", $userID, $this->getCurrentTimestamp(), $taskID);
         return ["ResponseCode" => "OK"];
     }
 
@@ -795,8 +796,8 @@ class RequestHandler
         $sql = "SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskStatus = 'open'";
         $subtasks = $this->mysqliSelectFetchObject($sql, $taskID);
         if ($subtasks->number > 0) return "UNRESOLVED_SUBTASKS";
-        $sql = "UPDATE tasks SET taskStatus = 'resolved', taskDateResolved = ? WHERE taskID = ?";
-        $this->mysqliQueryPrepared($sql, $this->getCurrentTimestamp(), $taskID);
+        $sql = "UPDATE tasks SET taskStatus = 'resolved', taskDateUpdated = ?, taskDateResolved = ? WHERE taskID = ?";
+        $this->mysqliQueryPrepared($sql, $this->getCurrentTimestamp(), $this->getCurrentTimestamp(), $taskID);
         return ["ResponseCode" => "OK"];
     }
 

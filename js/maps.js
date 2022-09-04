@@ -25,6 +25,7 @@ function fillSuccessMap() {
         "REMOVED_USER": "Successfully removed user !",
         "SIGNUP": "Successfully signed up !",
         "TASK_ASSIGNED": "Successfully assigned task !",
+        "TASK_OPEN": "Successfully set task back to open !",
         "TASK_CREATED": "Successfully created task !",
         "UPDATED_GROUP": "Successfully updated group !",
         "UPDATED_MESSAGE": "Successfully updated message !",
