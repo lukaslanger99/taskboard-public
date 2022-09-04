@@ -1,9 +1,11 @@
 let labelHandler = {
   getLabels: async function (groupID) {
-    return await requestHandler.sendRequest('getLabels', ['groupID', groupID])
+    const response = await requestHandler.sendRequest('getLabels', ['groupID', groupID])
+    return response.data
   },
   getLabelsForTask: async function (groupID, taskID) {
-    return await requestHandler.sendRequest('getLabelsForTask', ['groupID', groupID], ['taskID', taskID])
+    const response = await requestHandler.sendRequest('getLabelsForTask', ['groupID', groupID], ['taskID', taskID])
+    return response.data
   },
   openGroupLabelsPopup: async function (groupID) {
     const labels = await this.getLabels(groupID)

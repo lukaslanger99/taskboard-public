@@ -1,6 +1,7 @@
 let taskdetailsHandler = {
-    getTaskData: async function(taskID) {
-        return await requestHandler.sendRequest('getTaskDataTaskdetails', ['taskID', taskID])
+    getTaskData: async function (taskID) {
+        const response = await requestHandler.sendRequest('getTaskDataTaskdetails', ['taskID', taskID])
+        return response.data
     },
     getPriorityColor: function (priority) {
         const priorities = ['green', '#ffcc00', 'red']
@@ -16,9 +17,9 @@ let taskdetailsHandler = {
                     <p><a href="${DIR_SYSTEM}php/details.php?action=taskDetails&id=${task.taskID}">ID_${task.taskID}</a></p>
                     <p class="taskdetails__subtask__title">${task.taskTitle}</p>
                     <p>
-                        ${(task.taskStatus == 'open') 
-                        ? `<div class="status status__open">OPEN</div>`
-                        : `<div class="status status__resolved">RESOLVED</div>`}
+                        ${(task.taskStatus == 'open')
+                    ? `<div class="status status__open">OPEN</div>`
+                    : `<div class="status status__resolved">RESOLVED</div>`}
                     </p>
                 </div>
                 <hr>`
@@ -89,14 +90,14 @@ let taskdetailsHandler = {
                             <tr>
                                 <td class="letf__td">Status:</td>
                                 <td>
-                                    ${(status == 'open') 
-                                    ? `<div class="status status__open">OPEN</div>` 
-                                    : `<div class="status status__resolved">RESOLVED</div>`}
+                                    ${(status == 'open')
+                ? `<div class="status status__open">OPEN</div>`
+                : `<div class="status status__resolved">RESOLVED</div>`}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="letf__td">Priority:</td>
-                                <td>${priorities[priority-1]}</td>
+                                <td>${priorities[priority - 1]}</td>
                             </tr>
                             ${(type == 'task') ? `<tr><td class="letf__td">Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
                         </table>
@@ -229,8 +230,8 @@ let taskdetailsHandler = {
                                 <td>${dates.dateUpdatedFormatted}</td>
                             </tr>
                             ${(status == 'resolved')
-                            ? `<tr><td class="letf__td">Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
-                            : ``}
+                ? `<tr><td class="letf__td">Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
+                : ``}
                         </table>
                     </div>
                 </div>
@@ -264,21 +265,21 @@ let taskdetailsHandler = {
             <div class="taskdetails__modules">
                 ${_bigModulesHTML}${_smallModulesHTML}
             </div>`
-    document.getElementById('taskdetails').innerHTML = `${headerHTML}${buttonsHTML}${modulesHTML}`
-    if (taskData.taskType == 'task') labelHandler.showLabelsInTaskDetails(taskData.taskParentID, taskData.taskID)
+        document.getElementById('taskdetails').innerHTML = `${headerHTML}${buttonsHTML}${modulesHTML}`
+        if (taskData.taskType == 'task') labelHandler.showLabelsInTaskDetails(taskData.taskParentID, taskData.taskID)
     },
     taskdetailsToggleContent: function (buttonID, contentAreaID) {
         var button = document.getElementById(buttonID)
         var container = document.getElementById(contentAreaID)
         if (button && container) {
-          var containerDisplay = getComputedStyle(container).display;
-          if (containerDisplay == 'none') {
-            container.style.display = 'block'
-            button.innerHTML = `<i class="fa fa-angle-down"></i>`
-          } else if (containerDisplay == 'block') {
-            container.style.display = 'none'
-            button.innerHTML = `<i class="fa fa-angle-right"></i>`
-          }
+            var containerDisplay = getComputedStyle(container).display;
+            if (containerDisplay == 'none') {
+                container.style.display = 'block'
+                button.innerHTML = `<i class="fa fa-angle-down"></i>`
+            } else if (containerDisplay == 'block') {
+                container.style.display = 'none'
+                button.innerHTML = `<i class="fa fa-angle-right"></i>`
+            }
         }
     }
 }

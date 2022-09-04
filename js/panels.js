@@ -1,7 +1,10 @@
 let panels = {
     // Queue
     printQueueTasks: async function (queueTasks = '') {
-        if (queueTasks == '') queueTasks = await requestHandler.sendRequest('getQueueTasks')
+        if (queueTasks == '') {
+            const response = await requestHandler.sendRequest('getQueueTasks')
+            queueTasks = response.data
+        }
         var html = '', toggle = false, title = ''
         if (queueTasks) {
             queueTasks.forEach(entry => {
@@ -28,7 +31,7 @@ let panels = {
     },
     addQueueTask: async function () {
         var text = document.getElementById("queueItem").value
-        if (!text) return
+        if (!text) return printErrorToast("EMPTY_FIELDS")
         const response = await requestHandler.sendRequest('addQueueTask', ['text', text], ['check', document.getElementById("queueHighprio").checked])
         document.getElementById("queueItem").value = ''
         document.getElementById("queueHighprio").checked = false
@@ -36,7 +39,10 @@ let panels = {
     },
     // Morningroutine
     printMorningroutineTasks: async function (morningroutineTasks = '') {
-        if (morningroutineTasks == '') morningroutineTasks = await requestHandler.sendRequest('getUnfinishedMorningroutineTasks')
+        if (morningroutineTasks == '') {
+            const response = await requestHandler.sendRequest('getUnfinishedMorningroutineTasks')
+            morningroutineTasks = response.data
+        }
         var html = '', toggle = false
         if (morningroutineTasks) {
             morningroutineTasks.forEach(entry => {
@@ -56,7 +62,7 @@ let panels = {
     },
     addMorningroutineTask: async function () {
         var text = document.getElementById("morningroutineItem").value
-        if (!text) return
+        if (!text) return printErrorToast("EMPTY_FIELDS")
         const response = await requestHandler.sendRequest('addMorningroutineTask', ['text', text])
         document.getElementById("morningroutineItem").value = ''
         this.printMorningroutineTasks(response.data)
@@ -70,7 +76,8 @@ let panels = {
         this.printMorningroutineTasks(response.data)
     },
     showMorningroutinePopup: async function () {
-        const morningroutineTasks = await requestHandler.sendRequest('getAllMorningroutineTasks')
+        const response = await requestHandler.sendRequest('getAllMorningroutineTasks')
+        const morningroutineTasks = response.data
         var popupHTML = ``
         if (morningroutineTasks) {
             var flag = false
@@ -104,7 +111,10 @@ let panels = {
     },
     // Appointment
     printAppointments: async function (appointments = '') {
-        if (appointments == '') appointments = await requestHandler.sendRequest('getAppointments')
+        if (appointments == '') {
+            const response = await requestHandler.sendRequest('getAppointments')
+            appointments = response.data
+        }
         var html = '', toggle = false, title = ''
         if (appointments) {
             appointments.forEach(entry => {
@@ -182,7 +192,8 @@ let panels = {
             `
 
         if (month == -1 && year == -1) var currentDate = new Date(), month = currentDate.getMonth(), year = currentDate.getFullYear()
-        const appoinments = await requestHandler.sendRequest('getAppointmentsFromMonth', ['month', month + 1], ['year', year])
+        const response = await requestHandler.sendRequest('getAppointmentsFromMonth', ['month', month + 1], ['year', year])
+        const appoinments = response.data
         var days = getDaysInMonth(month, year)
         var offsetFirstDay = days[0].getDay() - 1 // Sunday - Saturday : 0 - 6
         var boxcounter = offsetFirstDay
@@ -271,7 +282,7 @@ let panels = {
     editAppointment: async function (id) {
         var date = document.getElementById("appointmentDate").value
         var title = document.getElementById("appointmentTitle").value
-        if (!(date && title)) return
+        if (!(date && title)) return printErrorToast("EMPTY_FIELDS")
         const response = await requestHandler.sendRequest('editAppointment', ['id', id], ['date', date], ['title', title])
         hideDynamicForm()
         this.printAppointments(response.data)
@@ -282,7 +293,10 @@ let panels = {
         this.printAppointments(response.data)
     },
     printMotd: async function (motd = '') {
-        if (motd == '') motd = await requestHandler.sendRequest('getMotd')
+        if (motd == '') {
+            const response = await requestHandler.sendRequest('getMotd')
+            motd = response.data
+        }
         var html = '', toggle = false, title = ''
         if (motd) {
             motd.forEach(entry => {
@@ -346,7 +360,7 @@ let panels = {
     },
     editMotd: async function (id) {
         var title = document.getElementById("motdTitle").value
-        if (!title) return
+        if (!title) return printErrorToast("EMPTY_FIELDS")
         const response = await requestHandler.sendRequest('editMotd', ['id', id])
         hideDynamicForm()
         this.printMotd(response.data)

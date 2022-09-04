@@ -114,7 +114,7 @@ function openFeedbackForm() {
 
 async function createFeedback() {
   const description = document.getElementById('feedbackDescription').value
-  if (!description) return
+  if (!description) return printErrorToast("EMPTY_FIELDS")
   const response = await requestHandler.sendRequest('createFeedback', ['description', description])
   if (response.ResponseCode != "OK") return
   closeDynamicForm()

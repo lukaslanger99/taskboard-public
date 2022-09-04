@@ -119,12 +119,12 @@ let timetable = {
         var text = document.getElementById("text").value
         var start = document.getElementById("start").value
         var end = document.getElementById("end").value
-        if (!(text && start < end)) return
+        if (!(text && start < end)) return printErrorToast("EMPTY_FIELDS")
         const response = await requestHandler.sendRequest(
-            'addEntry', ['id', id], ['text', text], ['start', start], ['end', end], 
-            ['mon', document.getElementById("mon").checked], ['tue', document.getElementById("tue").checked], ['wed', document.getElementById("wed").checked], 
-            ['thu', document.getElementById("thu").checked], ['fri', document.getElementById("fri").checked], ['sat', document.getElementById("sat").checked], 
-            ['sun', document.getElementById("sun").checked], 
+            'addEntry', ['id', id], ['text', text], ['start', start], ['end', end],
+            ['mon', document.getElementById("mon").checked], ['tue', document.getElementById("tue").checked], ['wed', document.getElementById("wed").checked],
+            ['thu', document.getElementById("thu").checked], ['fri', document.getElementById("fri").checked], ['sat', document.getElementById("sat").checked],
+            ['sun', document.getElementById("sun").checked],
             ['monfri', document.getElementById("monfri").checked], ['monsun', document.getElementById("monsun").checked])
         this.fillPopup(response.data, this.type)
     },

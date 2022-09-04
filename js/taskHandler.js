@@ -45,7 +45,7 @@ let taskHandler = {
         var tasktitle = document.getElementById("tasktitle").value
         var taskdescription = document.getElementById("taskdescription").value
         var createAnother = document.getElementById("createAnother").checked
-        if (!(taskprio && tasktitle && taskdescription)) return
+        if (!(taskprio && tasktitle && taskdescription)) return printErrorToast("EMPTY_FIELDS")
         await requestHandler.sendRequest(
             'createTask', ['type', type], ['taskprio', taskprio], ['parentID', parentID], ['tasktitle', tasktitle], ['taskdescription', taskdescription])
         if (createAnother) this.openCreateTaskForm(type, parentID, false)
@@ -75,7 +75,7 @@ let taskHandler = {
     },
     createComment: async function (taskID) {
         const description = document.getElementById('commentDescription')
-        if (!description) return
+        if (!description) return printErrorToast("EMPTY_FIELDS")
         await requestHandler.sendRequest('createComment', ['taskID', taskID], ['description', description])
     },
     deleteComment: async function (commentID) {

@@ -1,6 +1,7 @@
 let indexHandler = {
     getGroupsWithTasks: async function () {
-        return await requestHandler.sendRequest('getActiveGroupsWithTasks')
+        const response = await requestHandler.sendRequest('getActiveGroupsWithTasks')
+        return response.data
     },
     printIndexGroups: async function () {
         const container = document.getElementById("group__boxes")

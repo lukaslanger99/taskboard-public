@@ -55,7 +55,7 @@ let weather = {
     },
     updateWeatherCity: async function () {
         const city = document.getElementById("weatherPanelCity").value
-        if (!city) return
+        if (!city) return printErrorToast("EMPTY_FIELDS")
         await requestHandler.sendRequest('updateWeatherCity', ['city', city])
         this.fetchWeather(city)
         this.fetchForecast(city)
