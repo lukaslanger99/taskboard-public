@@ -261,7 +261,7 @@ switch ($_GET['action']) {
 
     case 'createComment':
         header('Content-Type: application/json');
-        echo json_encode($rh->createComment($userID, $_POST['taskID'], $_POST['description']));
+        echo json_encode($rh->createComment($userID, $_POST['taskID'], $_POST['description'], $_POST['type']));
         break;
 
     case 'deleteComment':

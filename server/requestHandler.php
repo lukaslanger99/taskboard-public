@@ -170,7 +170,7 @@ class RequestHandler
         $taskData->parents = array_reverse($parents);
         ###
         if (($subtasks = $this->getSubtasks($userID, $taskID)) != "NO_SUBTASKS") $taskData->subtasks = $subtasks;
-        if ($comments = $this->mysqliSelectFetchArray("SELECT * FROM comments WHERE commentTaskID = ?", $taskID)) {
+        if ($comments = $this->mysqliSelectFetchArray("SELECT * FROM comments WHERE commentTaskID = ? ORDER BY commentDate DESC", $taskID)) {
             foreach ($comments as $comment) {
                 $comment->commentAuthor = $this->getUsernameByID($comment->commentAuthor);
                 $comment->commentDateFormatted = $comment->commentDate; // TODO
@@ -820,13 +820,12 @@ class RequestHandler
         return ["ResponseCode" => "OK", "data" => $location];
     }
 
-    public function createComment($userID, $taskID, $description)
+    public function createComment($userID, $taskID, $description, $type)
     {
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
-        $username = $this->getUsernameByID($userID);
         $timestamp = $this->getCurrentTimestamp();
-        $sql = "INSERT INTO comments (commentTaskID, commentAuthor, commentDescription, commentDate) VALUES (?, ?, ?, ?)";
-        $this->mysqliQueryPrepared($sql, $taskID, $username, $description, $timestamp);
+        $sql = "INSERT INTO comments (commentTaskID, commentAuthor, commentDescription, commentDate, commentType) VALUES (?, ?, ?, ?, ?)";
+        $this->mysqliQueryPrepared($sql, $taskID, $userID, $description, $timestamp, $type);
         return ["ResponseCode" => "OK"];
     }
 

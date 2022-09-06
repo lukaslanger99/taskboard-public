@@ -159,21 +159,17 @@ let panels = {
     openAddAppointmentForm: async function () {
         const groups = await printGroupDropdown()
         html = `${addHeaderDynamicForm('Create Appointment')}
-            <table style="margin:0 auto 15px auto;">
-                <tr>
-                    ${groups}
-                    <td>Date:</td>
-                    <td>
-                        <input type="date" id="appointmentDate" name="date">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Start:</td>
-                    <td><input type="time" name="start" id="start" value="00:00"/></td>
-                    <td>End (Optional):</td>
-                    <td><input type="time" name="end" id="end"/></td>
-                </tr>
-            </table>
+            <div class="popop__dropdowns">
+                ${groups}
+                <p>Date:</p>
+                <p><input type="date" id="appointmentDate" name="date"></p>
+            </div>
+            <div class="popop__dropdowns">
+                <p>Start:</p>
+                <p><input type="time" name="start" id="start" value="00:00"/></p>
+                <p>End (Optional):</p>
+                <p><input type="time" name="end" id="end"/></p>
+            </div>
             <textarea class="input-login" id="appointmentTitle" placeholder="name" name="title" rows="1"></textarea>
             <input class="submit-login" type="submit" value="Create" onclick="panels.addAppointment()" />`
         showDynamicForm(document.getElementById("dynamic-modal-content"), html)
@@ -332,11 +328,7 @@ let panels = {
     openAddMotdForm: async function () {
         const groups = await printGroupDropdown()
         var html = `${addHeaderDynamicForm('Create Message of the Day')}
-            <table style="margin:0 auto 15px auto;">
-                <tr>
-                ${groups}
-                </tr>
-            </table>
+            <div class="popop__dropdowns">${groups}</div>
             <textarea class="input-login" id="motdTitle" placeholder="name" name="title" rows="1"></textarea>
             <input class="submit-login" type="submit" value="Create" onclick="panels.addMotd()" />`
         showDynamicForm(document.getElementById("dynamic-modal-content"), html)

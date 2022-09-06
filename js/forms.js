@@ -19,14 +19,14 @@ const printGroupDropdown = async (selectedGroupId) => {
       groupsHtml += '<option value="' + group.groupID + '">' + group.groupName + '</option>\n';
     }
   });
-  return `<td>Group:</td>
-    <td>
+  return `<p>Group:</p>
+    <p>
         <div class="select">
             <select id="selectGroupID" name="groupID">
             ${groupsHtml}      
             </select>
         </div>
-    </td>`
+    </p>`
 }
 
 function printPriorityDropdown(selectedPriority = '2') {
@@ -91,18 +91,14 @@ const openUpdateTaskForm = async () => {
     dropDowns += await printGroupDropdown(task.taskParentID);
   }
   dropDowns += printPriorityDropdown(task.taskPriority);
-  var html = '\
-      '+ addHeaderDynamicForm('Update Task') + '\
-      <form action="'+ DIR_SYSTEM + 'php/action.php?action=update&id=' + task.taskID + '" autocomplete="off" method="post" >\
-      <table style="margin:0 auto 15px auto;">\
-      <tr>\
-              '+ dropDowns + '\
-              </tr>\
-              </table>\
-              <textarea class="input-login" type="text" name="title" cols="40" rows="1">'+ task.taskTitle + '</textarea>\
-              <textarea class="input-login" type="text" name="description" cols="40" rows="5">'+ task.taskDescription + '</textarea>\
-              <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />\
-              </form>';
+  var html = `
+      ${addHeaderDynamicForm('Update Task')}
+      <form action="${DIR_SYSTEM}php/action.php?action=update&id=${task.taskID}" autocomplete="off" method="post" >
+        <div class="popop__dropdowns">${dropDowns}</div>
+        <textarea class="input-login" type="text" name="title" cols="40" rows="1">${task.taskTitle}</textarea>
+        <textarea class="input-login" type="text" name="description" cols="40" rows="5">${task.taskDescription}</textarea>
+        <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />
+      </form>`
   showDynamicForm(document.getElementById("dynamic-modal-content"), html);
   closeDynamicFormListener();
 }

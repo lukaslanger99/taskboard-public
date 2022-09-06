@@ -67,7 +67,6 @@ th {
 
 .group-top-bar {
   border-radius: 5px;
-  height: 35px;
   display: flex;
   justify-content: stretch;
   margin: 0 5px;
@@ -130,6 +129,10 @@ th {
 .fifty-percent-width {
   width: 50%;
   float: left;
+}
+
+button {
+  cursor: pointer;
 }
 
 /* Button */
@@ -880,6 +883,12 @@ code {
   border-radius: 6px;
 }
 
+.popop__dropdowns {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
   .panel {
     flex-direction: column;
@@ -887,7 +896,7 @@ code {
   }
 
   .panel-item {
-    width: 99.5%;
+    width: auto;
   }
 
   .panel-item-area {
@@ -908,7 +917,7 @@ code {
   }
 
   .single-content {
-    width: 99.5%;
+    width: auto;
     margin-right: 5px;
   }
 
@@ -917,7 +926,7 @@ code {
   }
 
   .single-top-bar {
-    width: 99.5%;
+    width: auto;
   }
 
   .box {
@@ -942,6 +951,10 @@ code {
 
   .taskdetails__modules {
     display: flex;
+    flex-direction: column;
+  }
+
+  .popop__dropdowns {
     flex-direction: column;
   }
 }

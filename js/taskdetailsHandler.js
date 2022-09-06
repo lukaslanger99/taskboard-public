@@ -1,4 +1,5 @@
 let taskdetailsHandler = {
+    activities: [],
     getTaskDataTaskdetails: async function (taskID) {
         const response = await requestHandler.sendRequest('getTaskDataTaskdetails', ['taskID', taskID])
         return response.data
@@ -26,12 +27,14 @@ let taskdetailsHandler = {
         })
         return html
     },
-    printActivityComments: function (comments) {
+    printActivityComments: function (filterKeyword) {
+        if (!this.activities) return ''
+        var comments = []
+        if (filterKeyword == 'all') comments = this.activities
+        else comments = this.activities.filter((entry) => entry.commentType == filterKeyword)
         if (!comments) return ''
-        const activityComments = comments.filter((entry) => entry.commentType == 'comment')
-        if (!activityComments) return ''
         html = ``
-        activityComments.forEach(comment => {
+        comments.forEach(comment => {
             html += `
                 <div class="activity__comment">
                     <p class="comment__header">${comment.commentAuthor} added a comment - ${comment.commentDateFormatted}</p>
@@ -41,6 +44,12 @@ let taskdetailsHandler = {
                 </div>
                 <hr>`
         })
+        document.getElementById('activity_all').classList.remove('activity__active')
+        document.getElementById('activity_comments').classList.remove('activity__active')
+        document.getElementById('activity_history').classList.remove('activity__active')
+        if (filter == 'all') document.getElementById('activity_all').classList.add('activity__active')
+        else if (filter == 'comment') document.getElementById('activity_comments').classList.add('activity__active')
+        else if (filter == 'history') document.getElementById('activity_history').classList.add('activity__active')
         return html
     },
     printHeader: function (parentListHTML, title) {
@@ -147,7 +156,7 @@ let taskdetailsHandler = {
                 </div>
             </div>`
     },
-    printActivityModule: function (activity) {
+    printActivityModule: function (taskID) {
         return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
@@ -164,15 +173,23 @@ let taskdetailsHandler = {
                     <div class="header__title">Activity</div>
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_activity">
                         <div class="activity__header">
-                            <p class="activity__item"id="activity_all">All</p>
-                            <p class="activity__item activity__active" id="activity_comments">Comments</p>
-                            <p class="activity__item"id="activity_history">History</p>
+                            <p class="activity__item" id="activity_all" onclick="taskdetailsHandler.addActivitiesToModule('all')">All</p>
+                            <p class="activity__item" id="activity_comments" onclick="taskdetailsHandler.addActivitiesToModule('comment')">Comments</p>
+                            <p class="activity__item" id="activity_history" onclick="taskdetailsHandler.addActivitiesToModule('history')">History</p>
                         </div>
                         <hr>
-                        ${this.printActivityComments(activity)}
+                        <div id="taskdetails-activities"></div>
                     </div>
+                    <button onclick="taskHandler.openCreateCommentPopup(${taskID})">
+                        <i class="fa fa-comment"></i>
+                        Add Comment
+                    </button>
                 </div>
             </div>`
+    },
+    addActivitiesToModule: function (filterKeyword) {
+        var html = this.printActivityComments(filterKeyword)
+        document.getElementById('taskdetails-activities').innerHTML = html
     },
     printPeopleModule: function (assignee, reporter) {
         return `
@@ -250,7 +267,7 @@ let taskdetailsHandler = {
         __detailsModuleHTML = this.printDetailsModule(taskData.taskStatus, taskData.taskPriority, taskData.taskType)
         __descriptionModuleHTML = this.printDescriptionModule(taskData.descriptionWithMakros)
         __subtasksModuleHTML = this.printSubtasksModule(taskData.subtasks)
-        __activityModuleHTML = this.printActivityModule(taskData.activity)
+        __activityModuleHTML = this.printActivityModule(taskData.taskID, taskData.activity)
         _bigModulesHTML = `
             <div class="taskdetails__big__modules">
                 ${__detailsModuleHTML}${__descriptionModuleHTML}${__subtasksModuleHTML}${__activityModuleHTML}
@@ -266,6 +283,8 @@ let taskdetailsHandler = {
                 ${_bigModulesHTML}${_smallModulesHTML}
             </div>`
         document.getElementById('taskdetails').innerHTML = `${headerHTML}${buttonsHTML}${modulesHTML}`
+        this.activities = taskData.activity
+        this.addActivitiesToModule('comment')
         if (taskData.taskType == 'task') labelHandler.showLabelsInTaskDetails(taskData.taskParentID, taskData.taskID)
     },
     taskdetailsToggleContent: function (buttonID, contentAreaID) {

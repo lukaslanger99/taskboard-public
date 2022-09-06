@@ -2,21 +2,19 @@ let taskHandler = {
     openCreateTaskForm: async function (type, parentID = 0, toggleContentDropdown = true) {
         if (toggleContentDropdown && type == 'task') toggleDropdown('dropdown_create_content')
         var html = `${(type == 'task') ? addHeaderDynamicForm('Create Task') : addHeaderDynamicForm('Create Task')}
-        <table style="margin:0 auto 15px auto;">
-            <tr>
-                <td>Priority:</td>
-                <td>
-                  <div class="select">
-                    <select name="priority" id="taskprio">
-                      <option value="1">Low</option>
-                      <option value="2" selected>Normal</option>
-                      <option value="3">High</option>
-                    </select>
-                  </div>
-                </td>
+            <div class="popop__dropdowns">
+                <p>Priority:</p>
+                <p>                  
+                    <div class="select">
+                      <select name="priority" id="taskprio">
+                        <option value="1">Low</option>
+                        <option value="2" selected>Normal</option>
+                        <option value="3">High</option>
+                      </select>
+                    </div>
+                </p>
                 ${(type == 'task') ? await printGroupDropdown(parentID) : ''}
-            </tr>
-            </table>
+            </div>
             <textarea class="input-login" placeholder="title" id="tasktitle" name="title" cols="40" rows="1"></textarea>
             <textarea class="input-login" placeholder="description" id="taskdescription" name="description" cols="40" rows="5"></textarea>
             <div class="createanother__bottom">
@@ -76,10 +74,21 @@ let taskHandler = {
         if (response.ResponseCode != 'OK') return
         location.href = response.data
     },
+    openCreateCommentPopup: function (taskID) {
+        var html = `
+            ${addHeaderDynamicForm('Add Comment')}
+            <textarea class="input-login" placeholder="description" id="commentDescription" name="description" cols="40" rows="5"></textarea>
+            <button class="button" onclick="taskHandler.createComment(${taskID})">Add</button>`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
     createComment: async function (taskID) {
-        const description = document.getElementById('commentDescription')
+        const description = document.getElementById('commentDescription').value
         if (!description) return printErrorToast("EMPTY_FIELDS")
-        await requestHandler.sendRequest('createComment', ['taskID', taskID], ['description', description])
+        const response = await requestHandler.sendRequest('createComment', ['taskID', taskID], ['description', description], ['type', 'comment'])
+        if (response.ResponseCode != 'OK') return
+        closeDynamicForm()
+        taskdetailsHandler.printTaskdetails()
     },
     deleteComment: async function (commentID) {
         if (!confirm("Are you sure you want to delete this Comment?")) return
