@@ -146,10 +146,10 @@ function toggleUnfoldArea(targetId, buttonId, autoToggle = '') {
     var containerDisplay = getComputedStyle(container).display;
     if (containerDisplay == 'none') {
       container.style.display = 'flex'
-      button.style.webkitTransform = 'rotate(180deg)'
+      button.innerHTML = `<p><i class="fa fa-caret-up" aria-hidden="true"></i></p>`
     } else if (containerDisplay == 'flex' && autoToggle == '') {
       container.style.display = 'none'
-      button.style.webkitTransform = 'rotate(0deg)'
+      button.innerHTML = `<p><i class="fa fa-caret-down" aria-hidden="true"></i></p>`
     }
   }
 }
