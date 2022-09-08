@@ -47,9 +47,9 @@ let taskdetailsHandler = {
         document.getElementById('activity_all').classList.remove('activity__active')
         document.getElementById('activity_comments').classList.remove('activity__active')
         document.getElementById('activity_history').classList.remove('activity__active')
-        if (filter == 'all') document.getElementById('activity_all').classList.add('activity__active')
-        else if (filter == 'comment') document.getElementById('activity_comments').classList.add('activity__active')
-        else if (filter == 'history') document.getElementById('activity_history').classList.add('activity__active')
+        if (filterKeyword == 'all') document.getElementById('activity_all').classList.add('activity__active')
+        else if (filterKeyword == 'comment') document.getElementById('activity_comments').classList.add('activity__active')
+        else if (filterKeyword == 'history') document.getElementById('activity_history').classList.add('activity__active')
         return html
     },
     printHeader: function (parentListHTML, title) {
@@ -246,7 +246,7 @@ let taskdetailsHandler = {
                                 <td class="letf__td">Updated:</td>
                                 <td>${dates.dateUpdatedFormatted}</td>
                             </tr>
-                            ${(status == 'resolved')
+                            ${(status == 'resolved' || status == 'archived')
                 ? `<tr><td class="letf__td">Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
                 : ``}
                         </table>

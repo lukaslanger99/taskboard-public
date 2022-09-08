@@ -150,6 +150,18 @@ class RequestHandler
         return ["ResponseCode" => "OK", "data" => $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID)];
     }
 
+    private function formatDate($date)
+    {
+        $dateDiffHours = round((strtotime($this->getCurrentTimestamp()) - strtotime($date)) / 3600);
+        $dateDiffDays = round($dateDiffHours / 24);
+        if ($dateDiffHours < 1) return "less than 1 hour ago";
+        else if ($dateDiffHours == 1) return "1 hour ago";
+        else if ($dateDiffHours > 1 && $dateDiffDays < 1) return $dateDiffHours . " hours ago";
+        else if ($dateDiffDays == 1) return "1 day ago";
+        else if (7 > $dateDiffDays  && $dateDiffDays > 1) return $dateDiffDays . " days ago";
+        return date("j/M/Y G:i", strtotime($date));
+    }
+
     public function getTaskDataTaskdetails($userID, $taskID)
     {
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
@@ -173,7 +185,7 @@ class RequestHandler
         if ($comments = $this->mysqliSelectFetchArray("SELECT * FROM comments WHERE commentTaskID = ? ORDER BY commentDate DESC", $taskID)) {
             foreach ($comments as $comment) {
                 $comment->commentAuthor = $this->getUsernameByID($comment->commentAuthor);
-                $comment->commentDateFormatted = $comment->commentDate; // TODO
+                $comment->commentDateFormatted = $this->formatDate($comment->commentDate);
                 $comment->descriptionWithMakros = $parsedown->text($comment->commentDescription);
             }
             $taskData->activity = $comments;
@@ -181,10 +193,9 @@ class RequestHandler
         $taskData->assignee = $this->getUsernameByID($taskData->taskAssignee);
         $taskData->reporter = $this->getUsernameByID($taskData->taskReporter);
         $taskData->datesFormatted = [
-            // $this->formatDate($date)
-            "dateCreatedFormatted" => $taskData->taskDateCreated, // TODO
-            "dateUpdatedFormatted" => $taskData->taskDateUpdated, // TODO
-            "dateResolvedFormatted" => $taskData->taskDateResolved // TODO
+            "dateCreatedFormatted" => $this->formatDate($taskData->taskDateCreated),
+            "dateUpdatedFormatted" => $this->formatDate($taskData->taskDateUpdated),
+            "dateResolvedFormatted" => $this->formatDate($taskData->taskDateResolved)
         ];
         $taskData->descriptionWithMakros = $parsedown->text($taskData->taskDescription);
         return ["ResponseCode" => "OK", "data" => $taskData];

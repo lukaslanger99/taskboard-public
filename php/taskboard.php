@@ -359,46 +359,6 @@ class TaskBoard
         echo $html;
     }
 
-    public function printComments($id, $type)
-    {
-        $sql = "SELECT * FROM comments WHERE commentTaskID = ?";
-        $data = $this->mysqliSelectFetchArray($sql, $id);
-        if ($data != null) {
-            $html = '<table>';
-            foreach ($data as $i) {
-                $html .= '
-                    <tr class="comment-background">
-                        <td width="15%">' . $this->getUsernameByID($i->commentAuthor) . ':</td>
-                        <td style="font-size:14px;">' . $this->addTagsToUrlsInString($i->commentDescription) . '</td>
-                        <td width="18%">' . $i->commentDate . '</td>
-                        <td style="white-space: nowrap;">
-                            <div class="editgroup-button" onclick="openEditCommentForm(' . $i->commentID . ', \'' . $i->commentDescription . '\')">
-                                Edit
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                            </div>
-                            <div class="editgroup-button" onclick="taskHandler.deleteComment(' . $i->commentID . ')">
-                                Delete
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </div>
-                        </td>
-                    </tr>';
-            }
-            $html .= '</table>';
-        } else {
-            $html =  '';
-        }
-        $html .= 'table>
-                    <tr>
-                        <td><textarea cols="40" rows="3" type="text" name="description" id="commentDescription"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td style="float:right;"><button class="button" onclick="taskHandler.createComment(' . $id . ')">Comment"</button></td>
-                    </tr>
-                </table>
-            </div>';
-        return $html;
-    }
-
     public function printGroupNames()
     {
         $groups = $this->sqlGetAllGroups();
