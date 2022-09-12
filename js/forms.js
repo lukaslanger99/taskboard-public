@@ -86,7 +86,6 @@ function printGroupForm() {
 const openUpdateTaskForm = async () => {
   const task = await getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
   var dropDowns = ''
-  console.log(task)
   if (task.taskType == 'task') {
     dropDowns += await printGroupDropdown(task.taskParentID);
   }

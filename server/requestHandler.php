@@ -474,9 +474,9 @@ class RequestHandler
         if (!$end) $end = '-';
         $sql = "INSERT INTO messages 
             (messageOwner, messageGroup, messageType, messageTitle, messageDate, messageStart, messageEnd) 
-            VALUES (?, ?, 'appointment', ?, ?, ?, ?);";
-        $this->mysqliQueryPrepared($sql, $userID, (int) $groupID, str_replace(array("\r", "\n"), " ", $title), $date, $start, $end);
-        return $this->getAppointments($userID);
+            VALUES (?, ?, ?, ?, ?, ?, ?);";
+        $this->mysqliQueryPrepared($sql, $userID, (int) $groupID, 'appointment', str_replace(array("\r", "\n"), " ", $title), $date, $start, $end);
+        return ["ResponseCode" => "OK"];
     }
 
     public function getMotd($userID)
