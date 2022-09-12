@@ -1,7 +1,5 @@
 <?php
 require('config.php');
-unset($_SESSION['delete']);
-unset($_SESSION['deleteGroup']);
 if ($_SESSION['userID']) {
     $_SESSION['enteredUrl'] = $_SERVER['REQUEST_URI'];
     require('html/top-bar.php');

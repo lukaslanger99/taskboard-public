@@ -1,12 +1,5 @@
 const DIR_SYSTEM = 'http://lukaslanger.bplaced.net/taskboard/'
 
-function leaveGroup(groupID) {
-  var a = confirm("Are you sure you want to leave this group?");
-  if (a == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=leaveGroup&groupID=" + groupID;
-  }
-}
-
 function deleteUser(name, id) {
   var b = confirm("Are you sure you want to delete " + name + "?");
   if (b == true) {
@@ -29,46 +22,6 @@ function showForm(id) {
   }
 }
 
-//Edit group form
-function openEditGroupForm(groupID, name, priority, archiveTime) {
-  var container = document.getElementById("dynamic-modal-content");
-  if (container) {
-    html = `
-      <div class="modal-header">
-        Update Group
-        <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>
-      </div>
-      <form action="${DIR_SYSTEM}php/action.php?action=updateGroup&id=${groupID}" autocomplete="off" method="post" >
-      <table style="margin:0 auto 15px auto;">
-          <tr>
-              <td>Name:</td>
-              <td>
-                  <input type="text" name="name" value="${name}">
-              </td>
-          </tr>
-          <tr>
-              <td>Priority:</td>
-              <td>
-                  <input type="number" name="priority" min="1" max="1000" value="${priority}">
-              </td
-          </tr>
-          <tr>
-          <td>Number of days till task archived:</td>
-              <td>
-                  <input type="number" name="archivetime" min="1" max="365" value="${archiveTime}">
-              </td>
-          </tr>
-      </table>
-        <input class="submit-login" type="submit" name="updategroup-submit" value="Update" />
-      </form>`
-    container.innerHTML = html;
-    container.style.height = '230px';
-
-    document.getElementById('bg-modal-dynamicform').style.display = 'flex'
-    closeDynamicFormListener()
-  }
-}
-
 //Edit comment form
 function openEditCommentForm(commentID, text) {
   var container = document.getElementById("dynamic-modal-content");
@@ -87,21 +40,6 @@ function openEditCommentForm(commentID, text) {
 
     document.getElementById('bg-modal-dynamicform').style.display = 'flex';
     closeDynamicFormListener()
-  }
-}
-
-function openShowUsersPopup() {
-  var container = document.getElementById("bg-modal-groupusers");
-  if (container) {
-    container.style.display = 'flex';
-    var faCloseShowUSers = document.getElementById('fa-close-groupusers');
-    if (faCloseShowUSers) {
-      faCloseShowUSers.addEventListener('click',
-        function () {
-          container.style.display = 'none';
-        }
-      )
-    }
   }
 }
 
@@ -152,12 +90,4 @@ function toggleUnfoldArea(targetId, buttonId, autoToggle = '') {
       button.innerHTML = `<p><i class="fa fa-caret-down" aria-hidden="true"></i></p>`
     }
   }
-}
-
-async function groupUnfoldCheckboxListener(groupID) {
-  var checkboxElement = document.getElementById('groupUnfoldCheckbox')
-  checkboxElement.addEventListener('click',
-    async () => {
-      return await requestHandler.sendRequest('toggleUnfoldGroup', ['id', id], ['checked', checkboxElement.checked])
-    })
 }

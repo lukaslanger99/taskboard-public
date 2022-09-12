@@ -104,19 +104,17 @@ switch ($_GET['action']) {
 
     case 'completeMorningroutineTask':
         header('Content-Type: application/json');
-        if ($data = $rh->completeMorningroutineTask($userID, $_POST['id']) != "NO_MORNINGROUTINE") $result = ["ResponseCode" => "OK", "data" => $data];
-        else $result = ["ResponseCode" => "NO_MORNINGROUTINE"];
-        echo json_encode($result);
+        echo json_encode($rh->completeMorningroutineTask($userID, $_POST['id']));
         break;
 
     case 'addMorningroutineTask':
         header('Content-Type: application/json');
-        echo json_encode(["ResponseCode" => "OK", "data" => $rh->addMorningroutineTask($userID, $_POST['text'])]);
+        echo json_encode($rh->addMorningroutineTask($userID, $_POST['text']));
         break;
 
     case 'resetMorningroutine':
         header('Content-Type: application/json');
-        echo json_encode(["ResponseCode" => "OK", "data" => $rh->resetMorningroutine($userID)]);
+        echo json_encode($rh->resetMorningroutine($userID));
         break;
 
     case 'updateMorningroutineOrder':
@@ -177,11 +175,6 @@ switch ($_GET['action']) {
     case 'toggleUnfoldPanel':
         header('Content-Type: application/json');
         echo json_encode($rh->toggleUnfoldPanel($userID, $_POST['type'], $_POST['checked']));
-        break;
-
-    case 'toggleUnfoldGroup':
-        header('Content-Type: application/json');
-        echo json_encode($rh->toggleUnfoldGroup($userID, $_POST['id'], $_POST['checked']));
         break;
 
     case 'toggleActivePanel':
@@ -279,6 +272,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->deleteGroup($userID, $_POST['groupID']));
         break;
 
+    case 'leaveGroup':
+        header('Content-Type: application/json');
+        echo json_encode($rh->leaveGroup($userID, $_POST['groupID']));
+        break;
+
     case 'createGroupInvite':
         header('Content-Type: application/json');
         echo json_encode($rh->createGroupInvite($userID, $_POST['groupID'], $_POST['username']));
@@ -289,14 +287,57 @@ switch ($_GET['action']) {
         echo json_encode($rh->toggleGroupInvites($userID, $_POST['groupID'], $_POST['status']));
         break;
 
-    case 'toggleGroupStatus':
-        header('Content-Type: application/json');
-        echo json_encode($rh->toggleGroupStatus($userID, $_POST['groupID'], $_POST['status']));
-        break;
-
     case 'updateWeatherCity':
         header('Content-Type: application/json');
         echo json_encode($rh->updateWeatherCity($userID, $_POST['city']));
+        break;
+
+    case 'getGroupAccess':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getGroupAccess($userID, $_POST['groupID']));
+        break;
+
+    case 'removeUser':
+        header('Content-Type: application/json');
+        echo json_encode($rh->removeUser($userID, $_POST['groupID'], $_POST['userID']));
+        break;
+
+    case 'refreshInvites':
+        header('Content-Type: application/json');
+        echo json_encode($rh->refreshInvites($userID, $_POST['groupID']));
+        break;
+
+    case 'joinGroup':
+        header('Content-Type: application/json');
+        echo json_encode($rh->joinGroup($userID, $_GET['t']));
+        break;
+
+    case 'getGroupIniviteData':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getGroupIniviteData($userID, $_POST['groupID']));
+        break;
+
+    case 'getGroupSettingsData':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getGroupSettingsData($userID, $_POST['groupID']));
+        break;
+
+    case 'updateGroup':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateGroup(
+            $userID,
+            $_POST['groupID'],
+            $_POST['groupName'],
+            $_POST['groupPriority'],
+            $_POST['groupArchiveTime'],
+            $_POST['groupUnfolded'],
+            $_POST['groupStatus']
+        ));
+        break;
+
+    case 'getGroupData':
+        header('Content-Type: application/json');
+        echo json_encode($rh->getGroupData($userID, $_POST['groupID']));
         break;
 
     default:

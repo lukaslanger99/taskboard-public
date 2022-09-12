@@ -38,11 +38,9 @@ let panels = {
         this.printQueueTasks(response.data)
     },
     // Morningroutine
-    printMorningroutineTasks: async function (morningroutineTasks = '') {
-        if (morningroutineTasks == '') {
-            const response = await requestHandler.sendRequest('getUnfinishedMorningroutineTasks')
-            morningroutineTasks = response.data
-        }
+    printMorningroutineTasks: async function () {
+        const response = await requestHandler.sendRequest('getUnfinishedMorningroutineTasks')
+        const morningroutineTasks = response.data
         var html = '', toggle = false
         if (morningroutineTasks) {
             morningroutineTasks.forEach(entry => {
@@ -65,15 +63,16 @@ let panels = {
         if (!text) return printErrorToast("EMPTY_FIELDS")
         const response = await requestHandler.sendRequest('addMorningroutineTask', ['text', text])
         document.getElementById("morningroutineItem").value = ''
-        this.printMorningroutineTasks(response.data)
+        this.printMorningroutineTasks()
     },
     completeMorningroutineTask: async function (id) {
         const response = await requestHandler.sendRequest('completeMorningroutineTask', ['id', id])
-        this.printMorningroutineTasks(response.data)
+        console.log(response)
+        this.printMorningroutineTasks()
     },
     resetMorningroutine: async function () {
         const response = await requestHandler.sendRequest('resetMorningroutine')
-        this.printMorningroutineTasks(response.data)
+        this.printMorningroutineTasks()
     },
     showMorningroutinePopup: async function () {
         const response = await requestHandler.sendRequest('getAllMorningroutineTasks')

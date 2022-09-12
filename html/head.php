@@ -23,6 +23,8 @@
     <script src="<?php echo DIR_SYSTEM ?>js/node_modules/tata-js/dist/tata.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/forms.js" defer></script>
     <script src="<?php echo DIR_SYSTEM ?>js/draggableHandler.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/groupHandler.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/groupdetailsHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/indexHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/javascript.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/labelHandler.js"></script>

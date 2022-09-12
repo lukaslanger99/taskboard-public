@@ -70,12 +70,6 @@ if ($inviteCounter > 0) {
                         <p>Groups</p>
                     </div>
                 </a>
-                <a href="http://lukaslanger.bplaced.net/taskboard/php/archive.php">
-                    <div class="dropdown_button">
-                        <p><i class="fa fa-archive"></i></p>
-                        <p>Archive</p>
-                    </div>
-                </a>
                 <hr class="solid">
                 <div class="dropdown_create_button" onclick="openFeedbackForm()">
                     <p><i class="fa fa-bug"></i></p>

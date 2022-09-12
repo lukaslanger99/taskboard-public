@@ -348,9 +348,9 @@ class RequestHandler
         $entryData = $this->mysqliSelectFetchObject("SELECT * FROM morningroutine WHERE entryID = ?", $id);
         if ($entryData->entryUserID == $userID) {
             $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = NOW() WHERE entryID = ?", $id);
-            return $this->getUnfinishedMorningroutineTasks($userID);
+            return ["ResponseCode" => "OK"];
         }
-        return "NO_MORNINGROUTINE";
+        return ["ResponseCode" => "NO_MORNINGROUTINE"];
     }
 
     public function addMorningroutineTask($userID, $text)
@@ -369,13 +369,13 @@ class RequestHandler
                 }
             }
         }
-        return $this->getUnfinishedMorningroutineTasks($userID);
+        return ["ResponseCode" => "OK"];
     }
 
     public function resetMorningroutine($userID)
     {
         $this->mysqliQueryPrepared("UPDATE morningroutine SET entryDate = '0000-00-00' WHERE entryUserID = ?", $userID);
-        return $this->getUnfinishedMorningroutineTasks($userID);
+        return ["ResponseCode" => "OK"];
     }
 
     public function updateMorningroutineOrder($entryIDs)
@@ -564,12 +564,6 @@ class RequestHandler
         } else if ($type == 'morningroutine') {
             $this->mysqliQueryPrepared("UPDATE panels SET panelMorningroutine = ? WHERE userID = ?", $checked, $userID);
         }
-        return ["ResponseCode" => "OK"];
-    }
-
-    public function toggleUnfoldGroup($userID, $groupID, $checked)
-    {
-        $this->mysqliQueryPrepared("UPDATE groupaccess SET groupUnfolded = ? WHERE userID = ? AND groupID = ?", $checked, $userID, $groupID);
         return ["ResponseCode" => "OK"];
     }
 
@@ -907,6 +901,12 @@ class RequestHandler
         return ["ResponseCode" => "OK"];
     }
 
+    public function leaveGroup($userID, $groupID)
+    {
+        $this->mysqliQueryPrepared("DELETE FROM groupaccess WHERE groupID = ? AND userID = ?", $groupID, $userID);
+        return ["ResponseCode" => "OK"];
+    }
+
     private function generateRandomString($length = 21)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -945,13 +945,6 @@ class RequestHandler
         return ["ResponseCode" => "OK"];
     }
 
-    public function toggleGroupStatus($userID, $groupID, $status)
-    {
-        if (!$this->groupOwnerCheck($groupID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
-        $this->mysqliQueryPrepared("UPDATE groups SET groupStatus = ? WHERE groupID = ?;", $status, $groupID);
-        return ["ResponseCode" => "OK"];
-    }
-
     private function getCurrentTimestamp()
     {
         return date('Y-m-d H:i');
@@ -961,5 +954,99 @@ class RequestHandler
     {
         $this->mysqliQueryPrepared("UPDATE panels SET panelWeatherCity = ? WHERE userID = ?", $city, $userID);
         return ["ResponseCode" => "OK"];
+    }
+
+    public function getGroupAccess($userID, $groupID)
+    {
+        if (!$groupAccess = $this->mysqliSelectFetchArray("SELECT * FROM groupaccess WHERE groupID = ?", $groupID)) return ["ResponseCode" => "NO_ENTRIES"];
+        foreach ($groupAccess as $entry) {
+            $entry->userName = $this->getUsernameByID($entry->userID);
+        }
+        $data = (object) [];
+        $data->groupAccess = $groupAccess;
+        if ($this->groupOwnerCheck($groupID, $userID)) $data->groupOwner = true;
+        return ["ResponseCode" => "OK", "data" => $data];
+    }
+
+    public function removeUser($userID, $groupID, $removedUserID)
+    {
+        if (!$this->groupOwnerCheck($groupID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
+        $this->mysqliQueryPrepared("DELETE FROM groupaccess WHERE userID = ? AND groupID = ?", $removedUserID, $groupID);
+        return ["ResponseCode" => "OK"];
+    }
+
+    public function refreshInvites($userID, $groupID)
+    {
+        if (!$this->groupOwnerCheck($groupID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
+        $newToken = $this->generateRandomString();
+        $this->mysqliQueryPrepared(
+            "UPDATE tokens SET tokenToken = ? WHERE tokenType = ? AND tokenGroupID = ?;",
+            $newToken,
+            'groupinvite',
+            $groupID
+        );
+        return ["ResponseCode" => "OK", "data" => $newToken];
+    }
+
+    public function joinGroup($userID, $token)
+    {
+        if (!$tokenData = $this->mysqliSelectFetchObject("SELECT * FROM tokens WHERE tokenToken = ?", $token)) return ["ResponseCode" => "INVALID_TOKEN"];
+        $groupCheck = $this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE groupID = ? AND userID = ?", $tokenData->tokenGroupID, $userID);
+        if ($groupCheck) return ["ResponseCode" => "ALREADY_JOINED"];
+        $this->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES (?, ?)", $tokenData->tokenGroupID, $userID);
+        header("Location: " . DIR_SYSTEM . "php/details.php?action=groupDetails&id=" . $tokenData->tokenGroupID);
+        exit;
+    }
+
+    public function getGroupIniviteData($userID, $groupID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
+        $data = $this->mysqliSelectFetchObject("SELECT groupInvites FROM groups WHERE groupID = ?", $groupID);
+        if ($data->groupInvites == 'enabled') {
+            $tokenData = $this->mysqliSelectFetchObject("SELECT tokenToken FROM tokens WHERE tokenType = ? AND tokenGroupID = ?", 'groupinvite', $groupID);
+            $data->token = $tokenData->tokenToken;
+        }
+        if ($this->groupOwnerCheck($groupID, $userID)) $data->groupOwner = true;
+        return ["ResponseCode" => "OK", "data" => $data];
+    }
+
+    public function getGroupSettingsData($userID, $groupID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
+        $data = $this->mysqliSelectFetchObject("SELECT groupName, groupPriority, groupArchiveTime, groupStatus FROM groups WHERE groupID = ?", $groupID);
+        $unfolded = $this->mysqliSelectFetchObject("SELECT groupUnfolded FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID);
+        $data->groupUnfolded = $unfolded->groupUnfolded;
+        if ($this->groupOwnerCheck($groupID, $userID)) $data->groupOwner = true;
+        return ["ResponseCode" => "OK", "data" => $data];
+    }
+
+    public function updateGroup($userID, $groupID, $groupName, $groupPrio, $groupArchiveTime, $groupUnfolded, $groupStatus)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
+        $this->mysqliQueryPrepared("UPDATE groupaccess SET groupUnfolded = ? WHERE userID = ? AND groupID = ?", $groupUnfolded, $userID, $groupID);
+        if ($this->groupOwnerCheck($groupID, $userID)) {
+            $this->mysqliQueryPrepared(
+                "UPDATE groups SET groupName = ?, groupPriority = ?, groupArchiveTime = ?, groupStatus = ? WHERE groupID = ?",
+                $groupName,
+                $groupPrio,
+                $groupArchiveTime,
+                $groupStatus,
+                $groupID
+            );
+        }
+        return ["ResponseCode" => "OK"];
+    }
+
+    public function getGroupData($userID, $groupID)
+    {
+        if (!$this->checkGroupPermission($userID, $groupID)) return ["ResponseCode" => "NO_ACCESS"];
+        $groupData = $this->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupID = ?", $groupID);
+        ($this->groupOwnerCheck($groupID, $userID)) ? $groupData->groupOwner = true : $groupData->groupOwner = false;
+        $groupData->tasks = $this->mysqliSelectFetchArray(
+            "SELECT * FROM tasks WHERE taskParentID = ? AND taskType = ? ORDER BY taskID DESC",
+            $groupID,
+            'task'
+        );
+        return ["ResponseCode" => "OK", "data" => $groupData];
     }
 }

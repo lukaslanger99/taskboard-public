@@ -246,7 +246,7 @@ let taskdetailsHandler = {
                                 <td class="letf__td">Updated:</td>
                                 <td>${dates.dateUpdatedFormatted}</td>
                             </tr>
-                            ${(status == 'resolved' || status == 'archived')
+                            ${(status != 'open')
                 ? `<tr><td class="letf__td">Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
                 : ``}
                         </table>

@@ -13,17 +13,9 @@ switch ($_GET['action']) {
         break;
 
     case 'groupDetails':
-        $sql = "SELECT * FROM groups WHERE groupID = ?";
-        $group = $taskBoard->mysqliSelectFetchObject($sql, $_GET['id']);
-
-        if ($group && ($taskBoard->checkGroupPermission($_SESSION['userID'], $group->groupID) || $_SESSION['userID'] == 1)) {
-            require('../html/top-bar.php');
-            $taskBoard->printGroupDetails($group);
-            $_SESSION['deleteGroup'] = $group->groupID;
-        } else {
-            $taskBoard->locationIndex("?error=invalidurl");
-        }
-
+        require('../html/top-bar.php');
+        echo '<div id="groupdetails"></div>
+            <script>groupdetailsHandler.printGroupdetails()</script>';
         break;
 
     case 'userDetails':
