@@ -46,17 +46,12 @@ switch ($_GET['action']) {
         if ($_POST['sat'] == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'sat'); // Saturday
         if ($_POST['sun'] == 'true' || $monsun == 'true') $rh->insertEntry($userID, $id, $text, $start, $end, 'sun'); // Sunday
         header('Content-Type: application/json');
-        if ($json = $rh->timetableToJSON($rh->getTimetableByID($userID, $id)) != "NO_TIMETABLE") $result = ["ResponseCode" => "OK", "data" => $json];
-        else $result = ["ResponseCode" => "NO_TIMETABLE"];
-        echo json_encode($result);
+        echo json_encode(["ResponseCode" => "OK"]);
         break;
 
     case 'createTimetable':
         header('Content-Type: application/json');
-        $rh->createTimetable($userID, $_POST['type'], $_POST['copycheck']);
-        if ($json = $rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])) != "NO_TIMETABLE") $result = ["ResponseCode" => "OK", "data" => $json];
-        else $result = ["ResponseCode" => "NO_TIMETABLE"];
-        echo json_encode($result);
+        echo json_encode($rh->createTimetable($userID, $_POST['type'], $_POST['copycheck']));
         break;
 
     case 'deleteTimetable':
@@ -72,9 +67,7 @@ switch ($_GET['action']) {
 
     case 'getTimetable':
         header('Content-Type: application/json');
-        if ($json = $rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])) != "NO_TIMETABLE") $result = ["ResponseCode" => "OK", "data" => $json];
-        else $result = ["ResponseCode" => "NO_TIMETABLE"];
-        echo json_encode($result);
+        echo json_encode($rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])));
         break;
 
     case 'getQueueTasks':

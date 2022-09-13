@@ -240,6 +240,7 @@ class RequestHandler
                 }
             }
         }
+        return ["ResponseCode" => "OK"];
     }
 
     public function deleteTimetable($userID, $timetableID)
@@ -296,9 +297,9 @@ class RequestHandler
                     $json['tasks'][] = $task;
                 }
             }
-            return $json;
+            return ["ResponseCode" => "OK", "data" => $json];
         }
-        return "NO_TIMETABLE";
+        return ["ResponseCode" => "NO_TIMETABLE"];
     }
 
     public function getQueueTasks($userID)

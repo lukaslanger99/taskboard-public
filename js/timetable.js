@@ -1,5 +1,7 @@
 let timetable = {
-    fillPopup: function (data, type) {
+    fillPopup: async function (type) {
+        const response = await requestHandler.sendRequest('getTimetable', ['type', type])
+        const data = response.data
         this.type = type
         var title, buttons
         if (type == 'current') {
@@ -20,7 +22,7 @@ let timetable = {
                 <div class="modal__header__right">${buttons}</div>
                 <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>
             </div>`
-        if (data.tasks) {
+        if (data && data.tasks) {
             html += `<div class="timetable__content">
                     <div class="timetable__content__row">
                         <div class="timetable__content__head">Monday</div>
@@ -56,17 +58,17 @@ let timetable = {
         closeDynamicFormListener()
     },
     timetablePopup: async function (type) {
-        const response = await requestHandler.sendRequest('getTimetable', ['type', type])
-        this.fillPopup(response.data, type)
+        await requestHandler.sendRequest('getTimetable', ['type', type])
+        this.fillPopup(type)
     },
     createTimetable: async function (type) {
-        const response = await requestHandler.sendRequest('createTimetable', ['type', type], ['copycheck', document.getElementById("copycheck").checked])
-        this.fillPopup(response.data, type)
+        await requestHandler.sendRequest('createTimetable', ['type', type], ['copycheck', document.getElementById("copycheck").checked])
+        this.fillPopup(type)
     },
     deleteTimetable: async function (id, type) {
         if (!confirm("Are you sure you want to delete this timetable?")) return
-        const response = await requestHandler.sendRequest('deleteTimetable', ['id', id])
-        this.fillPopup(response.data, type)
+        await requestHandler.sendRequest('deleteTimetable', ['id', id])
+        this.fillPopup(type)
     },
     parentHTML: '',
     type: '',
