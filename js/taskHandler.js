@@ -93,5 +93,45 @@ let taskHandler = {
     deleteComment: async function (commentID) {
         if (!confirm("Are you sure you want to delete this Comment?")) return
         await requestHandler.sendRequest('deleteComment', ['commentID', commentID])
+    },
+    openUpdateTaskForm: async function (taskID) {
+        const response = await requestHandler.sendRequest('getTaskData', ['id', taskID])
+        const task = response.data
+        var dropDowns = ''
+        if (task.taskType == 'task') {
+            dropDowns += await printGroupDropdown(task.taskParentID);
+        }
+        var html = `
+            ${addHeaderDynamicForm('Update Task')}
+            <div class="popop__dropdowns">
+                ${dropDowns}
+                <p>Priority:</p>
+                <p>                  
+                    <div class="select">
+                      <select name="priority" id="taskprio">
+                        <option value="1">Low</option>
+                        <option value="2" selected>Normal</option>
+                        <option value="3">High</option>
+                      </select>
+                    </div>
+                </p>
+            </div>
+            <textarea class="input-login" type="text" id="tasktitle" cols="40" rows="1">${task.taskTitle}</textarea>
+            <textarea class="input-login" type="text" id="taskdescription" cols="40" rows="5">${task.taskDescription}</textarea>
+            <button class="button" onclick="taskHandler.updateTask(${taskID}, '${task.taskType}')">Update</button>`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
+    updateTask: async function (taskID, type) {
+        var taskprio = document.getElementById("taskprio").value
+        if (type == 'task') parentID = document.getElementById("selectGroupID").value
+        var tasktitle = document.getElementById("tasktitle").value
+        var taskdescription = document.getElementById("taskdescription").value
+        if (!(taskprio && tasktitle && taskdescription)) return printErrorToast("EMPTY_FIELDS")
+        await requestHandler.sendRequest(
+            'updateTask', ['taskID', taskID], ['taskprio', taskprio], ['parentID', parentID], ['tasktitle', tasktitle], ['taskdescription', taskdescription])
+        closeDynamicForm()
+        printSuccessToast('TASK_UPDATED')
+        taskdetailsHandler.printTaskdetails()
     }
 }

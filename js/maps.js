@@ -29,7 +29,7 @@ function fillSuccessMap() {
         "TASK_CREATED": "Successfully created task !",
         "UPDATED_GROUP": "Successfully updated group !",
         "UPDATED_MESSAGE": "Successfully updated message !",
-        "UPDATED_TASK": "Successfully updated task !",
+        "TASK_UPDATED": "Successfully updated task !",
         "UPDATE_MAIL": "Successfully updated mail !",
         "UPDATE_PW": "Successfully updated password !",
         "UPDATE_SHORTNAME": "Successfully updated shortname !",

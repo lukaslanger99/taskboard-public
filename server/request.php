@@ -220,6 +220,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->createTask($userID, $_POST['type'], $_POST['parentID'], $_POST['tasktitle'], $_POST['taskdescription'], $_POST['taskprio']));
         break;
 
+    case 'updateTask':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateTask($userID, $_POST['taskID'], $_POST['parentID'], $_POST['tasktitle'], $_POST['taskdescription'], $_POST['taskprio']));
+        break;
+
     case 'createFeedback':
         header('Content-Type: application/json');
         echo json_encode($rh->createFeedback($userID, $_POST['description']));

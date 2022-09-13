@@ -1,15 +1,6 @@
-async function getTaskData(taskID) {
-  const response = await requestHandler.sendRequest('getTaskData', ['id', taskID])
-  return response.data
-}
-
-async function getGroups() {
-  const response = await requestHandler.sendRequest('getActiveGroups')
-  return response.data
-}
-
 const printGroupDropdown = async (selectedGroupId) => {
-  const groups = await getGroups()
+  const response = await requestHandler.sendRequest('getActiveGroups')
+  const groups = response.data
   if (!groups) return printErrorToast('NO_GROUPS')
   var groupsHtml = ''
   groups.forEach(group => {
@@ -29,39 +20,6 @@ const printGroupDropdown = async (selectedGroupId) => {
     </p>`
 }
 
-function printPriorityDropdown(selectedPriority = '2') {
-  var priorityHtml = '';
-  if (selectedPriority == 1) {
-    priorityHtml += '\
-    <option selected="selected" value="1">Low</option>\
-    <option value="2">Normal</option>\
-    <option value="3">High</option>\
-    ';
-  } else if (selectedPriority == 2) {
-    priorityHtml += '\
-    <option value="1">Low</option>\
-    <option selected="selected" value="2">Normal</option>\
-    <option value="3">High</option>\
-    ';
-  } else {
-    priorityHtml += '\
-    <option selected="selected" value="1">Low</option>\
-    <option value="2">Normal</option>\
-    <option selected="selected" value="3">High</option>\
-    ';
-  }
-
-  var html = '\
-  <td>Priority:</td>\
-  <td>\
-      <div class="select">\
-          <select name="priority">\
-          '+ priorityHtml + '\
-          </select>\
-      </div>\
-  </td>';
-  return html;
-}
 
 //check nightmode toggled to show dropdown
 var nightmodeChangeCheck = document.URL.replace(/.*nightmodechange=([^&]*).*|(.*)/, '$1')
@@ -80,26 +38,6 @@ function printGroupForm() {
     showDynamicForm(container, html)
     closeDynamicFormListener()
   }
-}
-
-// Update Task Form
-const openUpdateTaskForm = async () => {
-  const task = await getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
-  var dropDowns = ''
-  if (task.taskType == 'task') {
-    dropDowns += await printGroupDropdown(task.taskParentID);
-  }
-  dropDowns += printPriorityDropdown(task.taskPriority);
-  var html = `
-      ${addHeaderDynamicForm('Update Task')}
-      <form action="${DIR_SYSTEM}php/action.php?action=update&id=${task.taskID}" autocomplete="off" method="post" >
-        <div class="popop__dropdowns">${dropDowns}</div>
-        <textarea class="input-login" type="text" name="title" cols="40" rows="1">${task.taskTitle}</textarea>
-        <textarea class="input-login" type="text" name="description" cols="40" rows="5">${task.taskDescription}</textarea>
-        <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />
-      </form>`
-  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-  closeDynamicFormListener();
 }
 
 function openFeedbackForm() {

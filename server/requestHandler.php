@@ -723,6 +723,50 @@ class RequestHandler
         return ["ResponseCode" => "OK"];
     }
 
+    public function updateTask($userID, $taskID, $parentID, $title, $description, $prio)
+    {
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
+        $oldTaskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
+        $priority = (int) $prio;
+
+        if ($oldTaskData->taskPriority != $priority) $this->createComment(
+            $userID,
+            $taskID,
+            "PRIORITY[" . $oldTaskData->taskPriority . " -> " . $priority . "]",
+            "history"
+        );
+        if ($oldTaskData->taskType == 'task' && $oldTaskData->taskParentID != $parentID) {
+            $this->createComment(
+                $userID,
+                $taskID,
+                'GROUP[' . $this->getGroupNameByID($oldTaskData->taskParentID) . ' -> ' . $this->getGroupNameByID($parentID) . ']',
+                "history"
+            );
+        }
+        if ($oldTaskData->taskTitle != $title) $this->createComment(
+            $userID,
+            $taskID,
+            'TITLE[' . $oldTaskData->taskTitle . ' -> ' . $title . ']',
+            "history"
+        );
+        if ($oldTaskData->taskDescription != $description) $this->createComment(
+            $userID,
+            $taskID,
+            'DESCRIPTION[' . $oldTaskData->taskDescription . ' -> ' . $description . ']',
+            "history"
+        );
+        $sql = "UPDATE tasks SET 
+            taskParentID = ?,
+            taskPriority = ?,
+            taskPriorityColor = ?,
+            taskTitle = ?,
+            taskDescription = ?,
+            taskDateUpdated = ?
+            WHERE taskID = ?";
+        $this->mysqliQueryPrepared($sql, $parentID, $priority, $this->getPriorityColor($priority), $title, $description, $this->getCurrentTimestamp(), $taskID);
+        return ["ResponseCode" => "OK"];
+    }
+
     public function createFeedback($userID, $description)
     {
         $title = $this->getUsernameByID($userID) . " - " . $this->getCurrentTimestamp();

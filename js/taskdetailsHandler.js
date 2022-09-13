@@ -37,7 +37,9 @@ let taskdetailsHandler = {
         comments.forEach(comment => {
             html += `
                 <div class="activity__comment">
-                    <p class="comment__header">${comment.commentAuthor} added a comment - ${comment.commentDateFormatted}</p>
+                    <p class="comment__header">
+                        ${comment.commentAuthor} ${(comment.commentType == 'comment') ? 'added a comment' : 'updated task'} - ${comment.commentDateFormatted}
+                    </p>
                     <div class="comment__content">
                         ${comment.descriptionWithMakros}
                     </div>
@@ -69,7 +71,7 @@ let taskdetailsHandler = {
     printButtons: function (taskID, type, status) {
         return `
             <div class="taskdetails__buttons">
-                <button onclick="openUpdateTaskForm()">Update</button>
+                <button onclick="taskHandler.openUpdateTaskForm(${taskID})">Update</button>
                 <button onclick="taskHandler.deleteTask(${taskID}, '${type}')">Delete</button>
                 <button onclick="taskHandler.openCreateTaskForm('subtask', ${taskID}, 'false')">Create Subtask</button>
                 <button onclick="taskHandler.assignTask(${taskID})">Assign Task</button>
