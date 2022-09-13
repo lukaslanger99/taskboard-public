@@ -31,7 +31,7 @@ switch ($_GET['action']) {
         echo json_encode($rh->getTaskDataTaskdetails($userID, $_POST['taskID']));
         break;
 
-    case 'addEntrys':
+    case 'addEntries':
         $id = $_POST['id'];
         $text = $_POST['text'];
         $start = $_POST['start'];
