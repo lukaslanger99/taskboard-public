@@ -355,10 +355,10 @@ class TaskBoard
     {
         if ($type == 'appointment') {
             return '<div class="panel-item-top-bar">
-                <div class="top-bar-left">
+                <div class="display__flex">
                     <p id="appointmentPanelTitle"></p>
                 </div>
-                <div class="top-bar-right">
+                <div class="display__flex">
                     <div class="panel-item-top-bar-button" id="openAppointmentCalendarButton" onclick="panels.openAppointmentCalendar()">
                         <i class="fa fa-calendar-day" aria-hidden="true"></i>
                     </div>
@@ -393,7 +393,7 @@ class TaskBoard
                 </div>';
         } else if ($type == 'weather') {
             return '<div class="panel-item-top-bar">
-                    <div class="top-bar-left">
+                    <div class="display__flex">
                         <p>Weather</p>
                     </div>
                     <div class="panel_item_top_bar_unfold_button" id="weatherUnfoldButton" onclick="toggleUnfoldArea(\'weatherPanelContentArea\',\'weatherUnfoldButton\')">
@@ -402,10 +402,10 @@ class TaskBoard
                 </div>';
         } else if ($type == 'timetable') {
             return '<div class="panel-item-top-bar">
-                    <div class="top-bar-left">
+                    <div class="display__flex">
                         <p>Timetable (KW' . date("W") . ')</p>
                     </div>
-                    <div class="top-bar-right">
+                    <div class="display__flex">
                         <div class="panel-item-top-bar-button" id="timetableCurrentWeekButton" onclick="timetable.timetablePopup(\'current\')">
                             Current week
                         </div>
@@ -439,10 +439,10 @@ class TaskBoard
         }
 
         return '<div class="panel-item-top-bar">
-            <div class="top-bar-left">
+            <div class="display__flex">
                 <p id="' . $titleID . '">' . $title . '</p>
             </div>
-            <div class="top-bar-right">
+            <div class="display__flex">
                 <div class="panel-item-top-bar-button" id="' . $createButtonID . '" onclick="' . $onclick . '">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </div>

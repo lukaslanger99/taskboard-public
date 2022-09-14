@@ -83,7 +83,7 @@ let panels = {
                 (flag) ? popupHTML += `<hr class="solid">` : flag = true
                 popupHTML += `
                     <div class="label__item draggable__item" draggable="true" data-type="${task.entryID}">
-                        <div class="label__left">
+                        <div class="display__flex">
                             <div>${task.entryTitle}</div>
                         </div>
                         <div class="label__right">

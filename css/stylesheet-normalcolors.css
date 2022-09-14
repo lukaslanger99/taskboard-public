@@ -37,16 +37,8 @@ th {
   background-color: lightgray;
 }
 
-.single__content__subtask {
-  background-color: lightgray;
-}
-
 /* Button */
 .button {
-  background-color: #f2f2f2;
-}
-
-.profile-button {
   background-color: #f2f2f2;
 }
 
@@ -155,11 +147,6 @@ th {
   border: 1px solid #337ab7;
 }
 
-.signup-area {
-  background-color: #f2f2f2;
-  border: 1px solid #337ab7;
-}
-
 .box-header {
   color: #fff;
   background-color: #337ab7;
@@ -190,16 +177,6 @@ th {
   background-color: white;
 }
 
-/* Group */
-.editgroup-button {
-  background-color: #f2f2f2;
-}
-
-.editgroup-button:hover {
-  background-color: #e6e6e6;
-  color: black;
-}
-
 /* Dropdown Button */
 .dropbtn {
   background-color: #f2f2f2;
@@ -218,16 +195,6 @@ th {
 
 .dropdown_message {
   background-color: #ccc;
-}
-
-.dropdown-item {
-  background-color: #ccc;
-  color: black;
-}
-
-.dropdown-item:hover {
-  background-color: #e6e6e6;
-  color: black;
 }
 
 .comment-background {

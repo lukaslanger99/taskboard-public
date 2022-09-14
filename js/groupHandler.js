@@ -46,7 +46,7 @@ let groupHandler = {
         if (data.groupAccess) {
             data.groupAccess.forEach(entry => {
                 html += `        
-                    <div class="display-flex">
+                    <div class="display__flex">
                         <p><div>${entry.userName}</div></p>
                         ${(data.groupOwner)
                         ? `<p><i class="fa fa-trash fa-2x" aria-hidden="true" onclick="groupHandler.removeUser(${entry.groupID}, ${entry.userID}, '${entry.userName}')"></i></p>`

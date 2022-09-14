@@ -16,7 +16,7 @@ let labelHandler = {
         (flag) ? labelsHTML += `<hr class="solid">` : flag = true
         labelsHTML += `
         <div class="label__item draggable__item" draggable="true" data-type="${label.labelID}">
-            <div class="label__left">
+            <div class="display__flex">
                 <i class="fa fa-circle fa-2x" aria-hidden="true" style="color:${label.labelColor}"></i>
                 <div>${label.labelName}</div>
             </div>

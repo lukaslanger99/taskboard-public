@@ -25,14 +25,14 @@ if ($inviteCounter > 0) {
 
 <body>
     <div class="top-bar">
-        <div class="top-bar-left">
+        <div class="display__flex">
             <div class="top_bar_title">
                 <a href="<?php echo DIR_SYSTEM ?>">
                     <p>TaskBoard</p>
                 </a>
             </div>
         </div>
-        <div class="top-bar-right">
+        <div class="display__flex">
             <?php
             if ($userID == 1) {
                 echo '<a href="' . DIR_SYSTEM . 'php/admin.php"><div class="button"><p>Admin</p></div></a>';

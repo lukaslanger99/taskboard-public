@@ -110,7 +110,7 @@ let taskdetailsHandler = {
                                 <td class="letf__td">Priority:</td>
                                 <td>${priorities[priority - 1]}</td>
                             </tr>
-                            ${(type == 'task') ? `<tr><td class="letf__td">Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
+                            ${(type == 'task') ? `<tr><td class="letf__td">Labels:</td><td class="display__flex" id="tasklabel-list"></td></tr>` : ``}
                         </table>
                     </div>
                 </div>
@@ -174,7 +174,7 @@ let taskdetailsHandler = {
                 <div class="taskdetails__module__right">
                     <div class="header__title">Activity</div>
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_activity">
-                        <div class="activity__header">
+                        <div class="display__flex">
                             <p class="activity__item" id="activity_all" onclick="taskdetailsHandler.addActivitiesToModule('all')">All</p>
                             <p class="activity__item" id="activity_comments" onclick="taskdetailsHandler.addActivitiesToModule('comment')">Comments</p>
                             <p class="activity__item" id="activity_history" onclick="taskdetailsHandler.addActivitiesToModule('history')">History</p>
