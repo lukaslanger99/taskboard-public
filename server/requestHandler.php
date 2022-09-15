@@ -398,8 +398,8 @@ class RequestHandler
         $sql = "SELECT m.messageID, m.messageOwner, m.messageGroup, m.messageTitle, m.messageDate, m.messageStart, m.messageEnd
         FROM messages m
             LEFT JOIN groupaccess ga ON m.messageGroup = ga.groupID
-        WHERE  ga.userID = ? AND m.messageType = 'appointment' AND messageDate > CURRENT_DATE
-        ORDER BY m.messageDate";
+        WHERE  ga.userID = ? AND m.messageType = 'appointment' AND messageDate >= CURRENT_DATE
+        ORDER BY m.messageDate, messageStart";
         $data = $this->mysqliSelectFetchArray($sql, $userID);
         if ($data) {
             for ($i = 0; $i < 10 && $i < sizeof($data); $i++) {
