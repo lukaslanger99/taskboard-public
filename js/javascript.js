@@ -7,42 +7,6 @@ function deleteUser(name, id) {
   }
 }
 
-function removeUserAccess(groupID, userID, userName) {
-  var b = confirm("Are you sure you want to remove " + userName + "?");
-  if (b == true) {
-    location.href = DIR_SYSTEM + "php/action.php?action=removeUser&userID=" + userID + "&groupID=" + groupID;
-  }
-}
-
-function showForm(id) {
-  var element = document.getElementById(id);
-  if (element) {
-    document.getElementById(id).style.display = 'flex';
-    document.querySelector('html').style.overflow = 'hidden';
-  }
-}
-
-//Edit comment form
-function openEditCommentForm(commentID, text) {
-  var container = document.getElementById("dynamic-modal-content");
-  if (container) {
-    html = '\
-          <div class="modal-header">\
-            Update Comment\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-          </div>\
-          <form action="'+ DIR_SYSTEM + 'php/action.php?action=updateComment&commentID=' + commentID + '" autocomplete="off" method="post" >\
-            <textarea class="input-login" type="text" name="text" cols="40" rows="1">'+ text + '</textarea>\
-            <input class="submit-login" type="submit" name="updatecomment-submit" value="Update" />\
-          </form>';
-    container.innerHTML = html;
-    container.style.height = '230px';
-
-    document.getElementById('bg-modal-dynamicform').style.display = 'flex';
-    closeDynamicFormListener()
-  }
-}
-
 function printEditMailForm(mail) {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {

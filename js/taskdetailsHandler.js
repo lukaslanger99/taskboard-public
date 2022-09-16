@@ -37,9 +37,22 @@ let taskdetailsHandler = {
         comments.forEach(comment => {
             html += `
                 <div class="activity__comment">
-                    <p class="comment__header">
-                        ${comment.commentAuthor} ${(comment.commentType == 'comment') ? 'added a comment' : 'updated task'} - ${comment.commentDateFormatted}
-                    </p>
+                    <div class="comment__header">
+                        <p>${comment.commentAuthor} ${(comment.commentType == 'comment') ? 'added a comment' : 'updated task'} - ${comment.commentDateFormatted}</p>
+                        ${(comment.commentOwner)
+                    ? `<div class="invisible__buttons">
+                            <div 
+                                class="appointment__invisible__button" 
+                                onclick="taskdetailsHandler.openEditCommentPopup(${comment.commentID},'${comment.commentDescription}')"
+                            >
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </div>
+                            <div class="appointment__invisible__button" onclick="taskdetailsHandler.deleteComment(${comment.commentID})">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </div>
+                        </div>`
+                    : ''}
+                    </div>
                     <div class="comment__content">
                         ${comment.descriptionWithMakros}
                     </div>
@@ -53,6 +66,28 @@ let taskdetailsHandler = {
         else if (filterKeyword == 'comment') document.getElementById('activity_comments').classList.add('activity__active')
         else if (filterKeyword == 'history') document.getElementById('activity_history').classList.add('activity__active')
         return html
+    },
+    openEditCommentPopup: function (commentID, text) {
+        html = `
+            ${addHeaderDynamicForm('Update Comment')}
+            <textarea class="input-login" id="commenttext" type="text" cols="40" rows="3">${text}</textarea>
+            <button class="button" onclick="taskdetailsHandler.updateComment(${commentID})">Update</button>`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
+    updateComment: async function (commentID) {
+        const text = document.getElementById('commenttext').value
+        if (!text) return printErrorToast("EMPTY_FIELDS")
+        const response = await requestHandler.sendRequest('updateComment', ['commentID', commentID], ['text', text])
+        if (response.ResponseCode != 'OK') return
+        closeDynamicForm()
+        taskdetailsHandler.printTaskdetails()
+    },
+    deleteComment: async function (commentID) {
+        if (!confirm("Are you sure you want to delete this comment?")) return
+        const response = await requestHandler.sendRequest('deleteComment', ['commentID', commentID])
+        if (response.ResponseCode != 'OK') return
+        taskdetailsHandler.printTaskdetails()
     },
     printHeader: function (parentListHTML, title) {
         return `

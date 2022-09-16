@@ -184,6 +184,7 @@ class RequestHandler
         if (($subtasks = $this->getSubtasks($userID, $taskID)) != "NO_SUBTASKS") $taskData->subtasks = $subtasks;
         if ($comments = $this->mysqliSelectFetchArray("SELECT * FROM comments WHERE commentTaskID = ? ORDER BY commentDate DESC", $taskID)) {
             foreach ($comments as $comment) {
+                $comment->commentOwner = ($comment->commentAuthor == $userID);
                 $comment->commentAuthor = $this->getUsernameByID($comment->commentAuthor);
                 $comment->commentDateFormatted = $this->formatDate($comment->commentDate);
                 $comment->descriptionWithMakros = $parsedown->text($comment->commentDescription);
@@ -884,6 +885,14 @@ class RequestHandler
         $commentData = $this->mysqliSelectFetchObject("SELECT commentTaskID FROM comments WHERE commentID = ?", $commentID);
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($commentData->commentTaskID))) return ["ResponseCode" => "NO_ACCESS"];
         $this->mysqliQueryPrepared("DELETE FROM comments WHERE commentID = ?", $commentID);
+        return ["ResponseCode" => "OK"];
+    }
+
+    public function updateComment($userID, $commentID, $text)
+    {
+        $commentData = $this->mysqliSelectFetchObject("SELECT commentTaskID FROM comments WHERE commentID = ?", $commentID);
+        if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($commentData->commentTaskID))) return ["ResponseCode" => "NO_ACCESS"];
+        $this->mysqliQueryPrepared("UPDATE comments SET commentDescription = ? WHERE commentID = ?", $text, $commentID);
         return ["ResponseCode" => "OK"];
     }
 

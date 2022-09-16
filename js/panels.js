@@ -118,7 +118,7 @@ let panels = {
                     <div class="timetable__content__task__row">
                         <div class="timetable__content__task__date">${entry.messageDate}</div>
                         ${(entry.messagePermission) ?
-                        `<div class="appointment__content__task__invisible__buttons">
+                        `<div class="invisible__buttons">
                             <div 
                                 class="appointment__invisible__button" 
                                 onclick="panels.openEditAppointmentForm(${entry.messageID},'${entry.messageTitle}','${entry.messageDateFormFormat}')"

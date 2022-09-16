@@ -260,6 +260,11 @@ switch ($_GET['action']) {
         echo json_encode($rh->deleteComment($userID, $_POST['commentID']));
         break;
 
+    case 'updateComment':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateComment($userID, $_POST['commentID'], $_POST['text']));
+        break;
+
     case 'createGroup':
         header('Content-Type: application/json');
         echo json_encode($rh->createGroup($userID, $_POST['groupName']));

@@ -6,7 +6,7 @@
     min-height: 500px;
 }
 
-.appointment__content__task__invisible__buttons {
+.invisible__buttons {
     display: none;
 }
 
@@ -19,11 +19,11 @@
     color: grey;
 }
 
-.timetable__content__block:hover .appointment__content__task__invisible__buttons {
+.timetable__content__block:hover .invisible__buttons {
     display: flex;
 }
 
-.timetable__panel__prevtask:hover .appointment__content__task__invisible__buttons {
+.timetable__panel__prevtask:hover .invisible__buttons {
     display: flex;
 }
 
@@ -39,7 +39,7 @@
 }
 
 @media (max-width: 768px) {
-    .appointment__content__task__invisible__buttons {
+    .invisible__buttons {
         display: flex;
     }
   }

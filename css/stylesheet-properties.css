@@ -752,6 +752,15 @@ code {
   padding: 0 25px;
 }
 
+.activity__comment:hover .invisible__buttons {
+  display: flex;
+}
+
+.comment__header {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (max-width: 768px) {
   .panel {
     flex-direction: column;
