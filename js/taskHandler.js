@@ -109,9 +109,9 @@ let taskHandler = {
                 <p>                  
                     <div class="select">
                       <select name="priority" id="taskprio">
-                        <option value="1">Low</option>
-                        <option value="2" selected>Normal</option>
-                        <option value="3">High</option>
+                        <option value="1" ${(task.taskPriority == 1) ? 'selected' : ''}>Low</option>
+                        <option value="2" ${(task.taskPriority == 2) ? 'selected' : ''}>Normal</option>
+                        <option value="3" ${(task.taskPriority == 3) ? 'selected' : ''}>High</option>
                       </select>
                     </div>
                 </p>
