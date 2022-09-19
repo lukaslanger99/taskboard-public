@@ -23,11 +23,14 @@
     <script src="<?php echo DIR_SYSTEM ?>js/node_modules/tata-js/dist/tata.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/forms.js" defer></script>
     <script src="<?php echo DIR_SYSTEM ?>js/draggableHandler.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/groupHandler.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/groupdetailsHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/indexHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/javascript.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/labelHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/maps.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/panels.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/requestHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/taskHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/taskdetailsHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/timetable.js"></script>

@@ -2,21 +2,19 @@ let taskHandler = {
     openCreateTaskForm: async function (type, parentID = 0, toggleContentDropdown = true) {
         if (toggleContentDropdown && type == 'task') toggleDropdown('dropdown_create_content')
         var html = `${(type == 'task') ? addHeaderDynamicForm('Create Task') : addHeaderDynamicForm('Create Task')}
-        <table style="margin:0 auto 15px auto;">
-            <tr>
-                <td>Priority:</td>
-                <td>
-                  <div class="select">
-                    <select name="priority" id="taskprio">
-                      <option value="1">Low</option>
-                      <option selected="selected" value="2">Normal</option>
-                      <option value="3">High</option>
-                    </select>
-                  </div>
-                </td>
+            <div class="popop__dropdowns">
+                <p>Priority:</p>
+                <p>                  
+                    <div class="select">
+                      <select name="priority" id="taskprio">
+                        <option value="1">Low</option>
+                        <option value="2" selected>Normal</option>
+                        <option value="3">High</option>
+                      </select>
+                    </div>
+                </p>
                 ${(type == 'task') ? await printGroupDropdown(parentID) : ''}
-            </tr>
-            </table>
+            </div>
             <textarea class="input-login" placeholder="title" id="tasktitle" name="title" cols="40" rows="1"></textarea>
             <textarea class="input-login" placeholder="description" id="taskdescription" name="description" cols="40" rows="5"></textarea>
             <div class="createanother__bottom">
@@ -45,90 +43,95 @@ let taskHandler = {
         var tasktitle = document.getElementById("tasktitle").value
         var taskdescription = document.getElementById("taskdescription").value
         var createAnother = document.getElementById("createAnother").checked
-
-        if (taskprio && tasktitle && taskdescription) {
-            var url = `${DIR_SYSTEM}server/request.php?action=createTask`
-            var formData = new FormData()
-            formData.append('type', type)
-            formData.append('taskprio', taskprio)
-            formData.append('parentID', parentID)
-            formData.append('tasktitle', tasktitle)
-            formData.append('taskdescription', taskdescription)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            await response.json()
-            if (createAnother) this.openCreateTaskForm(type, parentID, false)
-            else closeDynamicForm()
-            printSuccessToast('taskcreated')
-            if (type == 'task') indexHandler.printIndexGroups()
-            else taskdetailsHandler.printTaskdetails()
-        }
+        if (!(taskprio && tasktitle && taskdescription)) return printErrorToast("EMPTY_FIELDS")
+        await requestHandler.sendRequest(
+            'createTask', ['type', type], ['taskprio', taskprio], ['parentID', parentID], ['tasktitle', tasktitle], ['taskdescription', taskdescription])
+        if (createAnother) this.openCreateTaskForm(type, parentID, false)
+        else closeDynamicForm()
+        printSuccessToast('TASK_CREATED')
+        if (type == 'task') indexHandler.printIndexGroups()
+        else taskdetailsHandler.printTaskdetails()
     },
     setTaskToOpen: async function (taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=setTaskToOpen`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        await response.json()
+        await requestHandler.sendRequest('setTaskToOpen', ['taskID', taskID])
+        printSuccessToast('TASK_OPEN')
         taskdetailsHandler.printTaskdetails()
     },
     assignTask: async function (taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=assignTask`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        await response.json()
+        await requestHandler.sendRequest('assignTask', ['taskID', taskID])
+        printSuccessToast('TASK_ASSIGNED')
         taskdetailsHandler.printTaskdetails()
     },
     resolveTask: async function (taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=resolveTask`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        const responseCode = await response.json()
-        if (responseCode != 'OK') return
+        const response = await requestHandler.sendRequest('resolveTask', ['taskID', taskID])
+        if (response.ResponseCode != 'OK') return
+        printSuccessToast('RESOLVED_TASK')
         taskdetailsHandler.printTaskdetails()
     },
     deleteTask: async function (taskID) {
         if (!confirm("Are you sure you want to delete Task id:" + taskID + "?")) return
-        var url = `${DIR_SYSTEM}server/request.php?action=deleteTask`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        const responseCode = await response.json()
-        if (responseCode.ResponseCode != 'OK') return
-        location.href = responseCode.location
+        const response = await requestHandler.sendRequest('deleteTask', ['taskID', taskID])
+        if (response.ResponseCode != 'OK') return
+        location.href = response.data
+    },
+    openCreateCommentPopup: function (taskID) {
+        var html = `
+            ${addHeaderDynamicForm('Add Comment')}
+            <textarea class="input-login" placeholder="description" id="commentDescription" name="description" cols="40" rows="5"></textarea>
+            <button class="button" onclick="taskHandler.createComment(${taskID})">Add</button>`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
     },
     createComment: async function (taskID) {
-        const description = document.getElementById('commentDescription')
-        if (description) {
-            var url = `${DIR_SYSTEM}server/request.php?action=createComment`
-            var formData = new FormData()
-            formData.append('taskID', taskID)
-            formData.append('description', description)
-            const response = await fetch(
-                url, { method: 'POST', body: formData }
-            )
-            await response.json()
-        }
+        const description = document.getElementById('commentDescription').value
+        if (!description) return printErrorToast("EMPTY_FIELDS")
+        const response = await requestHandler.sendRequest('createComment', ['taskID', taskID], ['description', description], ['type', 'comment'])
+        if (response.ResponseCode != 'OK') return
+        closeDynamicForm()
+        taskdetailsHandler.printTaskdetails()
     },
     deleteComment: async function (commentID) {
         if (!confirm("Are you sure you want to delete this Comment?")) return
-        var url = `${DIR_SYSTEM}server/request.php?action=deleteComment`
-        var formData = new FormData()
-        formData.append('commentID', commentID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        await response.json()
+        await requestHandler.sendRequest('deleteComment', ['commentID', commentID])
+    },
+    openUpdateTaskForm: async function (taskID) {
+        const response = await requestHandler.sendRequest('getTaskData', ['id', taskID])
+        const task = response.data
+        var dropDowns = ''
+        if (task.taskType == 'task') {
+            dropDowns += await printGroupDropdown(task.taskParentID);
+        }
+        var html = `
+            ${addHeaderDynamicForm('Update Task')}
+            <div class="popop__dropdowns">
+                ${dropDowns}
+                <p>Priority:</p>
+                <p>                  
+                    <div class="select">
+                      <select name="priority" id="taskprio">
+                        <option value="1" ${(task.taskPriority == 1) ? 'selected' : ''}>Low</option>
+                        <option value="2" ${(task.taskPriority == 2) ? 'selected' : ''}>Normal</option>
+                        <option value="3" ${(task.taskPriority == 3) ? 'selected' : ''}>High</option>
+                      </select>
+                    </div>
+                </p>
+            </div>
+            <textarea class="input-login" type="text" id="tasktitle" cols="40" rows="1">${task.taskTitle}</textarea>
+            <textarea class="input-login" type="text" id="taskdescription" cols="40" rows="5">${task.taskDescription}</textarea>
+            <button class="button" onclick="taskHandler.updateTask(${taskID}, '${task.taskType}')">Update</button>`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
+    updateTask: async function (taskID, type) {
+        var taskprio = document.getElementById("taskprio").value
+        if (type == 'task') parentID = document.getElementById("selectGroupID").value
+        var tasktitle = document.getElementById("tasktitle").value
+        var taskdescription = document.getElementById("taskdescription").value
+        if (!(taskprio && tasktitle && taskdescription)) return printErrorToast("EMPTY_FIELDS")
+        await requestHandler.sendRequest(
+            'updateTask', ['taskID', taskID], ['taskprio', taskprio], ['parentID', parentID], ['tasktitle', tasktitle], ['taskdescription', taskdescription])
+        closeDynamicForm()
+        printSuccessToast('TASK_UPDATED')
+        taskdetailsHandler.printTaskdetails()
     }
 }

@@ -25,14 +25,14 @@ if ($inviteCounter > 0) {
 
 <body>
     <div class="top-bar">
-        <div class="top-bar-left">
+        <div class="display__flex">
             <div class="top_bar_title">
                 <a href="<?php echo DIR_SYSTEM ?>">
                     <p>TaskBoard</p>
                 </a>
             </div>
         </div>
-        <div class="top-bar-right">
+        <div class="display__flex">
             <?php
             if ($userID == 1) {
                 echo '<a href="' . DIR_SYSTEM . 'php/admin.php"><div class="button"><p>Admin</p></div></a>';
@@ -70,13 +70,11 @@ if ($inviteCounter > 0) {
                         <p>Groups</p>
                     </div>
                 </a>
-                <a href="http://lukaslanger.bplaced.net/taskboard/php/archive.php">
-                    <div class="dropdown_button">
-                        <p><i class="fa fa-archive"></i></p>
-                        <p>Archive</p>
-                    </div>
-                </a>
                 <hr class="solid">
+                <div class="dropdown_create_button" onclick="openFeedbackForm()">
+                    <p><i class="fa fa-bug"></i></p>
+                    <p>Report a Bug | Feedback</p>
+                </div>
                 <a href="<?php echo DIR_SYSTEM ?>php/profile.php">
                     <div class="dropdown_button">
                         <p><i class="fa fa-cog"></i></p>

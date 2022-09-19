@@ -1,19 +1,15 @@
 let taskdetailsHandler = {
-    getTaskData: async function(taskID) {
-        var url = `${DIR_SYSTEM}server/request.php?action=getTaskDataTaskdetails`
-        var formData = new FormData()
-        formData.append('taskID', taskID)
-        const response = await fetch(
-            url, { method: 'POST', body: formData }
-        )
-        return await response.json()
+    activities: [],
+    getTaskDataTaskdetails: async function (taskID) {
+        const response = await requestHandler.sendRequest('getTaskDataTaskdetails', ['taskID', taskID])
+        return response.data
     },
     getPriorityColor: function (priority) {
         const priorities = ['green', '#ffcc00', 'red']
         return priorities[priority - 1]
     },
     printSubtasks: function (subtasks) {
-        if (!subtasks) return ''
+        if (subtasks.ResponseCode == 'NO_SUBTASKS') return ''
         html = ''
         subtasks.forEach(task => {
             html += `
@@ -22,31 +18,76 @@ let taskdetailsHandler = {
                     <p><a href="${DIR_SYSTEM}php/details.php?action=taskDetails&id=${task.taskID}">ID_${task.taskID}</a></p>
                     <p class="taskdetails__subtask__title">${task.taskTitle}</p>
                     <p>
-                        ${(task.taskStatus == 'open') 
-                        ? `<div class="status status__open">OPEN</div>`
-                        : `<div class="status status__resolved">RESOLVED</div>`}
+                        ${(task.taskStatus == 'open')
+                    ? `<div class="status status__open">OPEN</div>`
+                    : `<div class="status status__resolved">RESOLVED</div>`}
                     </p>
                 </div>
                 <hr>`
         })
         return html
     },
-    printActivityComments: function (comments) {
+    printActivityComments: function (filterKeyword) {
+        if (!this.activities) return ''
+        var comments = []
+        if (filterKeyword == 'all') comments = this.activities
+        else comments = this.activities.filter((entry) => entry.commentType == filterKeyword)
         if (!comments) return ''
-        const activityComments = comments.filter((entry) => entry.commentType == 'comment')
-        if (!activityComments) return ''
         html = ``
-        activityComments.forEach(comment => {
+        comments.forEach(comment => {
             html += `
                 <div class="activity__comment">
-                    <p class="comment__header">${comment.commentAuthor} added a comment - ${comment.commentDateFormatted}</p>
+                    <div class="comment__header">
+                        <p>${comment.commentAuthor} ${(comment.commentType == 'comment') ? 'added a comment' : 'updated task'} - ${comment.commentDateFormatted}</p>
+                        ${(comment.commentOwner)
+                    ? `<div class="invisible__buttons">
+                            <div 
+                                class="appointment__invisible__button" 
+                                onclick="taskdetailsHandler.openEditCommentPopup(${comment.commentID},'${comment.commentDescription}')"
+                            >
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </div>
+                            <div class="appointment__invisible__button" onclick="taskdetailsHandler.deleteComment(${comment.commentID})">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </div>
+                        </div>`
+                    : ''}
+                    </div>
                     <div class="comment__content">
                         ${comment.descriptionWithMakros}
                     </div>
                 </div>
                 <hr>`
         })
+        document.getElementById('activity_all').classList.remove('activity__active')
+        document.getElementById('activity_comments').classList.remove('activity__active')
+        document.getElementById('activity_history').classList.remove('activity__active')
+        if (filterKeyword == 'all') document.getElementById('activity_all').classList.add('activity__active')
+        else if (filterKeyword == 'comment') document.getElementById('activity_comments').classList.add('activity__active')
+        else if (filterKeyword == 'history') document.getElementById('activity_history').classList.add('activity__active')
         return html
+    },
+    openEditCommentPopup: function (commentID, text) {
+        html = `
+            ${addHeaderDynamicForm('Update Comment')}
+            <textarea class="input-login" id="commenttext" type="text" cols="40" rows="3">${text}</textarea>
+            <button class="button" onclick="taskdetailsHandler.updateComment(${commentID})">Update</button>`
+        showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+        closeDynamicFormListener()
+    },
+    updateComment: async function (commentID) {
+        const text = document.getElementById('commenttext').value
+        if (!text) return printErrorToast("EMPTY_FIELDS")
+        const response = await requestHandler.sendRequest('updateComment', ['commentID', commentID], ['text', text])
+        if (response.ResponseCode != 'OK') return
+        closeDynamicForm()
+        taskdetailsHandler.printTaskdetails()
+    },
+    deleteComment: async function (commentID) {
+        if (!confirm("Are you sure you want to delete this comment?")) return
+        const response = await requestHandler.sendRequest('deleteComment', ['commentID', commentID])
+        if (response.ResponseCode != 'OK') return
+        taskdetailsHandler.printTaskdetails()
     },
     printHeader: function (parentListHTML, title) {
         return `
@@ -65,7 +106,7 @@ let taskdetailsHandler = {
     printButtons: function (taskID, type, status) {
         return `
             <div class="taskdetails__buttons">
-                <button onclick="openUpdateTaskForm()">Update</button>
+                <button onclick="taskHandler.openUpdateTaskForm(${taskID})">Update</button>
                 <button onclick="taskHandler.deleteTask(${taskID}, '${type}')">Delete</button>
                 <button onclick="taskHandler.openCreateTaskForm('subtask', ${taskID}, 'false')">Create Subtask</button>
                 <button onclick="taskHandler.assignTask(${taskID})">Assign Task</button>
@@ -75,6 +116,7 @@ let taskdetailsHandler = {
             </div>`
     },
     printDetailsModule: function (status, priority, type) {
+        const priorities = ['Low', 'Normal', 'High']
         return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
@@ -92,24 +134,18 @@ let taskdetailsHandler = {
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_details">
                         <table class="taskdetails__datatable">
                             <tr>
-                                <td>Status:</td>
+                                <td class="letf__td">Status:</td>
                                 <td>
-                                    ${(status == 'open') 
-                                    ? `<div class="status status__open">OPEN</div>` 
-                                    : `<div class="status status__resolved">RESOLVED</div>`}
+                                    ${(status == 'open')
+                ? `<div class="status status__open">OPEN</div>`
+                : `<div class="status status__resolved">RESOLVED</div>`}
                                 </td>
                             </tr>
                             <tr>
-                                <td>Priority:</td>
-                                <td>
-                                    <select name="priority" id="taskprio">
-                                        <option ${(priority == 1) ? `selected="selected"` : ``} value="1">Low</option>
-                                        <option ${(priority == 2) ? `selected="selected"` : ``} value="2">Normal</option>
-                                        <option ${(priority == 3) ? `selected="selected"` : ``} value="3">High</option>
-                                    </select>
-                                </td>
+                                <td class="letf__td">Priority:</td>
+                                <td>${priorities[priority - 1]}</td>
                             </tr>
-                            ${(type == 'task') ? `<tr><td>Labels:</td><td id="tasklabel-list"></td></tr>` : ``}
+                            ${(type == 'task') ? `<tr><td class="letf__td">Labels:</td><td class="display__flex" id="tasklabel-list"></td></tr>` : ``}
                         </table>
                     </div>
                 </div>
@@ -157,7 +193,7 @@ let taskdetailsHandler = {
                 </div>
             </div>`
     },
-    printActivityModule: function (activity) {
+    printActivityModule: function (taskID) {
         return `
             <div class="taskdetails__module">
                 <div class="taskdetails__module__left">
@@ -173,16 +209,24 @@ let taskdetailsHandler = {
                 <div class="taskdetails__module__right">
                     <div class="header__title">Activity</div>
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_activity">
-                        <div class="activity__header">
-                            <p class="activity__item"id="activity_all">All</p>
-                            <p class="activity__item activity__active" id="activity_comments">Comments</p>
-                            <p class="activity__item"id="activity_history">History</p>
+                        <div class="display__flex">
+                            <p class="activity__item" id="activity_all" onclick="taskdetailsHandler.addActivitiesToModule('all')">All</p>
+                            <p class="activity__item" id="activity_comments" onclick="taskdetailsHandler.addActivitiesToModule('comment')">Comments</p>
+                            <p class="activity__item" id="activity_history" onclick="taskdetailsHandler.addActivitiesToModule('history')">History</p>
                         </div>
                         <hr>
-                        ${this.printActivityComments(activity)}
+                        <div id="taskdetails-activities"></div>
                     </div>
+                    <button onclick="taskHandler.openCreateCommentPopup(${taskID})">
+                        <i class="fa fa-comment"></i>
+                        Add Comment
+                    </button>
                 </div>
             </div>`
+    },
+    addActivitiesToModule: function (filterKeyword) {
+        var html = this.printActivityComments(filterKeyword)
+        document.getElementById('taskdetails-activities').innerHTML = html
     },
     printPeopleModule: function (assignee, reporter) {
         return `
@@ -202,11 +246,11 @@ let taskdetailsHandler = {
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_people">
                         <table class="taskdetails__datatable">
                             <tr>
-                                <td>Assignee:</td>
+                                <td class="letf__td">Assignee:</td>
                                 <td>${assignee}</td>
                             </tr>
                             <tr>
-                                <td>Reporter:</td>
+                                <td class="letf__td">Reporter:</td>
                                 <td>${reporter}</td>
                             </tr>
                         </table>
@@ -232,16 +276,16 @@ let taskdetailsHandler = {
                     <div class="taskdetails__module__content" id="taskdetailsModuleContent_dates">
                         <table class="taskdetails__datatable">
                             <tr>
-                                <td>Created:</td>
+                                <td class="letf__td">Created:</td>
                                 <td>${dates.dateCreatedFormatted}</td>
                             </tr>
                             <tr>
-                                <td>Updated:</td>
+                                <td class="letf__td">Updated:</td>
                                 <td>${dates.dateUpdatedFormatted}</td>
                             </tr>
-                            ${(status == 'resolved')
-                            ? `<tr><td>Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
-                            : ``}
+                            ${(status != 'open')
+                ? `<tr><td class="letf__td">Resolved:</td><td>${dates.dateResolvedFormatted}</td></tr>`
+                : ``}
                         </table>
                     </div>
                 </div>
@@ -249,7 +293,7 @@ let taskdetailsHandler = {
             </div>`
     },
     printTaskdetails: async function () {
-        const taskData = await this.getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
+        const taskData = await this.getTaskDataTaskdetails(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1'))
         _parentsListHTML = ``
         taskData.parents.forEach(item => {
             if (item.type == 'group') _parentsListHTML += `<li><a href="${DIR_SYSTEM}php/details.php?action=groupDetails&id=${item.id}">${item.name}</a></li>`
@@ -260,7 +304,7 @@ let taskdetailsHandler = {
         __detailsModuleHTML = this.printDetailsModule(taskData.taskStatus, taskData.taskPriority, taskData.taskType)
         __descriptionModuleHTML = this.printDescriptionModule(taskData.descriptionWithMakros)
         __subtasksModuleHTML = this.printSubtasksModule(taskData.subtasks)
-        __activityModuleHTML = this.printActivityModule(taskData.activity)
+        __activityModuleHTML = this.printActivityModule(taskData.taskID, taskData.activity)
         _bigModulesHTML = `
             <div class="taskdetails__big__modules">
                 ${__detailsModuleHTML}${__descriptionModuleHTML}${__subtasksModuleHTML}${__activityModuleHTML}
@@ -275,21 +319,23 @@ let taskdetailsHandler = {
             <div class="taskdetails__modules">
                 ${_bigModulesHTML}${_smallModulesHTML}
             </div>`
-    document.getElementById('taskdetails').innerHTML = `${headerHTML}${buttonsHTML}${modulesHTML}`
-    if (taskData.taskType == 'task') labelHandler.showLabelsInTaskDetails(taskData.taskParentID, taskData.taskID)
+        document.getElementById('taskdetails').innerHTML = `${headerHTML}${buttonsHTML}${modulesHTML}`
+        this.activities = taskData.activity
+        this.addActivitiesToModule('comment')
+        if (taskData.taskType == 'task') labelHandler.showLabelsInTaskDetails(taskData.taskParentID, taskData.taskID)
     },
     taskdetailsToggleContent: function (buttonID, contentAreaID) {
         var button = document.getElementById(buttonID)
         var container = document.getElementById(contentAreaID)
         if (button && container) {
-          var containerDisplay = getComputedStyle(container).display;
-          if (containerDisplay == 'none') {
-            container.style.display = 'block'
-            button.innerHTML = `<i class="fa fa-angle-down"></i>`
-          } else if (containerDisplay == 'block') {
-            container.style.display = 'none'
-            button.innerHTML = `<i class="fa fa-angle-right"></i>`
-          }
+            var containerDisplay = getComputedStyle(container).display;
+            if (containerDisplay == 'none') {
+                container.style.display = 'block'
+                button.innerHTML = `<i class="fa fa-angle-down"></i>`
+            } else if (containerDisplay == 'block') {
+                container.style.display = 'none'
+                button.innerHTML = `<i class="fa fa-angle-right"></i>`
+            }
         }
     }
 }

@@ -1,22 +1,7 @@
-async function getTaskData(id) {
-  var url = `${DIR_SYSTEM}server/request.php?action=getTaskData`
-  var formData = new FormData()
-  formData.append('id', id)
-  const response = await fetch(
-    url, { method: 'POST', body: formData }
-  )
-  return await response.json()
-}
-
-async function getGroups() {
-  const response = await fetch(
-    `${DIR_SYSTEM}server/request.php?action=getActiveGroups`
-  )
-  return await response.json()
-}
-
 const printGroupDropdown = async (selectedGroupId) => {
-  const groups = await getGroups()
+  const response = await requestHandler.sendRequest('getActiveGroups')
+  const groups = response.data
+  if (!groups) return printErrorToast('NO_GROUPS')
   var groupsHtml = ''
   groups.forEach(group => {
     if (selectedGroupId && selectedGroupId == group.groupID) {
@@ -25,49 +10,16 @@ const printGroupDropdown = async (selectedGroupId) => {
       groupsHtml += '<option value="' + group.groupID + '">' + group.groupName + '</option>\n';
     }
   });
-  return `<td>Group:</td>
-    <td>
+  return `<p>Group:</p>
+    <p>
         <div class="select">
             <select id="selectGroupID" name="groupID">
             ${groupsHtml}      
             </select>
         </div>
-    </td>`
+    </p>`
 }
 
-function printPriorityDropdown(selectedPriority = '2') {
-  var priorityHtml = '';
-  if (selectedPriority == 1) {
-    priorityHtml += '\
-    <option selected="selected" value="1">Low</option>\
-    <option value="2">Normal</option>\
-    <option value="3">High</option>\
-    ';
-  } else if (selectedPriority == 2) {
-    priorityHtml += '\
-    <option value="1">Low</option>\
-    <option selected="selected" value="2">Normal</option>\
-    <option value="3">High</option>\
-    ';
-  } else {
-    priorityHtml += '\
-    <option selected="selected" value="1">Low</option>\
-    <option value="2">Normal</option>\
-    <option selected="selected" value="3">High</option>\
-    ';
-  }
-
-  var html = '\
-  <td>Priority:</td>\
-  <td>\
-      <div class="select">\
-          <select name="priority">\
-          '+ priorityHtml + '\
-          </select>\
-      </div>\
-  </td>';
-  return html;
-}
 
 //check nightmode toggled to show dropdown
 var nightmodeChangeCheck = document.URL.replace(/.*nightmodechange=([^&]*).*|(.*)/, '$1')
@@ -88,27 +40,23 @@ function printGroupForm() {
   }
 }
 
-// Update Task Form
-const openUpdateTaskForm = async () => {
-  var task = await getTaskData(document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1')), dropDowns = ''
-  if (task.taskType == 'task') {
-    dropDowns += await printGroupDropdown(task.taskParentID);
-  }
-  dropDowns += printPriorityDropdown(task.taskPriority);
-  var html = '\
-      '+ addHeaderDynamicForm('Update Task') + '\
-      <form action="'+ DIR_SYSTEM + 'php/action.php?action=update&id=' + task.taskID + '" autocomplete="off" method="post" >\
-      <table style="margin:0 auto 15px auto;">\
-      <tr>\
-              '+ dropDowns + '\
-              </tr>\
-              </table>\
-              <textarea class="input-login" type="text" name="title" cols="40" rows="1">'+ task.taskTitle + '</textarea>\
-              <textarea class="input-login" type="text" name="description" cols="40" rows="5">'+ task.taskDescription + '</textarea>\
-              <input class="submit-login" type="submit" name="updatetask-submit" value="Update" />\
-              </form>';
-  showDynamicForm(document.getElementById("dynamic-modal-content"), html);
-  closeDynamicFormListener();
+function openFeedbackForm() {
+  toggleDropdown('dropdown_content')
+  var html = `
+    ${addHeaderDynamicForm('Update Task')}
+    <textarea class="input-login" type="text" name="description" id="feedbackDescription" cols="40" rows="5"></textarea>
+    <button class="button" onclick="createFeedback()">Update</button>`
+  showDynamicForm(document.getElementById("dynamic-modal-content"), html)
+  closeDynamicFormListener()
+}
+
+async function createFeedback() {
+  const description = document.getElementById('feedbackDescription').value
+  if (!description) return printErrorToast("EMPTY_FIELDS")
+  const response = await requestHandler.sendRequest('createFeedback', ['description', description])
+  if (response.ResponseCode != "OK") return
+  closeDynamicForm()
+  indexHandler.printIndexGroups()
 }
 
 function addHeaderDynamicForm(title) {

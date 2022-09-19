@@ -1,22 +1,11 @@
 let labelHandler = {
   getLabels: async function (groupID) {
-    var url = `${DIR_SYSTEM}server/request.php?action=getLabels`
-    var formData = new FormData()
-    formData.append('groupID', groupID)
-    const response = await fetch(
-      url, { method: 'POST', body: formData }
-    )
-    return await response.json()
+    const response = await requestHandler.sendRequest('getLabels', ['groupID', groupID])
+    return response.data
   },
   getLabelsForTask: async function (groupID, taskID) {
-    var url = `${DIR_SYSTEM}server/request.php?action=getLabelsForTask`
-    var formData = new FormData()
-    formData.append('groupID', groupID)
-    formData.append('taskID', taskID)
-    const response = await fetch(
-      url, { method: 'POST', body: formData }
-    )
-    return await response.json()
+    const response = await requestHandler.sendRequest('getLabelsForTask', ['groupID', groupID], ['taskID', taskID])
+    return response.data
   },
   openGroupLabelsPopup: async function (groupID) {
     const labels = await this.getLabels(groupID)
@@ -27,7 +16,7 @@ let labelHandler = {
         (flag) ? labelsHTML += `<hr class="solid">` : flag = true
         labelsHTML += `
         <div class="label__item draggable__item" draggable="true" data-type="${label.labelID}">
-            <div class="label__left">
+            <div class="display__flex">
                 <i class="fa fa-circle fa-2x" aria-hidden="true" style="color:${label.labelColor}"></i>
                 <div>${label.labelName}</div>
             </div>
@@ -173,11 +162,13 @@ let labelHandler = {
       });
     }
     labelHTML += `
-      <i 
-        class="fa fa-edit" 
-        aria-hidden="true" 
-        onclick="labelHandler.editTaskLabels(${groupID}, ${taskID})"
-      ></i>`
-    document.getElementById('tasklabel-list').innerHTML = `<div class="display-flex">${labelHTML}</div>`
+      <div>
+        <i 
+          class="fa fa-edit" 
+          aria-hidden="true" 
+          onclick="labelHandler.editTaskLabels(${groupID}, ${taskID})"
+        ></i>
+      </div>`
+    document.getElementById('tasklabel-list').innerHTML = labelHTML
   }
 }

@@ -74,37 +74,10 @@ class TaskBoard
         return implode(' ', $words);
     }
 
-    public function checkGroupPermission($userID, $groupID)
-    {
-        if ($this->mysqliSelectFetchObject("SELECT * FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID)) return 1;
-        return 0;
-    }
-
     public function checkIfEmailIsTaken($email)
     {
         if ($this->mysqliSelectFetchObject("SELECT userMail FROM users WHERE userMail = ?", $email)) return 'taken';
         return 'untaken';
-    }
-
-    public function checkTaskPermission($userID, $task)
-    {
-        if ($task->taskType == 'task') {
-            $groupID = $task->taskParentID;
-        } else if ($task->taskType == 'subtask') {
-            $parent = $task;
-            do {
-                $parent = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $parent->taskParentID);
-                $type = $parent->taskType;
-            } while ($type == 'subtask');
-            $groupID = $parent->taskParentID;
-        }
-        return $this->checkGroupPermission($userID, $groupID);
-    }
-
-    public function checkUsername($username)
-    {
-        $count = $this->mysqliSelectFetchObject("SELECT COUNT(*) as number FROM users WHERE userName = ?", $username);
-        return $count->number;
     }
 
     public function deleteGroup($id)
@@ -140,17 +113,6 @@ class TaskBoard
         return $randomString;
     }
 
-    public function getArchivedTasks()
-    {
-        if ($data = $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskStatus = 'archived' ORDER BY taskID DESC")) {
-            foreach ($data as $i) {
-                if ($this->checkGroupPermission($_SESSION['userID'], $i->taskParentID))
-                    $tasks[] = $i;
-            }
-        }
-        return $tasks;
-    }
-
     public function getDateDifferenceDaysOnly($date)
     {
         $tmpDate = new DateTime($date);
@@ -170,12 +132,6 @@ class TaskBoard
     {
         $return = $this->mysqliSelectFetchObject("SELECT groupOwner FROM groups WHERE groupID = ?", $groupID);
         return $return->groupOwner;
-    }
-
-    private function getGroupUnfolded($userID, $groupID)
-    {
-        $data = $this->mysqliSelectFetchObject("SELECT groupUnfolded FROM groupaccess WHERE userID = ? AND groupID = ?", $userID, $groupID);
-        return $data->groupUnfolded;
     }
 
     public function getMailByUserID($userID)
@@ -214,41 +170,6 @@ class TaskBoard
     {
         $sql = "SELECT * FROM users WHERE userID = ?";
         return $this->mysqliSelectFetchObject($sql, $userID);
-    }
-
-    private function getUserListHTML($groupID)
-    {
-        $isOwner = $this->groupOwnerCheck($groupID, $_SESSION['userID']);
-        $groupEntries = $this->mysqliSelectFetchArray("SELECT * FROM groupaccess WHERE groupID = ?", $groupID);
-        $nightmodeEnabled = $this->getNightmodeEnabled($_SESSION['userID']);
-
-        $html = '<div class="panel-item-content-item">
-        <table>';
-        $toggle = false;
-        foreach ($groupEntries as $entry) {
-            $userID = $entry->userID;
-            if ($isOwner && ($userID != $_SESSION['userID'])) {
-                $removeAccessHTML = '<button type="button" onclick="removeUserAccess(\'' . $groupID . '\',' . $userID . ', \'' . $this->getUsernameByID($userID) . '\')">Remove</button>';
-            }
-            ($nightmodeEnabled) ? (($toggle) ? $color = '#1a1a1a' : $color = '#333') : (($toggle) ? $color = '#fff' : $color = '#f2f2f2');
-            $html .=  '<tr style="background-color:' . $color . ';">
-                    <td>' . $this->getUsernameByID($userID) . '</td>
-                    <td>
-                        ' . $removeAccessHTML . '
-                    </td>
-                </tr>';
-            $toggle = !$toggle;
-            unset($removeAccessHTML);
-        }
-        $html .= '</table>
-            </div>';
-        return $html;
-    }
-
-    public function getUserType($userID)
-    {
-        $user = $this->getUserData($userID);
-        return $user->userType;
     }
 
     public function getPriorityColor($priority)
@@ -304,11 +225,6 @@ class TaskBoard
         return $data->userMailStatus == 'verified';
     }
 
-    public function getTasksByGroupID($groupID)
-    {
-        return $this->mysqliSelectFetchArray("SELECT * FROM tasks WHERE taskType = 'task' AND taskParentID = ? ORDER BY taskID DESC", $groupID);
-    }
-
     public function getWeek()
     {
         if (date('W') % 2 == 1) return 'odd';
@@ -318,12 +234,6 @@ class TaskBoard
     public function getWeekday()
     {
         return date('D');
-    }
-
-    public function groupOwnerCheck($groupID, $userID)
-    {
-        $groupOwnerID = $this->mysqliSelectFetchObject("SELECT groupOwner FROM groups WHERE groupID = ?", $groupID);
-        return $groupOwnerID->groupOwner == $userID;
     }
 
     public function locationEnteredUrl($url, $getParam = '')
@@ -346,57 +256,6 @@ class TaskBoard
     {
         header("Location: " . DIR_SYSTEM . $url);
         exit;
-    }
-
-    public function printArchive()
-    {
-        $html = '<div class="group-box">
-                    <div class="group-top-bar">
-                        Archive
-                    </div>';
-        $html .= $this->printTaskTable($this->getArchivedTasks());
-        $html .=  '</div>';
-        echo $html;
-    }
-
-    public function printComments($id, $type)
-    {
-        $sql = "SELECT * FROM comments WHERE commentTaskID = ?";
-        $data = $this->mysqliSelectFetchArray($sql, $id);
-        if ($data != null) {
-            $html = '<table>';
-            foreach ($data as $i) {
-                $html .= '
-                    <tr class="comment-background">
-                        <td width="15%">' . $this->getUsernameByID($i->commentAuthor) . ':</td>
-                        <td style="font-size:14px;">' . $this->addTagsToUrlsInString($i->commentDescription) . '</td>
-                        <td width="18%">' . $i->commentDate . '</td>
-                        <td style="white-space: nowrap;">
-                            <div class="editgroup-button" onclick="openEditCommentForm(' . $i->commentID . ', \'' . $i->commentDescription . '\')">
-                                Edit
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                            </div>
-                            <div class="editgroup-button" onclick="taskHandler.deleteComment(' . $i->commentID . ')">
-                                Delete
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </div>
-                        </td>
-                    </tr>';
-            }
-            $html .= '</table>';
-        } else {
-            $html =  '';
-        }
-        $html .= 'table>
-                    <tr>
-                        <td><textarea cols="40" rows="3" type="text" name="description" id="commentDescription"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td style="float:right;"><button class="button" onclick="taskHandler.createComment(' . $id . ')">Comment"</button></td>
-                    </tr>
-                </table>
-            </div>';
-        return $html;
     }
 
     public function printGroupNames()
@@ -444,98 +303,6 @@ class TaskBoard
             }
         }
         $html .= '</table></div>';
-        echo $html;
-    }
-
-    public function printGroupDetails($group)
-    {
-        $groupID = $group->groupID;
-        $userID = $_SESSION['userID'];
-        $groupOwnerCheck = $userID == $this->getGroupOwnerID($groupID);
-        if ($groupOwnerCheck) {
-            $editGroupButton = '
-            <div class="button" onclick="openEditGroupForm(' . $groupID . ', \'' . $group->groupName . '\', ' . $group->groupPriority . ', ' . $group->groupArchiveTime . ')">
-                <p><i class="fa fa-edit" aria-hidden="true"></i></p>
-            </div>';
-        }
-        $html = '<div class="group-box">
-                    <div class="top-bar">
-                        <div class="top-bar-left">
-                            <div class="top_bar_title"><p>' . $group->groupName . '</p></div>
-                            <div class="button" onclick="openShowUsersPopup()">
-                                <i class="fa fa-user fa-2x" aria-hidden="true"></i>
-                            </div>
-                            ' . $editGroupButton . '
-                            <div class="button" onclick="labelHandler.openGroupLabelsPopup(' . $groupID . ')">
-                                <p>Labels</p>
-                            </div>
-                        </div>
-                        <div class="top-bar-right">
-                            <div class="dropbtn" id="groupdetailsUnfoldButton" onclick="toggleUnfoldArea(\'groupDetailsButtons\',\'groupdetailsUnfoldButton\')">
-                                <p><i class="fa fa-caret-down" aria-hidden="true"></i></p>
-                            </div>
-                        </div>';
-
-        $inviteToken = $this->mysqliSelectFetchObject("SELECT tokenToken FROM tokens WHERE tokenGroupID = ? AND tokenType = 'groupinvite'", $groupID);
-        if ($groupOwnerCheck) {
-            if ($group->groupInvites == 'enabled') {
-                $groupInvites = '
-                ' . DIR_SYSTEM . 'php/action.php?action=joingroup&t=' . $inviteToken->tokenToken . '
-                <div class="panel-item-top-bar-button">
-                    <a href="' . DIR_SYSTEM . 'php/action.php?action=refreshinvite&id=' . $groupID . '"> <i class="fa fa-refresh" aria-hidden="true"></i> </a>
-                </div>
-                <button class="button" onclick="groupHandler.toggleGroupInvites(' . $groupID . ', \'disabled\')">Disable Invites</button>
-            ';
-            } else {
-                $groupInvites = '<button class="button" onclick="groupHandler.toggleGroupInvites(' . $groupID . ', \'enabled\')">Enable Invites</button>';
-            }
-        }
-
-        if ($groupOwnerCheck && $group->groupStatus == 'active') {
-            $changeGroupStatus = '<button class="button" onclick="groupHandler.toggleGroupStatus(' . $groupID . ', \'hidden\')">Hide Group</button>';
-        } else if ($groupOwnerCheck && $group->groupStatus == 'hidden') {
-            $changeGroupStatus = '<button class="button" onclick="groupHandler.toggleGroupStatus(' . $groupID . ', \'active\')">Show Group</button>';
-        }
-
-        if ($groupOwnerCheck) {
-            $inviteUser = '<input type="text" name="name" placeholder="username" id="groupInvite_username"/>
-                <button class="button" onclick="groupHandler.createGroupInvite()">Invite</button>';
-            $deleteGroup = '<button class="button" type="button" onclick="groupHandler.deleteGroup(' . $groupID . ')">Delete Group</button>';
-        } else {
-            $leaveGroup = '<button class="button" type="button" onclick="leaveGroup(' . $groupID . ')">Leave Group</button>';
-        }
-
-        if ($this->getGroupUnfolded($userID, $groupID) == 'true') $groupUnfoldedCheckbox = 'checked';
-        $groupUnfolded = '<div>
-                <input id="groupUnfoldCheckbox" type="checkbox" ' . $groupUnfoldedCheckbox . '>
-                <small>Unfolded by default on mobile</small>
-            </div>
-            <script>groupUnfoldCheckboxListener(' . $groupID . ')</script>';
-
-        $html .= '</div>
-            <div class="group__deatils__buttons__hidden" id="groupDetailsButtons">
-                ' . $groupUnfolded . '
-                ' . $groupInvites . '
-                ' . $inviteUser . '
-                ' . $changeGroupStatus . '
-                ' . $leaveGroup . '
-                ' . $deleteGroup . '
-            </div>
-                <div class="group__details__content">
-                ';
-        $html .= $this->printTaskTable($this->getTasksByGroupID($groupID));
-        $html .= '</div>
-        </div>
-
-        <div class="bg-modal" id="bg-modal-groupusers">
-            <div class="modal-content" id="groupusers-modal-content">
-                <div class="modal-header">
-                  Groupusers
-                  <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-groupusers"></i>
-                </div>
-                ' . $this->getUserListHTML($groupID) . '
-            </div>
-        </div>';
         echo $html;
     }
 
@@ -588,10 +355,10 @@ class TaskBoard
     {
         if ($type == 'appointment') {
             return '<div class="panel-item-top-bar">
-                <div class="top-bar-left">
+                <div class="display__flex">
                     <p id="appointmentPanelTitle"></p>
                 </div>
-                <div class="top-bar-right">
+                <div class="display__flex">
                     <div class="panel-item-top-bar-button" id="openAppointmentCalendarButton" onclick="panels.openAppointmentCalendar()">
                         <i class="fa fa-calendar-day" aria-hidden="true"></i>
                     </div>
@@ -626,7 +393,7 @@ class TaskBoard
                 </div>';
         } else if ($type == 'weather') {
             return '<div class="panel-item-top-bar">
-                    <div class="top-bar-left">
+                    <div class="display__flex">
                         <p>Weather</p>
                     </div>
                     <div class="panel_item_top_bar_unfold_button" id="weatherUnfoldButton" onclick="toggleUnfoldArea(\'weatherPanelContentArea\',\'weatherUnfoldButton\')">
@@ -635,10 +402,10 @@ class TaskBoard
                 </div>';
         } else if ($type == 'timetable') {
             return '<div class="panel-item-top-bar">
-                    <div class="top-bar-left">
+                    <div class="display__flex">
                         <p>Timetable (KW' . date("W") . ')</p>
                     </div>
-                    <div class="top-bar-right">
+                    <div class="display__flex">
                         <div class="panel-item-top-bar-button" id="timetableCurrentWeekButton" onclick="timetable.timetablePopup(\'current\')">
                             Current week
                         </div>
@@ -672,10 +439,10 @@ class TaskBoard
         }
 
         return '<div class="panel-item-top-bar">
-            <div class="top-bar-left">
+            <div class="display__flex">
                 <p id="' . $titleID . '">' . $title . '</p>
             </div>
-            <div class="top-bar-right">
+            <div class="display__flex">
                 <div class="panel-item-top-bar-button" id="' . $createButtonID . '" onclick="' . $onclick . '">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </div>
@@ -892,51 +659,6 @@ class TaskBoard
             ';
             echo $html;
         }
-    }
-
-    private function printTaskTable($tasks)
-    {
-        $html =  '
-            <table style="margin-top:10px;">
-                <tr">
-                    <th>ID</th>
-                    <th>TITLE</th>
-                    <th>DESCRIPTION</th>
-                    <th>GROUP_ID</th>
-                    <th>PRIORITY</th>
-                    <th>DATE_CREATED</th>
-                    <th>ASSIGNED_BY</th>
-                    <th>DATE_RESOLVED</th>
-                    <th></th>
-                </tr>';
-        if ($tasks) {
-            ($this->getNightmodeEnabled($_SESSION['userID'])) ? $backgroundColor = '#333333' : $backgroundColor = '#fff';
-            $toggle = true;
-            foreach ($tasks as $task) {
-                $toggle = !$toggle;
-                ($toggle) ? $html .= '<tr style="background-color:' . $backgroundColor . ';">' : $html .= '<tr>';
-                $html .= '
-                    <td><a href="' . DIR_SYSTEM . 'php/details.php?action=taskDetails&id=' . $task->taskID . '">' . $task->taskID . '</a></td>
-                    <td>' . $task->taskTitle . '</td>
-                    <td>' . $task->taskDescription . '</td>
-                    <td>' . $task->taskParentID . '</td>
-                    <td>' . $task->taskPriority . '</td>
-                    <td>' . $task->taskDateCreated . '</td>
-                    <td>' . $this->getUsernameByID($task->taskAssignee) . '</td>
-                    <td>' . $task->taskDateResolved . '</td>
-                    <td style="white-space: nowrap;">
-                        <div class="editgroup-button" onclick="taskHandler.deleteTask(' . $task->taskID . ', \'' . $task->taskType . '\')">
-                            Delete
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </div>
-                    </td>
-                </tr>
-                ';
-            }
-        }
-
-        $html .= '</table>';
-        return $html;
     }
 
     public function printUserDetails($userID)

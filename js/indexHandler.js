@@ -1,24 +1,27 @@
 let indexHandler = {
     getGroupsWithTasks: async function () {
-        const response = await fetch(
-            `${DIR_SYSTEM}server/request.php?action=getActiveGroupsWithTasks`
-        )
-        return await response.json()
+        const response = await requestHandler.sendRequest('getActiveGroupsWithTasks')
+        return response.data
     },
     printIndexGroups: async function () {
+        const container = document.getElementById("group__boxes")
+        if (!container) return
         const groups = await this.getGroupsWithTasks()
         html = ''
         if (groups) {
             groups.forEach(group => {
                 html += this.printGroup(group)
-            });
+            })
         } else {
             html += `<div = class="emptypage-modal">
                     <div class="emptypage">Nothing to do, go create some tasks or groups and start working :-)</div>
                 </div>`
         }
-        document.getElementById("group__boxes").innerHTML = html
-        executeScriptElements(document.getElementsByTagName("body")[0])
+        container.innerHTML = html
+        const unfoldedGroups = groups.filter((entry) => entry.unfolded == 'true')
+        unfoldedGroups.forEach(group => {
+            toggleUnfoldArea(`groupContent_${group.groupName}`, `groupUnfoldButton_${group.groupName}`, 'true')
+        })
     },
     printGroup: function (group) {
         if (!group.unarchivedTasks) return ``
