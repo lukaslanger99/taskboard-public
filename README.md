@@ -24,7 +24,7 @@ Every task belongs to a group. On the starting page you can see which tasks of t
 - UPDATE you can configure your own labels to split up tasks even more. (eg. in progress, review pending, delayed)
 
 ### Taskdetails
-![](https://i.gyazo.com/d00d98ac38a7a54c9c79fb71c0595b48.png)
+![](https://i.gyazo.com/d0ee4a79ee712070e9f3c9142657006a.png)
 
 On the task page you can see all details, have the ability to create subtasks to split the task if it's to complex, and write comments
 
@@ -36,7 +36,7 @@ UPDATE the whole design got refectored, so now it looks way more attractive and 
 On the messageboard panel you can create and will see messages. A message is belonging to a group so you have one board where you will see all messages from the groups you belong to.
 
 ### Appointment Panel
-![](https://i.gyazo.com/60648f43a3b5cf64187a28f61dee0dcc.png)
+![](https://i.gyazo.com/d00d98ac38a7a54c9c79fb71c0595b48.png)
 
 ![](https://i.gyazo.com/b601c03a155b3d0842f87faaa0cb87d5.png)
 
