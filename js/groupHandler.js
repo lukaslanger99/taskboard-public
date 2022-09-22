@@ -10,7 +10,8 @@ let groupHandler = {
     },
     deleteGroup: async function (groupID) {
         if (!confirm("Are you sure you want to delete this group?")) return
-        return await requestHandler.sendRequest('deleteGroup', ['groupID', groupID])
+        const response = await requestHandler.sendRequest('deleteGroup', ['groupID', groupID])
+        if (response.ResponseCode == 'OK') location.href = DIR_SYSTEM + 'php/groups.php'
     },
     leaveGroup: async function (groupID) {
         if (!confirm("Are you sure you want to leave this group?")) return
