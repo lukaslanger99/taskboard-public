@@ -8,6 +8,7 @@ if ($_SESSION['userID']) {
     echo '<script>indexHandler.printIndexGroups()</script>';
 } else {
     require('html/head.php');
+
     echo '
             <body>
                 <form action="' . DIR_SYSTEM . 'php/login.inc.php" autocomplete="off" method="post" >
@@ -30,8 +31,9 @@ if ($_SESSION['userID']) {
                     <div class="light-text">No account?</div>
                         <a href="' . DIR_SYSTEM . 'php/signup.php">Create an account</a>
                     </div>
-                </div>
-            </body>
-        </html>';
+                </div>';
+    if ($_GET['success'] == 'SIGNUP') {
+        echo '<script>printSuccessToast(\'SIGNUP\')</script>';
+    };
 }
 require('html/bottom.php');

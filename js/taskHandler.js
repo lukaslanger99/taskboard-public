@@ -1,5 +1,13 @@
 let taskHandler = {
     openCreateTaskForm: async function (type, parentID = 0, toggleContentDropdown = true) {
+        const groupDropdownHTML = ''
+        if (type == 'task') {
+            const groupDropdownHTML = await printGroupDropdown(parentID)
+            if (!groupDropdownHTML) {
+                printErrorToast("NO_GROUPS")
+                return
+            }
+        }
         if (toggleContentDropdown && type == 'task') toggleDropdown('dropdown_create_content')
         var html = `${(type == 'task') ? addHeaderDynamicForm('Create Task') : addHeaderDynamicForm('Create Task')}
             <div class="popop__dropdowns">
@@ -13,7 +21,7 @@ let taskHandler = {
                       </select>
                     </div>
                 </p>
-                ${(type == 'task') ? await printGroupDropdown(parentID) : ''}
+                ${groupDropdownHTML}
             </div>
             <textarea class="input-login" placeholder="title" id="tasktitle" name="title" cols="40" rows="1"></textarea>
             <textarea class="input-login" placeholder="description" id="taskdescription" name="description" cols="40" rows="5"></textarea>

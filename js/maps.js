@@ -62,6 +62,7 @@ function fillErrorMap() {
         "INVALID_URL": "Invalid Url !",
         "LOGIN": "Wrong username or password !",
         "MAIL_TAKEN": "Mail already taken !",
+        "NO_GROUPS": "No groups, create a group first !",
         "NO_USER_FOUND": "No user found !",
         "PW_NOT_EQUAL": "Passwords are not equal !",
         "UNRESOVED_SUBTASKS": "Unresolved subtasks !",

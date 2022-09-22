@@ -52,7 +52,7 @@ if (isset($_POST['signup-submit'])) {
             $taskBoard->mysqliQueryPrepared("INSERT INTO panels (userID) VALUES (?)", $user->userID);
             //send verify mail
             $taskBoard->sendVerifyMail($user->userID, $user->userMail);
-            $taskBoard->locationIndex("?success=signup");
+            $taskBoard->locationIndex("?success=SIGNUP");
         }
     }
 } else {
