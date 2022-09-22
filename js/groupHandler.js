@@ -1,10 +1,11 @@
 let groupHandler = {
     createGroup: async function () {
-        const groupName = document.getElementById('createGroup_groupName')
+        const groupName = document.getElementById('createGroup_groupName').value
         if (groupName) {
-            const response = await requestHandler.sendRequest('createGroup', ['groupname', groupName])
+            const response = await requestHandler.sendRequest('createGroup', ['groupName', groupName])
             const errors = ["GROUPNAME_TAKEN", "MAX_GROUPS", "UNVERIFIED_MAIL"]
             if (errors.includes(response.ResponseCode)) printErrorToast(response.ResponseCode)
+            else closeDynamicForm()
         }
     },
     deleteGroup: async function (groupID) {

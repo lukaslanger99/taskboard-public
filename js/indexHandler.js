@@ -12,7 +12,8 @@ let indexHandler = {
             groups.forEach(group => {
                 html += this.printGroup(group)
             })
-        } else {
+        }
+        if (html == '') {
             html += `<div = class="emptypage-modal">
                     <div class="emptypage">Nothing to do, go create some tasks or groups and start working :-)</div>
                 </div>`
