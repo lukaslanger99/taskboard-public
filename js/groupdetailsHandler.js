@@ -1,7 +1,7 @@
 let groupdetailsHandler = {
     printGroupdetails: async function () {
         const response = await requestHandler.sendRequest('getGroupData', ['groupID', document.URL.replace(/.*id=([^&]*).*|(.*)/, '$1')])
-        if (response.ResponseCode != 'OK') return
+        if (response.ResponseCode != 'OK') location.href = DIR_SYSTEM
         const data = response.data
         headerHTML = this.printHeader(data.groupName)
         buttonsHTML = this.printButtons(data.groupID, data.groupOwner)

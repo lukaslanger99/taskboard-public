@@ -2,6 +2,7 @@ let taskdetailsHandler = {
     activities: [],
     getTaskDataTaskdetails: async function (taskID) {
         const response = await requestHandler.sendRequest('getTaskDataTaskdetails', ['taskID', taskID])
+        if (response.ResponseCode != 'OK') location.href = DIR_SYSTEM
         return response.data
     },
     getPriorityColor: function (priority) {
