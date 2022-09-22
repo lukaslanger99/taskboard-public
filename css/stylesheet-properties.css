@@ -159,17 +159,16 @@ button {
 
 /* Panel */
 .panel {
-  height: 300px;
-  margin-top: 25px;
   border-radius: 5px;
   margin: 25px 5px 0 5px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .panel-item {
   border-radius: 5px;
-  width: 25%;
   margin: 5px;
+  height: 300px;
 }
 
 .panel-item-content {
