@@ -43,7 +43,7 @@ function printGroupForm() {
 function openFeedbackForm() {
   toggleDropdown('dropdown_content')
   var html = `
-    ${addHeaderDynamicForm('Update Task')}
+    ${addHeaderDynamicForm('Send Feedback')}
     <textarea class="input-login" type="text" name="description" id="feedbackDescription" cols="40" rows="5"></textarea>
     <button class="button" onclick="createFeedback()">Update</button>`
   showDynamicForm(document.getElementById("dynamic-modal-content"), html)
