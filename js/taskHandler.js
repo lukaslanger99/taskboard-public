@@ -1,8 +1,8 @@
 let taskHandler = {
     openCreateTaskForm: async function (type, parentID = 0, toggleContentDropdown = true) {
-        const groupDropdownHTML = ''
+        var groupDropdownHTML = ''
         if (type == 'task') {
-            const groupDropdownHTML = await printGroupDropdown(parentID)
+            groupDropdownHTML = await printGroupDropdown(parentID)
             if (!groupDropdownHTML) {
                 printErrorToast("NO_GROUPS")
                 return
