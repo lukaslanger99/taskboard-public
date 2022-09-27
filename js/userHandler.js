@@ -16,24 +16,15 @@ let userHandler = {
         if (!username || !email || !password || !passwordRepeat) return printErrorToast('EMPTY_FIELDS')
         if (password != passwordRepeat) return printErrorToast('PW_NOT_EQUAL')
         const response = await requestHandler.sendRequest('signup', ['username', username], ['email', email], ['password', password])
-        if (response.ResponseCode != 'OK') return printErrorToast(response.responseCode)
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         location.href = DIR_SYSTEM
         return printSuccessToast('SIGNUP')
-    },
-    resetPw: async function (username, oldPw) {
-        const newPw = document.getElementById('resetPassword').value
-        const newPwRepeat = document.getElementById('resetPasswordRepeat').value
-        if (!newPw || !newPwRepeat) return printErrorToast('EMPTY_FIELDS')
-        if (newPw != newPwRepeat) return printErrorToast('PW_NOT_EQUAL')
-        const response = await requestHandler.sendRequest('resetPw', ['username', username], ['oldPw', oldPw], ['newPw', newPw])
-        if (response.ResponseCode != 'OK') return printErrorToast('INVALID_URL')
-        return printSuccessToast('UPDATE_PW')
     },
     updateShortname: async function () {
         const usernameShort = document.getElementById('updateShortnameUsernameShort').value
         if (!usernameShort) return printErrorToast('EMPTY_FIELDS')
         const response = await requestHandler.sendRequest('updateShortname', ['usernameShort', usernameShort])
-        if (response.ResponseCode != 'OK') return printErrorToast(response.responseCode)
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         return printSuccessToast('UPDATE_SHORTNAME')
     },
     updatePassword: async function () {
@@ -43,32 +34,32 @@ let userHandler = {
         if (!passwordOld || !passwordNew || !passwordNewRepeat) return printErrorToast('EMPTY_FIELDS')
         if (passwordNew != passwordNewRepeat) return printErrorToast('PW_NOT_EQUAL')
         const response = await requestHandler.sendRequest('updatePassword', ['passwordOld', passwordOld], ['passwordNew', passwordNew])
-        if (response.ResponseCode != 'OK') return printErrorToast(response.responseCode)
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         return printSuccessToast('UPDATE_PW')
     },
     acceptInvite: async function (token) {
         const response = await requestHandler.sendRequest('acceptInvite', ['token', token])
-        if (response.ResponseCode != 'OK') return printErrorToast(response.responseCode)
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         location.href = `${DIR_SYSTEM}php/details.php?action=groupDetails&id=${response.data}`
         return printSuccessToast('JOINED_GROUP')
     },
     rejectInvite: async function (token) {
         const response = await requestHandler.sendRequest('rejectInvite', ['token', token])
-        if (response.ResponseCode != 'OK') return printErrorToast(response.responseCode)
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         return
     },
     resendVerifymail: async function () {
-        const response = await requestHandler.sendRequest('resendVerifymail')
+        await requestHandler.sendRequest('resendVerifymail')
         return printSuccessToast('MAIL_SENT')
     },
     toggleNightmode: async function (checked) {
         await requestHandler.sendRequest('toggleNightmode', ['checked', checked])
     },
     updateMail: async function () {
-        const mail = document.getElementById('updateMailMail')
+        const mail = document.getElementById('updateMailMail').value
         if (!mail) return printErrorToast('EMPTY_FIELDS')
-        await requestHandler.sendRequest('updateMail', ['mail', mail])
-        if (response.ResponseCode != 'OK') return printErrorToast(response.responseCode)
+        const response = await requestHandler.sendRequest('updateMail', ['mail', mail])
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         return printSuccessToast('UPDATE_MAIL')
     }
 }

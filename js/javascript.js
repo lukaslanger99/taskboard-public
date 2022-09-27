@@ -16,7 +16,7 @@ function printEditMailForm(mail) {
             <textarea class="input-login" type="text" id="updateMailMail" cols="40" rows="1">${mail}</textarea>
             <button class="button" onclick="userHandler.updateMail()">Update</button>
           </div>`
-    showDynamicForm()
+    showDynamicForm(document.getElementById("dynamic-modal-content"), html)
     closeDynamicFormListener()
   }
 }

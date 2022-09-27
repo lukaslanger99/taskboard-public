@@ -34,5 +34,6 @@
     <script src="<?php echo DIR_SYSTEM ?>js/taskHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/taskdetailsHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/timetable.js"></script>
+    <script src="<?php echo DIR_SYSTEM ?>js/userHandler.js"></script>
     <script src="<?php echo DIR_SYSTEM ?>js/weather.js"></script>
 </head>

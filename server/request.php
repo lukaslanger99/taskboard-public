@@ -1,12 +1,7 @@
 <?php
 require('requestHandler.php');
 $rh = new RequestHandler();
-
-if (!$_SESSION['userID']) {
-    $taskBoard->locationIndex();
-} else {
-    $userID = $_SESSION['userID'];
-}
+$userID = $_SESSION['userID'];
 
 switch ($_GET['action']) {
     case 'getActiveGroups':
@@ -399,7 +394,7 @@ switch ($_GET['action']) {
         break;
 
     default:
-        # code...
+        header('Content-Type: application/json');
+        echo json_encode(["ResponseCode" => "UNKNOWN_ACTION"]);
         break;
 }
-exit;

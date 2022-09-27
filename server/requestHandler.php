@@ -1376,7 +1376,6 @@ class RequestHandler
     {
         $userData = $this->mysqliSelectFetchObject("SELECT userPass FROM users WHERE userID = ?", $userID);
         if (!password_verify($passwordOld, $userData->userPass)) return ["ResponseCode" => "WRONG_PW"];
-        $hashedPw = password_hash($passwordNew, PASSWORD_DEFAULT);
         $this->mysqliQueryPrepared("UPDATE users SET userPass = ? WHERE userID = ?", password_hash($passwordNew, PASSWORD_DEFAULT), $userID);
         return ["ResponseCode" => "OK"];
     }
