@@ -343,6 +343,61 @@ switch ($_GET['action']) {
         echo json_encode($rh->getGroupData($userID, $_POST['groupID']));
         break;
 
+    case 'login':
+        header('Content-Type: application/json');
+        echo json_encode($rh->login($_POST['username'], $_POST['pw']));
+        break;
+
+    case 'signup':
+        header('Content-Type: application/json');
+        echo json_encode($rh->signup($_POST['username'], $_POST['email'], $_POST['password']));
+        break;
+
+    case 'resetPw':
+        header('Content-Type: application/json');
+        echo json_encode($rh->resetPw($_POST['username'], $_POST['oldPw'], $_POST['newPw']));
+        break;
+
+    case 'updateShortname':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateShortname($userID, $_POST['usernameShort']));
+        break;
+
+    case 'updatePassword':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updatePassword($userID, $_POST['passwordOld'], $_POST['passwordNew']));
+        break;
+
+    case 'acceptInvite':
+        header('Content-Type: application/json');
+        echo json_encode($rh->acceptInvite($userID, $_POST['token']));
+        break;
+
+    case 'rejectInvite':
+        header('Content-Type: application/json');
+        echo json_encode($rh->rejectInvite($userID, $_POST['token']));
+        break;
+
+    case 'resendVerifymail':
+        header('Content-Type: application/json');
+        echo json_encode($rh->resendVerifymail($userID));
+        break;
+
+    case 'toggleNightmode':
+        header('Content-Type: application/json');
+        echo json_encode($rh->toggleNightmode($userID, $checked));
+        break;
+
+    case 'updateMail':
+        header('Content-Type: application/json');
+        echo json_encode($rh->updateMail($userID, $_POST['mail']));
+        break;
+
+    case 'verifyMail':
+        header('Content-Type: application/json');
+        echo json_encode($rh->verifyMail($userID, $_GET['t']));
+        break;
+
     default:
         # code...
         break;

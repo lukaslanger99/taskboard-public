@@ -96,18 +96,18 @@ function closeDynamicForm() {
   document.querySelector('html').style.overflow = 'auto';
 }
 
-function addCheckboxListener(elementId, phpAction) {
+function nightmodeCheckboxListener(elementId) {
   var checkboxElement = document.getElementById(elementId);
   if (checkboxElement) {
     checkboxElement.addEventListener("click",
       function () {
-        location.href = DIR_SYSTEM + "php/profile.inc.php?action=" + phpAction + "&n=" + checkboxElement.checked;
+        userHandler.toggleNightmode(checkboxElement.checked)
       }
     )
   }
 }
 
-addCheckboxListener('nightmode-checkbox', 'toggleNightmode')
+nightmodeCheckboxListener('nightmode-checkbox')
 
 panels.toggleActiveCheckboxListener('motdActiveCheckbox', 'motd') // Active MOTD
 panels.toggleActiveCheckboxListener('appointmentActiveCheckbox', 'appointment') // Active Appointment

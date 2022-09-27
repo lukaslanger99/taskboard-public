@@ -17,7 +17,6 @@ function fillSuccessMap() {
         "LEAVE_GROUP": "Successfully left group !",
         "LOGIN": "Successfully logged in !",
         "MAIL_SENT": "Successfully sent verify mail !",
-        "MAIL_TAKEN": "Mail already taken !",
         "MOTD_CREATED": "Successfully created Motd !",
         "PW_RESET": "Password successfully changed !",
         "PW_RESET_MAIL_SENT": "Mail to reset your password successfully sent !",
@@ -54,20 +53,24 @@ var errorMap = new Map();
 
 function fillErrorMap() {
     var mapData = {
-        "EMPTY_FIELD": "Empty Fields !",
         "EMPTY_FIELDS": "Empty Fields !",
         "GROUPNAME_TAKEN": "Groupname already taken !",
         "HIGH_NUMBER": "Failed, number was to high !",
+        "INVALID_CHARS": "Invalid characters !",
         "INVALID_INPUT": "Invalid Input !",
+        "INVALID_TOKEN": "Invalid token !",
         "INVALID_URL": "Invalid Url !",
         "LOGIN": "Wrong username or password !",
         "MAIL_TAKEN": "Mail already taken !",
+        "MAX_GROUP_USERS": "Max. amount of groupusers !",
         "NO_GROUPS": "No groups, create a group first !",
         "NO_USER_FOUND": "No user found !",
         "PW_NOT_EQUAL": "Passwords are not equal !",
         "UNRESOVED_SUBTASKS": "Unresolved subtasks !",
         "UNVERIFIED_MAIL": "Verify your mail before creating new groups !",
-        "WRONG_MAIL": "Wrong mail !"
+        "USERNAME_TAKEN": "Username already taken !",
+        "WRONG_MAIL": "Wrong mail !",
+        "WRONG_PW": "Wrong password !"
     };
 
     for (const [key, value] of Object.entries(mapData)) {

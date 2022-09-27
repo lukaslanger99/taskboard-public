@@ -10,7 +10,7 @@ $user = $taskBoard->getUserData($_SESSION['userID']);
 if ($user->userMailStatus == 'verified') {
     $verifyStatus = '<p style="color:green;">Verified</p>';
 } else {
-    $verifyStatus = '<a href="' . DIR_SYSTEM . 'php/profile.inc.php?action=resendverifymail" style="color:red;text-decoration:underline;"> Verify now!</a>';
+    $verifyStatus = '<p onclick="userHandler.resendVerifymail()" style="color:red;text-decoration:underline;"> Verify now!</p>';
 }
 
 require('../html/top-bar.php');
@@ -33,17 +33,13 @@ echo '
                 </tr>
             </table>
 
-            <form action="' . DIR_SYSTEM . 'php/profile.inc.php?action=updateshortname" autocomplete="off" method="post">
-                <input type="text" maxlength="3" name="usernameshort" value="' . $user->userNameShort . '">
-                <input type="submit" name="updateshortname-submit" value="Update shortname"/>
-            </form>
+            <input type="text" maxlength="3" id="updateShortnameUsernameShort" value="' . $user->userNameShort . '">
+            <button class="button" onclick="userHandler.updateShortname()">Update shortname</button>
 
-            <form action="' . DIR_SYSTEM . 'php/profile.inc.php?action=updatepassword" autocomplete="off" method="post">
-                <input type="password" name="passwordold" placeholder="old password"/>
-                <input type="password" name="passwordnew" placeholder="new password"/>
-                <input type="password" name="passwordnewrepeat" placeholder="repeat new password"/>
-                <input type="submit" name="updatepassword-submit" value="Update password"/>
-            </form>
+            <input type="password" id="updatePasswordPasswordOld" placeholder="old password"/>
+            <input type="password" id="updatePasswordPasswordNew" placeholder="new password"/>
+            <input type="password" id="updatePasswordPasswordNewRepeat" placeholder="repeat new password"/>
+            <button class="button" onclick="userHandler.updatePassword()">Update password</button>
         </div>
     ';
 
@@ -63,14 +59,10 @@ if ($invites) {
                 <tr>
                     <td>Invite From: ' . $ownerUsername . ' For: ' . $groupName . '</td>
                     <td>
-                        <form action="' . DIR_SYSTEM . 'php/profile.inc.php?action=acceptinvite&t=' . $invite->tokenToken . '" autocomplete="off" method="post">
-                            <input type="submit" name="acceptinvite-submit" value="Accept"/>
-                        </form>
+                        <button class="button" onclick="userHandler.acceptInvite(\'' . $invite->tokenToken . '\')">Accept</button>
                     </td>
                     <td>
-                        <form action="' . DIR_SYSTEM . 'php/profile.inc.php?action=rejectinvite&t=' . $invite->tokenToken . '" autocomplete="off" method="post">
-                            <input type="submit" name="rejectinvite-submit" value="Reject"/>
-                        </form>
+                        <button class="button" onclick="userHandler.rejectInvite(\'' . $invite->tokenToken . '\')">Reject</button>
                     </td>
                 </tr>';
         }

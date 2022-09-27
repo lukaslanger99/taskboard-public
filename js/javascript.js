@@ -10,21 +10,13 @@ function deleteUser(name, id) {
 function printEditMailForm(mail) {
   var container = document.getElementById("dynamic-modal-content");
   if (container) {
-    html = '\
-          <div class="modal-header">\
-            Update Mail\
-            <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>\
-          </div>\
-          <div id="editmailform">\
-            <form action="'+ DIR_SYSTEM + 'php/profile.inc.php?action=updateMail" autocomplete="off" method="post" >\
-                <textarea class="input-login" type="text" name="mail" cols="40" rows="1">'+ mail + '</textarea>\
-                <input class="submit-login" type="submit" name="updatemail-submit" value="Update" />\
-            </form>\
-          </div>';
-    container.innerHTML = html;
-    container.style.height = '180px';
-
-    document.getElementById('bg-modal-dynamicform').style.display = 'flex';
+    html = `
+          ${addHeaderDynamicForm('Update Mail')}
+          <div id="editmailform">
+            <textarea class="input-login" type="text" id="updateMailMail" cols="40" rows="1">${mail}</textarea>
+            <button class="button" onclick="userHandler.updateMail()">Update</button>
+          </div>`
+    showDynamicForm()
     closeDynamicFormListener()
   }
 }

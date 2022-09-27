@@ -11,20 +11,18 @@ if ($_SESSION['userID']) {
 
     echo '
             <body>
-                <form action="' . DIR_SYSTEM . 'php/login.inc.php" autocomplete="off" method="post" >
-                    <div class="login__inner">
-                        <h2>Login</h2>
-                        <div className="login__group">
-                            <label htmlFor="username">Username</label>
-                            <input type="text" name="username" placeholder="username" value="' . $_GET['username'] . '"/><br>
-                        </div>
-                        <div className="login__group">
-                            <label htmlFor="password">Password</label>
-                            <input type="password" name="password" placeholder="password"/><br>
-                        </div>
-                        <input type="submit" name="login-submit" value="Login"/>
+                <div class="login__inner">
+                    <h2>Login</h2>
+                    <div className="login__group">
+                        <label htmlFor="username">Username</label>
+                        <input type="text" id="loginUsername" placeholder="username" value="' . $_GET['username'] . '"/><br>
                     </div>
-                </form>
+                    <div className="login__group">
+                        <label htmlFor="password">Password</label>
+                        <input type="password" id="loginPassword" placeholder="password"/><br>
+                    </div>
+                    <button class="button" onclick="userHandler.login()">Login</button>
+                </div>
                 <div class="login__signup">
                     <a href="' . DIR_SYSTEM . 'php/recover.php">Recover password</a>
                     <div class="login__signup__bottom">

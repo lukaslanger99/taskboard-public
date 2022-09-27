@@ -1,20 +1,17 @@
 <?php
-    require('../config.php');
-    require('../html/head.php');
-    echo '
+require('../config.php');
+require('../html/head.php');
+echo '
     <body>
     <div class="login-view">
         <div class="login-box" style="height:350px;">
             <div class="box-header">Signup</div>
-                <form action="'.DIR_SYSTEM.'php/signup.inc.php" autocomplete="off" method="post" >
-                    <input class="input-login" type="text" name="username" placeholder="username"/>
-                    <input class="input-login" type="text" name="email" placeholder="E-mail"/>
-                    <input class="input-login" type="password" name="password" placeholder="password"/>
-                    <input class="input-login" type="password" name="passwordRepeat" placeholder="repeat password"/>
-                    <input class="submit-login" type="submit" name="signup-submit" value="Signup"/>
-                </form>
+                <input class="input-login" type="text" id="signupUsername" placeholder="username"/>
+                <input class="input-login" type="text" id="signupEmail" placeholder="E-mail"/>
+                <input class="input-login" type="password" id="signupPassword" placeholder="password"/>
+                <input class="input-login" type="password" id="signupPasswordRepeat" placeholder="repeat password"/>
+                <button class="button" onclick="userHandler.signup()">Signup</button>
             </div>
-            </div>
-        </body>
-    </html>';
-    require('../html/bottom.php'); 
+        </div>
+    </div>';
+require('../html/bottom.php');
