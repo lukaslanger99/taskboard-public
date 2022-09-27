@@ -66,13 +66,13 @@ let groupHandler = {
         const data = response.data
         var html = `
             ${addHeaderDynamicForm('Group Invites')}
-            ${this.getInviteHTML(data)}
+            ${this.getInviteHTML(groupID, data)}
             <input type="text" name="name" placeholder="username" id="groupInvite_username">
             <button onclick="groupHandler.iniviteUser(${groupID})">Invite</button>`
         showDynamicForm(document.getElementById("dynamic-modal-content"), html)
         closeDynamicFormListener()
     },
-    getInviteHTML: function (data) {
+    getInviteHTML: function (groupID, data) {
         if (!data.groupOwner && data.groupInvites != 'enabled') return ''
         if (!data.groupOwner && data.groupInvites == 'enabled') return `<p>${DIR_SYSTEM}server/request.php?action=joinGroup&t=${data.token}</p>`
         if (data.groupInvites != 'enabled') return `<button class="button" onclick="groupHandler.toggleGroupInvites(${groupID}, 'enabled')">Enable Invites</button>`

@@ -19,7 +19,8 @@ let indexHandler = {
                 </div>`
         }
         container.innerHTML = html
-        const unfoldedGroups = groups.filter((entry) => entry.unfolded == 'true')
+        var unfoldedGroups = []
+        if (groups) groups.filter((entry) => entry.unfolded == 'true')
         unfoldedGroups.forEach(group => {
             toggleUnfoldArea(`groupContent_${group.groupName}`, `groupUnfoldButton_${group.groupName}`, 'true')
         })

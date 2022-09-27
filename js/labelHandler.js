@@ -154,7 +154,9 @@ let labelHandler = {
     }
   },
   showLabelsInTaskDetails: async function (groupID, taskID) {
-    const usedLabels = (await this.getLabelsForTask(groupID, taskID)).filter((label) => label.isUsed)
+    const labels = await this.getLabelsForTask(groupID, taskID)
+    var usedLabels = []
+    if (labels) labels.filter((label) => label.isUsed)
     var labelHTML = ''
     if (usedLabels) {
       usedLabels.forEach(label => {

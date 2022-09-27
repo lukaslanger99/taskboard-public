@@ -72,14 +72,14 @@ let taskHandler = {
     },
     resolveTask: async function (taskID) {
         const response = await requestHandler.sendRequest('resolveTask', ['taskID', taskID])
-        if (response.ResponseCode != 'OK') return
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         printSuccessToast('RESOLVED_TASK')
         taskdetailsHandler.printTaskdetails()
     },
     deleteTask: async function (taskID) {
         if (!confirm("Are you sure you want to delete Task id:" + taskID + "?")) return
         const response = await requestHandler.sendRequest('deleteTask', ['taskID', taskID])
-        if (response.ResponseCode != 'OK') return
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         location.href = response.data
     },
     openCreateCommentPopup: function (taskID) {
@@ -94,7 +94,7 @@ let taskHandler = {
         const description = document.getElementById('commentDescription').value
         if (!description) return printErrorToast("EMPTY_FIELDS")
         const response = await requestHandler.sendRequest('createComment', ['taskID', taskID], ['description', description], ['type', 'comment'])
-        if (response.ResponseCode != 'OK') return
+        if (response.ResponseCode != 'OK') return printErrorToast(response.ResponseCode)
         closeDynamicForm()
         taskdetailsHandler.printTaskdetails()
     },

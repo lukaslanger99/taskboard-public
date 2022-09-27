@@ -846,7 +846,7 @@ class RequestHandler
         if (!$this->deleteTaskPermission($taskID, $userID)) return ["ResponseCode" => "NO_ACCESS"];
         $sql = "SELECT COUNT(*) as number FROM tasks WHERE taskType = 'subtask' AND taskParentID = ? AND taskStatus = 'open'";
         $subtasks = $this->mysqliSelectFetchObject($sql, $taskID);
-        if ($subtasks->number > 0) return "UNRESOLVED_SUBTASKS";
+        if ($subtasks->number > 0) return ["ResponseCode" => "UNRESOLVED_SUBTASKS"];
         $sql = "UPDATE tasks SET taskStatus = 'resolved', taskDateUpdated = ?, taskDateResolved = ? WHERE taskID = ?";
         $this->mysqliQueryPrepared($sql, $this->getCurrentTimestamp(), $this->getCurrentTimestamp(), $taskID);
         return ["ResponseCode" => "OK"];
