@@ -61,7 +61,7 @@ let timetable = {
         var container = document.getElementById("dynamic-modal-content")
         var html = `<div class="modal-header">
                 <div class="modal__header__left">Add Entry</div>
-                <i class="fa fa-close fa-2x" aria-hidden="true" onclick="timetable.loadParentForm()"></i>
+                <i class="fa fa-close fa-2x" aria-hidden="true" onclick="timetable.timetablePopup()"></i>
             </div>
             <div class="timetable__entry__form">
                 <input type="text" name="text" id="text" placeholder="text" />
@@ -113,11 +113,6 @@ let timetable = {
             ['sun', document.getElementById("sun").checked],
             ['monfri', document.getElementById("monfri").checked], ['monsun', document.getElementById("monsun").checked])
         this.fillPopup()
-    },
-    loadParentForm: function () {
-        var container = document.getElementById("dynamic-modal-content");
-        showDynamicForm(container, this.parentHTML)
-        closeDynamicFormListener()
     },
     printHtmlDay: function (tasks) {
         var html = ''
