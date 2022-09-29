@@ -869,7 +869,7 @@ class RequestHandler
 
     public function createGroup($userID, $groupName)
     {
-        if ($this->getMailStatus($userID) == 'unverified') return ["ResponseCode" => "UNVERIFIED_MAIL"];
+        if ($this->getNumberOfOwnedGroups($userID) > 1 && $this->getMailStatus($userID) == 'unverified') return ["ResponseCode" => "UNVERIFIED_MAIL"];
         if ($this->getNumberOfOwnedGroups($userID) > 9 && $this->getUserType($userID) == 'normal') return ["ResponseCode" => "MAX_GROUPS"];
         if ($this->mysqliSelectFetchObject(
             "SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?",
@@ -1296,12 +1296,8 @@ class RequestHandler
         //insert user
         $sql = "INSERT INTO users (userName, userNameShort, userMail, userPass) VALUES (?, ?, ?, ?)";
         $this->mysqliQueryPrepared($sql, $username, substr($username, 0, 3), $email, password_hash($password, PASSWORD_DEFAULT));
-        //insert task group
         $user = $this->mysqliSelectFetchObject("SELECT * FROM users WHERE userName = ?", $username);
-        $this->mysqliQueryPrepared("INSERT INTO groups (groupName, groupOwner) VALUES (?, ?)", 'Tasks', $user->userID);
-        //groupaccess
-        $group = $this->mysqliSelectFetchObject("SELECT * FROM groups WHERE groupName = ? AND groupOwner = ?", 'Tasks', $user->userID);
-        $this->mysqliQueryPrepared("INSERT INTO groupaccess (groupID, userID) VALUES ( ?, ?)", $group->groupID, $group->groupOwner);
+        $this->createGroup($user->userID, 'Tasks');
         //insert panel entry
         $this->mysqliQueryPrepared("INSERT INTO panels (userID) VALUES (?)", $user->userID);
         //send verify mail
