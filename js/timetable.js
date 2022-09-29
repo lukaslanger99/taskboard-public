@@ -1,25 +1,13 @@
 let timetable = {
-    fillPopup: async function (type) {
-        const response = await requestHandler.sendRequest('getTimetable', ['type', type])
+    fillPopup: async function () {
+        const response = await requestHandler.sendRequest('getTimetable')
         const data = response.data
-        this.type = type
-        var title, buttons
-        if (type == 'current') {
-            title = 'Current week'
-        } else if (type == 'next') {
-            title = 'Next week'
-        }
-        if (data) {
-            buttons = `<button onclick="timetable.addEntryPopup(${data.id})">Add entry</button>
-                <button onclick="timetable.deleteTimetable(${data.id},'${type}')">Delete</button>`
-        } else {
-            buttons = `<input type="checkbox" id="copycheck" name="copycheck" checked />
-                <small>copy last</small>
-                <button onclick="timetable.createTimetable('${type}')">Create</button>`
-        }
         var html = `<div class="modal-header">
-                <div class="modal__header__left">${title}</div>
-                <div class="modal__header__right">${buttons}</div>
+                <div class="modal__header__left">Timetable</div>
+                <div class="modal__header__right">
+                    <button onclick="timetable.addEntryPopup(${data.id})">Add entry</button>
+                    <button onclick="timetable.deleteTimetable(${data.id})">Delete</button>
+                </div>
                 <i class="fa fa-close fa-2x" aria-hidden="true" id="fa-close-dynamicform"></i>
             </div>`
         if (data && data.tasks) {
@@ -57,24 +45,20 @@ let timetable = {
         showDynamicForm(document.getElementById("dynamic-modal-content"), html)
         closeDynamicFormListener()
     },
-    timetablePopup: async function (type) {
-        await requestHandler.sendRequest('getTimetable', ['type', type])
-        this.fillPopup(type)
+    timetablePopup: async function () {
+        this.fillPopup()
     },
-    createTimetable: async function (type) {
-        await requestHandler.sendRequest('createTimetable', ['type', type], ['copycheck', document.getElementById("copycheck").checked])
-        this.fillPopup(type)
+    createTimetable: async function () {
+        await requestHandler.sendRequest('createTimetable')
+        this.fillPopup()
     },
-    deleteTimetable: async function (id, type) {
+    deleteTimetable: async function (id) {
         if (!confirm("Are you sure you want to delete this timetable?")) return
         await requestHandler.sendRequest('deleteTimetable', ['id', id])
-        this.fillPopup(type)
+        this.fillPopup()
     },
-    parentHTML: '',
-    type: '',
     addEntryPopup: function (id) {
-        var container = document.getElementById("dynamic-modal-content");
-        this.parentHTML = container.innerHTML
+        var container = document.getElementById("dynamic-modal-content")
         var html = `<div class="modal-header">
                 <div class="modal__header__left">Add Entry</div>
                 <i class="fa fa-close fa-2x" aria-hidden="true" onclick="timetable.loadParentForm()"></i>
@@ -128,7 +112,7 @@ let timetable = {
             ['thu', document.getElementById("thu").checked], ['fri', document.getElementById("fri").checked], ['sat', document.getElementById("sat").checked],
             ['sun', document.getElementById("sun").checked],
             ['monfri', document.getElementById("monfri").checked], ['monsun', document.getElementById("monsun").checked])
-        this.fillPopup(this.type)
+        this.fillPopup()
     },
     loadParentForm: function () {
         var container = document.getElementById("dynamic-modal-content");

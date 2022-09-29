@@ -202,45 +202,9 @@ class RequestHandler
         return ["ResponseCode" => "OK", "data" => $taskData];
     }
 
-    public function createTimetable($userID, $type, $copyLast)
+    public function createTimetable($userID)
     {
-        if ($copyLast == 'true') {
-            $lastTimetableID  = $this->mysqliSelectFetchObject(
-                "SELECT MAX(timetableID) as max_number FROM timetables WHERE timetableUserID = ?",
-                $userID
-            );
-        }
-        $year = date("Y");
-        $week = date("W");
-        if ($type == 'next') $week = ($week + 1) % 52;
-        $this->mysqliQueryPrepared(
-            "INSERT INTO timetables (timetableUserID, timetableWeek, timetableYear) VALUES (?, ?, ?)",
-            $userID,
-            $week,
-            $year
-        );
-        $timetable = $this->mysqliSelectFetchObject(
-            "SELECT * FROM timetables WHERE timetableUserID = ? AND timetableWeek = ? AND timetableYear = ?",
-            $userID,
-            $week,
-            $year
-        );
-
-        if ($lastTimetableID) {
-            $entrys = $this->mysqliSelectFetchArray("SELECT * FROM timetableentrys WHERE timetableID = ?", $lastTimetableID->max_number);
-            if ($entrys) {
-                foreach ($entrys as $entry) {
-                    $this->insertEntry(
-                        $userID,
-                        $timetable->timetableID,
-                        $entry->timetableText,
-                        $entry->timetableTimeStart,
-                        $entry->timetableTimeEnd,
-                        $entry->timetableWeekday
-                    );
-                }
-            }
-        }
+        $this->mysqliQueryPrepared("INSERT INTO timetables (timetableUserID) VALUES (?)", $userID);
         return ["ResponseCode" => "OK"];
     }
 
@@ -262,27 +226,17 @@ class RequestHandler
         }
     }
 
-    public function getTimetable($userID, $type)
+    public function getTimetable($userID)
     {
-        $year = date("Y");
-        $week = date("W");
-        if ($type == 'next') $week = ($week + 1) % 52;
-
-        return $this->mysqliSelectFetchObject(
-            "SELECT * FROM timetables WHERE timetableUserID = ? AND timetableWeek = ? AND timetableYear = ?",
-            $userID,
-            $week,
-            $year
-        );
+        $timetable = $this->mysqliSelectFetchObject("SELECT * FROM timetables WHERE timetableUserID = ?", $userID);
+        if ($timetable) return $timetable;
+        $this->createTimetable($userID);
+        return $this->getTimetable($userID);
     }
 
     public function getTimetableByID($userID, $timetableID)
     {
-        return $this->mysqliSelectFetchObject(
-            "SELECT * FROM timetables WHERE timetableUserID = ? AND timetableID = ?",
-            $userID,
-            $timetableID
-        );
+        return $this->mysqliSelectFetchObject("SELECT * FROM timetables WHERE timetableUserID = ? AND timetableID = ?", $userID, $timetableID);
     }
 
     public function timetableToJSON($timetable)
@@ -290,8 +244,6 @@ class RequestHandler
         if ($timetable) {
             $timetableID = $timetable->timetableID;
             $json['id'] = $timetableID;
-            $json['week'] = $timetable->timetableWeek;
-
             $tasks = $this->mysqliSelectFetchArray("SELECT * FROM timetableentrys WHERE timetableID = ? ORDER BY timetableTimeStart", $timetableID);
             if ($tasks) {
                 foreach ($tasks as $task) {

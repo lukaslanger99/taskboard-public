@@ -46,7 +46,7 @@ switch ($_GET['action']) {
 
     case 'createTimetable':
         header('Content-Type: application/json');
-        echo json_encode($rh->createTimetable($userID, $_POST['type'], $_POST['copycheck']));
+        echo json_encode($rh->createTimetable($userID));
         break;
 
     case 'deleteTimetable':
@@ -62,7 +62,7 @@ switch ($_GET['action']) {
 
     case 'getTimetable':
         header('Content-Type: application/json');
-        echo json_encode($rh->timetableToJSON($rh->getTimetable($userID, $_POST['type'])));
+        echo json_encode($rh->timetableToJSON($rh->getTimetable($userID)));
         break;
 
     case 'getQueueTasks':

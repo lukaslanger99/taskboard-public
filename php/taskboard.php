@@ -367,11 +367,8 @@ class TaskBoard
                         <p>Timetable (KW' . date("W") . ')</p>
                     </div>
                     <div class="display__flex">
-                        <div class="panel-item-top-bar-button" id="timetableCurrentWeekButton" onclick="timetable.timetablePopup(\'current\')">
-                            Current week
-                        </div>
-                        <div class="panel-item-top-bar-button" id="timetableNextWeekButton" onclick="timetable.timetablePopup(\'next\')">
-                            Next week
+                        <div class="panel-item-top-bar-button" id="timetableButton" onclick="timetable.timetablePopup()">
+                            View Full Timetable
                         </div>
                         <div class="panel_item_top_bar_unfold_button" id="timetableUnfoldButton" onclick="toggleUnfoldArea(\'timetablePanelContentArea\',\'timetableUnfoldButton\')">
                             <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -478,11 +475,7 @@ class TaskBoard
                 </div>';
         } else if ($type == 'timetable') {
             if ($spec != '') {
-                $tasks = $this->mysqliSelectFetchArray(
-                    "SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableWeekday = ? ORDER BY timetableTimeStart",
-                    $spec,
-                    date('D')
-                );
+                $tasks = $this->mysqliSelectFetchArray("SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableWeekday = ?", $spec, date("D"));
                 if ($tasks) {
                     $currentTime = date('H:i');
                     $nextTask = null;
@@ -591,7 +584,7 @@ class TaskBoard
             ];
         }
         if ($panelData->panelTimetable == 'true') {
-            $timetable = $this->mysqliSelectFetchObject("SELECT timetableID FROM timetables WHERE timetableUserID = ? AND timetableWeek = ?", $userID, date('W'));
+            $timetable = $this->mysqliSelectFetchObject("SELECT timetableID FROM timetables WHERE timetableUserID = ?", $userID);
             $activePanels[$panelData->panelTimetableOrder] = [
                 'name' => 'timetable',
                 'unfolded' => $panelData->panelTimetableUnfolded,
