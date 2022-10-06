@@ -475,7 +475,11 @@ class TaskBoard
                 </div>';
         } else if ($type == 'timetable') {
             if ($spec != '') {
-                $tasks = $this->mysqliSelectFetchArray("SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableWeekday = ?", $spec, date("D"));
+                $tasks = $this->mysqliSelectFetchArray(
+                    "SELECT * FROM timetableentrys WHERE timetableID = ? AND timetableWeekday = ? ORDER BY timetableTimeStart",
+                    $spec,
+                    date("D")
+                );
                 if ($tasks) {
                     $currentTime = date('H:i');
                     $nextTask = null;
