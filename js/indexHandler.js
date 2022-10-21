@@ -93,7 +93,7 @@ let indexHandler = {
                         <div class="emptyspace">&nbsp;</div>
                         <div class="bottom">
                             <div class="label bottom_label">id_${task.taskID}</div>`
-        if (task.taskAssignedBy) html += `<div class="label bottom_label">${task.taskAssignedBy}</div>`
+        if (task.taskAssignee) html += `<div class="label bottom_label">${task.taskAssignee}</div>`
         if (task.taskStatus == 'open') {
             if (task.dateDiff == 0) html += `<div class="label new_label">NEW</div>`
             else if (task.dateDiff > 31) html += `<div class="label bottom_label" style="background-color:red;color:#fff;">${task.dateDiff}</div>`
