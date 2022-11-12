@@ -132,6 +132,7 @@ let taskHandler = {
     },
     updateTask: async function (taskID, type) {
         var taskprio = document.getElementById("taskprio").value
+        var parentID = 0
         if (type == 'task') parentID = document.getElementById("selectGroupID").value
         var tasktitle = document.getElementById("tasktitle").value
         var taskdescription = document.getElementById("taskdescription").value

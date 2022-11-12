@@ -681,6 +681,9 @@ class RequestHandler
         if (!$this->checkGroupPermission($userID, $this->getGroupIDOfTask($taskID))) return ["ResponseCode" => "NO_ACCESS"];
         $oldTaskData = $this->mysqliSelectFetchObject("SELECT * FROM tasks WHERE taskID = ?", $taskID);
         $priority = (int) $prio;
+        if (!$parentID) {
+            $parentID = $oldTaskData->taskParentID;
+        }
 
         if ($oldTaskData->taskPriority != $priority) $this->createComment(
             $userID,
