@@ -78,7 +78,10 @@ let indexHandler = {
             </div > `
         if (tasks) {
             tasks.forEach(task => {
-                html += this.printTask(task)
+                if (task.taskStatus == 'resolved' && title != 'Resolved')
+                    html += ''
+                else
+                    html += this.printTask(task)
             });
         }
         html += `</div>`
